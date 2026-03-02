@@ -15,7 +15,18 @@ local function fire_node_observers(node: graph.GraphNode)
 	end
 end
 
-local function gather_eager_users(node: graph.GraphNode): { graph.GraphNode }
+--[[
+	Prompts (forces) a graph node to be re-evaluated. If it meaningfully
+	changes, then dependents will be marked invalid and will have to be
+	re-evaluated at a later point (or immediately if it is eager).
+
+	https://fluff.blog/2024/04/16/monotonic-painting.html
+]]
+local function change(node: graph.GraphNode)
+	if not evaluate(node, true) then
+		return
+	end
+
 	local eager_users: { graph.GraphNode } = {}
 
 	local search_now: { graph.GraphNode } = { node }
@@ -28,12 +39,10 @@ local function gather_eager_users(node: graph.GraphNode): { graph.GraphNode }
 			for user in searching.users do
 				if user.validity == "busy" then
 					External.log_error(graph.infinite_loop)
-				end
-
-				if user.validity == "valid" then
-					user.validity = "invalid"
-
+				elseif user.validity == "valid" then
 					is_finished = false
+
+					user.validity = "invalid"
 
 					table.insert(search_next, user)
 
@@ -45,30 +54,12 @@ local function gather_eager_users(node: graph.GraphNode): { graph.GraphNode }
 		end
 
 		search_now, search_next = search_next, search_now
-
 		table.clear(search_next)
 	until is_finished
 
 	table.sort(eager_users, function(x: graph.GraphNode, y: graph.GraphNode)
 		return x.created_at < y.created_at
 	end)
-
-	return eager_users
-end
-
---[[
-	Prompts a graph node to be re-evaluated. If it meaningfully
-	changes, then dependents will be marked invalid and will have to be
-	re-evaluated at a later point (or immediately if it is eager).
-
-	https://fluff.blog/2024/04/16/monotonic-painting.html
-]]
-local function change(node: graph.GraphNode)
-	if not evaluate(node, true) then
-		return
-	end
-
-	local eager_users = gather_eager_users(node)
 
 	fire_node_observers(node)
 

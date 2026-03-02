@@ -6,6 +6,7 @@ local format_graph = require("./format_graph")
 local standard_graph_shapes = require("./standard_graph_shapes")
 
 export type Graph = assemble_graph.Graph
+export type GraphNode = assemble_graph.GraphNode
 
 type Options = {
 	filters: { (standard_graph_shapes.GraphShape) -> boolean },
