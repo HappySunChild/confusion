@@ -15,7 +15,7 @@ local async = require("./async/types")
 local chrono = require("./chrono/types")
 local context = require("./context/types")
 local keyframes = require("./keyframes/types")
-local pipeline = require("./pipeline/types")
+local pipe = require("./pipe/types")
 local safe = require("./safe/types")
 
 local iter = require("./iter/types")
@@ -55,7 +55,7 @@ export type Contextual<T> = context.Contextual<T>
 
 export type Timer = chrono.Timer
 
-export type Pipe<T, S = unknown> = pipeline.Pipe<S, T>
+export type Pipe<T, S = unknown> = pipe.Pipe<S, T>
 
 export type SpecialKey<T = string> = instances.SpecialKey
 export type Child = instances.Child
@@ -98,7 +98,7 @@ type ConFusionForRoblox = confusion.ConFusion<{
 	read TweenInfo: tweens.TweenInfoConstructor,
 
 	-- Pipeline
-	read Pipe: pipeline.PipeConstructor,
+	read Pipe: pipe.PipeConstructor,
 
 	-- Roblox: Instances
 	read New: instances.NewConstructor,
@@ -169,8 +169,8 @@ local confusion_for_roblox = confusion.configure({
 		TweenInfo = require("./motion_tweens/TweenInfo"),
 		EasingStyles = require("./motion_tweens/EasingStyles"),
 
-		-- Pipeline
-		Pipe = require("./pipeline/Pipe"),
+		-- Pipe
+		Pipe = require("./pipe/Pipe"),
 
 		-- Roblox: Instances
 		New = require("./roblox_instances/New"),
