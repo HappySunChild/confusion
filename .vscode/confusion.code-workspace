@@ -7,7 +7,6 @@
 	],
 	"settings": {
 		"material-icon-theme.folders.associations": {
-			"src": "../../../../custom-icons/folder-fusion",
 			"core_external": "interface",
 			"core_calc": "functions",
 			"core_graph": "graph",
@@ -23,11 +22,6 @@
 			"keyframes": "input",
 			"predicates": "keys",
 			"safe": "syntax",
-			"roblox_instances": "../../../../custom-icons/folder-roblox",
-			"roblox_templates": "../../../../custom-icons/folder-roblox",
-			"roblox_binds": "../../../../custom-icons/folder-roblox",
-			"roblox_provider": "../../../../custom-icons/folder-roblox",
-			"roblox_stylesheets": "../../../../custom-icons/folder-roblox"
 		},
 		"luau-lsp.sourcemap.rojoProjectFile": "dev.project.json",
 		"luau-lsp.platform.type": "roblox",
