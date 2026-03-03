@@ -4,7 +4,7 @@ return {
 		-- require("./confusion/core_calc/Value.spec"),
 		-- require("./confusion/core_calc/cast_to_state.spec"),
 		-- require("./confusion/core_calc/is_similar.spec"),
-		require("./confusion/core_graph/change.spec"),
+		-- require("./confusion/core_graph/change.spec"),
 		-- require("./confusion/core_graph/depend.spec"),
 		-- require("./confusion/core_graph/evaluate.spec"),
 		-- require("./confusion/core_graph/is_eager.spec"),
@@ -16,5 +16,7 @@ return {
 		-- require("./confusion/core_memory/inner_scope.spec"),
 		-- require("./confusion/core_memory/insert.spec"),
 		-- require("./confusion/core_memory/scoped.spec"),
+
+		require("./confusion/lerp/lerp_type.spec"),
 	},
 }
