@@ -18,5 +18,8 @@ return {
 		-- require("./confusion/core_memory/scoped.spec"),
 
 		require("./confusion/lerp/lerp_type.spec"),
+		require("./confusion/safe/Safe.spec"),
+		require("./confusion/context/Contextual.spec"),
+		require("./confusion/pipe/Pipe.spec"),
 	},
 }
