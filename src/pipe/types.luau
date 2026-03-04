@@ -6,6 +6,14 @@ local tweens = require("../motion_tweens/types")
 export type Pipe<S, T> = {
 	type: "Pipe",
 
+	resolve: (Pipe<S, T>) -> calc.UsedAs<T>,
+
+	map: (
+		Pipe<S, T>,
+		processor: (value: T, use: calc.Use, scope: memory.Scope<S>) -> any
+	) -> Pipe<S, T>,
+	modify: (Pipe<S, T>, processor: (latest: T, scope: memory.Scope<S>) -> any) -> Pipe<S, T>,
+
 	spring: (
 		Pipe<S, T>,
 		speed: calc.UsedAs<number>?,
@@ -13,30 +21,20 @@ export type Pipe<S, T> = {
 	) -> Pipe<S, T>,
 	tween: (Pipe<S, T>, info: calc.UsedAs<tweens.TweenInfo>) -> Pipe<S, T>,
 
-	map: <O>(
-		Pipe<S, T>,
-		processor: (value: T, use: calc.Use, scope: memory.Scope<S>) -> O
-	) -> Pipe<S, T>, -- Pipe<O>, -- this isn't allowed?
-
 	for_pairs: <IK, IV, OK, OV>(
 		Pipe<S, T>,
 		processor: iter_for.ForPairsProcessor<S, IK, IV, OK, OV>
-	) -> Pipe<S, T>, -- Pipe<{ [OK]: OV }>,
+	) -> Pipe<S, T>,
 	for_values: <IK, IV, OV>(
 		Pipe<S, T>,
 		processor: iter_for.ForValuesProcessor<S, IV, OV>
-	) -> Pipe<S, T>, -- Pipe<{ [IK]: OV }>,
+	) -> Pipe<S, T>,
 	for_keys: <IK, IV, OK>(
 		Pipe<S, T>,
 		processor: iter_for.ForKeysProcessor<S, IK, OK>
-	) -> Pipe<S, T>, -- Pipe<{ [OK]: IV }>,
-
-	resolve: (Pipe<S, T>) -> calc.UsedAs<T>,
+	) -> Pipe<S, T>,
 }
 
-export type PipeConstructor = <S, T>(
-	scope: memory.Scope<S>,
-	initial_value: calc.UsedAs<T>
-) -> Pipe<S, T>
+export type PipeConstructor = <S, T>(scope: memory.Scope<S>, initial_value: T) -> Pipe<S, T>
 
 return nil

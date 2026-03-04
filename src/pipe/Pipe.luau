@@ -21,18 +21,14 @@ type Self<S, T> = {
 local CLASS = table.freeze({
 	type = "Pipe",
 
-	spring = function<S, T>(
-		self: Self<S, T>,
-		speed: calc.UsedAs<number>?,
-		damping: calc.UsedAs<number>?
-	): Self<S, T>
-		self._latest = Spring(self._internal_scope, self._latest, speed, damping)
-
-		return self
+	resolve = function<T>(self: Self<any, T>): T
+		return self._latest
 	end,
-	tween = function<S, T>(self: Self<S, T>, info: calc.UsedAs<tweens.TweenInfo>): Self<S, T>
-		self._latest = Tween(self._internal_scope, self._latest, info)
-
+	modify = function<S, T>(
+		self: Self<S, T>,
+		processor: (latest: T, scope: memory.Scope<S>) -> any
+	): Self<S, T>
+		self._latest = processor(self._latest, self._internal_scope)
 		return self
 	end,
 
@@ -44,6 +40,21 @@ local CLASS = table.freeze({
 		self._latest = Computed(self._internal_scope, function(use, scope)
 			return processor(use(latest), use, scope)
 		end)
+
+		return self
+	end,
+
+	spring = function<S, T>(
+		self: Self<S, T>,
+		speed: calc.UsedAs<number>?,
+		damping: calc.UsedAs<number>?
+	): Self<S, T>
+		self._latest = Spring(self._internal_scope, self._latest, speed, damping)
+
+		return self
+	end,
+	tween = function<S, T>(self: Self<S, T>, info: calc.UsedAs<tweens.TweenInfo>): Self<S, T>
+		self._latest = Tween(self._internal_scope, self._latest, info)
 
 		return self
 	end,
@@ -77,10 +88,6 @@ local CLASS = table.freeze({
 		self._latest = ForKeys(self._internal_scope, self._latest, processor)
 
 		return self
-	end,
-
-	resolve = function<T>(self: Self<unknown, T>): calc.UsedAs<T>
-		return self._latest
 	end,
 })
 local METATABLE = table.freeze({ __index = CLASS })
