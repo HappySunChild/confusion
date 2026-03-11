@@ -1,6 +1,6 @@
 {
 	"aliases": {
-		"butler": "./lib/butler",
+		"butler": "./butler",
 		"utility": "./utility"
 	}
 }
