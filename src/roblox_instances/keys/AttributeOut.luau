@@ -2,8 +2,8 @@ local calc = require("../../core_calc/types")
 local instances = require("../types")
 local memory = require("../../core_memory/types")
 
-local External = require("../../core_external/External")
 local SpecialKey = require("../SpecialKey")
+local log_error = require("../../core_logging/log_error")
 local xtypeof = require("../../core_graph/xtypeof")
 
 local KEY_CACHE = {}
@@ -17,7 +17,7 @@ local function AttributeOut(attribute: string): instances.SpecialKey<"AttributeO
 			"AttributeOut",
 			function(scope: memory.Scope, apply_to: Instance, value: calc.Value<any>)
 				if xtypeof(value) ~= "State" or value.Kind ~= "Value" then
-					External.log_error(instances.invalid_out_type, nil, typeof(value))
+					log_error(instances.invalid_out_type, nil, typeof(value))
 				end
 
 				local event = apply_to:GetAttributeChangedSignal(attribute)

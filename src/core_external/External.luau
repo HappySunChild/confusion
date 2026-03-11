@@ -1,17 +1,12 @@
 local external = require("./types")
-local logging = require("../core_logging/types")
 
-local format_error = require("../core_logging/format_error")
+local log_error = require("../core_logging/log_error")
 
 local bound_callbacks = {}
 local active_provider: external.ExternalProvider? = nil
 
 local last_update = os.clock()
 local delta_time = 0
-
-local function log_error(message: string, err: logging.Error?, ...: any?): never
-	error(format_error(message, err, ...), 0)
-end
 
 return table.freeze({
 	set_provider = function(new_provider: external.ExternalProvider?)
@@ -82,25 +77,5 @@ return table.freeze({
 		end
 
 		return active_provider.cancel_task(task)
-	end,
-
-	log_error = log_error,
-	log_error_nonfatal = function(message: string, err: logging.Error?, ...: any?)
-		local formatted_message = format_error(message, err, ...)
-
-		if active_provider ~= nil then
-			active_provider.log_error_nonfatal(formatted_message)
-		else
-			print(formatted_message)
-		end
-	end,
-	log_warn = function(message: string, ...: any?)
-		local formatted_message = format_error(message, debug.traceback(nil, 2), ...)
-
-		if active_provider ~= nil then
-			active_provider.log_warn(formatted_message)
-		else
-			print(formatted_message)
-		end
 	end,
 })

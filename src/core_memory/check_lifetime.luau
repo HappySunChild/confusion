@@ -1,6 +1,6 @@
 local memory = require("./types")
 
-local External = require("../core_external/External")
+local log_error = require("../core_logging/log_error")
 
 local function check_lifetime<A, B, C...>(
 	a: A,
@@ -10,7 +10,7 @@ local function check_lifetime<A, B, C...>(
 	...: C...
 )
 	if scope_b == nil then
-		External.log_error(memory.use_after_destroy, nil, formatter(a, b, ...))
+		log_error(memory.use_after_destroy, nil, formatter(a, b, ...))
 	end
 end
 

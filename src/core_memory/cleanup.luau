@@ -1,7 +1,9 @@
 local memory = require("./types")
 
-local External = require("../core_external/External")
 local ExternalDebug = require("../core_external/ExternalDebug")
+local untrack_scope = ExternalDebug.untrack_scope
+
+local log_error = require("../core_logging/log_error")
 
 local ALREADY_DESTROYING: { [memory.Chore]: true } = {}
 
@@ -11,7 +13,7 @@ local function cleanup(chore: memory.Chore?)
 	end
 
 	if ALREADY_DESTROYING[chore] ~= nil then
-		External.log_error(memory.destroyed_twice)
+		log_error(memory.destroyed_twice)
 	end
 
 	ALREADY_DESTROYING[chore] = true
@@ -36,7 +38,7 @@ local function cleanup(chore: memory.Chore?)
 				chore[i] = nil
 			end
 
-			ExternalDebug.untrack_scope(chore)
+			untrack_scope(chore)
 		elseif typeof(chore.destroy) == "function" then -- :destroy method
 			chore:destroy()
 		elseif typeof(chore.Destroy) == "function" then -- :Destroy method

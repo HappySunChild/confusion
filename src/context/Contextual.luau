@@ -1,8 +1,7 @@
 local calc = require("../core_calc/types")
 local context = require("./types")
 
-local External = require("../core_external/External")
-
+local log_error = require("../core_logging/log_error")
 local parse_error = require("../core_logging/parse_error")
 
 type Self<T> = {
@@ -34,7 +33,7 @@ local CLASS = table.freeze({
 		self._values[thread] = original
 
 		if not ok then
-			External.log_error(calc.callback_error, value)
+			log_error(calc.callback_error, value)
 		end
 
 		return value

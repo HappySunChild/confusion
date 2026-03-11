@@ -128,9 +128,10 @@ type ConFusionForRoblox = confusion.ConFusion<{
 	read AttributeOf: binds.AttributeOfConstructor,
 }>
 
-local confusion_for_roblox = confusion.configure({
+local confusion_for_roblox = confusion({
 	version = { major = 1, minor = 0 },
 	provider = require("./roblox_provider/RobloxProvider"),
+	logger = require("./roblox_provider/RobloxLogger"),
 	debugger = nil,
 	include = {
 		-- Iter: For

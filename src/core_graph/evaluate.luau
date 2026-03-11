@@ -1,6 +1,6 @@
 local graph = require("./types")
 
-local External = require("../core_external/External")
+local log_error = require("../core_logging/log_error")
 
 --[[
 	Evaluates the graph object if necessary, so that it is up to date.
@@ -10,7 +10,7 @@ local External = require("../core_external/External")
 ]]
 local function evaluate(node: graph.GraphNode, force_computation: boolean?): boolean
 	if node.validity == "busy" then
-		External.log_error(graph.infinite_loop)
+		log_error(graph.infinite_loop)
 	end
 
 	local first_evaluation = node.last_change == nil or node.last_compute == nil

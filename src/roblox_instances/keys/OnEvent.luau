@@ -1,8 +1,8 @@
 local instances = require("../types")
 local memory = require("../../core_memory/types")
 
-local External = require("../../core_external/External")
 local SpecialKey = require("../SpecialKey")
+local log_error = require("../../core_logging/log_error")
 
 local function get_property(instance: Instance, key: string)
 	return instance[key]
@@ -21,12 +21,7 @@ local function OnEvent(event_name: string): instances.SpecialKey<"OnEvent">
 				local ok, event = pcall(get_property, apply_to, event_name)
 
 				if not ok or typeof(event) ~= "RBXScriptSignal" then
-					External.log_error(
-						instances.cannot_connect_event,
-						nil,
-						apply_to.ClassName,
-						event_name
-					)
+					log_error(instances.cannot_connect_event, nil, apply_to.ClassName, event_name)
 				end
 
 				table.insert(scope, event:Connect(callback))

@@ -6,7 +6,6 @@ local name_of = require("../core_logging/name_of")
 local active_debugger: external.ExternalDebugger? = nil
 
 return table.freeze({
-	name_of = name_of,
 	set_debugger = function(new_debugger: external.ExternalDebugger?)
 		local old_debugger = active_debugger
 
@@ -36,4 +35,5 @@ return table.freeze({
 
 		active_debugger.untrack_scope(scope)
 	end,
+	name_of = name_of,
 })

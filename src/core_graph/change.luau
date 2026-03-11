@@ -1,9 +1,11 @@
 local graph = require("./types")
 
 local External = require("../core_external/External")
+local do_task_immediate = External.do_task_immediate
 
 local evaluate = require("./evaluate")
 local is_eager = require("./is_eager")
+local log_error = require("../core_logging/log_error")
 
 local function fire_node_observers(node: graph.GraphNode)
 	if node._observers == nil then
@@ -11,7 +13,7 @@ local function fire_node_observers(node: graph.GraphNode)
 	end
 
 	for _, callback in node._observers do
-		External.do_task_immediate(callback)
+		do_task_immediate(callback)
 	end
 end
 
@@ -38,7 +40,7 @@ local function change(node: graph.GraphNode)
 		for _, searching: graph.GraphNode in search_now do
 			for user in searching.users do
 				if user.validity == "busy" then
-					External.log_error(graph.infinite_loop)
+					log_error(graph.infinite_loop)
 				elseif user.validity == "valid" then
 					is_finished = false
 

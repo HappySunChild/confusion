@@ -4,9 +4,6 @@ export type ExternalProvider = {
 	start_scheduler: () -> (),
 	stop_scheduler: () -> (),
 
-	log_error_nonfatal: (message: string) -> (),
-	log_warn: (message: string) -> (),
-
 	do_task_immediate: <A...>(resume: (A...) -> () | thread, A...) -> thread?,
 	do_task_deferred: <A...>(resume: (A...) -> () | thread, A...) -> thread?,
 	do_task_delayed: <A...>(sec: number, resume: (A...) -> () | thread, A...) -> thread?,
@@ -19,6 +16,12 @@ export type ExternalDebugger = {
 
 	track_scope: (scope: memory.Scope) -> (),
 	untrack_scope: (scope: memory.Scope) -> (),
+}
+
+export type ExternalLogger = {
+	log_error: (message: string) -> (),
+	log_error_nonfatal: (message: string) -> (),
+	log_warn: (message: string) -> (),
 }
 
 return {

@@ -1,8 +1,8 @@
 local calc = require("../../core_calc/types")
 local instances = require("../types")
 
-local External = require("../../core_external/External")
 local SpecialKey = require("../SpecialKey")
+local log_error = require("../../core_logging/log_error")
 local xtypeof = require("../../core_graph/xtypeof")
 
 type OneOrMore<T> = T | { T }
@@ -23,7 +23,7 @@ local function process_ref(instance: Instance, ref: OneOrMore<calc.Value<Instanc
 		return
 	end
 
-	External.log_error(instances.invalid_ref_type, nil, ref_type)
+	log_error(instances.invalid_ref_type, nil, ref_type)
 end
 
 local Refs = SpecialKey(

@@ -44,11 +44,6 @@ local RobloxProvider = table.freeze({
 			scheduler_disconnect = nil
 		end
 	end,
-
-	log_error_nonfatal = function(message: string)
-		task.spawn(error, message, 0)
-	end,
-	log_warn = warn,
 })
 
 return RobloxProvider :: external.ExternalProvider

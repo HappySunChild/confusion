@@ -1,10 +1,9 @@
 local instances = require("./types")
 local memory = require("../core_memory/types")
 
-local External = require("../core_external/External")
-
 local apply_properties = require("./apply_properties")
 local default_properties = require("./default_properties")
+local log_error = require("../core_logging/log_error")
 
 local function New(
 	scope: memory.Scope,
@@ -14,7 +13,7 @@ local function New(
 	local success, new_instance = pcall(Instance.new, class_name, nil) -- ok
 
 	if not success then
-		External.log_error(instances.cannot_create_class, nil, class_name)
+		log_error(instances.cannot_create_class, nil, class_name)
 	end
 
 	local default_class_properties = default_properties[class_name]

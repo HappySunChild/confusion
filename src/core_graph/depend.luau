@@ -1,9 +1,9 @@
 local graph = require("./types")
 
-local External = require("../core_external/External")
 local cast_to_graph = require("./cast_to_graph")
 local check_lifetime = require("../core_memory/check_lifetime")
 local evaluate = require("./evaluate")
+local log_error = require("../core_logging/log_error")
 local name_of = require("../core_logging/name_of")
 
 local function depend_lifetime_formatter(a: unknown, b: unknown): (string, string)
@@ -21,14 +21,14 @@ local function depend(user: graph.GraphNode, dependency: any?)
 	evaluate(dependency)
 
 	if table.isfrozen(user.using) then
-		External.log_error(
+		log_error(
 			graph.cannot_depend_user_frozen,
 			nil,
 			name_of(user, "unknown"),
 			name_of(dependency, "unknown")
 		)
 	elseif table.isfrozen(dependency.users) then
-		External.log_error(
+		log_error(
 			graph.cannot_depend_dependency_frozen,
 			nil,
 			name_of(user, "unknown"),

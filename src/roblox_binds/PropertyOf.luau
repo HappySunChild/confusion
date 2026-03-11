@@ -2,9 +2,9 @@ local binds = require("./types")
 local instances = require("../roblox_instances/types")
 local memory = require("../core_memory/types")
 
-local External = require("../core_external/External")
 local change = require("../core_graph/change")
 local destructor = require("../core_memory/destructor")
+local log_error = require("../core_logging/log_error")
 
 type Self<T> = {
 	_event: RBXScriptConnection,
@@ -34,12 +34,7 @@ local function PropertyOf(
 	local ok, event: RBXScriptSignal = pcall(instance.GetPropertyChangedSignal, instance, property)
 
 	if not ok then
-		External.log_error(
-			instances.cannot_connect_change,
-			nil,
-			instance.ClassName,
-			tostring(property)
-		)
+		log_error(instances.cannot_connect_change, nil, instance.ClassName, tostring(property))
 	end
 
 	local new_property: binds.PropertyOf<unknown> = setmetatable({

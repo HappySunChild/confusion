@@ -18,10 +18,6 @@ local SpecProvider = table.freeze({
 	stop_scheduler = function()
 		do_update_steps = false
 	end,
-
-	log_error_nonfatal = function() end,
-	log_warn = function() end,
-
 	ext_step = function()
 		if do_update_steps then
 			External.perform_update_step()
