@@ -1,10 +1,10 @@
-local External = require("@fusion/core_external/External")
+local ExternalScheduler = require("@fusion/core_external/ExternalScheduler")
 
 local SpecTask = require("./SpecTask")
 
 local do_update_steps = false
 
-local SpecProvider = table.freeze({
+local SpecScheduler = {
 	do_task_immediate = SpecTask.spawn,
 	do_task_deferred = SpecTask.defer,
 	do_task_delayed = SpecTask.delay,
@@ -20,11 +20,11 @@ local SpecProvider = table.freeze({
 	end,
 	ext_step = function()
 		if do_update_steps then
-			External.perform_update_step()
+			ExternalScheduler.perform_update_step()
 		end
 
 		SpecTask.process()
 	end,
-})
+}
 
-return SpecProvider
+return table.freeze(SpecScheduler)

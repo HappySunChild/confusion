@@ -2,12 +2,12 @@ local butler = require("@butler/butler")
 local butler_chrono = require("@butler/hooks/butler_chrono")
 local butler_pretty = require("@butler/hooks/butler_pretty")
 
-local External = require("@fusion/core_external/External")
+local ExternalScheduler = require("@fusion/core_external/ExternalScheduler")
 
-local SpecProvider = require("./SpecProvider")
+local SpecScheduler = require("./SpecScheduler")
 local test_config = require("./test_config")
 
-External.set_provider(SpecProvider)
+ExternalScheduler.set_scheduler(SpecScheduler)
 
 local configured = butler({
 	hooks = {
