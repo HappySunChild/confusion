@@ -25,5 +25,5 @@ export type ExternalLogger = {
 }
 
 return {
-	missing_provider = "ConFusion is not connected to an external provider.",
+	missing_scheduler = "ConFusion is not connected to an external scheduler.",
 }
