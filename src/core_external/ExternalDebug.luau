@@ -11,7 +11,7 @@ return table.freeze({
 			old_debugger.stop_debugging()
 		end
 
-		if new_debugger then
+		if new_debugger ~= nil then
 			new_debugger.start_debugging()
 		end
 
