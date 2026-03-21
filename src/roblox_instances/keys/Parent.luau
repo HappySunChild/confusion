@@ -2,8 +2,8 @@ local calc = require("../../core_calc/types")
 local instances = require("../types")
 local memory = require("../../core_memory/types")
 
-local External = require("../../core_external/External")
 local SpecialKey = require("../SpecialKey")
+local log_warn = require("../../core_logging/log_warn")
 local observe_immediate = require("../../core_graph/observe_immediate")
 local peek = require("../../core_use/peek")
 
@@ -13,7 +13,7 @@ local function set_parent(instance: Instance, parent: Instance?)
 	end)
 
 	if not success then
-		External.log_warn(err)
+		log_warn(err)
 	end
 end
 

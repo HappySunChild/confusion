@@ -7,6 +7,7 @@ local memory = require("../core_memory/types")
 local ExternalScheduler = require("../core_external/ExternalScheduler")
 local cancel_task = ExternalScheduler.cancel_task
 local do_task_immediate = ExternalScheduler.do_task_immediate
+
 local cast_to_state = require("../core_calc/cast_to_state")
 local change = require("../core_graph/change")
 local cleanup = require("../core_memory/cleanup")
@@ -15,6 +16,7 @@ local derive_scope = require("../core_memory/derive_scope")
 local destructor = require("../core_memory/destructor")
 local evaluate = require("../core_graph/evaluate")
 local is_similar = require("../core_calc/is_similar")
+local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local parse_error = require("../core_logging/parse_error")
 local peek = require("../core_use/peek")
 
@@ -46,7 +48,7 @@ local function handle_eventual_computation<T, S>(eventual: Self<T, S>)
 		eventual._inner_scope = inner_scope
 	else -- throw away computation scope, invalidated because computation errored
 		cleanup(inner_scope)
-		External.log_error_nonfatal(calc.callback_error, err)
+		log_error_nonfatal(calc.callback_error, err)
 	end
 
 	eventual._active_thread = nil

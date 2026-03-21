@@ -1,6 +1,6 @@
 local instances = require("./types")
 
-local External = require("../core_external/External")
+local log_warn = require("../core_logging/log_warn")
 
 local STAGE_ORDER = table.freeze({
 	self = 1,
@@ -16,7 +16,7 @@ local function sort_keys(a: instances.SpecialKey, b: instances.SpecialKey)
 	local b_order = STAGE_ORDER[b.stage]
 
 	if a_order == nil then
-		External.log_warn(
+		log_warn(
 			if a.stage == nil
 				then instances.missing_specialkey_stage
 				else instances.invalid_specialkey_stage,
@@ -26,7 +26,7 @@ local function sort_keys(a: instances.SpecialKey, b: instances.SpecialKey)
 
 		return true
 	elseif b_order == nil then
-		External.log_warn(
+		log_warn(
 			if b.stage == nil
 				then instances.missing_specialkey_stage
 				else instances.invalid_specialkey_stage,

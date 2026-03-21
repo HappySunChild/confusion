@@ -3,11 +3,11 @@ local iter = require("../iter/types")
 local iter_for = require("./types")
 local memory = require("../core_memory/types")
 
-local External = require("../core_external/External")
 local cleanup = require("../core_memory/cleanup")
 local depend = require("../core_graph/depend")
 local derive_scope = require("../core_memory/derive_scope")
 local destructor = require("../core_memory/destructor")
+local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local peek = require("../core_use/peek")
 
 type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {
@@ -41,7 +41,7 @@ local CLASS = table.freeze({
 				has_holes = true
 				continue
 			elseif output[output_key] ~= nil then
-				External.log_error_nonfatal(
+				log_error_nonfatal(
 					iter_for.for_key_collision,
 					nil,
 					output_key,

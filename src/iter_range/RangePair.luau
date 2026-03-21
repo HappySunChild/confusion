@@ -3,12 +3,12 @@ local iter_range = require("./types")
 local logging = require("../core_logging/types")
 local memory = require("../core_memory/types")
 
-local External = require("../core_external/External")
 local cleanup = require("../core_memory/cleanup")
 local derive_scope = require("../core_memory/derive_scope")
 local destructor = require("../core_memory/destructor")
 local generic_use = require("../core_use/generic_use")
 local is_similar = require("../core_calc/is_similar")
+local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local mark_dirty = require("../core_graph/mark_dirty")
 local parse_error = require("../core_logging/parse_error")
 
@@ -47,7 +47,7 @@ local CLASS = table.freeze({
 		if not ok then
 			cleanup(inner_scope)
 
-			External.log_error_nonfatal(calc.callback_error, output_value :: logging.Error)
+			log_error_nonfatal(calc.callback_error, output_value :: logging.Error)
 
 			return false
 		end

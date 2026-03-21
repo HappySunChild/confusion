@@ -2,11 +2,11 @@ local calc = require("../core_calc/types")
 local iter_for = require("../iter_for/types")
 local memory = require("../core_memory/types")
 
-local External = require("../core_external/External")
 local cast_to_state = require("../core_calc/cast_to_state")
 local cleanup = require("../core_memory/cleanup")
 local dissolving_use = require("../core_use/dissolving_use")
 local inner_scope = require("../core_memory/inner_scope")
+local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 
 local function check_dissolvable<S, IK, IV, OK, OV>(
 	scope: memory.Scope<S>,
@@ -38,7 +38,7 @@ local function check_dissolvable<S, IK, IV, OK, OV>(
 		if output_key == nil or output_value == nil then
 			continue
 		elseif output[output_key] ~= nil then
-			External.log_error_nonfatal(iter_for.for_key_collision, nil, tostring(output_key))
+			log_error_nonfatal(iter_for.for_key_collision, nil, tostring(output_key))
 
 			continue
 		end
