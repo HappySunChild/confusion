@@ -25,7 +25,7 @@
 			"chrono": "temp",
 			"safe": "functions",
 			"roblox_instances": "roblox",
-			"roblox_provider": "roblox",
+			"roblox_external": "roblox",
 			"roblox_templates": "roblox",
 		},
 		"luau-lsp.sourcemap.rojoProjectFile": "dev.project.json",

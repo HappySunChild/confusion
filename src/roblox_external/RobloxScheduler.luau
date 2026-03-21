@@ -3,11 +3,11 @@ local RunService = game:GetService("RunService")
 
 local external = require("../core_external/types")
 
-local External = require("../core_external/External")
+local ExternalScheduler = require("../core_external/ExternalScheduler")
 
-local scheduler_disconnect
+local scheduler_disconnect: () -> ()? = nil
 
-local RobloxProvider = table.freeze({
+local RobloxScheduler: external.ExternalScheduler = {
 	do_task_immediate = task.spawn,
 	do_task_deferred = task.defer,
 	do_task_delayed = task.delay,
@@ -24,14 +24,14 @@ local RobloxProvider = table.freeze({
 			RunService:BindToRenderStep(
 				id,
 				Enum.RenderPriority.First.Value,
-				External.perform_update_step
+				ExternalScheduler.perform_update_step
 			)
 
 			scheduler_disconnect = function()
 				RunService:UnbindFromRenderStep(id)
 			end
 		else
-			local connection = RunService.Heartbeat:Connect(External.perform_update_step)
+			local connection = RunService.Heartbeat:Connect(ExternalScheduler.perform_update_step)
 
 			scheduler_disconnect = function()
 				connection:Disconnect()
@@ -44,6 +44,6 @@ local RobloxProvider = table.freeze({
 			scheduler_disconnect = nil
 		end
 	end,
-})
+}
 
-return RobloxProvider :: external.ExternalProvider
+return table.freeze(RobloxScheduler)
