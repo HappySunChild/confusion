@@ -1,8 +1,6 @@
 local external = require("./types")
 local memory = require("../core_memory/types")
 
-local name_of = require("../core_logging/name_of")
-
 local active_debugger: external.ExternalDebugger? = nil
 
 return table.freeze({
@@ -35,5 +33,4 @@ return table.freeze({
 
 		active_debugger.untrack_scope(scope)
 	end,
-	name_of = name_of,
 })
