@@ -1,7 +1,7 @@
 local graph = require("./types")
 
-local External = require("../core_external/External")
-local do_task_immediate = External.do_task_immediate
+local ExternalScheduler = require("../core_external/ExternalScheduler")
+local do_task_immediate = ExternalScheduler.do_task_immediate
 
 local evaluate = require("./evaluate")
 local is_eager = require("./is_eager")

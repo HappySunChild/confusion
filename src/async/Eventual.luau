@@ -4,7 +4,9 @@ local graph = require("../core_graph/types")
 local logging = require("../core_logging/types")
 local memory = require("../core_memory/types")
 
-local External = require("../core_external/External")
+local ExternalScheduler = require("../core_external/ExternalScheduler")
+local cancel_task = ExternalScheduler.cancel_task
+local do_task_immediate = ExternalScheduler.do_task_immediate
 local cast_to_state = require("../core_calc/cast_to_state")
 local change = require("../core_graph/change")
 local cleanup = require("../core_memory/cleanup")
@@ -73,7 +75,7 @@ local CLASS = table.freeze({
 
 		-- cancel any currently active computations
 		if self._active_thread ~= nil then
-			External.cancel_task(self._active_thread)
+			cancel_task(self._active_thread)
 			self._active_thread = nil
 		end
 
@@ -84,7 +86,7 @@ local CLASS = table.freeze({
 		self._old_value = self._pending_value
 
 		-- start computation
-		External.do_task_immediate(handle_eventual_computation, self)
+		do_task_immediate(handle_eventual_computation, self)
 
 		return not is_similar(self._old_value, self._cached_value)
 	end,
@@ -128,7 +130,7 @@ end
 
 local function destroy_eventual<T, S>(eventual: Self<T, S>)
 	if eventual._active_thread ~= nil then
-		External.cancel_task(eventual._active_thread)
+		cancel_task(eventual._active_thread)
 	end
 
 	eventual._session_used = nil

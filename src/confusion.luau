@@ -4,9 +4,9 @@ local graph = require("./core_graph/types")
 local memory = require("./core_memory/types")
 local use = require("./core_use/types")
 
-local External = require("./core_external/External")
 local ExternalDebugger = require("./core_external/ExternalDebug")
 local ExternalLogger = require("./core_external/ExternalLogger")
+local ExternalScheduler = require("./core_external/ExternalScheduler")
 
 local merge = require("./core_memory/merge")
 
@@ -18,7 +18,7 @@ type Version = {
 type Configuration<Included> = {
 	version: Version,
 	include: Included,
-	provider: external.ExternalProvider,
+	scheduler: external.ExternalScheduler,
 	debugger: external.ExternalDebugger?,
 	logger: external.ExternalLogger?,
 }
@@ -64,7 +64,7 @@ local CORE_CONFUSION = table.freeze({
 })
 
 local function confusion<I>(options: Configuration<I>): ConFusion<I>
-	External.set_provider(options.provider)
+	ExternalScheduler.set_provider(options.scheduler)
 	ExternalDebugger.set_debugger(options.debugger)
 	ExternalLogger.set_logger(options.logger)
 

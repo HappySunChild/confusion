@@ -130,8 +130,8 @@ type ConFusionForRoblox = confusion.ConFusion<{
 
 local confusion_for_roblox = confusion({
 	version = { major = 1, minor = 0 },
-	provider = require("./roblox_provider/RobloxProvider"),
-	logger = require("./roblox_provider/RobloxLogger"),
+	scheduler = require("./roblox_external/RobloxScheduler"),
+	logger = require("./roblox_external/RobloxLogger"),
 	debugger = nil,
 	include = {
 		-- Iter: For

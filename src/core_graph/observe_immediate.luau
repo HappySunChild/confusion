@@ -1,7 +1,8 @@
 local graph = require("./types")
 local memory = require("../core_memory/types")
 
-local External = require("../core_external/External")
+local ExternalScheduler = require("../core_external/ExternalScheduler")
+local do_task_immediate = ExternalScheduler.do_task_immediate
 
 local observe = require("./observe")
 
@@ -16,7 +17,7 @@ local function observe_immediate(
 	subject: graph.GraphNode,
 	callback: () -> ()
 ): (() -> ())?
-	External.do_task_immediate(callback)
+	do_task_immediate(callback)
 
 	return observe(scope, subject, callback)
 end

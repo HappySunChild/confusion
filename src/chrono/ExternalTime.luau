@@ -1,7 +1,7 @@
 local chrono = require("./types")
 local memory = require("../core_memory/types")
 
-local External = require("../core_external/External")
+local ExternalScheduler = require("../core_external/ExternalScheduler")
 local change = require("../core_graph/change")
 local destructor = require("../core_memory/destructor")
 
@@ -14,7 +14,7 @@ local CLASS = {
 	kind = "ExternalTime",
 	timeliness = "lazy",
 	using = table.freeze({}),
-	_cached_value = External.get_last_update(),
+	_cached_value = ExternalScheduler.get_last_update(),
 
 	enable = function(self: Self)
 		ALL_TIMERS[self] = true
@@ -51,7 +51,7 @@ local function ExternalTime(scope: memory.Scope): chrono.ExternalTime
 	return new_externaltime
 end
 
-External.bind_to_update_step(function(now: number)
+ExternalScheduler.bind_to_update_step(function(now: number)
 	CLASS._cached_value = now
 
 	for timer in ALL_TIMERS do

@@ -3,13 +3,16 @@ local chrono = require("../chrono/types")
 local memory = require("../core_memory/types")
 local motion = require("./types")
 
-local External = require("../core_external/External")
+local ExternalScheduler = require("../core_external/ExternalScheduler")
+local get_delta_time = ExternalScheduler.get_delta_time
+
 local Timer = require("../chrono/Timer")
 local change = require("../core_graph/change")
 local depend = require("../core_graph/depend")
 local destructor = require("../core_memory/destructor")
 local evaluate = require("../core_graph/evaluate")
 local is_similar = require("../core_calc/is_similar")
+local log_warn = require("../core_logging/log_warn")
 local peek = require("../core_use/peek")
 
 type Self<T> = {
@@ -40,7 +43,7 @@ local function sync_dynamics<T>(
 	if output_value ~= output_value then
 		local goal = motion_obj._active_goal
 
-		External.log_warn(motion.animated_invalid_motion, output_value, goal)
+		log_warn(motion.animated_invalid_motion, output_value, goal)
 
 		output_value = goal
 	end
@@ -92,7 +95,7 @@ local CLASS = table.freeze({
 
 		-- protect against NaN goals
 		if new_goal ~= new_goal then
-			External.log_warn(motion.animated_invalid_goal, new_goal)
+			log_warn(motion.animated_invalid_goal, new_goal)
 
 			return false
 		end
@@ -122,7 +125,7 @@ local CLASS = table.freeze({
 
 		-- fix Motions following eachother
 		if elapsed == 0 then
-			elapsed = External.get_delta_time()
+			elapsed = get_delta_time()
 		end
 
 		local old_value = self._cached_value :: any
