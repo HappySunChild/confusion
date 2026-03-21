@@ -32,15 +32,15 @@ return table.freeze({
 			print(formatted_message)
 		end
 	end,
-	log_error = function(message: string, err: logging.Error?, ...: any)
+	log_error = function(message: string, err: logging.Error?, ...: any): never
 		local formatted_message = format_error(message, err, ...)
 
 		if active_logger ~= nil then
 			active_logger.log_error(formatted_message)
 			-- active_log_error(formatted_message)
-		else
-			error(formatted_message, 0)
 		end
+
+		error(formatted_message, 0)
 	end,
 	log_error_nonfatal = function(message: string, err: logging.Error?, ...: any)
 		local formatted_message = format_error(message, err, ...)
