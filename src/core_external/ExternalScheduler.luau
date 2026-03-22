@@ -54,7 +54,7 @@ return table.freeze({
 		return active_scheduler.cancel_task(task)
 	end,
 
-	bind_to_update_step = function(callback: (now: number) -> ()): () -> ()
+	bind_to_update_step = function(callback: (now: number, dt: number) -> ()): () -> ()
 		local unique_identifier = {}
 		bound_callbacks[unique_identifier] = callback
 
@@ -69,7 +69,7 @@ return table.freeze({
 		last_update = now
 
 		for _, callback in bound_callbacks do
-			callback(now)
+			callback(now, delta_time)
 		end
 	end,
 
