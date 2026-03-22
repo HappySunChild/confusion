@@ -18,7 +18,8 @@ local SpecScheduler = {
 	stop_scheduler = function()
 		do_update_steps = false
 	end,
-	ext_step = function()
+
+	step = function()
 		if do_update_steps then
 			ExternalScheduler.perform_update_step()
 		end
