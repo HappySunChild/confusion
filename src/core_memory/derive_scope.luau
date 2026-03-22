@@ -1,6 +1,7 @@
 local memory = require("./types")
 
 local ExternalDebug = require("../core_external/ExternalDebug")
+local track_scope = ExternalDebug.track_scope
 
 local merge = require("./merge")
 
@@ -16,7 +17,7 @@ local function derive_scope<S, M>(existing: memory.Scope<S>, methods: M?): memor
 
 	local derived_scope = setmetatable({}, new_metatable)
 
-	ExternalDebug.track_scope(derived_scope)
+	track_scope(derived_scope)
 
 	return derived_scope
 end
