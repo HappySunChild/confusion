@@ -5,7 +5,7 @@ local butler_pretty = require("@butler/hooks/butler_pretty")
 local ExternalScheduler = require("@fusion/core_external/ExternalScheduler")
 
 local SpecScheduler = require("./SpecScheduler")
-local test_config = require("./test_config")
+local config = require("./config")
 
 ExternalScheduler.set_scheduler(SpecScheduler)
 
@@ -25,7 +25,7 @@ local configured = butler({
 
 local configured_units = {}
 
-for _, unit in test_config.all_units do
+for _, unit in config.all_units do
 	table.insert(configured_units, unit(configured))
 end
 
