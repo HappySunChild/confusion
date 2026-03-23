@@ -15,13 +15,14 @@ return function(configured: butler.Configured)
 			expect(value):to_be_a("table")
 			expect(value.type):to_equal("State")
 			expect(value.kind):to_equal("Value")
-			expect(table.find(scope, value._oldest_task)):to_exist()
+			expect(scope):to_have_value(value._oldest_task)
 
 			cleanup(scope)
 		end)
 		test("destroyable", function()
-			local value = Value({}, nil)
-			expect(cleanup):to_never_throw(value)
+			local scope = {}
+			Value(scope, nil)
+			expect(cleanup):to_never_throw(scope)
 		end)
 		test("default", function()
 			local scope = {}
