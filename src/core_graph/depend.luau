@@ -16,6 +16,10 @@ local function depend(user: graph.GraphNode, dependency: any?)
 		return
 	end
 
+	if cast_to_graph(user) == nil then
+		return
+	end
+
 	check_lifetime(user, dependency, dependency.scope, depend_lifetime_formatter)
 
 	evaluate(dependency)
