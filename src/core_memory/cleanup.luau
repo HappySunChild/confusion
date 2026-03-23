@@ -8,8 +8,8 @@ local log_error = require("../core_logging/log_error")
 local ALREADY_DESTROYING: { [memory.Chore]: true } = {}
 
 --[[
-	Cleans up the tasks passed in as the arguments.
-	A task can be any of the following:
+	Cleans up the chores passed in as the arguments.
+	A chore can be any of the following:
 	- a Roblox Instance - will be destroyed
 	- a Roblox RBXScriptConnection - will be disconnected
 	- a function - will be ran
