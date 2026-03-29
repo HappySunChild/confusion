@@ -5,13 +5,13 @@ local memory = require("../core_memory/types")
 
 local cleanup = require("../core_memory/cleanup")
 local depend = require("../core_graph/depend")
-local derive_scope = require("../core_memory/derive_scope")
 local destructor = require("../core_memory/destructor")
+local inner_scope = require("../core_memory/inner_scope")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local peek = require("../core_use/peek")
 
 type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {
-	_input: calc.UsedAs<{ [IK]: IV }>,
+	_input_table: calc.UsedAs<{ [IK]: IV }>,
 
 	_active_pairs: { [IK]: iter_for.ComputedPair<IK, IV, OK, OV> },
 	_pair_scope: memory.Scope<S>,
@@ -62,7 +62,7 @@ local CLASS = table.freeze({
 			end
 		end
 
-		if has_holes and max_array_index < min_array_index then
+		if has_holes and max_array_index > min_array_index then -- this has been broken for HOW LONG??
 			local move_to_index = min_array_index
 
 			for move_from_index = min_array_index, max_array_index do
@@ -79,9 +79,9 @@ local CLASS = table.freeze({
 		end
 	end,
 	_evaluate = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>)
-		depend(self, self._input)
+		depend(self, self._input_table)
 
-		local pending_pairs = table.clone(peek(self._input)) :: { [IK]: IV }
+		local pending_pairs = table.clone(peek(self._input_table)) :: { [IK]: IV }
 
 		local old_pairs = self._active_pairs
 		local new_pairs = {}
@@ -144,7 +144,7 @@ local CLASS = table.freeze({
 
 			-- cleanup pairs that can't be reused
 			if not can_reuse then
-				pair:destroy()
+				cleanup(pair.scope)
 
 				continue
 			end
@@ -163,7 +163,8 @@ local CLASS = table.freeze({
 
 		-- create new pair objects for any remaining pairs that couldn't be reused.
 		for pending_key, pending_value in pending_pairs do
-			new_pairs[pending_key] = pair_constructor(pair_scope, pending_key, pending_value)
+			new_pairs[pending_key] =
+				pair_constructor(inner_scope(pair_scope), pending_key, pending_value)
 		end
 
 		self._active_pairs = new_pairs
@@ -174,7 +175,6 @@ local CLASS = table.freeze({
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_fordiassembly<S, IK, IV, OK, OV>(fordisassembly: Self<S, IK, IV, OK, OV>)
-	cleanup(fordisassembly._pair_scope)
 	fordisassembly._pair_scope = nil
 	fordisassembly._active_pairs = nil
 end
@@ -195,10 +195,10 @@ local function ForDisassembly<S, IK, IV, OK, OV>(
 		users = {},
 		using = {},
 
-		_input = input,
+		_input_table = input,
 
 		_active_pairs = {},
-		_pair_scope = derive_scope(scope),
+		_pair_scope = inner_scope(scope),
 
 		_constructor = constructor,
 	}, CLASS_METATABLE) :: any
