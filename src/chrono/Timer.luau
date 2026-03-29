@@ -63,7 +63,7 @@ local CLASS = table.freeze({
 		return old_value ~= new_value
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function Timer(scope: memory.Scope): chrono.Timer
 	local externaltime = ExternalTime(scope)
@@ -80,7 +80,7 @@ local function Timer(scope: memory.Scope): chrono.Timer
 		_start = peek(externaltime),
 
 		_timer = externaltime,
-	}, METATABLE) :: Self
+	}, CLASS_METATABLE) :: Self
 
 	table.insert(scope, destructor(new_timer))
 

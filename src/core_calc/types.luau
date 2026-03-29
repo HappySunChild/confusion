@@ -3,7 +3,6 @@ local memory = require("../core_memory/types")
 
 export type StateNode<T> = {
 	type: "State",
-
 	_cached_value: T,
 } & graph.GraphNode
 

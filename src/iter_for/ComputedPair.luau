@@ -86,7 +86,7 @@ local CLASS = table.freeze({
 		return not (is_similar(old_key, new_key) and is_similar(old_value, new_value))
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_computedpair<S, IK, IV, OK, OV>(computedpair: Self<S, IK, IV, OK, OV>)
 	cleanup(computedpair._inner_scope)
@@ -122,7 +122,7 @@ local function ComputedPair<S, IK, IV, OK, OV>(
 
 		_inner_scope = nil,
 		_processor = processor,
-	}, METATABLE)
+	}, CLASS_METATABLE)
 
 	new_computedpair._use = generic_use(new_computedpair)
 

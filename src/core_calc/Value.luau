@@ -30,7 +30,7 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function Value<T>(scope: memory.Scope, initial_value: T): calc.Value<T>
 	local new_value: Self<T> = setmetatable({
@@ -40,7 +40,7 @@ local function Value<T>(scope: memory.Scope, initial_value: T): calc.Value<T>
 		users = {},
 
 		_cached_value = initial_value,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
 	local oldest_task = destructor(new_value)
 	new_value._oldest_task = oldest_task

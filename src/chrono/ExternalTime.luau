@@ -30,7 +30,7 @@ local CLASS = {
 		return true
 	end,
 }
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_externaltime(externaltime: Self)
 	ALL_TIMERS[externaltime] = nil
@@ -42,7 +42,7 @@ local function ExternalTime(scope: memory.Scope): chrono.ExternalTime
 		created_at = os.clock(),
 		validity = "valid",
 		users = {},
-	}, METATABLE) :: Self
+	}, CLASS_METATABLE) :: Self
 
 	ALL_TIMERS[new_externaltime] = true
 

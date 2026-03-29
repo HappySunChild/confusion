@@ -74,7 +74,7 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_rangedisassembly<S, V>(rangediassembly: Self<S, V>)
 	cleanup(rangediassembly._pairs_scope)
@@ -105,7 +105,7 @@ local function RangeDisassembly<S, V>(
 		_active_pairs = {},
 		_pairs_scope = derive_scope(scope),
 		_processor = processor,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
 	table.insert(scope, destructor(new_disassembly, destroy_rangedisassembly))
 

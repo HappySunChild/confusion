@@ -62,7 +62,7 @@ local CLASS = table.freeze({
 		return not is_similar(old_value, output_value)
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_rangepair<T, S>(rangepair: Self<T, S>)
 	cleanup(rangepair._inner_scope)
@@ -87,7 +87,7 @@ local function RangePair<S, T>(
 
 		_inner_scope = nil,
 		_processor = processor,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
 	new_rangepair._use = generic_use(new_rangepair)
 

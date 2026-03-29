@@ -33,9 +33,9 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, V>)
+local function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, V>): iter.Iter<K, V>
 	local new_iter: Self<K, V> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
@@ -46,7 +46,7 @@ local function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, 
 		_cached_value = {},
 
 		_disassembly = disassembly,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
 	new_iter._use = generic_use(new_iter)
 

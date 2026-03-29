@@ -171,9 +171,9 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function destroy_fordiasssembly<S, IK, IV, OK, OV>(fordisassembly: Self<S, IK, IV, OK, OV>)
+local function destroy_fordiassembly<S, IK, IV, OK, OV>(fordisassembly: Self<S, IK, IV, OK, OV>)
 	cleanup(fordisassembly._pair_scope)
 	fordisassembly._pair_scope = nil
 	fordisassembly._active_pairs = nil
@@ -201,9 +201,9 @@ local function ForDisassembly<S, IK, IV, OK, OV>(
 		_pair_scope = derive_scope(scope),
 
 		_constructor = constructor,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
-	table.insert(scope, destructor(new_disassembly, destroy_fordiasssembly))
+	table.insert(scope, destructor(new_disassembly, destroy_fordiassembly))
 
 	return new_disassembly
 end

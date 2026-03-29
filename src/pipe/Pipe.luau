@@ -14,7 +14,7 @@ local Tween = require("../motion_tweens/Tween")
 local inner_scope = require("../core_memory/inner_scope")
 
 type Self<S, T> = {
-	_latest: calc.UsedAs<T>,
+	_current: calc.UsedAs<T>,
 	_internal_scope: memory.Scope<S>,
 } & pipeline.Pipe<S, T>
 
@@ -22,13 +22,13 @@ local CLASS = table.freeze({
 	type = "Pipe",
 
 	resolve = function<T>(self: Self<any, T>): T
-		return self._latest
+		return self._current
 	end,
 	modify = function<S, T>(
 		self: Self<S, T>,
 		processor: (latest: T, scope: memory.Scope<S>) -> any
 	): Self<S, T>
-		self._latest = processor(self._latest, self._internal_scope)
+		self._current = processor(self._current, self._internal_scope)
 		return self
 	end,
 
@@ -36,8 +36,8 @@ local CLASS = table.freeze({
 		self: Self<S, T>,
 		processor: (value: T, use: calc.Use, scope: memory.Scope<S>) -> O
 	): Self<S, O>
-		local latest = self._latest
-		self._latest = Computed(self._internal_scope, function(use, scope)
+		local latest = self._current
+		self._current = Computed(self._internal_scope, function(use, scope)
 			return processor(use(latest), use, scope)
 		end)
 
@@ -49,12 +49,12 @@ local CLASS = table.freeze({
 		speed: calc.UsedAs<number>?,
 		damping: calc.UsedAs<number>?
 	): Self<S, T>
-		self._latest = Spring(self._internal_scope, self._latest, speed, damping)
+		self._current = Spring(self._internal_scope, self._current, speed, damping)
 
 		return self
 	end,
 	tween = function<S, T>(self: Self<S, T>, info: calc.UsedAs<tweens.TweenInfo>): Self<S, T>
-		self._latest = Tween(self._internal_scope, self._latest, info)
+		self._current = Tween(self._internal_scope, self._current, info)
 
 		return self
 	end,
@@ -69,7 +69,7 @@ local CLASS = table.freeze({
 			OV
 		>
 	): Self<S, { [OK]: OV }>
-		self._latest = ForPairs(self._internal_scope, self._latest, processor)
+		self._current = ForPairs(self._internal_scope, self._current, processor)
 
 		return self
 	end,
@@ -77,7 +77,7 @@ local CLASS = table.freeze({
 		self: Self<S, { [IK]: IV }>,
 		processor: iter_for.ForValuesProcessor<S, IV, OV>
 	): Self<S, { [IK]: OV }>
-		self._latest = ForValues(self._internal_scope, self._latest, processor)
+		self._current = ForValues(self._internal_scope, self._current, processor)
 
 		return self
 	end,
@@ -85,18 +85,18 @@ local CLASS = table.freeze({
 		self: Self<S, { [IK]: IV }>,
 		processor: iter_for.ForKeysProcessor<S, IK, OK>
 	): Self<S, { [OK]: IV }>
-		self._latest = ForKeys(self._internal_scope, self._latest, processor)
+		self._current = ForKeys(self._internal_scope, self._current, processor)
 
 		return self
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function Pipe<S, T>(scope: memory.Scope<S>, initial_value: calc.UsedAs<T>): pipeline.Pipe<S, T>
 	local new_pipe: Self<S, T> = setmetatable({
 		_internal_scope = inner_scope(scope),
-		_latest = initial_value,
-	}, METATABLE) :: any
+		_current = initial_value,
+	}, CLASS_METATABLE) :: any
 
 	return new_pipe
 end

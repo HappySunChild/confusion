@@ -20,7 +20,7 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_propertyof<T>(propertyof: Self<T>)
 	propertyof._event:Disconnect()
@@ -45,7 +45,7 @@ local function PropertyOf(
 
 		_cached_value = instance[property],
 		_event = nil,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 	new_property._event = event:Connect(function()
 		new_property._cached_value = instance[property]
 

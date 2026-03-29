@@ -140,7 +140,7 @@ local CLASS = table.freeze({
 		return not is_similar(old_value, new_value)
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function Motion<T>(
 	scope: memory.Scope,
@@ -167,7 +167,7 @@ local function Motion<T>(
 		_active_move = nil,
 
 		_timer = Timer(scope),
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
 	table.insert(scope, destructor(new_motion))
 

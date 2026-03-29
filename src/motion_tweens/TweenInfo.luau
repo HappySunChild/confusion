@@ -3,7 +3,7 @@ local tweens = require("./types")
 local EasingStyles = require("./EasingStyles")
 
 local CLASS = table.freeze({ type = "TweenInfo" })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function TweenInfo(info: {
 	easing_style: ((number) -> number)?,
@@ -18,7 +18,7 @@ local function TweenInfo(info: {
 		delay_time = info.delay_time or 0,
 		reverses = info.reverses or false,
 		repeat_count = info.repeat_count or 0,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 end
 
 return TweenInfo

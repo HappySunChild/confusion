@@ -36,7 +36,7 @@ local CLASS = table.freeze({
 		return not is_similar(old_value, new_value)
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function check_dissolvable<T>(alpha: calc.UsedAs<number>, keyframes: { T }): (boolean, T?)
 	if cast_to_state(alpha) ~= nil then
@@ -72,7 +72,7 @@ local function Keyframes<T>(
 
 		_alpha = alpha,
 		_keyframes = keyframes,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
 	new_keyframes._use = generic_use(new_keyframes)
 

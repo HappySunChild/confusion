@@ -51,7 +51,7 @@ local CLASS = table.freeze({
 		return false
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function check_dissolvable<T, S>(
 	scope: memory.Scope<S>,
@@ -100,7 +100,7 @@ local function Computed<T, S>(
 
 		_inner_scope = nil,
 		_processor = processor,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
 	local oldest_task = destructor(new_computed, destroy_computed)
 

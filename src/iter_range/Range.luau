@@ -34,7 +34,7 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function check_dissolvable(
 	start: calc.UsedAs<number>,
@@ -87,7 +87,7 @@ local function Range(
 		_start = start,
 		_finish = finish,
 		_step = step,
-	}, METATABLE)
+	}, CLASS_METATABLE)
 
 	table.insert(scope, destructor(new_range))
 

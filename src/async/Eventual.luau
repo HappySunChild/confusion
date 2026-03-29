@@ -93,7 +93,7 @@ local CLASS = table.freeze({
 		return not is_similar(self._old_value, self._cached_value)
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function generate_callbacks<T, S>(eventual: Self<T, S>): (calc.Use, (any) -> ())
 	local session_used = eventual._session_used
@@ -161,7 +161,7 @@ local function Eventual<T, S>(
 		_session_used = {},
 		_inner_scope = nil,
 		_processor = processor,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
 	new_eventual._use, new_eventual._become = generate_callbacks(new_eventual)
 
