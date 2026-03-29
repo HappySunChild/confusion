@@ -7,7 +7,7 @@ local function format_error(message: string, error_or_trace: logging.Error | str
 	message = string.format(message, ...)
 
 	if err ~= nil then
-		message = string.format(message, "ERROR_MESSAGE", err.message)
+		message = string.gsub(message, "ERROR_MESSAGE", err.message)
 	else
 		message = string.gsub(message, "ERROR_MESSAGE", "unknown error")
 	end
