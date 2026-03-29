@@ -58,7 +58,7 @@ local function sync_dynamics<T>(
 end
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Motion",
 	timeliness = "eager",
 

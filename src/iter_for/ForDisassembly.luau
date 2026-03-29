@@ -24,7 +24,7 @@ type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {
 }
 
 local CLASS = table.freeze({
-	type = "Graph",
+	type = "graph",
 	kind = "Disassembly",
 	timeliness = "lazy",
 

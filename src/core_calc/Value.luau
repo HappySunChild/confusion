@@ -8,7 +8,7 @@ local is_similar = require("./is_similar")
 type Self<T> = calc.Value<T>
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Value",
 	timeliness = "lazy",
 

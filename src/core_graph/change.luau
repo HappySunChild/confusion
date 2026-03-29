@@ -26,7 +26,7 @@ end
 ]]
 local function change(node: graph.GraphNode)
 	if not evaluate(node, true) then
-		return
+		return false
 	end
 
 	local eager_users: { graph.GraphNode } = {}
@@ -70,6 +70,8 @@ local function change(node: graph.GraphNode)
 			fire_node_observers(user)
 		end
 	end
+
+	return true
 end
 
 return change

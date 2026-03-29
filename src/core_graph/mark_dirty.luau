@@ -12,16 +12,16 @@ local function mark_dirty(node: graph.GraphNode)
 	if node.validity == "busy" then
 		log_error(graph.infinite_loop)
 	elseif node.validity == "dirty" then
-		return
+		return false
 	end
 
 	if is_eager(node) then
-		change(node) -- ok i think??
-
-		return
+		return change(node)
 	end
 
 	node.validity = "dirty"
+
+	return false
 end
 
 return mark_dirty

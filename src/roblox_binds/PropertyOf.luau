@@ -11,7 +11,7 @@ type Self<T> = {
 } & binds.PropertyOf<T>
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "PropertyOf",
 	timeliness = "lazy",
 	using = table.freeze({}),

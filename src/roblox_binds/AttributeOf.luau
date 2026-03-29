@@ -9,7 +9,7 @@ type Self<T> = {
 } & instances.AttributeOf<T>
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "AttributeOf",
 	timeliness = "lazy",
 	using = table.freeze({}),

@@ -10,7 +10,7 @@ type OneOrMore<T> = T | { T }
 local function process_ref(instance: Instance, ref: OneOrMore<calc.Value<Instance>>)
 	local ref_type = xtypeof(ref)
 
-	if ref_type == "State" and ref.kind == "Value" then
+	if ref_type == "state" and ref.kind == "Value" then
 		ref = ref :: calc.Value<Instance>
 		ref:set(instance)
 

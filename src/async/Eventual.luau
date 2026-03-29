@@ -55,7 +55,7 @@ local function handle_eventual_computation<T, S>(eventual: Self<T, S>)
 end
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Eventual",
 	timeliness = "eager",
 

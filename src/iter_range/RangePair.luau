@@ -21,7 +21,7 @@ type Self<T, S> = {
 } & iter_range.RangePair<T>
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "RangePair",
 	timeliness = "lazy",
 

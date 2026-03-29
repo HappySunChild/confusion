@@ -15,7 +15,7 @@ type Self = {
 } & chrono.Timer
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Timer",
 	timeliness = "lazy",
 

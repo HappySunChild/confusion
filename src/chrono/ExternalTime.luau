@@ -10,7 +10,7 @@ type Self = chrono.ExternalTime
 local ALL_TIMERS = {}
 
 local CLASS = {
-	type = "State",
+	type = "state",
 	kind = "ExternalTime",
 	timeliness = "lazy",
 	using = table.freeze({}),

@@ -23,7 +23,7 @@ local function assemble_graph(shape: standard_graph_shapes.GraphShape): Graph
 			created_at = 0,
 			users = {},
 			using = {},
-			type = "Graph",
+			type = "graph",
 			timeliness = "lazy",
 			validity = "valid",
 			_evaluate = function()

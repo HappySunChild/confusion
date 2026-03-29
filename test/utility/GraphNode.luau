@@ -6,7 +6,7 @@ local destructor = require("@fusion/core_memory/destructor")
 
 local CLASS = table.freeze({
 	timeliness = "lazy",
-	type = "Graph",
+	type = "graph",
 
 	_evaluate = function()
 		return true

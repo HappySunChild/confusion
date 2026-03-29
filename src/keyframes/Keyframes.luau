@@ -17,7 +17,7 @@ type Self<T> = {
 } & keyframes.Keyframes<T>
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Keyframes",
 	timeliness = "lazy",
 

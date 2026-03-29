@@ -3,7 +3,7 @@ local calc = require("./types")
 local xtypeof = require("../core_graph/xtypeof")
 
 local function cast_to_state(x: unknown): calc.StateNode<unknown>?
-	if xtypeof(x) == "State" then
+	if xtypeof(x) == "state" then
 		return x
 	end
 

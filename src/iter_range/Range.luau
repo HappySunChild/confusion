@@ -14,7 +14,7 @@ type Self = {
 } & iter_range.Range
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Range",
 	timeliness = "lazy",
 

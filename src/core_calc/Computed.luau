@@ -19,7 +19,7 @@ type Self<T, S> = {
 } & calc.Computed<T>
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Computed",
 	timeliness = "lazy",
 

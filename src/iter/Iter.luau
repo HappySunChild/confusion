@@ -12,7 +12,7 @@ type Self<K, V> = {
 } & iter.Iter<K, V>
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Iter",
 	timeliness = "lazy",
 

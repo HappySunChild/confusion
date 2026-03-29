@@ -26,8 +26,8 @@ return function(configured: butler.Configured)
 			cleanup(scope)
 		end)
 		test("dummy state", function()
-			local dummy_state = { type = "State" }
-			local dummy_state_with_meta = setmetatable({}, { __index = { type = "State" } })
+			local dummy_state = { type = "state" }
+			local dummy_state_with_meta = setmetatable({}, { __index = { type = "state" } })
 			local non_state = { type = "not State" }
 			local non_state_with_meta = setmetatable({}, { __index = { type = "not State" } })
 
