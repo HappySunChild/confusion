@@ -17,7 +17,7 @@ return function(configured: butler.Configured)
 		end)
 
 		for _, method in { "destroy", "Destroy", "disconnect", "Disconnect" } do
-			test(`methods {method}`, function(remark: (string) -> ())
+			test(`calls {method}`, function(remark: (string) -> ())
 				local ran = false
 
 				cleanup({
