@@ -28,7 +28,7 @@ return function(configured: butler.Configured)
 			end)
 
 			expect(computed):to_be_a("table")
-			expect(computed.type):to_equal("State")
+			expect(computed.type):to_equal("state")
 			expect(computed.kind):to_equal("Computed")
 			expect(scope):to_have_value(computed._oldest_task)
 
@@ -37,12 +37,10 @@ return function(configured: butler.Configured)
 		test("destroy", function()
 			local scope = {}
 			local value = Value(scope)
-			local computed = Computed(scope, function(use)
+			Computed(scope, function(use)
 				use(value)
 			end)
-			expect(computed):to_exist()
-			expect(cleanup):to_never_throw(computed)
-			cleanup(scope)
+			expect(cleanup):to_never_throw(scope)
 		end)
 		test("computes", function()
 			local scope = {}

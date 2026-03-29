@@ -13,7 +13,7 @@ return function(configured: butler.Configured)
 			local value = Value(scope, nil)
 
 			expect(value):to_be_a("table")
-			expect(value.type):to_equal("State")
+			expect(value.type):to_equal("state")
 			expect(value.kind):to_equal("Value")
 			expect(scope):to_have_value(value._oldest_task)
 

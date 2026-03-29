@@ -6,9 +6,9 @@ local cleanup = require("@fusion/core_memory/cleanup")
 local observe_immediate = require("@fusion/core_graph/observe_immediate")
 
 return function(configured: butler.Configured)
-	local unit, expect = configured.unit, configured.expect
+	local expect = configured.expect
 
-	return unit("observe_immediate", function(test: butler.Test)
+	return configured.unit("observe_immediate", function(test: butler.Test)
 		test("always fires on call", function()
 			local scope = {}
 
