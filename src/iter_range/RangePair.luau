@@ -89,9 +89,12 @@ local function RangePair<S, T>(
 		_processor = processor,
 	}, CLASS_METATABLE) :: any
 
+	local oldest_task = destructor(new_rangepair, destroy_rangepair)
+
+	new_rangepair._oldest_task = oldest_task
 	new_rangepair._use = generic_use(new_rangepair)
 
-	table.insert(scope, destructor(new_rangepair, destroy_rangepair))
+	table.insert(scope, oldest_task)
 
 	return new_rangepair
 end

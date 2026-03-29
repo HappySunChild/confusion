@@ -82,7 +82,10 @@ local function Timer(scope: memory.Scope): chrono.Timer
 		_timer = externaltime,
 	}, CLASS_METATABLE) :: Self
 
-	table.insert(scope, destructor(new_timer))
+	local oldest_task = destructor(new_timer)
+	new_timer._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	depend(new_timer, externaltime)
 

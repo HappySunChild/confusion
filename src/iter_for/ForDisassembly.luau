@@ -203,7 +203,11 @@ local function ForDisassembly<S, IK, IV, OK, OV>(
 		_constructor = constructor,
 	}, CLASS_METATABLE) :: any
 
-	table.insert(scope, destructor(new_disassembly, destroy_fordiassembly))
+	local oldest_task = destructor(new_disassembly, destroy_fordiassembly)
+
+	new_disassembly._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	return new_disassembly
 end

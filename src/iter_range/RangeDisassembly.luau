@@ -107,7 +107,11 @@ local function RangeDisassembly<S, V>(
 		_processor = processor,
 	}, CLASS_METATABLE) :: any
 
-	table.insert(scope, destructor(new_disassembly, destroy_rangedisassembly))
+	local oldest_task = destructor(new_disassembly, destroy_rangedisassembly)
+
+	new_disassembly._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	return new_disassembly
 end

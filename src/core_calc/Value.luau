@@ -44,6 +44,7 @@ local function Value<T>(scope: memory.Scope, initial_value: T): calc.Value<T>
 
 	local oldest_task = destructor(new_value)
 	new_value._oldest_task = oldest_task
+
 	table.insert(scope, oldest_task)
 
 	return new_value

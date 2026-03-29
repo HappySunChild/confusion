@@ -62,7 +62,6 @@ local CLASS = table.freeze({
 	is_pending = function<T, S>(self: Self<T, S>)
 		return self._active_thread ~= nil
 	end,
-
 	_evaluate = function<T, S>(self: Self<T, S>): boolean
 		if self.scope == nil then
 			return false
@@ -163,9 +162,12 @@ local function Eventual<T, S>(
 		_processor = processor,
 	}, CLASS_METATABLE) :: any
 
+	local oldest_task = destructor(new_eventual, destroy_eventual)
+
+	new_eventual._oldest_task = oldest_task
 	new_eventual._use, new_eventual._become = generate_callbacks(new_eventual)
 
-	table.insert(scope, destructor(new_eventual, destroy_eventual))
+	table.insert(scope, oldest_task)
 
 	evaluate(new_eventual, true)
 

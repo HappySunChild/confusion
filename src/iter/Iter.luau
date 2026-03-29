@@ -48,9 +48,12 @@ local function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, 
 		_disassembly = disassembly,
 	}, CLASS_METATABLE) :: any
 
+	local oldest_task = destructor(new_iter)
+
+	new_iter._oldest_task = oldest_task
 	new_iter._use = generic_use(new_iter)
 
-	table.insert(scope, destructor(new_iter))
+	table.insert(scope, oldest_task)
 
 	return new_iter
 end

@@ -74,9 +74,12 @@ local function Keyframes<T>(
 		_keyframes = keyframes,
 	}, CLASS_METATABLE) :: any
 
+	local oldest_task = destructor(new_keyframes)
+
+	new_keyframes._oldest_task = oldest_task
 	new_keyframes._use = generic_use(new_keyframes)
 
-	table.insert(scope, destructor(new_keyframes))
+	table.insert(scope, oldest_task())
 
 	return new_keyframes
 end

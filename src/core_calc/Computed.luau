@@ -104,8 +104,8 @@ local function Computed<T, S>(
 
 	local oldest_task = destructor(new_computed, destroy_computed)
 
-	new_computed._use = generic_use(new_computed)
 	new_computed._oldest_task = oldest_task
+	new_computed._use = generic_use(new_computed)
 
 	table.insert(scope, oldest_task)
 

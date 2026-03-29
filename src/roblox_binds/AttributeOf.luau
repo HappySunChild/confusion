@@ -40,14 +40,16 @@ local function AttributeOf<T>(
 		_cached_value = instance:GetAttribute(attribute),
 		_event = nil,
 	}, CLASS_METATABLE) :: any
-
 	new_attribute._event = event:Connect(function()
 		new_attribute._cached_value = instance:GetAttribute(attribute)
-
 		change(new_attribute)
 	end)
 
-	table.insert(scope, destructor(new_attribute, destroy_attributeof))
+	local oldest_task = destructor(new_attribute, destroy_attributeof)
+
+	new_attribute._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	return new_attribute
 end

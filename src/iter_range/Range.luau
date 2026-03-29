@@ -76,7 +76,7 @@ local function Range(
 		return constant
 	end
 
-	local new_range = setmetatable({
+	local new_range: Self = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		using = {},
@@ -87,9 +87,13 @@ local function Range(
 		_start = start,
 		_finish = finish,
 		_step = step,
-	}, CLASS_METATABLE)
+	}, CLASS_METATABLE) :: any
 
-	table.insert(scope, destructor(new_range))
+	local oldest_task = destructor(new_range)
+
+	new_range._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	return new_range
 end

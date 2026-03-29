@@ -48,11 +48,14 @@ local function PropertyOf(
 	}, CLASS_METATABLE) :: any
 	new_property._event = event:Connect(function()
 		new_property._cached_value = instance[property]
-
 		change(new_property)
 	end)
 
-	table.insert(scope, destructor(new_property, destroy_propertyof))
+	local oldest_task = destructor(new_property, destroy_propertyof)
+
+	new_property._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	return new_property
 end

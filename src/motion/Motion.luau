@@ -169,7 +169,11 @@ local function Motion<T>(
 		_timer = Timer(scope),
 	}, CLASS_METATABLE) :: any
 
-	table.insert(scope, destructor(new_motion))
+	local oldest_task = destructor(new_motion)
+
+	new_motion._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	evaluate(new_motion, true)
 

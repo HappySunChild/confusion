@@ -46,7 +46,11 @@ local function ExternalTime(scope: memory.Scope): chrono.ExternalTime
 
 	ALL_TIMERS[new_externaltime] = true
 
-	table.insert(scope, destructor(new_externaltime, destroy_externaltime))
+	local oldest_task = destructor(new_externaltime, destroy_externaltime)
+
+	new_externaltime._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	return new_externaltime
 end

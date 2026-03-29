@@ -105,7 +105,7 @@ local function ComputedPair<S, IK, IV, OK, OV>(
 	roam_values: boolean,
 	processor: ComputedPairProcessor<S, IK, IV, OK, OV>
 )
-	local new_computedpair = setmetatable({
+	local new_computedpair: Self<S, IK, IV, OK, OV> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
@@ -122,11 +122,14 @@ local function ComputedPair<S, IK, IV, OK, OV>(
 
 		_inner_scope = nil,
 		_processor = processor,
-	}, CLASS_METATABLE)
+	}, CLASS_METATABLE) :: any
 
+	local oldest_task = destructor(new_computedpair, destroy_computedpair)
+
+	new_computedpair._oldest_task = oldest_task
 	new_computedpair._use = generic_use(new_computedpair)
 
-	table.insert(scope, destructor(new_computedpair, destroy_computedpair))
+	table.insert(scope, oldest_task)
 
 	return new_computedpair
 end
