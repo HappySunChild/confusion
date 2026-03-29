@@ -9,23 +9,20 @@ return function(configured: butler.Configured)
 	local unit, expect = configured.unit, configured.expect
 
 	return unit("Computed", function(test: butler.Test)
-		test("dissolves with constants", function()
-			local scope = {}
-			local computed = Computed(scope, function(use)
-				return use("foo")
-			end)
+		-- test("dissolves with constants", function()
+		-- 	local scope = {}
+		-- 	local computed = Computed(scope, function(use)
+		-- 		return use("foo")
+		-- 	end)
 
-			expect(computed):to_be_a("string"):to_equal("foo")
-			expect(scope):to_never_have_key(1)
+		-- 	expect(computed):to_be_a("string"):to_equal("foo")
+		-- 	expect(scope):to_never_have_key(1)
 
-			cleanup(scope)
-		end)
-		test("constructs with state", function()
+		-- 	cleanup(scope)
+		-- end)
+		test("constructs", function()
 			local scope = {}
-			local value = Value(scope, 0)
-			local computed = Computed(scope, function(use)
-				return use(value)
-			end)
+			local computed = Computed(scope, function() end)
 
 			expect(computed):to_be_a("table")
 			expect(computed.type):to_equal("state")

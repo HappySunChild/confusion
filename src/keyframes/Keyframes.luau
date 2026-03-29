@@ -57,11 +57,11 @@ local function Keyframes<T>(
 	alpha: calc.UsedAs<number>,
 	keyframes: { T }
 ): keyframes.Keyframes<T> | T
-	local can_dissolve, constant = check_dissolvable(alpha, keyframes)
+	-- local can_dissolve, constant = check_dissolvable(alpha, keyframes)
 
-	if can_dissolve then
-		return constant
-	end
+	-- if can_dissolve then
+	-- 	return constant
+	-- end
 
 	local new_keyframes: Self<T> = setmetatable({
 		scope = scope,

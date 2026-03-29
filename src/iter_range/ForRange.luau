@@ -53,11 +53,11 @@ local function ForRange<S, T>(
 ): iter.Iter<number, T> | { T }
 	step = step or 1
 
-	local can_dissolve, constant = check_dissolvable(scope, start, finish, step, processor)
+	-- local can_dissolve, constant = check_dissolvable(scope, start, finish, step, processor)
 
-	if can_dissolve then
-		return constant
-	end
+	-- if can_dissolve then
+	-- 	return constant
+	-- end
 
 	return Iter(scope, RangeDisassembly(scope, processor, start, finish, step))
 end

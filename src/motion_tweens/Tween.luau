@@ -32,9 +32,9 @@ local function Tween<T>(
 	goal: calc.UsedAs<T>,
 	info: calc.UsedAs<tweens.TweenInfo>
 ): motion.Motion<T> | T
-	if cast_to_state(goal) == nil then
-		return goal
-	end
+	-- if cast_to_state(goal) == nil then
+	-- 	return goal
+	-- end
 
 	return Motion(scope, goal, TweenMover(info))
 end

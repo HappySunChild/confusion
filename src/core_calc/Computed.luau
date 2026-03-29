@@ -83,11 +83,11 @@ local function Computed<T, S>(
 	scope: memory.Scope<S>,
 	processor: calc.ComputedProcessor<S, T>
 ): calc.Computed<T>
-	local can_dissolve, constant = check_dissolvable(scope, processor)
+	-- local can_dissolve, constant = check_dissolvable(scope, processor)
 
-	if can_dissolve then
-		return constant
-	end
+	-- if can_dissolve then
+	-- 	return constant
+	-- end
 
 	local new_computed: Self<T, S> = setmetatable({
 		scope = scope,
