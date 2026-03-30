@@ -191,7 +191,7 @@ return function(configured: butler.Configured)
 			expect(peek(forvalues)[5]):to_never_exist()
 			cleanup(scope)
 		end)
-		test("update cleanup", function()
+		test("cleanup, state change", function()
 			local scope = {}
 			local destructed = {}
 			local data = Value(scope, { "foo", "bar" })
@@ -212,7 +212,7 @@ return function(configured: butler.Configured)
 			expect(destructed.baz):to_never_exist()
 			cleanup(scope)
 		end)
-		test("total cleanup", function()
+		test("cleanup, external cleanup", function()
 			local scope = {}
 			local destructed = {}
 			local data = { "foo", "bar" }
