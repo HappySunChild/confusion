@@ -1,0 +1,213 @@
+local ForKeys = require("@fusion/iter_for/ForKeys")
+local Value = require("@fusion/core_calc/Value")
+local cleanup = require("@fusion/core_memory/cleanup")
+local peek = require("@fusion/core_use/peek")
+
+local butler = require("@butler/butler")
+
+return function(configured: butler.Configured)
+	local expect = configured.expect
+
+	return configured.unit("ForKeys", function(test: butler.Test)
+		test("constructs", function()
+			local scope = {}
+			local forkeys = ForKeys(scope, {}, function() end)
+			expect(forkeys):to_be_a("table")
+			expect(forkeys.type):to_equal("state")
+			expect(forkeys.kind):to_equal("Iter")
+			expect(scope):to_have_value(forkeys._oldest_task)
+			cleanup(scope)
+		end)
+		test("iterates, constants", function()
+			local scope = {}
+			local data = { foo = 1, bar = 2 }
+			local forkeys = ForKeys(scope, data, function(_, _, key: string)
+				return string.upper(key)
+			end)
+			expect(peek(forkeys)):to_be_a("table")
+			expect(peek(forkeys).FOO):to_equal(1)
+			expect(peek(forkeys).BAR):to_equal(2)
+			cleanup(scope)
+		end)
+		test("iterates, state", function()
+			local scope = {}
+			local data = Value(scope, { foo = 1, bar = 2 })
+			local forkeys = ForKeys(scope, data, function(_, _, key: string)
+				return string.upper(key)
+			end)
+			expect(peek(forkeys)):to_be_a("table")
+			expect(peek(forkeys).FOO):to_equal(1)
+			expect(peek(forkeys).BAR):to_equal(2)
+			data:set({ baz = 3, qux = 4 })
+			expect(peek(forkeys).FOO):to_never_exist()
+			expect(peek(forkeys).BAR):to_never_exist()
+			expect(peek(forkeys).BAZ):to_equal(3)
+			expect(peek(forkeys).QUX):to_equal(4)
+			cleanup(scope)
+		end)
+		test("use, constants", function()
+			local scope = {}
+			local data = { foo = 1, bar = 2 }
+			local forkeys = ForKeys(scope, data, function(use, _, key: string)
+				return key .. use("baz")
+			end)
+			expect(peek(forkeys)):to_be_a("table")
+			expect(peek(forkeys).foobaz):to_equal(1)
+			expect(peek(forkeys).barbaz):to_equal(2)
+			cleanup(scope)
+		end)
+		test("use, state", function()
+			local scope = {}
+			local data = { foo = 1, bar = 2 }
+			local suffix = Value(scope, "first")
+			local forkeys = ForKeys(scope, data, function(use, _, key: string)
+				return key .. use(suffix)
+			end)
+			expect(peek(forkeys).foofirst):to_equal(1)
+			expect(peek(forkeys).barfirst):to_equal(2)
+			suffix:set("second")
+			expect(peek(forkeys).foofirst):to_never_exist()
+			expect(peek(forkeys).barfirst):to_never_exist()
+			expect(peek(forkeys).foosecond):to_equal(1)
+			expect(peek(forkeys).barsecond):to_equal(2)
+			cleanup(scope)
+		end)
+		test("errors", function()
+			local scope = {}
+			local data = { foo = 1, bar = 2, baz = 3 }
+			local suffix = Value(scope, "first")
+			local destroyed = {}
+			local forkeys = ForKeys(scope, data, function(use, inner_scope, key: string)
+				local generated = key .. use(suffix)
+				table.insert(inner_scope, function()
+					destroyed[generated] = true
+				end)
+				if key == "bar" and use(suffix) == "second" then
+					error("This is an intentional error from a unit test")
+				end
+				return generated
+			end)
+			expect(peek(forkeys)):to_be_a("table")
+			expect(peek(forkeys).foofirst):to_equal(1)
+			expect(peek(forkeys).barfirst):to_equal(2)
+			expect(peek(forkeys).bazfirst):to_equal(3)
+			suffix:set("second")
+			expect(peek(forkeys))
+				:to_never_have_key("foofirst")
+				:to_never_have_key("barfirst")
+				:to_never_have_key("bazfirst")
+				:to_never_have_key("barsecond")
+			expect(peek(forkeys).foosecond):to_equal(1)
+			expect(peek(forkeys).bazsecond):to_equal(3)
+			expect(destroyed)
+				:to_have_key("foofirst")
+				:to_have_key("barfirst")
+				:to_have_key("bazfirst")
+				:to_never_have_key("foosecond")
+				:to_have_key("barsecond")
+				:to_never_have_key("bazsecond")
+			suffix:set("third")
+			expect(peek(forkeys))
+				:to_never_have_key("foofirst")
+				:to_never_have_key("barfirst")
+				:to_never_have_key("bazfirst")
+				:to_never_have_key("foosecond")
+				:to_never_have_key("barsecond")
+				:to_never_have_key("bazsecond")
+			expect(peek(forkeys).foothird):to_equal(1)
+			expect(peek(forkeys).barthird):to_equal(2)
+			expect(peek(forkeys).bazthird):to_equal(3)
+			expect(destroyed)
+				:to_have_key("foofirst")
+				:to_have_key("barfirst")
+				:to_have_key("bazfirst")
+				:to_have_key("foosecond")
+				:to_have_key("barsecond")
+				:to_have_key("bazsecond")
+			cleanup(scope)
+		end)
+		test("nil", function()
+			local scope = {}
+			local data = { foo = 1, bar = 2, baz = 3 }
+			local omit_third = Value(scope, false)
+			local forkeys = ForKeys(scope, data, function(use, _, key: string)
+				if key == "bar" then
+					return nil
+				end
+				if use(omit_third) and key == "baz" then
+					return nil
+				end
+				return key
+			end)
+			expect(peek(forkeys)):to_be_a("table")
+			expect(peek(forkeys).foo):to_equal(1)
+			expect(peek(forkeys).bar):to_never_exist()
+			expect(peek(forkeys).baz):to_equal(3)
+			omit_third:set(true)
+			expect(peek(forkeys).foo):to_equal(1)
+			expect(peek(forkeys).bar):to_never_exist()
+			expect(peek(forkeys).baz):to_never_exist()
+			omit_third:set(false)
+			expect(peek(forkeys).foo):to_equal(1)
+			expect(peek(forkeys).bar):to_never_exist()
+			expect(peek(forkeys).baz):to_equal(3)
+			cleanup(scope)
+		end)
+		test("cleanup, state change", function()
+			local scope = {}
+			local destructed = {}
+			local data = Value(scope, { foo = 1, bar = 2 })
+			local forkeys = ForKeys(scope, data, function(_, inner_scope, key: string)
+				table.insert(inner_scope, function()
+					destructed[key] = true
+				end)
+				return key
+			end)
+			peek(forkeys)
+			expect(destructed)
+				:to_never_have_key("foo")
+				:to_never_have_key("bar")
+				:to_never_have_key("baz")
+			data:set({ baz = 3 })
+			peek(forkeys)
+			expect(destructed):to_have_key("foo"):to_have_key("bar"):to_never_have_key("baz")
+			cleanup(scope)
+		end)
+		test("cleanup, external cleanup", function()
+			local scope = {}
+			local destructed = {}
+			local data = { foo = 1, bar = 2 }
+			local forkeys = ForKeys(scope, data, function(_, inner_scope, key: string)
+				table.insert(inner_scope, function()
+					destructed[key] = true
+				end)
+				return key
+			end)
+			peek(forkeys)
+			expect(destructed):to_never_have_key("foo"):to_never_have_key("bar")
+			cleanup(scope)
+			expect(destructed):to_have_key("foo"):to_have_key("bar")
+		end)
+		test("roaming keys", function()
+			local scope = {}
+			local data = Value(scope, { foo = 1, bar = 2 })
+			local computations = 0
+			local forkeys = ForKeys(scope, data, function(_, _, key: string)
+				computations += 1
+				return string.upper(key)
+			end)
+			peek(forkeys)
+			expect(computations):to_equal(2)
+			data:set({ foo = 3, bar = 4 })
+			peek(forkeys)
+			expect(computations):to_equal(2)
+			data:set({ foo = 3, bar = 4, baz = 5 })
+			peek(forkeys)
+			expect(computations):to_equal(3)
+			data:set({ qux = 6 })
+			peek(forkeys)
+			expect(computations):to_equal(4)
+			cleanup(scope)
+		end)
+	end)
+end
