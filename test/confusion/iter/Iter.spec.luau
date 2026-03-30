@@ -21,11 +21,6 @@ return function(configured: butler.Configured)
 
 			cleanup(scope)
 		end)
-		test("destroys", function()
-			local scope = {}
-			Iter(scope, nil)
-			expect(cleanup):to_never_throw(scope)
-		end)
 		test("populates", function()
 			local scope = {}
 

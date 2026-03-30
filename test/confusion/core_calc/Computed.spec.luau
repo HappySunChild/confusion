@@ -31,14 +31,6 @@ return function(configured: butler.Configured)
 
 			cleanup(scope)
 		end)
-		test("destroy", function()
-			local scope = {}
-			local value = Value(scope)
-			Computed(scope, function(use)
-				use(value)
-			end)
-			expect(cleanup):to_never_throw(scope)
-		end)
 		test("computes", function()
 			local scope = {}
 			local dependency = Value(scope, 5)

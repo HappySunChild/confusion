@@ -19,11 +19,6 @@ return function(configured: butler.Configured)
 
 			cleanup(scope)
 		end)
-		test("destroyable", function()
-			local scope = {}
-			Value(scope, nil)
-			expect(cleanup):to_never_throw(scope)
-		end)
 		test("default", function()
 			local scope = {}
 			local value = Value(scope, 5)
