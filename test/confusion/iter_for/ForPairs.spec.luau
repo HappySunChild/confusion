@@ -12,21 +12,18 @@ return function(configured: butler.Configured)
 		test("constructs", function()
 			local scope = {}
 			local forpairs = ForPairs(scope, {}, function() end)
-
 			expect(forpairs):to_be_a("table")
 			expect(forpairs.type):to_equal("state")
 			expect(forpairs.kind):to_equal("Iter")
 			expect(scope):to_have_value(forpairs._oldest_task)
-
 			cleanup(scope)
 		end)
-		test("iterates constants", function()
+		test("iterates, constants", function()
 			local scope = {}
 			local data = { foo = "bar", baz = "qux" }
 			local forpairs = ForPairs(scope, data, function(_, _, key, value)
 				return value, key
 			end)
-
 			expect(peek(forpairs)):to_be_a("table")
 			expect(peek(forpairs).foo):to_never_exist()
 			expect(peek(forpairs).baz):to_never_exist()
@@ -34,7 +31,7 @@ return function(configured: butler.Configured)
 			expect(peek(forpairs).qux):to_equal("baz")
 			cleanup(scope)
 		end)
-		test("iterates state", function()
+		test("iterates, state", function()
 			local scope = {}
 			local data = Value(scope, { foo = "bar", baz = "qux" })
 			local forpairs = ForPairs(scope, data, function(_, _, key, value)
@@ -52,7 +49,7 @@ return function(configured: butler.Configured)
 			expect(peek(forpairs).oof):to_equal("bar")
 			cleanup(scope)
 		end)
-		test("use constants", function()
+		test("use, constants", function()
 			local scope = {}
 			local data = { foo = "bar", baz = "qux" }
 			local forpairs = ForPairs(scope, data, function(use, _, key: string, value: string)
@@ -63,7 +60,7 @@ return function(configured: butler.Configured)
 			expect(peek(forpairs).quxbaz):to_equal("bazbaz")
 			cleanup(scope)
 		end)
-		test("use state", function()
+		test("use, state", function()
 			local scope = {}
 			local data = { foo = "bar", baz = "qux" }
 			local suffix = Value(scope, "first")
