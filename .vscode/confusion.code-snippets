@@ -16,8 +16,14 @@
 	},
 	"test": {
 		"scope": "luau",
-		"prefix": "=test",
+		"prefix": "tt",
 		"body": "test(\"$1\", function()\n\t$0\nend)",
+		"include": "*.spec.luau"
+	},
+	"expect": {
+		"scope": "luau",
+		"prefix": "xx",
+		"body": "expect($1)$0",
 		"include": "*.spec.luau"
 	}
 }
