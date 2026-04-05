@@ -55,28 +55,26 @@ return table.freeze({
 	process = function()
 		local now = os.clock()
 
-		while true do
-			for index = #QUEUE, 1, -1 do
-				local queued_task = QUEUE[index]
+		for index = #QUEUE, 1, -1 do
+			local queued_task = QUEUE[index]
 
-				if queued_task.startby ~= nil and now < queued_task.startby then
-					continue
-				end
-
-				start_task(queued_task.thread, table.unpack(queued_task.args))
+			if queued_task.startby ~= nil and now < queued_task.startby then
+				continue
 			end
 
-			for index = #ACTIVE, 1, -1 do
-				local thread = ACTIVE[index]
-				local ok, result: string = coroutine.resume(thread)
+			start_task(queued_task.thread, table.unpack(queued_task.args))
+		end
 
-				if not ok then
-					print("Error in scheduler: " .. result)
-				end
+		for index = #ACTIVE, 1, -1 do
+			local thread = ACTIVE[index]
+			local ok, result: string = coroutine.resume(thread)
 
-				if coroutine.status(thread) == "dead" then
-					table.remove(ACTIVE, index)
-				end
+			if not ok then
+				print("Error in scheduler: " .. result)
+			end
+
+			if coroutine.status(thread) == "dead" then
+				table.remove(ACTIVE, index)
 			end
 		end
 	end,
