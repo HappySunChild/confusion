@@ -9,8 +9,6 @@ local destructor = require("../core_memory/destructor")
 local peek = require("../core_use/peek")
 
 type Self = {
-	_paused: boolean,
-	_start: number,
 	_timer: chrono.ExternalTime,
 } & chrono.Timer
 
@@ -20,34 +18,33 @@ local CLASS = table.freeze({
 	timeliness = "lazy",
 
 	unpause = function(self: Self)
-		if not self._paused then
+		if not self.is_paused then
 			return
 		end
 
 		self._timer:enable()
-		self._paused = false
+		self.reference_point = peek(self._timer) - self._cached_value
+		self.is_paused = false
 
 		change(self)
 	end,
 	pause = function(self: Self)
-		if self._paused then
+		if self.is_paused then
 			return
 		end
 
 		self._timer:disable()
-		self._paused = true
-
-		change(self)
+		self.is_paused = true
 	end,
 	zero = function(self: Self)
-		self._start = peek(self._timer) :: number
+		self.reference_point = peek(self._timer) :: number
 		self._cached_value = 0
 
 		change(self)
 	end,
 
 	_evaluate = function(self: Self)
-		if self._paused then
+		if self.is_paused then
 			return false
 		end
 
@@ -56,7 +53,7 @@ local CLASS = table.freeze({
 		local now = peek(self._timer) :: number
 
 		local old_value = self._cached_value
-		local new_value = now - self._start
+		local new_value = now - self.reference_point
 
 		self._cached_value = new_value
 
@@ -73,11 +70,10 @@ local function Timer(scope: memory.Scope): chrono.Timer
 		validity = "valid",
 		using = {},
 		users = {},
-
 		_cached_value = 0,
 
-		_paused = false,
-		_start = peek(externaltime),
+		is_paused = false,
+		reference_point = peek(externaltime),
 
 		_timer = externaltime,
 	}, CLASS_METATABLE) :: Self

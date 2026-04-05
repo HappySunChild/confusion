@@ -25,7 +25,6 @@ local CLASS = {
 	is_enabled = function(self: Self)
 		return ALL_TIMERS[self] ~= nil
 	end,
-
 	_evaluate = function(self: Self)
 		return true
 	end,

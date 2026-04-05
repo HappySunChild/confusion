@@ -19,8 +19,16 @@ return {
 		-- require("./confusion/core_memory/inner_scope.spec"),
 		-- require("./confusion/core_memory/insert.spec"),
 		-- require("./confusion/core_memory/scoped.spec"),
-		require("./confusion/core_use/peek.spec"),
-		require("./confusion/core_use/generic_use.spec"),
+		-- require("./confusion/core_use/peek.spec"),
+		-- require("./confusion/core_use/generic_use.spec"),
+
+		-- require("./confusion/iter/Iter.spec"),
+		-- require("./confusion/iter_for/ForKeys.spec"),
+		-- require("./confusion/iter_for/ForValues.spec"),
+		-- require("./confusion/iter_for/ForPairs.spec"),
+
+		require("./confusion/chrono/ExternalTime.spec"),
+		require("./confusion/chrono/Timer.spec"),
 
 		-- require("./confusion/lerp/lerp_type.spec"),
 		-- require("./confusion/safe/Safe.spec"),
