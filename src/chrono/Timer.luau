@@ -25,8 +25,6 @@ local CLASS = table.freeze({
 		self._timer:enable()
 		self.reference_point = peek(self._timer) - self._cached_value
 		self.is_paused = false
-
-		change(self)
 	end,
 	pause = function(self: Self)
 		if self.is_paused then
