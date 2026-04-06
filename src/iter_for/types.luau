@@ -22,7 +22,7 @@ export type ForPairsConstructor = <S, IK, IV, OK, OV>(
 	scope: memory.Scope<S>,
 	input_table: calc.UsedAs<{ [IK]: IV }>,
 	processor: ForPairsProcessor<S, IK, IV, OK, OV>
-) -> iter.Iter<OK, OV> | { [OK]: OV }
+) -> iter.Iter<OK, OV>
 
 export type ForKeysProcessor<S, IK, OK> = (
 	use: calc.Use,
@@ -33,7 +33,7 @@ export type ForKeysConstructor = <S, IK, IV, OK>(
 	scope: memory.Scope<S>,
 	input_table: calc.UsedAs<{ [IK]: IV }>,
 	processor: ForKeysProcessor<S, IK, OK>
-) -> iter.Iter<OK, IV> | { [OK]: IV }
+) -> iter.Iter<OK, IV>
 
 export type ForValuesProcessor<S, IV, OV> = (
 	use: calc.Use,
@@ -44,7 +44,7 @@ export type ForValuesConstructor = <S, IK, IV, OV>(
 	scope: memory.Scope<S>,
 	input_table: calc.UsedAs<{ [IK]: IV }>,
 	processor: ForValuesProcessor<S, IV, OV>
-) -> iter.Iter<IK, OV> | { [IK]: OV }
+) -> iter.Iter<IK, OV>
 
 return {
 	for_key_collision = "The key '%*' was returned multiple times simultaneously, which is not allowed in `For` objects.\nInput:\n\tKey: %*\n\tValue: %*\n\nOutput:\n\tKey: %*\n\tValue: %*",

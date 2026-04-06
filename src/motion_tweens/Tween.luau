@@ -4,7 +4,6 @@ local motion = require("../motion/types")
 local tweens = require("./types")
 
 local Motion = require("../motion/Motion")
-local cast_to_state = require("../core_calc/cast_to_state")
 local get_tween_alpha = require("./get_tween_alpha")
 local get_tween_duration = require("./get_tween_duration")
 local lerp_type = require("../lerp/lerp_type")
@@ -31,11 +30,7 @@ local function Tween<T>(
 	scope: memory.Scope,
 	goal: calc.UsedAs<T>,
 	info: calc.UsedAs<tweens.TweenInfo>
-): motion.Motion<T> | T
-	-- if cast_to_state(goal) == nil then
-	-- 	return goal
-	-- end
-
+): motion.Motion<T>
 	return Motion(scope, goal, TweenMover(info))
 end
 
