@@ -14,7 +14,7 @@ type Self = {
 } & iter_range.Range
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Range",
 	timeliness = "lazy",
 
@@ -34,7 +34,7 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function check_dissolvable(
 	start: calc.UsedAs<number>,
@@ -76,20 +76,24 @@ local function Range(
 		return constant
 	end
 
-	local new_range = setmetatable({
+	local new_range: Self = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
+		using = {},
+		users = {},
 
-		_using = {},
-		_users = {},
 		_cached_value = {},
 
 		_start = start,
 		_finish = finish,
 		_step = step,
-	}, METATABLE)
+	}, CLASS_METATABLE) :: any
 
-	table.insert(scope, destructor(new_range))
+	local oldest_task = destructor(new_range)
+
+	new_range._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	return new_range
 end

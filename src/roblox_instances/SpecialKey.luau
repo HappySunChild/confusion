@@ -4,7 +4,7 @@ local memory = require("../core_memory/types")
 local CLASS = table.freeze({
 	type = "SpecialKey",
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function SpecialKey(
 	stage: instances.SpecialKeyStage,
@@ -19,7 +19,7 @@ local function SpecialKey(
 		stage = stage,
 		kind = kind,
 		apply = apply_callback,
-	}, METATABLE))
+	}, CLASS_METATABLE))
 end
 
 return SpecialKey

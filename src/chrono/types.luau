@@ -11,6 +11,8 @@ export type ExternalTime = calc.StateNode<number> & {
 
 export type Timer = calc.StateNode<number> & {
 	kind: "Timer",
+	is_paused: boolean,
+	reference_point: number,
 
 	pause: (Timer) -> (),
 	unpause: (Timer) -> (),

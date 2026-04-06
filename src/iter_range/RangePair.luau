@@ -3,12 +3,12 @@ local iter_range = require("./types")
 local logging = require("../core_logging/types")
 local memory = require("../core_memory/types")
 
-local External = require("../core_external/External")
 local cleanup = require("../core_memory/cleanup")
 local derive_scope = require("../core_memory/derive_scope")
 local destructor = require("../core_memory/destructor")
 local generic_use = require("../core_use/generic_use")
 local is_similar = require("../core_calc/is_similar")
+local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local mark_dirty = require("../core_graph/mark_dirty")
 local parse_error = require("../core_logging/parse_error")
 
@@ -21,7 +21,7 @@ type Self<T, S> = {
 } & iter_range.RangePair<T>
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "RangePair",
 	timeliness = "lazy",
 
@@ -47,7 +47,7 @@ local CLASS = table.freeze({
 		if not ok then
 			cleanup(inner_scope)
 
-			External.log_error_nonfatal(calc.callback_error, output_value :: logging.Error)
+			log_error_nonfatal(calc.callback_error, output_value :: logging.Error)
 
 			return false
 		end
@@ -62,7 +62,7 @@ local CLASS = table.freeze({
 		return not is_similar(old_value, output_value)
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_rangepair<T, S>(rangepair: Self<T, S>)
 	cleanup(rangepair._inner_scope)
@@ -77,20 +77,24 @@ local function RangePair<S, T>(
 	local new_rangepair: Self<T, S> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
-		_cached_value = nil,
+		validity = "valid",
+		using = {},
+		users = {},
 
-		_using = {},
-		_users = {},
+		_cached_value = nil,
 
 		_input_index = initial_index,
 
 		_inner_scope = nil,
 		_processor = processor,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
+	local oldest_task = destructor(new_rangepair, destroy_rangepair)
+
+	new_rangepair._oldest_task = oldest_task
 	new_rangepair._use = generic_use(new_rangepair)
 
-	table.insert(scope, destructor(new_rangepair, destroy_rangepair))
+	table.insert(scope, oldest_task)
 
 	return new_rangepair
 end

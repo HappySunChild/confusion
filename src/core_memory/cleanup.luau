@@ -1,17 +1,31 @@
 local memory = require("./types")
 
-local External = require("../core_external/External")
 local ExternalDebug = require("../core_external/ExternalDebug")
+local untrack_scope = ExternalDebug.untrack_scope
+
+local log_error = require("../core_logging/log_error")
 
 local ALREADY_DESTROYING: { [memory.Chore]: true } = {}
 
+--[[
+	Cleans up the chores passed in as the arguments.
+	A chore can be any of the following:
+	- a Roblox Instance - will be destroyed
+	- a Roblox RBXScriptConnection - will be disconnected
+	- a function - will be ran
+	- an array - `cleanup` will be called on each item
+	- a table with a `Destroy` or `destroy` function - will be called
+	- a table with a `Disconnect` or `disconnect` function - will be called
+	
+	Anything else passed in will be ignored.
+]]
 local function cleanup(chore: memory.Chore?)
 	if chore == nil then
 		return
 	end
 
 	if ALREADY_DESTROYING[chore] ~= nil then
-		External.log_error(memory.destroyed_twice)
+		log_error(memory.destroyed_twice)
 	end
 
 	ALREADY_DESTROYING[chore] = true
@@ -36,7 +50,7 @@ local function cleanup(chore: memory.Chore?)
 				chore[i] = nil
 			end
 
-			ExternalDebug.untrack_scope(chore)
+			untrack_scope(chore)
 		elseif typeof(chore.destroy) == "function" then -- :destroy method
 			chore:destroy()
 		elseif typeof(chore.Destroy) == "function" then -- :Destroy method

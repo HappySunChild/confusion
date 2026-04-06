@@ -1,5 +1,5 @@
 {
-	"name": "ConFusion",
+	"name": "confusion",
 	"tree": {
 		"$className": "DataModel",
 		"ReplicatedStorage": {
@@ -7,7 +7,7 @@
 			"Libraries": {
 				"$className": "Folder",
 				"$ignoreUnknownInstances": true,
-				"ConFusion": {
+				"confusion": {
 					"$path": "src"
 				}
 			}
@@ -15,8 +15,8 @@
 		"ServerScriptService": {
 			"$ignoreUnknownInstances": true,
 			"$className": "ServerScriptService",
-			"dev-tests": {
-				"$path": "dev-tests/roblox/server"
+			"confusion-tests": {
+				"$path": "dev/roblox/server"
 			}
 		},
 		"StarterPlayer": {
@@ -25,8 +25,8 @@
 			"StarterPlayerScripts": {
 				"$className": "StarterPlayerScripts",
 				"$ignoreUnknownInstances": true,
-				"dev-tests": {
-					"$path": "dev-tests/roblox/client"
+				"confusion-tests": {
+					"$path": "dev/roblox/client"
 				}
 			}
 		}

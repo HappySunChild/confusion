@@ -1,0 +1,246 @@
+--!strict
+export type GraphShape = {
+	label: string,
+	facts: {
+		well_formed: boolean,
+	},
+	repr: { string },
+	ids: { string },
+	edges: { { from: string, to: string } },
+}
+
+local standard_graph_shapes: { GraphShape } = {
+	{
+		label = "Unit",
+		facts = { well_formed = true },
+		repr = { "A" },
+		ids = { "A" },
+		edges = {},
+	},
+	{
+		label = "Pair",
+		facts = { well_formed = true },
+		repr = {
+			"A",
+			"↓",
+			"B",
+		},
+		ids = { "A", "B" },
+		edges = {
+			{ from = "A", to = "B" },
+		},
+	},
+	{
+		label = "Chain",
+		facts = { well_formed = true },
+		repr = {
+			"A",
+			"↓",
+			"B",
+			"↓",
+			"C",
+			"↓",
+			"D",
+		},
+		ids = { "A", "B", "C", "D" },
+		edges = {
+			{ from = "A", to = "B" },
+			{ from = "B", to = "C" },
+			{ from = "C", to = "D" },
+		},
+	},
+	{
+		label = "Many In",
+		facts = { well_formed = true },
+		repr = {
+			"A B C",
+			" ↘↓↙ ",
+			"  D  ",
+		},
+		ids = { "A", "B", "C", "D" },
+		edges = {
+			{ from = "A", to = "D" },
+			{ from = "B", to = "D" },
+			{ from = "C", to = "D" },
+		},
+	},
+	{
+		label = "Many Out",
+		facts = { well_formed = true },
+		repr = {
+			"  A  ",
+			" ↙↓↘ ",
+			"B C D",
+		},
+		ids = { "A", "B", "C", "D" },
+		edges = {
+			{ from = "A", to = "B" },
+			{ from = "A", to = "C" },
+			{ from = "A", to = "D" },
+		},
+	},
+	{
+		label = "Split Chain",
+		facts = { well_formed = true },
+		repr = {
+			"  A  ",
+			" ↙ ↘ ",
+			"B   C",
+			"↓   ↓",
+			"D   E",
+		},
+		ids = { "A", "B", "C", "D", "E" },
+		edges = {
+			{ from = "A", to = "B" },
+			{ from = "A", to = "C" },
+			{ from = "B", to = "D" },
+			{ from = "C", to = "E" },
+		},
+	},
+	{
+		label = "Braided Chain",
+		facts = { well_formed = true },
+		repr = {
+			"A   B",
+			"↓↘ ↙↓",
+			"↓↙ ↘↓",
+			"C   D",
+			"↓   ↓",
+			"E   F",
+		},
+		ids = { "A", "B", "C", "D", "E", "F" },
+		edges = {
+			{ from = "A", to = "C" },
+			{ from = "A", to = "D" },
+			{ from = "B", to = "C" },
+			{ from = "B", to = "D" },
+			{ from = "C", to = "E" },
+			{ from = "D", to = "F" },
+		},
+	},
+	{
+		label = "Diamond",
+		facts = { well_formed = true },
+		repr = {
+			"  A  ",
+			" ↙ ↘ ",
+			"B   C",
+			" ↘ ↙ ",
+			"  D  ",
+		},
+		ids = { "A", "B", "C", "D" },
+		edges = {
+			{ from = "A", to = "B" },
+			{ from = "A", to = "C" },
+			{ from = "B", to = "D" },
+			{ from = "C", to = "D" },
+		},
+	},
+	{
+		label = "Pentagon",
+		facts = { well_formed = true },
+		repr = {
+			"  A  ",
+			" ↙ ↘ ",
+			"B   ↓",
+			"↓   C",
+			"D   ↓",
+			" ↘ ↙ ",
+			"  E  ",
+		},
+		ids = { "A", "B", "C", "D", "E" },
+		edges = {
+			{ from = "A", to = "B" },
+			{ from = "A", to = "C" },
+			{ from = "B", to = "D" },
+			{ from = "C", to = "E" },
+			{ from = "D", to = "E" },
+		},
+	},
+	{
+		label = "Hexagon",
+		facts = { well_formed = true },
+		repr = {
+			"  A  ",
+			" ↙ ↘ ",
+			"B   C",
+			"↓   ↓",
+			"D   E",
+			" ↘ ↙ ",
+			"  F  ",
+		},
+		ids = { "A", "B", "C", "D", "E", "F" },
+		edges = {
+			{ from = "A", to = "B" },
+			{ from = "A", to = "C" },
+			{ from = "B", to = "D" },
+			{ from = "C", to = "E" },
+			{ from = "D", to = "F" },
+			{ from = "E", to = "F" },
+		},
+	},
+	{
+		label = "Self Cycle",
+		facts = { well_formed = false },
+		repr = {
+			"A",
+			"↺",
+		},
+		ids = { "A" },
+		edges = { { from = "A", to = "A" } },
+	},
+	{
+		label = "Pair Cycle",
+		facts = { well_formed = false },
+		repr = {
+			"A",
+			"⇅",
+			"B",
+		},
+		ids = { "A", "B" },
+		edges = {
+			{ from = "A", to = "B" },
+			{ from = "B", to = "A" },
+		},
+	},
+	{
+		label = "Cycle In Chain",
+		facts = { well_formed = false },
+		repr = {
+			"A",
+			"↓",
+			"B",
+			"⇅",
+			"C",
+			"↓",
+			"D",
+		},
+		ids = { "A", "B", "C", "D" },
+		edges = {
+			{ from = "A", to = "B" },
+			{ from = "B", to = "C" },
+			{ from = "C", to = "B" },
+			{ from = "C", to = "D" },
+		},
+	},
+	{
+		label = "Circle",
+		facts = { well_formed = false },
+		repr = {
+			"  A  ",
+			" ↙ ↖ ",
+			"B   D",
+			" ↘ ↗ ",
+			"  C  ",
+		},
+		ids = { "A", "B", "C", "D" },
+		edges = {
+			{ from = "A", to = "B" },
+			{ from = "B", to = "C" },
+			{ from = "C", to = "D" },
+			{ from = "D", to = "A" },
+		},
+	},
+}
+
+return standard_graph_shapes

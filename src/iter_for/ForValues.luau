@@ -25,11 +25,11 @@ local function ForValues<S, IK, IV, OV>(
 		return input_key, new_value
 	end
 
-	local can_dissolve, constant = check_dissolvable(scope, input_table, augmented_processor)
+	-- local can_dissolve, constant = check_dissolvable(scope, input_table, augmented_processor)
 
-	if can_dissolve then
-		return constant
-	end
+	-- if can_dissolve then
+	-- 	return constant
+	-- end
 
 	local augmented_constructor = function(
 		scope: memory.Scope<S>,

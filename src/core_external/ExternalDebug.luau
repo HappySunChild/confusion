@@ -1,12 +1,9 @@
 local external = require("./types")
 local memory = require("../core_memory/types")
 
-local name_of = require("../core_logging/name_of")
-
 local active_debugger: external.ExternalDebugger? = nil
 
 return table.freeze({
-	name_of = name_of,
 	set_debugger = function(new_debugger: external.ExternalDebugger?)
 		local old_debugger = active_debugger
 
@@ -14,7 +11,7 @@ return table.freeze({
 			old_debugger.stop_debugging()
 		end
 
-		if new_debugger then
+		if new_debugger ~= nil then
 			new_debugger.start_debugging()
 		end
 

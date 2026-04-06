@@ -14,11 +14,11 @@ local function ForPairs<S, IK, IV, OK, OV>(
 	input_table: calc.UsedAs<{ [IK]: IV }>,
 	processor: iter_for.ForPairsProcessor<S, IK, IV, OK, OV>
 ): iter.Iter<OK, OV> | { [OK]: OV }
-	local can_dissolve, constant = check_dissolvable(scope, input_table, processor)
+	-- local can_dissolve, constant = check_dissolvable(scope, input_table, processor)
 
-	if can_dissolve then
-		return constant
-	end
+	-- if can_dissolve then
+	-- 	return constant
+	-- end
 
 	local augmented_constructor = function(
 		scope: memory.Scope<S>,

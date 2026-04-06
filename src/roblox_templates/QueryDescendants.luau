@@ -2,9 +2,8 @@ local instances = require("../roblox_instances/types")
 local memory = require("../core_memory/types")
 local templates = require("../roblox_templates/types")
 
-local External = require("../core_external/External")
-
 local apply_properties = require("../roblox_instances/apply_properties")
+local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 
 local function QueryDescendants(
 	scope: memory.Scope,
@@ -16,7 +15,7 @@ local function QueryDescendants(
 		local child = descendants[1]
 
 		if child == nil then
-			External.log_error_nonfatal(templates.missing_query_descendant, nil, selector)
+			log_error_nonfatal(templates.missing_query_descendant, nil, selector)
 
 			return nil
 		end

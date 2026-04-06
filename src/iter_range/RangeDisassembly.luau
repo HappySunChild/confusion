@@ -21,7 +21,7 @@ type Self<S, V> = {
 } & iter.Disassembly<number, V>
 
 local CLASS = table.freeze({
-	type = "Graph",
+	type = "graph",
 	kind = "Disassembly",
 	timeliness = "lazy",
 
@@ -74,7 +74,7 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_rangedisassembly<S, V>(rangediassembly: Self<S, V>)
 	cleanup(rangediassembly._pairs_scope)
@@ -94,9 +94,9 @@ local function RangeDisassembly<S, V>(
 	local new_disassembly: Self<S, V> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
-
-		_users = {},
-		_using = {},
+		validity = "valid",
+		users = {},
+		using = {},
 
 		_start = start,
 		_finish = finish,
@@ -105,9 +105,13 @@ local function RangeDisassembly<S, V>(
 		_active_pairs = {},
 		_pairs_scope = derive_scope(scope),
 		_processor = processor,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
-	table.insert(scope, destructor(new_disassembly, destroy_rangedisassembly))
+	local oldest_task = destructor(new_disassembly, destroy_rangedisassembly)
+
+	new_disassembly._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	return new_disassembly
 end

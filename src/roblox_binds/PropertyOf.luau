@@ -2,25 +2,25 @@ local binds = require("./types")
 local instances = require("../roblox_instances/types")
 local memory = require("../core_memory/types")
 
-local External = require("../core_external/External")
 local change = require("../core_graph/change")
 local destructor = require("../core_memory/destructor")
+local log_error = require("../core_logging/log_error")
 
 type Self<T> = {
 	_event: RBXScriptConnection,
 } & binds.PropertyOf<T>
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "PropertyOf",
 	timeliness = "lazy",
-	_using = table.freeze({}),
+	using = table.freeze({}),
 
 	_evaluate = function()
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_propertyof<T>(propertyof: Self<T>)
 	propertyof._event:Disconnect()
@@ -34,30 +34,28 @@ local function PropertyOf(
 	local ok, event: RBXScriptSignal = pcall(instance.GetPropertyChangedSignal, instance, property)
 
 	if not ok then
-		External.log_error(
-			instances.cannot_connect_change,
-			nil,
-			instance.ClassName,
-			tostring(property)
-		)
+		log_error(instances.cannot_connect_change, nil, instance.ClassName, tostring(property))
 	end
 
 	local new_property: binds.PropertyOf<unknown> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
-
-		_users = {},
+		validity = "valid",
+		users = {},
 
 		_cached_value = instance[property],
 		_event = nil,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 	new_property._event = event:Connect(function()
 		new_property._cached_value = instance[property]
-
 		change(new_property)
 	end)
 
-	table.insert(scope, destructor(new_property, destroy_propertyof))
+	local oldest_task = destructor(new_property, destroy_propertyof)
+
+	new_property._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	return new_property
 end

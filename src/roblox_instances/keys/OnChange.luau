@@ -1,8 +1,8 @@
 local instances = require("../types")
 local memory = require("../../core_memory/types")
 
-local External = require("../../core_external/External")
 local SpecialKey = require("../SpecialKey")
+local log_error = require("../../core_logging/log_error")
 
 local KEY_CACHE = {}
 
@@ -17,12 +17,7 @@ local function OnChange(property: string): instances.SpecialKey<"OnChange">
 				local ok, event = pcall(apply_to.GetPropertyChangedSignal, apply_to, property)
 
 				if not ok then
-					External.log_error(
-						instances.cannot_connect_change,
-						nil,
-						apply_to.ClassName,
-						property
-					)
+					log_error(instances.cannot_connect_change, nil, apply_to.ClassName, property)
 				end
 
 				table.insert(

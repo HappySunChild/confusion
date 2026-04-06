@@ -2,8 +2,9 @@ local calc = require("../core_calc/types")
 local instances = require("./types")
 local memory = require("../core_memory/types")
 
-local External = require("../core_external/External")
 local Parent = require("./keys/Parent")
+local log_error = require("../core_logging/log_error")
+local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local observe_immediate = require("../core_graph/observe_immediate")
 local parse_error = require("../core_logging/parse_error")
 local peek = require("../core_use/peek")
@@ -26,12 +27,7 @@ local function set_property(instance: Instance, property: string, value: any)
 	end
 
 	if pcall(test_property_assignable, instance, property) == false then
-		External.log_error_nonfatal(
-			instances.property_cannot_assign,
-			nil,
-			instance.ClassName,
-			property
-		)
+		log_error_nonfatal(instances.property_cannot_assign, nil, instance.ClassName, property)
 
 		return
 	end
@@ -40,9 +36,9 @@ local function set_property(instance: Instance, property: string, value: any)
 	local expected_type = typeof(instance[property])
 
 	if given_type == expected_type then
-		External.log_error_nonfatal(instances.property_assign_error, err)
+		log_error_nonfatal(instances.property_assign_error, err)
 	else
-		External.log_error_nonfatal(
+		log_error_nonfatal(
 			instances.invalid_property_type,
 			nil,
 			instance.ClassName,
@@ -84,7 +80,7 @@ local function apply_properties(
 		elseif key_type == "SpecialKey" then
 			table.insert(special_keys, key)
 		else
-			External.log_error(instances.invalid_key_type, nil, key_type)
+			log_error(instances.invalid_key_type, nil, key_type)
 		end
 	end
 
@@ -98,7 +94,7 @@ local function apply_properties(
 			continue
 		end
 
-		External.log_error_nonfatal(
+		log_error_nonfatal(
 			instances.specialkey_apply_error,
 			err,
 			key.kind,

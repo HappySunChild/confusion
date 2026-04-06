@@ -9,16 +9,16 @@ type Self<T> = {
 } & instances.AttributeOf<T>
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "AttributeOf",
 	timeliness = "lazy",
-	_using = table.freeze({}),
+	using = table.freeze({}),
 
 	_evaluate = function()
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_attributeof<T>(attributeof: Self<T>)
 	attributeof._event:Disconnect()
@@ -34,20 +34,22 @@ local function AttributeOf<T>(
 	local new_attribute: Self<T> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
-
-		_users = {},
+		validity = "valid",
+		users = {},
 
 		_cached_value = instance:GetAttribute(attribute),
 		_event = nil,
-	}, METATABLE) :: any
-
+	}, CLASS_METATABLE) :: any
 	new_attribute._event = event:Connect(function()
 		new_attribute._cached_value = instance:GetAttribute(attribute)
-
 		change(new_attribute)
 	end)
 
-	table.insert(scope, destructor(new_attribute, destroy_attributeof))
+	local oldest_task = destructor(new_attribute, destroy_attributeof)
+
+	new_attribute._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	return new_attribute
 end

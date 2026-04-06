@@ -7,23 +7,21 @@ export type Validity =
 	| "valid" -- does not need to be reevaluated
 export type Timeliness = "lazy" | "eager"
 
-type Disconnect = () -> ()
-
 export type GraphNode = {
 	scope: memory.Scope?,
 
-	type: "Graph",
+	type: "graph",
 	kind: string?,
 
 	created_at: number?,
-	validity: Validity?,
+	validity: Validity,
 	timeliness: Timeliness,
 
-	_last_change: number?,
-	_last_compute: number?,
-	_users: { [GraphNode]: true },
-	_using: { [GraphNode]: true },
-	_observers: { Disconnect }?,
+	last_change: number?,
+	last_compute: number?,
+	users: { [GraphNode]: true }, -- aka dependentSet
+	using: { [GraphNode]: true }, -- aka dependencySet
+	_observers: { () -> () }?,
 
 	_evaluate: (GraphNode) -> boolean,
 	_oldest_task: () -> (),
@@ -33,7 +31,7 @@ export type Observe = (
 	scope: memory.Scope,
 	subject: GraphNode,
 	callback: () -> ()
-) -> Disconnect?
+) -> () -> ()?
 
 return {
 	infinite_loop = "Detected an infinite loop. Consider adding an explicit breakpoint to your code to prevent a cyclic dependency.",

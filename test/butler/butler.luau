@@ -35,7 +35,7 @@ export type Options = {
 
 export type Configured = {
 	unit: (label: string, body: UnitBody) -> UnitRunner,
-	expect: (any) -> expect.ExpectTests,
+	expect: (x: any) -> expect.ExpectTests,
 
 	run_units: (units: { UnitRunner }) -> UnitsRunResult,
 }
@@ -163,7 +163,7 @@ end
 local function butler(options: Options): Configured
 	local new_butler = {
 		unit = unit,
-		expect = expect,
+		expect = expect, -- reexport for convenience hm?
 
 		run_units = units_runner(butler_hooks(options.hooks)),
 	}

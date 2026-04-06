@@ -12,7 +12,7 @@ type Self<K, V> = {
 } & iter.Iter<K, V>
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Iter",
 	timeliness = "lazy",
 
@@ -33,24 +33,27 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, V>)
+local function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, V>): iter.Iter<K, V>
 	local new_iter: Self<K, V> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
+		validity = "valid",
+		using = {},
+		users = {},
 
 		_cached_value = {},
 
-		_using = {},
-		_users = {},
-
 		_disassembly = disassembly,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
+	local oldest_task = destructor(new_iter)
+
+	new_iter._oldest_task = oldest_task
 	new_iter._use = generic_use(new_iter)
 
-	table.insert(scope, destructor(new_iter))
+	table.insert(scope, oldest_task)
 
 	return new_iter
 end

@@ -1,7 +1,6 @@
 local calc = require("../core_calc/types")
 
 local cast_to_state = require("../core_calc/cast_to_state")
-
 local evaluate = require("../core_graph/evaluate")
 
 local function peek<T>(x: calc.UsedAs<T>): T

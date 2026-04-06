@@ -1,33 +1,32 @@
-local units = require("./spec")
-
 local butler = require("@butler/butler")
 local butler_chrono = require("@butler/hooks/butler_chrono")
 local butler_pretty = require("@butler/hooks/butler_pretty")
+
+local ExternalScheduler = require("@fusion/core_external/ExternalScheduler")
+
+local SpecScheduler = require("./SpecScheduler")
+local config = require("./config")
+
+ExternalScheduler.set_scheduler(SpecScheduler)
 
 local configured = butler({
 	hooks = {
 		butler_chrono,
 		butler_pretty({
+			disable_color = game ~= nil, -- in theory this'd work, but we don't have access to require aliases on Roblox
 			disable_emoji = true,
+			line_width = 100,
 			hooks = { butler_chrono },
 		}),
 	},
 })
 
-local collected = {}
+-- running stuff
 
-type UnitsContainer = { (butler.Configured) -> butler.UnitRunner | UnitsContainer }
+local configured_units = {}
 
-local function collect(units: UnitsContainer)
-	for _, unit in units do
-		if typeof(unit) == "function" then
-			table.insert(collected, unit(configured))
-		elseif typeof(unit) == "table" then
-			collect(unit)
-		end
-	end
+for _, unit in config.all_units do
+	table.insert(configured_units, unit(configured))
 end
 
-collect(units)
-
-configured.run_units(collected)
+configured.run_units(configured_units)

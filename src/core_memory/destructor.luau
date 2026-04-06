@@ -4,17 +4,17 @@ local graph = require("../core_graph/types")
 local function destroy_node(node: graph.GraphNode)
 	node.scope = nil
 
-	local using = node._using
+	local using = node.using
 
 	for dependency in using do
-		dependency._users[node] = nil
+		dependency.users[node] = nil
 		using[dependency] = nil
 	end
 
-	local users = node._users
+	local users = node.users
 
 	for user in users do
-		user._using[node] = nil
+		user.using[node] = nil
 		users[user] = nil
 	end
 end

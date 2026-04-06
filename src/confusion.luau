@@ -4,8 +4,9 @@ local graph = require("./core_graph/types")
 local memory = require("./core_memory/types")
 local use = require("./core_use/types")
 
-local External = require("./core_external/External")
 local ExternalDebugger = require("./core_external/ExternalDebug")
+local ExternalLogger = require("./core_external/ExternalLogger")
+local ExternalScheduler = require("./core_external/ExternalScheduler")
 
 local merge = require("./core_memory/merge")
 
@@ -14,14 +15,15 @@ type Version = {
 	read minor: number,
 }
 
-type Configuration<I> = {
+type Configuration<Included> = {
 	version: Version,
-	provider: external.ExternalProvider,
+	include: Included,
+	scheduler: external.ExternalScheduler,
 	debugger: external.ExternalDebugger?,
-	include: I,
+	logger: external.ExternalLogger?,
 }
 
-export type ConFusion<I = any> = {
+export type ConFusion<Included = any> = {
 	version: Version,
 
 	-- Core: Memory
@@ -42,7 +44,7 @@ export type ConFusion<I = any> = {
 	-- Core: Use
 	peek: calc.Use,
 	flatten: use.Flatten,
-} & I
+} & Included
 
 local CORE_CONFUSION = table.freeze({
 	derive_scope = require("./core_memory/derive_scope"),
@@ -62,8 +64,9 @@ local CORE_CONFUSION = table.freeze({
 })
 
 local function confusion<I>(options: Configuration<I>): ConFusion<I>
-	External.set_provider(options.provider)
+	ExternalScheduler.set_provider(options.scheduler)
 	ExternalDebugger.set_debugger(options.debugger)
+	ExternalLogger.set_logger(options.logger)
 
 	local include = options.include
 

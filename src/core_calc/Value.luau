@@ -8,11 +8,11 @@ local is_similar = require("./is_similar")
 type Self<T> = calc.Value<T>
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Value",
 	timeliness = "lazy",
 
-	_using = table.freeze({}),
+	using = table.freeze({}),
 
 	set = function<T>(self: Self<T>, new_value: T): T
 		if not is_similar(new_value, self._cached_value) then
@@ -30,21 +30,19 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function Value<T>(scope: memory.Scope, initial_value: T): calc.Value<T>
 	local new_value: Self<T> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
+		users = {},
 
 		_cached_value = initial_value,
-
-		_users = {},
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
 	local oldest_task = destructor(new_value)
-
 	new_value._oldest_task = oldest_task
 
 	table.insert(scope, oldest_task)

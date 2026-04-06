@@ -3,12 +3,12 @@ local iter_for = require("./types")
 local logging = require("../core_logging/types")
 local memory = require("../core_memory/types")
 
-local External = require("../core_external/External")
 local cleanup = require("../core_memory/cleanup")
 local derive_scope = require("../core_memory/derive_scope")
 local destructor = require("../core_memory/destructor")
 local generic_use = require("../core_use/generic_use")
 local is_similar = require("../core_calc/is_similar")
+local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local mark_dirty = require("../core_graph/mark_dirty")
 local parse_error = require("../core_logging/parse_error")
 
@@ -29,7 +29,7 @@ type Self<S, IK, IV, OK, OV> = iter_for.ComputedPair<IK, IV, OK, OV> & {
 }
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "ComputedPair",
 
 	invalidate_pair = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>, new_key: IK, new_value: IV)
@@ -57,6 +57,8 @@ local CLASS = table.freeze({
 			return false
 		end
 
+		local output = self._cached_value
+
 		local inner_scope = derive_scope(self.scope)
 		local ok, new_key, new_value = xpcall(
 			self._processor,
@@ -68,9 +70,12 @@ local CLASS = table.freeze({
 		)
 
 		if not ok then
+			output.key, output.value = nil, nil -- this behavior isn't congruent with how Computeds work, but the spec says that this is how it should work...
+
+			cleanup(self._inner_scope) -- for some reason the spec also calls for clearing the current scope as well? I guess it makes it consistent with omitting the pair. this is all weird
 			cleanup(inner_scope)
 
-			External.log_error_nonfatal(calc.callback_error, new_key :: logging.Error)
+			log_error_nonfatal(calc.callback_error, new_key :: logging.Error)
 
 			return false
 		end
@@ -78,7 +83,6 @@ local CLASS = table.freeze({
 		cleanup(self._inner_scope)
 		self._inner_scope = inner_scope
 
-		local output = self._cached_value
 		local old_key, old_value = output.key, output.value
 
 		output.key, output.value = new_key, new_value
@@ -86,7 +90,7 @@ local CLASS = table.freeze({
 		return not (is_similar(old_key, new_key) and is_similar(old_value, new_value))
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_computedpair<S, IK, IV, OK, OV>(computedpair: Self<S, IK, IV, OK, OV>)
 	cleanup(computedpair._inner_scope)
@@ -105,12 +109,12 @@ local function ComputedPair<S, IK, IV, OK, OV>(
 	roam_values: boolean,
 	processor: ComputedPairProcessor<S, IK, IV, OK, OV>
 )
-	local new_computedpair = setmetatable({
+	local new_computedpair: Self<S, IK, IV, OK, OV> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
-
-		_users = {},
-		_using = {},
+		validity = "valid",
+		users = {},
+		using = {},
 
 		_cached_value = { key = nil, value = nil },
 
@@ -122,11 +126,14 @@ local function ComputedPair<S, IK, IV, OK, OV>(
 
 		_inner_scope = nil,
 		_processor = processor,
-	}, METATABLE)
+	}, CLASS_METATABLE) :: any
 
+	local oldest_task = destructor(new_computedpair, destroy_computedpair)
+
+	new_computedpair._oldest_task = oldest_task
 	new_computedpair._use = generic_use(new_computedpair)
 
-	table.insert(scope, destructor(new_computedpair, destroy_computedpair))
+	table.insert(scope, oldest_task)
 
 	return new_computedpair
 end

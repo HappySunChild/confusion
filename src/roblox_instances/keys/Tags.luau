@@ -2,10 +2,10 @@ local calc = require("../../core_calc/types")
 local instances = require("../types")
 local memory = require("../../core_memory/types")
 
-local External = require("../../core_external/External")
 local SpecialKey = require("../SpecialKey")
 local cast_to_state = require("../../core_calc/cast_to_state")
 local cleanup = require("../../core_memory/cleanup")
+local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
 local observe_immediate = require("../../core_graph/observe_immediate")
 local peek = require("../../core_use/peek")
 
@@ -97,7 +97,7 @@ local function process_tag(
 			process_tag(sub_tag, apply_to, new_tags, new_scopes, old_tags, old_scopes)
 		end
 	else
-		External.log_error_nonfatal(instances.invalid_tag_type, debug.traceback(nil, 2), tag_type)
+		log_error_nonfatal(instances.invalid_tag_type, debug.traceback(nil, 2), tag_type)
 	end
 end
 
