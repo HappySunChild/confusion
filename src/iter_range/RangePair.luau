@@ -44,7 +44,11 @@ local CLASS = table.freeze({
 		local ok, output_value =
 			xpcall(self._processor, parse_error, self._use, inner_scope, self._input_index)
 
+		cleanup(self._inner_scope)
+
 		if not ok then
+			self._cached_value = nil
+
 			cleanup(inner_scope)
 
 			log_error_nonfatal(calc.callback_error, output_value :: logging.Error)
@@ -52,7 +56,6 @@ local CLASS = table.freeze({
 			return false
 		end
 
-		cleanup(self._inner_scope)
 		self._inner_scope = inner_scope
 
 		local old_value = self._cached_value

@@ -8,90 +8,103 @@ local cleanup = require("../core_memory/cleanup")
 local depend = require("../core_graph/depend")
 local derive_scope = require("../core_memory/derive_scope")
 local destructor = require("../core_memory/destructor")
+local inner_scope = require("../core_memory/inner_scope")
 local peek = require("../core_use/peek")
 
-type Self<S, V> = {
+type Self<S, T> = {
 	_start: calc.UsedAs<number>,
 	_finish: calc.UsedAs<number>,
 	_step: calc.UsedAs<number>,
 
 	_pairs_scope: memory.Scope<S>,
-	_active_pairs: { iter_range.RangePair<V> },
-	_processor: iter_range.RangeDisassemblyProcessor<S, V>,
-} & iter.Disassembly<number, V>
+	_current_pairs: { iter_range.RangePair<T> },
+	_ordered_pairs: { iter_range.RangePair<T> },
+	_processor: iter_range.RangeDisassemblyProcessor<S, T>,
+} & iter.Disassembly<number, T>
 
 local CLASS = table.freeze({
 	type = "graph",
 	kind = "Disassembly",
 	timeliness = "lazy",
 
-	populate = function<S, V>(self: Self<S, V>, use: calc.Use, output: { [number]: V })
-		for index, pair in self._active_pairs do
+	populate = function<S, T>(self: Self<S, T>, use: calc.Use, output: { [number]: T })
+		for index, pair in self._ordered_pairs do
 			output[index] = use(pair)
 		end
 	end,
-	_evaluate = function<S, V>(self: Self<S, V>)
+	_evaluate = function<S, T>(self: Self<S, T>)
 		depend(self, self._start)
 		depend(self, self._finish)
 		depend(self, self._step)
 
-		local old_pairs = self._active_pairs
+		local ordered_pairs = self._ordered_pairs
+		local cur_pairs = self._current_pairs
 		local new_pairs = {}
 
-		for new_index = peek(self._start), peek(self._finish), peek(self._step) do
+		table.clear(ordered_pairs)
+
+		for new_index = peek<<number>>(self._start), peek<<number>>(self._finish), peek<<number>>(self._step) do
 			-- directly reuse objects that are the same
-			if old_pairs[new_index] ~= nil then
-				new_pairs[new_index] = old_pairs[new_index]
-				old_pairs[new_index] = nil
+			local cur_pair = cur_pairs[new_index]
+
+			if cur_pair ~= nil then
+				cur_pairs[new_index] = nil
+				new_pairs[new_index] = cur_pair
+
+				table.insert(ordered_pairs, cur_pair)
 
 				continue
 			end
 
 			-- reuse any existing objects that can be repurposed
-			local old_index, reuse_object = next(old_pairs)
+			local cur_index, reuse_pair = next(cur_pairs)
 
-			if reuse_object ~= nil then
-				old_pairs[old_index] = nil
+			if reuse_pair ~= nil then
+				cur_pairs[cur_index] = nil
+				new_pairs[new_index] = reuse_pair
 
-				reuse_object:invalidate_index(new_index)
+				table.insert(ordered_pairs, reuse_pair)
 
-				new_pairs[new_index] = reuse_object
+				reuse_pair:invalidate_index(new_index)
 
 				continue
 			end
 
 			-- create a new object if none are available
-			new_pairs[new_index] = RangePair(self._pairs_scope, new_index, self._processor)
+			local new_pair = RangePair(inner_scope(self._pairs_scope), new_index, self._processor)
+			new_pairs[new_index] = new_pair
+
+			table.insert(ordered_pairs, new_pair)
 		end
 
 		-- clean up remaining objects
-		for _, object in old_pairs do
-			object:destroy()
+		for _, pair in cur_pairs do
+			cleanup(pair.scope)
 		end
 
-		self._active_pairs = new_pairs
+		self._current_pairs = new_pairs
 
 		return true
 	end,
 })
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function destroy_rangedisassembly<S, V>(rangediassembly: Self<S, V>)
+local function destroy_rangedisassembly<S, T>(rangediassembly: Self<S, T>)
 	cleanup(rangediassembly._pairs_scope)
 	rangediassembly._pairs_scope = nil
 	rangediassembly._active_pairs = nil
 end
 
-local function RangeDisassembly<S, V>(
+local function RangeDisassembly<S, T>(
 	scope: memory.Scope<S>,
-	processor: iter_range.RangeDisassemblyProcessor<S, V>,
+	processor: iter_range.RangeDisassemblyProcessor<S, T>,
 	start: calc.UsedAs<number>,
 	finish: calc.UsedAs<number>,
 	step: calc.UsedAs<number>?
-): iter.Disassembly<number, V>
+): iter.Disassembly<number, T>
 	step = step or 1
 
-	local new_disassembly: Self<S, V> = setmetatable({
+	local new_disassembly: Self<S, T> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
@@ -102,7 +115,8 @@ local function RangeDisassembly<S, V>(
 		_finish = finish,
 		_step = step,
 
-		_active_pairs = {},
+		_ordered_pairs = {},
+		_current_pairs = {},
 		_pairs_scope = derive_scope(scope),
 		_processor = processor,
 	}, CLASS_METATABLE) :: any
