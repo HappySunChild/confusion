@@ -1,9 +1,9 @@
 return {
 	all_units = {
-		require("./confusion/core_calc/Computed.spec"),
-		require("./confusion/core_calc/Value.spec"),
-		require("./confusion/core_calc/cast_to_state.spec"),
-		require("./confusion/core_calc/is_similar.spec"),
+		require("./confusion/core_state/Computed.spec"),
+		require("./confusion/core_state/Value.spec"),
+		require("./confusion/core_state/cast_to_state.spec"),
+		require("./confusion/core_state/is_similar.spec"),
 		require("./confusion/core_external/ExternalDebug.spec"),
 		require("./confusion/core_external/ExternalLogger.spec"),
 		require("./confusion/core_external/ExternalScheduler.spec"),

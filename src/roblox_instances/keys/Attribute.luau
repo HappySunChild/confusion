@@ -1,6 +1,6 @@
-local calc = require("../../core_calc/types")
 local instances = require("../types")
 local memory = require("../../core_memory/types")
+local state = require("../../core_state/types")
 
 local SpecialKey = require("../SpecialKey")
 local observe_immediate = require("../../core_graph/observe_immediate")
@@ -15,7 +15,7 @@ local function Attribute(attribute: string): instances.SpecialKey<"Attribute">
 		key = SpecialKey(
 			"self",
 			"Attribute",
-			function(scope: memory.Scope, apply_to: Instance, value: calc.UsedAs<any>)
+			function(scope: memory.Scope, apply_to: Instance, value: state.UsedAs<any>)
 				observe_immediate(scope, value, function()
 					apply_to:SetAttribute(attribute, peek(value))
 				end)

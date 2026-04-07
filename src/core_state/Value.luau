@@ -1,11 +1,11 @@
-local calc = require("./types")
 local memory = require("../core_memory/types")
+local state = require("./types")
 
 local change = require("../core_graph/change")
 local destructor = require("../core_memory/destructor")
 local is_similar = require("./is_similar")
 
-type Self<T> = calc.Value<T>
+type Self<T> = state.Value<T>
 
 local CLASS = table.freeze({
 	type = "state",
@@ -32,7 +32,7 @@ local CLASS = table.freeze({
 })
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function Value<T>(scope: memory.Scope, initial_value: T): calc.Value<T>
+local function Value<T>(scope: memory.Scope, initial_value: T): state.Value<T>
 	local new_value: Self<T> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),

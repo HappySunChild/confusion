@@ -1,10 +1,10 @@
-local calc = require("../core_calc/types")
 local iter_for = require("../iter_for/types")
 local memory = require("../core_memory/types")
 local pipeline = require("./types")
+local state = require("../core_state/types")
 local tweens = require("../motion_tweens/types")
 
-local Computed = require("../core_calc/Computed")
+local Computed = require("../core_state/Computed")
 local ForKeys = require("../iter_for/ForKeys")
 local ForPairs = require("../iter_for/ForPairs")
 local ForValues = require("../iter_for/ForValues")
@@ -14,7 +14,7 @@ local Tween = require("../motion_tweens/Tween")
 local inner_scope = require("../core_memory/inner_scope")
 
 type Self<S, T> = {
-	_current: calc.UsedAs<T>,
+	_current: state.UsedAs<T>,
 	_internal_scope: memory.Scope<S>,
 } & pipeline.Pipe<S, T>
 
@@ -34,7 +34,7 @@ local CLASS = table.freeze({
 
 	map = function<S, T, O>(
 		self: Self<S, T>,
-		processor: (value: T, use: calc.Use, scope: memory.Scope<S>) -> O
+		processor: (value: T, use: state.Use, scope: memory.Scope<S>) -> O
 	): Self<S, O>
 		local latest = self._current
 		self._current = Computed(self._internal_scope, function(use, scope)
@@ -46,14 +46,14 @@ local CLASS = table.freeze({
 
 	spring = function<S, T>(
 		self: Self<S, T>,
-		speed: calc.UsedAs<number>?,
-		damping: calc.UsedAs<number>?
+		speed: state.UsedAs<number>?,
+		damping: state.UsedAs<number>?
 	): Self<S, T>
 		self._current = Spring(self._internal_scope, self._current, speed, damping)
 
 		return self
 	end,
-	tween = function<S, T>(self: Self<S, T>, info: calc.UsedAs<tweens.TweenInfo>): Self<S, T>
+	tween = function<S, T>(self: Self<S, T>, info: state.UsedAs<tweens.TweenInfo>): Self<S, T>
 		self._current = Tween(self._internal_scope, self._current, info)
 
 		return self
@@ -92,7 +92,7 @@ local CLASS = table.freeze({
 })
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function Pipe<S, T>(scope: memory.Scope<S>, initial_value: calc.UsedAs<T>): pipeline.Pipe<S, T>
+local function Pipe<S, T>(scope: memory.Scope<S>, initial_value: state.UsedAs<T>): pipeline.Pipe<S, T>
 	local new_pipe: Self<S, T> = setmetatable({
 		_internal_scope = inner_scope(scope),
 		_current = initial_value,

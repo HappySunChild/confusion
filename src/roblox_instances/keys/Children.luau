@@ -1,9 +1,9 @@
-local calc = require("../../core_calc/types")
 local instances = require("../types")
 local memory = require("../../core_memory/types")
+local state = require("../../core_state/types")
 
 local SpecialKey = require("../SpecialKey")
-local cast_to_state = require("../../core_calc/cast_to_state")
+local cast_to_state = require("../../core_state/cast_to_state")
 local cleanup = require("../../core_memory/cleanup")
 local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
 local observe_immediate = require("../../core_graph/observe_immediate")
@@ -83,7 +83,7 @@ local function process_child(
 			process_child(actual_child, parent, new_children, new_scopes, old_children, old_scopes)
 		end
 	elseif cast_to_state(child) ~= nil then -- STATE CASE
-		child = child :: calc.StateNode<instances.Child>
+		child = child :: state.StateNode<instances.Child>
 
 		local child_scope = old_scopes[child]
 

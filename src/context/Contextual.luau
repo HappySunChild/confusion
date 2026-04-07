@@ -1,5 +1,5 @@
-local calc = require("../core_calc/types")
 local context = require("./types")
+local state = require("../core_state/types")
 
 local log_error = require("../core_logging/log_error")
 local parse_error = require("../core_logging/parse_error")
@@ -33,7 +33,7 @@ local CLASS = table.freeze({
 		self._values[thread] = original
 
 		if not ok then
-			log_error(calc.callback_error, value)
+			log_error(state.callback_error, value)
 		end
 
 		return value

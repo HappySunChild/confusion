@@ -1,6 +1,6 @@
-local calc = require("../../core_calc/types")
 local instances = require("../types")
 local memory = require("../../core_memory/types")
+local state = require("../../core_state/types")
 
 local SpecialKey = require("../SpecialKey")
 local observe_immediate = require("../../core_graph/observe_immediate")
@@ -15,7 +15,7 @@ local function Tag(tag: string): instances.SpecialKey<"Tag">
 		key = SpecialKey(
 			"self",
 			"Tag",
-			function(scope: memory.Scope, apply_to: Instance, enabled: calc.UsedAs<boolean>)
+			function(scope: memory.Scope, apply_to: Instance, enabled: state.UsedAs<boolean>)
 				observe_immediate(scope, enabled, function()
 					local value = peek(enabled)
 

@@ -1,5 +1,5 @@
-local calc = require("../core_calc/types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 export type AnimationMove<T> = (elapsed: number) -> (boolean, T, ...any)
 export type MoveGenerator<T> = (goal: T, start: T, ...any) -> AnimationMove<T>
@@ -11,11 +11,11 @@ export type Motion<T> = {
 	set_dynamics: (self: Motion<T>, dynamics: { any }, at_index: number?) -> (),
 	get_dynamic: (self: Motion<T>, index: number) -> any?,
 	get_dynamics: (self: Motion<T>) -> { any },
-} & calc.StateNode<T>
+} & state.StateNode<T>
 export type MotionConstructor = <T>(
 	scope: memory.Scope,
-	goal: calc.UsedAs<T>,
-	move_generator: calc.UsedAs<MoveGenerator<T>>
+	goal: state.UsedAs<T>,
+	move_generator: state.UsedAs<MoveGenerator<T>>
 ) -> Motion<T>
 
 return {

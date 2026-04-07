@@ -1,7 +1,7 @@
-local calc = require("../core_calc/types")
 local iter = require("../iter/types")
 local iter_for = require("./types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 local Iter = require("../iter/Iter")
 
@@ -10,7 +10,7 @@ local ForDisassembly = require("./ForDisassembly")
 
 local function ForPairs<S, IK, IV, OK, OV>(
 	scope: memory.Scope<S>,
-	input_table: calc.UsedAs<{ [IK]: IV }>,
+	input_table: state.UsedAs<{ [IK]: IV }>,
 	processor: iter_for.ForPairsProcessor<S, IK, IV, OK, OV>
 ): iter.Iter<OK, OV> | { [OK]: OV }
 	local augmented_constructor = function(

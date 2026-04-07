@@ -1,13 +1,13 @@
-local calc = require("../core_calc/types")
 local iter = require("./types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 local depend = require("../core_graph/depend")
 local destructor = require("../core_memory/destructor")
 local generic_use = require("../core_use/generic_use")
 
 type Self<K, V> = {
-	_use: calc.Use,
+	_use: state.Use,
 	_disassembly: iter.Disassembly<K, V>,
 } & iter.Iter<K, V>
 

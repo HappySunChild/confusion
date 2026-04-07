@@ -1,5 +1,5 @@
-local Computed = require("@fusion/core_calc/Computed")
-local Value = require("@fusion/core_calc/Value")
+local Computed = require("@fusion/core_state/Computed")
+local Value = require("@fusion/core_state/Value")
 local cleanup = require("@fusion/core_memory/cleanup")
 local peek = require("@fusion/core_use/peek")
 

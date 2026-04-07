@@ -1,7 +1,7 @@
-local calc = require("../core_calc/types")
 local chrono = require("../chrono/types")
 local memory = require("../core_memory/types")
 local motion = require("./types")
+local state = require("../core_state/types")
 
 local ExternalScheduler = require("../core_external/ExternalScheduler")
 local get_delta_time = ExternalScheduler.get_delta_time
@@ -11,13 +11,13 @@ local change = require("../core_graph/change")
 local depend = require("../core_graph/depend")
 local destructor = require("../core_memory/destructor")
 local evaluate = require("../core_graph/evaluate")
-local is_similar = require("../core_calc/is_similar")
+local is_similar = require("../core_state/is_similar")
 local log_warn = require("../core_logging/log_warn")
 local peek = require("../core_use/peek")
 
 type Self<T> = {
-	_goal: calc.UsedAs<T>,
-	_generator: calc.UsedAs<motion.MoveGenerator<T>>,
+	_goal: state.UsedAs<T>,
+	_generator: state.UsedAs<motion.MoveGenerator<T>>,
 
 	_dynamics: { any },
 
@@ -144,8 +144,8 @@ local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function Motion<T>(
 	scope: memory.Scope,
-	goal: calc.UsedAs<T>,
-	move_generator: calc.UsedAs<motion.MoveGenerator<T>>
+	goal: state.UsedAs<T>,
+	move_generator: state.UsedAs<motion.MoveGenerator<T>>
 ): motion.Motion<T>
 	local new_motion: Self<T> = setmetatable({
 		scope = scope,

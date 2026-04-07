@@ -1,6 +1,6 @@
-local calc = require("./types")
 local logging = require("../core_logging/types")
 local memory = require("../core_memory/types")
+local state = require("./types")
 
 local cleanup = require("../core_memory/cleanup")
 local derive_scope = require("../core_memory/derive_scope")
@@ -12,9 +12,9 @@ local parse_error = require("../core_logging/parse_error")
 
 type Self<T, S> = {
 	_inner_scope: memory.Scope<S>?,
-	_processor: calc.ComputedProcessor<S, T>,
-	_use: calc.Use,
-} & calc.Computed<T>
+	_processor: state.ComputedProcessor<S, T>,
+	_use: state.Use,
+} & state.Computed<T>
 
 local CLASS = table.freeze({
 	type = "state",
@@ -44,7 +44,7 @@ local CLASS = table.freeze({
 
 		cleanup(inner_scope)
 
-		log_error_nonfatal(calc.callback_error, new_value :: logging.Error)
+		log_error_nonfatal(state.callback_error, new_value :: logging.Error)
 
 		return false
 	end,
@@ -58,8 +58,8 @@ end
 
 local function Computed<T, S>(
 	scope: memory.Scope<S>,
-	processor: calc.ComputedProcessor<S, T>
-): calc.Computed<T>
+	processor: state.ComputedProcessor<S, T>
+): state.Computed<T>
 	local new_computed: Self<T, S> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),

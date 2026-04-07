@@ -1,21 +1,21 @@
 local async = require("./types")
-local calc = require("../core_calc/types")
 local graph = require("../core_graph/types")
 local logging = require("../core_logging/types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 local ExternalScheduler = require("../core_external/ExternalScheduler")
 local cancel_task = ExternalScheduler.cancel_task
 local do_task_immediate = ExternalScheduler.do_task_immediate
 
-local cast_to_state = require("../core_calc/cast_to_state")
+local cast_to_state = require("../core_state/cast_to_state")
 local change = require("../core_graph/change")
 local cleanup = require("../core_memory/cleanup")
 local depend = require("../core_graph/depend")
 local derive_scope = require("../core_memory/derive_scope")
 local destructor = require("../core_memory/destructor")
 local evaluate = require("../core_graph/evaluate")
-local is_similar = require("../core_calc/is_similar")
+local is_similar = require("../core_state/is_similar")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local parse_error = require("../core_logging/parse_error")
 local peek = require("../core_use/peek")
@@ -32,7 +32,7 @@ type Self<T, S> = async.Eventual<T> & {
 
 	_session_used: { [graph.GraphNode]: true },
 	_become: (any) -> (),
-	_use: calc.Use,
+	_use: state.Use,
 }
 
 local function handle_eventual_computation<T, S>(eventual: Self<T, S>)
@@ -48,7 +48,7 @@ local function handle_eventual_computation<T, S>(eventual: Self<T, S>)
 		eventual._inner_scope = inner_scope
 	else -- throw away computation scope, invalidated because computation errored
 		cleanup(inner_scope)
-		log_error_nonfatal(calc.callback_error, err)
+		log_error_nonfatal(state.callback_error, err)
 	end
 
 	eventual._active_thread = nil
@@ -94,10 +94,10 @@ local CLASS = table.freeze({
 })
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function generate_callbacks<T, S>(eventual: Self<T, S>): (calc.Use, (any) -> ())
+local function generate_callbacks<T, S>(eventual: Self<T, S>): (state.Use, (any) -> ())
 	local session_used = eventual._session_used
 
-	local function use(target: calc.UsedAs<T>): T
+	local function use(target: state.UsedAs<T>): T
 		if cast_to_state(target) ~= nil then
 			depend(eventual, target)
 

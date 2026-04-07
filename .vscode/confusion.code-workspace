@@ -15,7 +15,7 @@
 			"iter": "functions",
 			"iter_for": "functions",
 			"iter_range": "functions",
-			"core_calc": "core",
+			"core_state": "core",
 			"core_external": "core",
 			"core_graph": "core",
 			"core_logging": "core",

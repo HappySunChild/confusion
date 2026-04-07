@@ -1,4 +1,4 @@
-local calc = require("../core_calc/types")
+local state = require("../core_state/types")
 
 local lerp_type = require("../lerp/lerp_type")
 
@@ -20,8 +20,8 @@ end
 
 local function evaluate_keyframes<T>(
 	eval_time: number,
-	keyframes: { calc.UsedAs<T> },
-	use: calc.Use
+	keyframes: { state.UsedAs<T> },
+	use: state.Use
 ): T?
 	local prev_time, next_time = get_bounding_keys(eval_time, keyframes)
 

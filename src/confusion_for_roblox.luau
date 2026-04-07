@@ -7,9 +7,9 @@ GitHub Repository: https://github.com/HappySunChild/ConFusion
 Fusion on GitHub: https://github.com/dphfox/Fusion
 --]]
 
-local calc = require("./core_calc/types")
 local graph = require("./core_graph/types")
 local memory = require("./core_memory/types")
+local state = require("./core_state/types")
 
 local async = require("./async/types")
 local chrono = require("./chrono/types")
@@ -35,12 +35,12 @@ local confusion = require("./confusion")
 export type Scope<T = ConFusionForRoblox> = memory.Scope<T>
 
 export type GraphNode = graph.GraphNode
-export type StateNode<T> = calc.StateNode<T>
-export type UsedAs<T> = calc.UsedAs<T>
+export type StateNode<T> = state.StateNode<T>
+export type UsedAs<T> = state.UsedAs<T>
 
-export type Value<T> = calc.Value<T>
-export type Computed<T> = calc.Computed<T>
-export type Use = calc.Use
+export type Value<T> = state.Value<T>
+export type Computed<T> = state.Computed<T>
+export type Use = state.Use
 
 export type Iter<K, V> = iter.Iter<K, V>
 

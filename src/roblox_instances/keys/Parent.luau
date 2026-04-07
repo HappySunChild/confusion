@@ -1,6 +1,6 @@
-local calc = require("../../core_calc/types")
 local instances = require("../types")
 local memory = require("../../core_memory/types")
+local state = require("../../core_state/types")
 
 local SpecialKey = require("../SpecialKey")
 local log_warn = require("../../core_logging/log_warn")
@@ -20,7 +20,7 @@ end
 return SpecialKey(
 	"ancestor",
 	"Parent",
-	function(scope: memory.Scope, apply_to: Instance, parent: calc.UsedAs<Instance?>)
+	function(scope: memory.Scope, apply_to: Instance, parent: state.UsedAs<Instance?>)
 		observe_immediate(scope, parent, function()
 			set_parent(apply_to, peek(parent))
 		end)

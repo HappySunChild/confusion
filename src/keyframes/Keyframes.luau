@@ -1,17 +1,17 @@
-local calc = require("../core_calc/types")
 local keyframes = require("./types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 local destructor = require("../core_memory/destructor")
 local evaluate_keyframes = require("./evaluate_keyframes")
 local generic_use = require("../core_use/generic_use")
-local is_similar = require("../core_calc/is_similar")
+local is_similar = require("../core_state/is_similar")
 
 type Self<T> = {
-	_alpha: calc.UsedAs<number>,
+	_alpha: state.UsedAs<number>,
 	_keyframes: { T },
 
-	_use: calc.Use,
+	_use: state.Use,
 } & keyframes.Keyframes<T>
 
 local CLASS = table.freeze({
@@ -38,7 +38,7 @@ local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function Keyframes<T>(
 	scope: memory.Scope,
-	alpha: calc.UsedAs<number>,
+	alpha: state.UsedAs<number>,
 	keyframes: { T }
 ): keyframes.Keyframes<T> | T
 	local new_keyframes: Self<T> = setmetatable({

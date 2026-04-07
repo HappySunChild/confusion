@@ -1,7 +1,7 @@
-local calc = require("../core_calc/types")
 local iter = require("../iter/types")
 local iter_for = require("./types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 local cleanup = require("../core_memory/cleanup")
 local depend = require("../core_graph/depend")
@@ -11,7 +11,7 @@ local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local peek = require("../core_use/peek")
 
 type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {
-	_input_table: calc.UsedAs<{ [IK]: IV }>,
+	_input_table: state.UsedAs<{ [IK]: IV }>,
 
 	_active_pairs: { [IK]: iter_for.ComputedPair<IK, IV, OK, OV> },
 	_pair_scope: memory.Scope<S>,
@@ -28,7 +28,7 @@ local CLASS = table.freeze({
 	kind = "Disassembly",
 	timeliness = "lazy",
 
-	populate = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>, use: calc.Use, output: { [OK]: OV? })
+	populate = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>, use: state.Use, output: { [OK]: OV? })
 		local min_array_index = math.huge
 		local max_array_index = -math.huge
 		local has_holes = false
@@ -181,7 +181,7 @@ end
 
 local function ForDisassembly<S, IK, IV, OK, OV>(
 	scope: memory.Scope,
-	input: calc.UsedAs<{ [IK]: IV }>,
+	input: state.UsedAs<{ [IK]: IV }>,
 	constructor: (
 		memory.Scope<S>,
 		initial_key: IK,

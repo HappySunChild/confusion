@@ -1,5 +1,5 @@
-local Value = require("@fusion/core_calc/Value")
-local cast_to_state = require("@fusion/core_calc/cast_to_state")
+local Value = require("@fusion/core_state/Value")
+local cast_to_state = require("@fusion/core_state/cast_to_state")
 local cleanup = require("@fusion/core_memory/cleanup")
 
 local butler = require("@butler/butler")

@@ -1,5 +1,5 @@
-local calc = require("../core_calc/types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 export type SpecialKeyStage =
 	| "self"
@@ -18,8 +18,8 @@ export type SpecialKey<T = string> = {
 }
 
 export type Properties = { [any]: any }
-export type Child = Instance | ((Instance) -> Child?) | { Child } | calc.StateNode<Child>
-export type Tag = string | { string } | calc.StateNode<Tag>
+export type Child = Instance | ((Instance) -> Child?) | { Child } | state.StateNode<Child>
+export type Tag = string | { string } | state.StateNode<Tag>
 
 export type NewConstructor = (
 	scope: memory.Scope,

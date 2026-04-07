@@ -1,7 +1,7 @@
-local calc = require("../core_calc/types")
 local iter = require("../iter/types")
 local iter_range = require("./types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 local RangePair = require("./RangePair")
 local cleanup = require("../core_memory/cleanup")
@@ -12,9 +12,9 @@ local inner_scope = require("../core_memory/inner_scope")
 local peek = require("../core_use/peek")
 
 type Self<S, T> = {
-	_start: calc.UsedAs<number>,
-	_finish: calc.UsedAs<number>,
-	_step: calc.UsedAs<number>,
+	_start: state.UsedAs<number>,
+	_finish: state.UsedAs<number>,
+	_step: state.UsedAs<number>,
 
 	_pairs_scope: memory.Scope<S>,
 	_current_pairs: { iter_range.RangePair<T> },
@@ -27,7 +27,7 @@ local CLASS = table.freeze({
 	kind = "Disassembly",
 	timeliness = "lazy",
 
-	populate = function<S, T>(self: Self<S, T>, use: calc.Use, output: { [number]: T })
+	populate = function<S, T>(self: Self<S, T>, use: state.Use, output: { [number]: T })
 		for index, pair in self._ordered_pairs do
 			output[index] = use(pair)
 		end
@@ -98,9 +98,9 @@ end
 local function RangeDisassembly<S, T>(
 	scope: memory.Scope<S>,
 	processor: iter_range.RangeDisassemblyProcessor<S, T>,
-	start: calc.UsedAs<number>,
-	finish: calc.UsedAs<number>,
-	step: calc.UsedAs<number>?
+	start: state.UsedAs<number>,
+	finish: state.UsedAs<number>,
+	step: state.UsedAs<number>?
 ): iter.Disassembly<number, T>
 	step = step or 1
 

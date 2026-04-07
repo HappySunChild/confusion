@@ -1,6 +1,6 @@
-local calc = require("../core_calc/types")
 local memory = require("../core_memory/types")
 local motion = require("../motion/types")
+local state = require("../core_state/types")
 
 local Motion = require("../motion/Motion")
 local pack_type = require("./pack_type")
@@ -11,8 +11,8 @@ local unpack_type = require("./unpack_type")
 local EPSILON = 0.0001
 
 local function SpringMover<T>(
-	speed: calc.UsedAs<number>,
-	damping: calc.UsedAs<number>
+	speed: state.UsedAs<number>,
+	damping: state.UsedAs<number>
 ): motion.MoveGenerator<T>
 	local start_pos: { number } = {}
 	local start_vel: { number } = {}
@@ -109,9 +109,9 @@ end
 
 local function Spring<T>(
 	scope: memory.Scope,
-	goal: calc.UsedAs<T>,
-	speed: calc.UsedAs<number>?,
-	damping: calc.UsedAs<number>?
+	goal: state.UsedAs<T>,
+	speed: state.UsedAs<number>?,
+	damping: state.UsedAs<number>?
 ): motion.Motion<T>
 	return Motion(scope, goal, SpringMover(speed or 10, damping or 1))
 end

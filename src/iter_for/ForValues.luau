@@ -1,7 +1,7 @@
-local calc = require("../core_calc/types")
 local iter = require("../iter/types")
 local iter_for = require("./types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 local Iter = require("../iter/Iter")
 
@@ -10,11 +10,11 @@ local ForDisassembly = require("./ForDisassembly")
 
 local function ForValues<S, IK, IV, OV>(
 	scope: memory.Scope<S>,
-	input_table: calc.UsedAs<{ [IK]: IV }>,
+	input_table: state.UsedAs<{ [IK]: IV }>,
 	processor: iter_for.ForValuesProcessor<S, IV, OV>
 ): iter.Iter<IK, OV> | { [IK]: OV }
 	local augmented_processor = function(
-		use: calc.Use,
+		use: state.Use,
 		scope: memory.Scope<S>,
 		input_key: IK,
 		input_value: IV

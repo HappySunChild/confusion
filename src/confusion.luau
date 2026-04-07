@@ -1,7 +1,7 @@
-local calc = require("./core_calc/types")
 local external = require("./core_external/types")
 local graph = require("./core_graph/types")
 local memory = require("./core_memory/types")
+local state = require("./core_state/types")
 local use = require("./core_use/types")
 
 local ExternalDebugger = require("./core_external/ExternalDebug")
@@ -34,15 +34,15 @@ export type ConFusion<Included = any> = {
 	insert: memory.Insert,
 
 	-- Core: State
-	Computed: calc.ComputedConstructor,
-	Value: calc.ValueConstructor,
+	Computed: state.ComputedConstructor,
+	Value: state.ValueConstructor,
 
 	-- Core: Graph
 	observe: graph.Observe,
 	observe_immediate: graph.Observe,
 
 	-- Core: Use
-	peek: calc.Use,
+	peek: state.Use,
 	flatten: use.Flatten,
 } & Included
 
@@ -53,8 +53,8 @@ local CORE_CONFUSION = table.freeze({
 	insert = require("./core_memory/insert"),
 	scoped = require("./core_memory/scoped"),
 
-	Computed = require("./core_calc/Computed"),
-	Value = require("./core_calc/Value"),
+	Computed = require("./core_state/Computed"),
+	Value = require("./core_state/Value"),
 
 	observe = require("./core_graph/observe"),
 	observe_immediate = require("./core_graph/observe_immediate"),

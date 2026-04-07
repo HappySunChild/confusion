@@ -1,11 +1,11 @@
-local calc = require("../core_calc/types")
 local memory = require("../core_memory/types")
 local motion = require("../motion/types")
+local state = require("../core_state/types")
 
 export type TweenConstructor = <T>(
 	scope: memory.Scope,
-	goal: calc.UsedAs<T>,
-	info: calc.UsedAs<TweenInfo>
+	goal: state.UsedAs<T>,
+	info: state.UsedAs<TweenInfo>
 ) -> motion.Motion<T>
 
 export type EasingStyle = {

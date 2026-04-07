@@ -1,6 +1,6 @@
-local calc = require("../core_calc/types")
 local instances = require("./types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 local Parent = require("./keys/Parent")
 local log_error = require("../core_logging/log_error")
@@ -53,7 +53,7 @@ local function apply_property(
 	scope: memory.Scope,
 	instance: Instance,
 	property: string,
-	value: calc.UsedAs<any>
+	value: state.UsedAs<any>
 )
 	observe_immediate(scope, value, function()
 		set_property(instance, property, peek(value))

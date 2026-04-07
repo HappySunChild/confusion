@@ -1,9 +1,9 @@
-local calc = require("../../core_calc/types")
 local instances = require("../types")
 local memory = require("../../core_memory/types")
+local state = require("../../core_state/types")
 
 local SpecialKey = require("../SpecialKey")
-local cast_to_state = require("../../core_calc/cast_to_state")
+local cast_to_state = require("../../core_state/cast_to_state")
 local cleanup = require("../../core_memory/cleanup")
 local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
 local observe_immediate = require("../../core_graph/observe_immediate")
@@ -74,7 +74,7 @@ local function process_tag(
 		new_tags[tag] = true
 		old_tags[tag] = nil
 	elseif cast_to_state(tag) ~= nil then -- STATE CASE
-		tag = tag :: calc.StateNode<instances.Tag>
+		tag = tag :: state.StateNode<instances.Tag>
 
 		local tag_scope = old_scopes[tag]
 

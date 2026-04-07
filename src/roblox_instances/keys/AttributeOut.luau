@@ -1,6 +1,6 @@
-local calc = require("../../core_calc/types")
 local instances = require("../types")
 local memory = require("../../core_memory/types")
+local state = require("../../core_state/types")
 
 local SpecialKey = require("../SpecialKey")
 local log_error = require("../../core_logging/log_error")
@@ -15,7 +15,7 @@ local function AttributeOut(attribute: string): instances.SpecialKey<"AttributeO
 		key = SpecialKey(
 			"observer",
 			"AttributeOut",
-			function(scope: memory.Scope, apply_to: Instance, value: calc.Value<any>)
+			function(scope: memory.Scope, apply_to: Instance, value: state.Value<any>)
 				if xtypeof(value) ~= "State" or value.Kind ~= "Value" then
 					log_error(instances.invalid_out_type, nil, typeof(value))
 				end

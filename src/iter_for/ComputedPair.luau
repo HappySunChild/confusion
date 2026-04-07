@@ -1,19 +1,19 @@
-local calc = require("../core_calc/types")
 local iter_for = require("./types")
 local logging = require("../core_logging/types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 local cleanup = require("../core_memory/cleanup")
 local derive_scope = require("../core_memory/derive_scope")
 local destructor = require("../core_memory/destructor")
 local generic_use = require("../core_use/generic_use")
-local is_similar = require("../core_calc/is_similar")
+local is_similar = require("../core_state/is_similar")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local mark_dirty = require("../core_graph/mark_dirty")
 local parse_error = require("../core_logging/parse_error")
 
 type ComputedPairProcessor<S, IK, IV, OK, OV> = (
-	use: calc.Use,
+	use: state.Use,
 	scope: memory.Scope<S>,
 	key: IK,
 	value: IV
@@ -25,7 +25,7 @@ type Self<S, IK, IV, OK, OV> = iter_for.ComputedPair<IK, IV, OK, OV> & {
 
 	_inner_scope: memory.Scope<S>,
 	_processor: ComputedPairProcessor<S, IK, IV, OK, OV>,
-	_use: calc.Use,
+	_use: state.Use,
 }
 
 local CLASS = table.freeze({
@@ -76,7 +76,7 @@ local CLASS = table.freeze({
 
 			cleanup(inner_scope)
 
-			log_error_nonfatal(calc.callback_error, new_key :: logging.Error)
+			log_error_nonfatal(state.callback_error, new_key :: logging.Error)
 
 			return false
 		end

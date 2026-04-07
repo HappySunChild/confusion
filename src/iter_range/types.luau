@@ -1,33 +1,33 @@
-local calc = require("../core_calc/types")
 local iter = require("../iter/types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 export type Range = {
 	kind: "Range",
 	timeliness: "lazy",
-} & calc.StateNode<{ number }>
+} & state.StateNode<{ number }>
 export type RangeConstructor = (
 	scope: memory.Scope,
-	start: calc.UsedAs<number>,
-	finish: calc.UsedAs<number>,
-	step: calc.UsedAs<number>?
+	start: state.UsedAs<number>,
+	finish: state.UsedAs<number>,
+	step: state.UsedAs<number>?
 ) -> Range | { number }
 
 export type RangePair<T> = {
 	invalidate_index: (RangePair<T>, new_index: number) -> (),
-} & calc.StateNode<T>
+} & state.StateNode<T>
 
 export type RangeDisassemblyProcessor<S, T> = (
-	use: calc.Use,
+	use: state.Use,
 	scope: memory.Scope<S>,
 	index: number
 ) -> T
 export type ForRangeConstructor = <S, T>(
 	scope: memory.Scope<S>,
-	start: calc.UsedAs<number>,
-	finish: calc.UsedAs<number>,
+	start: state.UsedAs<number>,
+	finish: state.UsedAs<number>,
 	processor: RangeDisassemblyProcessor<S, T>,
-	step: calc.UsedAs<number>?
+	step: state.UsedAs<number>?
 ) -> iter.Iter<number, T>
 
 return nil

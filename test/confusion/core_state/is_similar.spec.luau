@@ -1,4 +1,4 @@
-local is_similar = require("@fusion/core_calc/is_similar")
+local is_similar = require("@fusion/core_state/is_similar")
 
 local butler = require("@butler/butler")
 

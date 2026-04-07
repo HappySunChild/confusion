@@ -1,16 +1,16 @@
-local calc = require("../core_calc/types")
 local graph = require("../core_graph/types")
 local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 export type Eventual<T> = {
 	kind: "Eventual",
 	timeliness: "lazy",
 
 	is_pending: (Eventual<T>) -> boolean,
-} & calc.StateNode<T>
+} & state.StateNode<T>
 
 export type EventualProcessor<S, T> = (
-	use: calc.Use,
+	use: state.Use,
 	scope: memory.Scope<S>,
 	become: (T) -> ()
 ) -> ()

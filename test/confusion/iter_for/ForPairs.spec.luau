@@ -1,5 +1,5 @@
 local ForPairs = require("@fusion/iter_for/ForPairs")
-local Value = require("@fusion/core_calc/Value")
+local Value = require("@fusion/core_state/Value")
 local cleanup = require("@fusion/core_memory/cleanup")
 local peek = require("@fusion/core_use/peek")
 

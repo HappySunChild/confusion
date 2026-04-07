@@ -1,8 +1,8 @@
-local calc = require("./types")
+local state = require("./types")
 
 local xtypeof = require("../core_graph/xtypeof")
 
-local function cast_to_state(x: unknown): calc.StateNode<unknown>?
+local function cast_to_state(x: unknown): state.StateNode<unknown>?
 	if xtypeof(x) == "state" then
 		return x
 	end
