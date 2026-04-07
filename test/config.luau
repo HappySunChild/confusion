@@ -26,6 +26,7 @@ return {
 		require("./confusion/iter_for/ForKeys.spec"),
 		require("./confusion/iter_for/ForValues.spec"),
 		require("./confusion/iter_for/ForPairs.spec"),
+		require("./confusion/iter_range/ForRange.spec"),
 
 		require("./confusion/chrono/ExternalTime.spec"),
 		require("./confusion/chrono/Timer.spec"),
