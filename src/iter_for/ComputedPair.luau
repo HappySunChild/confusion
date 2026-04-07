@@ -69,10 +69,11 @@ local CLASS = table.freeze({
 			self._input_value
 		)
 
+		cleanup(self._inner_scope) -- for some reason the spec also calls for clearing the current scope as well? I guess it makes it consistent with omitting the pair. this is all weird
+
 		if not ok then
 			output.key, output.value = nil, nil -- this behavior isn't congruent with how Computeds work, but the spec says that this is how it should work...
 
-			cleanup(self._inner_scope) -- for some reason the spec also calls for clearing the current scope as well? I guess it makes it consistent with omitting the pair. this is all weird
 			cleanup(inner_scope)
 
 			log_error_nonfatal(calc.callback_error, new_key :: logging.Error)
@@ -80,7 +81,6 @@ local CLASS = table.freeze({
 			return false
 		end
 
-		cleanup(self._inner_scope)
 		self._inner_scope = inner_scope
 
 		local old_key, old_value = output.key, output.value
