@@ -5,9 +5,7 @@ local memory = require("../core_memory/types")
 local cleanup = require("../core_memory/cleanup")
 local derive_scope = require("../core_memory/derive_scope")
 local destructor = require("../core_memory/destructor")
-local dissolving_use = require("../core_use/dissolving_use")
 local generic_use = require("../core_use/generic_use")
-local inner_scope = require("../core_memory/inner_scope")
 local is_similar = require("./is_similar")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local parse_error = require("../core_logging/parse_error")
@@ -53,27 +51,6 @@ local CLASS = table.freeze({
 })
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function check_dissolvable<T, S>(
-	scope: memory.Scope<S>,
-	processor: calc.ComputedProcessor<S, T>
-): (boolean, T?)
-	local dissolving_scope = inner_scope(scope)
-	local success, value = pcall(processor, dissolving_use, dissolving_scope)
-
-	if success then
-		-- scope went unused, we can clean it up
-		if #dissolving_scope == 1 then
-			cleanup(dissolving_scope)
-		end
-
-		return true, value
-	end
-
-	cleanup(dissolving_scope)
-
-	return false
-end
-
 local function destroy_computed<T, S>(computed: Self<T, S>)
 	cleanup(computed._inner_scope)
 	computed._inner_scope = nil
@@ -83,12 +60,6 @@ local function Computed<T, S>(
 	scope: memory.Scope<S>,
 	processor: calc.ComputedProcessor<S, T>
 ): calc.Computed<T>
-	-- local can_dissolve, constant = check_dissolvable(scope, processor)
-
-	-- if can_dissolve then
-	-- 	return constant
-	-- end
-
 	local new_computed: Self<T, S> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),

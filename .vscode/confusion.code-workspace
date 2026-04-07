@@ -33,6 +33,7 @@
 		"files.exclude": {
 			"default.project.json": true,
 			"dev.project.json": true
-		}
+		},
+		"stylua.targetReleaseVersion": "latest"
 	},
 }

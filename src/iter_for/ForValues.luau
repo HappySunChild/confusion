@@ -7,7 +7,6 @@ local Iter = require("../iter/Iter")
 
 local ComputedPair = require("./ComputedPair")
 local ForDisassembly = require("./ForDisassembly")
-local check_dissolvable = require("./check_dissolvable")
 
 local function ForValues<S, IK, IV, OV>(
 	scope: memory.Scope<S>,
@@ -24,12 +23,6 @@ local function ForValues<S, IK, IV, OV>(
 
 		return input_key, new_value
 	end
-
-	-- local can_dissolve, constant = check_dissolvable(scope, input_table, augmented_processor)
-
-	-- if can_dissolve then
-	-- 	return constant
-	-- end
 
 	local augmented_constructor = function(
 		scope: memory.Scope<S>,

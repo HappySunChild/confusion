@@ -9,6 +9,6 @@ export type KeyframesConstructor = <T>(
 	scope: memory.Scope,
 	alpha: calc.UsedAs<number>,
 	keyframes: { [number]: T }
-) -> Keyframes<T> | T
+) -> Keyframes<T>
 
 return nil
