@@ -44,8 +44,6 @@ export type Use = calc.Use
 
 export type Iter<K, V> = iter.Iter<K, V>
 
-export type Range = iter_range.Range
-
 export type Motion<T> = motion.Motion<T>
 export type TweenInfo = tweens.TweenInfo
 
@@ -68,7 +66,6 @@ type ConFusionForRoblox = confusion.ConFusion<{
 
 	-- Iter: Range
 	read ForRange: iter_range.ForRangeConstructor,
-	read Range: iter_range.RangeConstructor,
 
 	-- Async
 	read Eventual: async.EventualConstructor,
@@ -141,7 +138,6 @@ local confusion_for_roblox = confusion({
 
 		-- Iter: Range
 		ForRange = require("./iter_range/ForRange"),
-		Range = require("./iter_range/Range"),
 
 		-- Async
 		Eventual = require("./async/Eventual"),
