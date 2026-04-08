@@ -1,0 +1,6 @@
+{
+	"aliases": {
+		"butler": "./butler",
+		"utility": "./utility"
+	}
+}

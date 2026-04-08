@@ -1,27 +1,29 @@
-local calc = require("./core-calc/types")
-local external = require("./core-external/types")
-local graph = require("./core-graph/types")
-local memory = require("./core-memory/types")
-local use = require("./core-use/types")
+local external = require("./core_external/types")
+local graph = require("./core_graph/types")
+local memory = require("./core_memory/types")
+local state = require("./core_state/types")
+local use = require("./core_use/types")
 
-local External = require("./core-external/External")
-local ExternalDebugger = require("./core-external/ExternalDebug")
+local ExternalDebugger = require("./core_external/ExternalDebug")
+local ExternalLogger = require("./core_external/ExternalLogger")
+local ExternalScheduler = require("./core_external/ExternalScheduler")
 
-local merge = require("./core-memory/merge")
+local merge = require("./core_memory/merge")
 
 type Version = {
 	read major: number,
 	read minor: number,
 }
 
-type Configuration<I> = {
+type Configuration<Included> = {
 	version: Version,
-	provider: external.ExternalProvider,
+	include: Included,
+	scheduler: external.ExternalScheduler,
 	debugger: external.ExternalDebugger?,
-	include: I,
+	logger: external.ExternalLogger?,
 }
 
-export type ConFusion<I = any> = {
+export type ConFusion<Included = any> = {
 	version: Version,
 
 	-- Core: Memory
@@ -32,53 +34,52 @@ export type ConFusion<I = any> = {
 	insert: memory.Insert,
 
 	-- Core: State
-	Computed: calc.ComputedConstructor,
-	Value: calc.ValueConstructor,
+	Computed: state.ComputedConstructor,
+	Value: state.ValueConstructor,
 
 	-- Core: Graph
 	observe: graph.Observe,
 	observe_immediate: graph.Observe,
 
 	-- Core: Use
-	peek: calc.Use,
+	peek: state.Use,
 	flatten: use.Flatten,
-} & I
+} & Included
 
 local CORE_CONFUSION = table.freeze({
-	derive_scope = require("./core-memory/derive_scope"),
-	cleanup = require("./core-memory/cleanup"),
-	inner_scope = require("./core-memory/inner_scope"),
-	insert = require("./core-memory/insert"),
-	scoped = require("./core-memory/scoped"),
+	derive_scope = require("./core_memory/derive_scope"),
+	cleanup = require("./core_memory/cleanup"),
+	inner_scope = require("./core_memory/inner_scope"),
+	insert = require("./core_memory/insert"),
+	scoped = require("./core_memory/scoped"),
 
-	Computed = require("./core-calc/Computed"),
-	Value = require("./core-calc/Value"),
+	Computed = require("./core_state/Computed"),
+	Value = require("./core_state/Value"),
 
-	observe = require("./core-graph/observe"),
-	observe_immediate = require("./core-graph/observe_immediate"),
+	observe = require("./core_graph/observe"),
+	observe_immediate = require("./core_graph/observe_immediate"),
 
-	flattern = require("./core-use/flatten"),
-	peek = require("./core-use/peek"),
+	flattern = require("./core_use/flatten"),
+	peek = require("./core_use/peek"),
 })
 
-local ConFusion = table.freeze({
-	configure = function<I>(options: Configuration<I>): ConFusion<I>
-		External.set_provider(options.provider)
-		ExternalDebugger.set_debugger(options.debugger)
+local function confusion<I>(options: Configuration<I>): ConFusion<I>
+	ExternalScheduler.set_provider(options.scheduler)
+	ExternalDebugger.set_debugger(options.debugger)
+	ExternalLogger.set_logger(options.logger)
 
-		local include = options.include
+	local include = options.include
 
-		assert(type(include) == "table", "`include` field should be a table!")
+	assert(type(include) == "table", "`include` field should be a table!")
 
-		local new_confusion = merge(
-			true,
-			table.clone(CORE_CONFUSION),
-			include,
-			{ version = options.version } -- always override version field
-		)
+	local new_confusion = merge(
+		true,
+		table.clone(CORE_CONFUSION),
+		include,
+		{ version = options.version } -- always override version field
+	)
 
-		return new_confusion :: ConFusion<I>
-	end,
-})
+	return new_confusion :: ConFusion<I>
+end
 
-return ConFusion
+return confusion

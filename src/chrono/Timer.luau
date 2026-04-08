@@ -1,53 +1,48 @@
 local chrono = require("./types")
-local memory = require("../core-memory/types")
+local memory = require("../core_memory/types")
 
 local ExternalTime = require("./ExternalTime")
 
-local change = require("../core-graph/change")
-local depend = require("../core-graph/depend")
-local destructor = require("../core-memory/destructor")
-local peek = require("../core-use/peek")
+local change = require("../core_graph/change")
+local depend = require("../core_graph/depend")
+local destructor = require("../core_memory/destructor")
+local peek = require("../core_use/peek")
 
 type Self = {
-	_paused: boolean,
-	_start: number,
 	_timer: chrono.ExternalTime,
 } & chrono.Timer
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Timer",
 	timeliness = "lazy",
 
 	unpause = function(self: Self)
-		if not self._paused then
+		if not self.is_paused then
 			return
 		end
 
 		self._timer:enable()
-		self._paused = false
-
-		change(self)
+		self.reference_point = peek(self._timer) - self._cached_value
+		self.is_paused = false
 	end,
 	pause = function(self: Self)
-		if self._paused then
+		if self.is_paused then
 			return
 		end
 
 		self._timer:disable()
-		self._paused = true
-
-		change(self)
+		self.is_paused = true
 	end,
 	zero = function(self: Self)
-		self._start = peek(self._timer) :: number
+		self.reference_point = peek(self._timer) :: number
 		self._cached_value = 0
 
 		change(self)
 	end,
 
 	_evaluate = function(self: Self)
-		if self._paused then
+		if self.is_paused then
 			return false
 		end
 
@@ -56,31 +51,35 @@ local CLASS = table.freeze({
 		local now = peek(self._timer) :: number
 
 		local old_value = self._cached_value
-		local new_value = now - self._start
+		local new_value = now - self.reference_point
 
 		self._cached_value = new_value
 
 		return old_value ~= new_value
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function Timer(scope: memory.Scope): chrono.Timer
 	local externaltime = ExternalTime(scope)
 	local new_timer = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
+		validity = "valid",
+		using = {},
+		users = {},
 		_cached_value = 0,
 
-		_paused = false,
-		_start = peek(externaltime),
+		is_paused = false,
+		reference_point = peek(externaltime),
 
-		_using = {},
-		_users = {},
 		_timer = externaltime,
-	}, METATABLE) :: Self
+	}, CLASS_METATABLE) :: Self
 
-	table.insert(scope, destructor(new_timer))
+	local oldest_task = destructor(new_timer)
+	new_timer._oldest_task = oldest_task
+
+	table.insert(scope, oldest_task)
 
 	depend(new_timer, externaltime)
 

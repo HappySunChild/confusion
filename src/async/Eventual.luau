@@ -1,20 +1,24 @@
 local async = require("./types")
-local calc = require("../core-calc/types")
-local graph = require("../core-graph/types")
-local logging = require("../core-logging/types")
-local memory = require("../core-memory/types")
+local graph = require("../core_graph/types")
+local logging = require("../core_logging/types")
+local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
-local External = require("../core-external/External")
-local cast_to_state = require("../core-calc/cast_to_state")
-local change = require("../core-graph/change")
-local cleanup = require("../core-memory/cleanup")
-local depend = require("../core-graph/depend")
-local derive_scope = require("../core-memory/derive_scope")
-local destructor = require("../core-memory/destructor")
-local evaluate = require("../core-graph/evaluate")
-local is_similar = require("../core-calc/is_similar")
-local parse_error = require("../core-logging/parse_error")
-local peek = require("../core-use/peek")
+local ExternalScheduler = require("../core_external/ExternalScheduler")
+local cancel_task = ExternalScheduler.cancel_task
+local do_task_immediate = ExternalScheduler.do_task_immediate
+
+local cast_to_state = require("../core_state/cast_to_state")
+local change = require("../core_graph/change")
+local cleanup = require("../core_memory/cleanup")
+local depend = require("../core_graph/depend")
+local derive_scope = require("../core_memory/derive_scope")
+local destructor = require("../core_memory/destructor")
+local evaluate = require("../core_graph/evaluate")
+local is_similar = require("../core_state/is_similar")
+local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
+local parse_error = require("../core_logging/parse_error")
+local peek = require("../core_use/peek")
 
 type Self<T, S> = async.Eventual<T> & {
 	_inner_scope: memory.Scope<S>,
@@ -28,7 +32,7 @@ type Self<T, S> = async.Eventual<T> & {
 
 	_session_used: { [graph.GraphNode]: true },
 	_become: (any) -> (),
-	_use: calc.Use,
+	_use: state.Use,
 }
 
 local function handle_eventual_computation<T, S>(eventual: Self<T, S>)
@@ -44,21 +48,20 @@ local function handle_eventual_computation<T, S>(eventual: Self<T, S>)
 		eventual._inner_scope = inner_scope
 	else -- throw away computation scope, invalidated because computation errored
 		cleanup(inner_scope)
-		External.log_error_nonfatal(calc.callback_error, err)
+		log_error_nonfatal(state.callback_error, err)
 	end
 
 	eventual._active_thread = nil
 end
 
 local CLASS = table.freeze({
-	type = "State",
+	type = "state",
 	kind = "Eventual",
 	timeliness = "eager",
 
 	is_pending = function<T, S>(self: Self<T, S>)
 		return self._active_thread ~= nil
 	end,
-
 	_evaluate = function<T, S>(self: Self<T, S>): boolean
 		if self.scope == nil then
 			return false
@@ -73,7 +76,7 @@ local CLASS = table.freeze({
 
 		-- cancel any currently active computations
 		if self._active_thread ~= nil then
-			External.cancel_task(self._active_thread)
+			cancel_task(self._active_thread)
 			self._active_thread = nil
 		end
 
@@ -84,17 +87,17 @@ local CLASS = table.freeze({
 		self._old_value = self._pending_value
 
 		-- start computation
-		External.do_task_immediate(handle_eventual_computation, self)
+		do_task_immediate(handle_eventual_computation, self)
 
 		return not is_similar(self._old_value, self._cached_value)
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function generate_callbacks<T, S>(eventual: Self<T, S>): (calc.Use, (any) -> ())
+local function generate_callbacks<T, S>(eventual: Self<T, S>): (state.Use, (any) -> ())
 	local session_used = eventual._session_used
 
-	local function use(target: calc.UsedAs<T>): T
+	local function use(target: state.UsedAs<T>): T
 		if cast_to_state(target) ~= nil then
 			depend(eventual, target)
 
@@ -128,7 +131,7 @@ end
 
 local function destroy_eventual<T, S>(eventual: Self<T, S>)
 	if eventual._active_thread ~= nil then
-		External.cancel_task(eventual._active_thread)
+		cancel_task(eventual._active_thread)
 	end
 
 	eventual._session_used = nil
@@ -145,23 +148,26 @@ local function Eventual<T, S>(
 	local new_eventual: Self<T, S> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
+		validity = "valid",
+		using = {},
+		users = {},
 
 		_cached_value = pending_value,
 		_pending_value = pending_value,
 		_old_value = nil,
 
-		_using = {},
-		_users = {},
-
 		_is_becoming = false,
 		_session_used = {},
 		_inner_scope = nil,
 		_processor = processor,
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
+	local oldest_task = destructor(new_eventual, destroy_eventual)
+
+	new_eventual._oldest_task = oldest_task
 	new_eventual._use, new_eventual._become = generate_callbacks(new_eventual)
 
-	table.insert(scope, destructor(new_eventual, destroy_eventual))
+	table.insert(scope, oldest_task)
 
 	evaluate(new_eventual, true)
 

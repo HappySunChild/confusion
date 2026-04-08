@@ -1,25 +1,16 @@
-local calc = require("../core-calc/types")
+local state = require("../core_state/types")
 
 local lerp_type = require("../lerp/lerp_type")
 
-local function get_bounding_keys(
-	eval_time: number,
-	keyframes: { any }
-): (number?, number?)
+local function get_bounding_keys(eval_time: number, keyframes: { any }): (number?, number?)
 	local prev_time, next_time = nil, nil
 
 	for keyframe_time in keyframes do
-		if
-			keyframe_time <= eval_time
-			and (prev_time == nil or keyframe_time > prev_time)
-		then
+		if keyframe_time <= eval_time and (prev_time == nil or keyframe_time > prev_time) then
 			prev_time = keyframe_time
 		end
 
-		if
-			keyframe_time >= eval_time
-			and (next_time == nil or keyframe_time < next_time)
-		then
+		if keyframe_time >= eval_time and (next_time == nil or keyframe_time < next_time) then
 			next_time = keyframe_time
 		end
 	end
@@ -29,8 +20,8 @@ end
 
 local function evaluate_keyframes<T>(
 	eval_time: number,
-	keyframes: { calc.UsedAs<T> },
-	use: calc.Use
+	keyframes: { state.UsedAs<T> },
+	use: state.Use
 ): T?
 	local prev_time, next_time = get_bounding_keys(eval_time, keyframes)
 

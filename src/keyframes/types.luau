@@ -1,14 +1,14 @@
-local calc = require("../core-calc/types")
-local memory = require("../core-memory/types")
+local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
-export type Keyframes<T> = calc.StateNode<T> & {
+export type Keyframes<T> = state.StateNode<T> & {
 	type: "State",
 	kind: "Keyframes",
 }
 export type KeyframesConstructor = <T>(
 	scope: memory.Scope,
-	alpha: calc.UsedAs<number>,
+	alpha: state.UsedAs<number>,
 	keyframes: { [number]: T }
-) -> Keyframes<T> | T
+) -> Keyframes<T>
 
 return nil

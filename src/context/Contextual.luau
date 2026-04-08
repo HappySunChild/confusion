@@ -1,9 +1,8 @@
-local calc = require("../core-calc/types")
 local context = require("./types")
+local state = require("../core_state/types")
 
-local External = require("../core-external/External")
-
-local parse_error = require("../core-logging/parse_error")
+local log_error = require("../core_logging/log_error")
+local parse_error = require("../core_logging/parse_error")
 
 type Self<T> = {
 	_default: T,
@@ -34,20 +33,20 @@ local CLASS = table.freeze({
 		self._values[thread] = original
 
 		if not ok then
-			External.log_error(calc.callback_error, value)
+			log_error(state.callback_error, value)
 		end
 
 		return value
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+local CLASS_METATABLE = table.freeze({ __index = CLASS })
 local WEAK_KEYS_METATABLE = table.freeze({ __mode = "k" })
 
 local function Contextual<T>(default: T): context.Contextual<T>
 	local new_contextual: Self<T> = setmetatable({
 		_default = default,
 		_values = setmetatable({}, WEAK_KEYS_METATABLE),
-	}, METATABLE) :: any
+	}, CLASS_METATABLE) :: any
 
 	return new_contextual
 end

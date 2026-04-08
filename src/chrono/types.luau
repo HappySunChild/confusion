@@ -1,7 +1,7 @@
-local calc = require("../core-calc/types")
-local memory = require("../core-memory/types")
+local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
-export type ExternalTime = calc.StateNode<number> & {
+export type ExternalTime = state.StateNode<number> & {
 	kind: "ExternalTime",
 
 	enable: (ExternalTime) -> (),
@@ -9,8 +9,10 @@ export type ExternalTime = calc.StateNode<number> & {
 	is_enabled: (ExternalTime) -> boolean,
 }
 
-export type Timer = calc.StateNode<number> & {
+export type Timer = state.StateNode<number> & {
 	kind: "Timer",
+	is_paused: boolean,
+	reference_point: number,
 
 	pause: (Timer) -> (),
 	unpause: (Timer) -> (),
