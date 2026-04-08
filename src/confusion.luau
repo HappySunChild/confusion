@@ -64,7 +64,7 @@ local CORE_CONFUSION = table.freeze({
 })
 
 local function confusion<I>(options: Configuration<I>): ConFusion<I>
-	ExternalScheduler.set_provider(options.scheduler)
+	ExternalScheduler.set_scheduler(options.scheduler)
 	ExternalDebugger.set_debugger(options.debugger)
 	ExternalLogger.set_logger(options.logger)
 
@@ -74,7 +74,7 @@ local function confusion<I>(options: Configuration<I>): ConFusion<I>
 
 	local new_confusion = merge(
 		true,
-		table.clone(CORE_CONFUSION),
+		table.clone(CORE_CONFUSION :: any),
 		include,
 		{ version = options.version } -- always override version field
 	)
