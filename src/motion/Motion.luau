@@ -16,16 +16,16 @@ local log_warn = require("../core_logging/log_warn")
 local peek = require("../core_use/peek")
 
 type Self<T> = {
-	_goal: state.UsedAs<T>,
-	_generator: state.UsedAs<motion.MoveGenerator<T>>,
+	goal: state.UsedAs<T>,
+	generator: state.UsedAs<motion.CurveGenerator<T>>,
 
-	_dynamics: { any },
+	dynamics: { any },
 
-	_regenerate: boolean?,
+	regenerate: boolean,
 
-	_active_goal: T,
-	_active_generator: motion.MoveGenerator<T>,
-	_active_move: motion.AnimationMove<T>,
+	active_goal: T,
+	active_generator: motion.CurveGenerator<T>,
+	active_curve: motion.AnimationCurve<T>,
 
 	_timer: chrono.Timer,
 } & motion.Motion<T>
@@ -36,12 +36,12 @@ local function sync_dynamics<T>(
 	output_value: T,
 	...: any
 ): (T, boolean)
-	local dynamics = motion_obj._dynamics
+	local dynamics = motion_obj.dynamics
 
 	table.clear(dynamics)
 
 	if output_value ~= output_value then
-		local goal = motion_obj._active_goal
+		local goal = motion_obj.active_goal
 
 		log_warn(motion.animated_invalid_motion, output_value, goal)
 
@@ -63,31 +63,31 @@ local CLASS = table.freeze({
 	timeliness = "eager",
 
 	set_dynamic = function<T>(self: Self<T>, index: number, value: any)
-		self._dynamics[index] = value
-		self._regenerate = true
+		self.dynamics[index] = value
+		self.regenerate = true
 
 		change(self)
 	end,
-	set_dynamics = function<T>(self: Self<T>, dynamics: { any }, at_index: number?)
-		table.move(dynamics, 1, #dynamics, at_index or 1, self._dynamics)
-		self._regenerate = true
+	set_dynamics = function<T>(self: Self<T>, new_dynamics: { any }, at_index: number?)
+		table.move(new_dynamics, 1, #new_dynamics, at_index or 1, self.dynamics)
+		self.regenerate = true
 
 		change(self)
 	end,
 	get_dynamic = function<T>(self: Self<T>, index: number)
-		return self._dynamics[index]
+		return self.dynamics[index]
 	end,
 	get_dynamics = function<T>(self: Self<T>): { any }
 		-- considered cloning, but i don't think it's worth it
 		-- WARNING TO ANYONE USING THIS, DIRECTLY MODIFYING THE DYNAMICS TABLE
 		-- IS VERY MUCH NOT RECOMMENDED, DO NOT DO IT UNLESS YOU KNOW WHAT YOU'RE DOING!!!
-		return self._dynamics
+		return self.dynamics
 	end,
 
 	_evaluate = function<T>(self: Self<T>)
 		local timer = self._timer
-		local goal = self._goal
-		local generator = self._generator
+		local goal = self.goal
+		local generator = self.generator
 
 		local new_goal = peek(goal) :: T
 
@@ -100,36 +100,36 @@ local CLASS = table.freeze({
 			return false
 		end
 
-		local new_generator = peek(generator) :: motion.MoveGenerator<T>
+		local new_generator = peek(generator) :: motion.CurveGenerator<T>
 
 		depend(self, generator)
 		depend(self, timer)
 
 		-- wake
 		if
-			new_goal ~= self._active_goal
-			or new_generator ~= self._active_generator
-			or self._regenerate == true
+			new_goal ~= self.active_goal
+			or new_generator ~= self.active_generator
+			or self.regenerate
 		then
-			self._regenerate = nil
+			self.active_goal = new_goal
+			self.active_generator = new_generator
+			self.active_curve = generator(new_goal, unpack(self.dynamics))
 
-			self._active_goal = new_goal
-			self._active_generator = new_generator
-			self._active_move = generator(new_goal, unpack(self._dynamics))
+			self.regenerate = false
 
 			timer:zero()
 			timer:unpause()
 		end
 
-		local elapsed = peek(timer) :: number
+		local elapsed = peek(timer)
 
 		-- fix Motions following eachother
-		if elapsed == 0 then
+		if elapsed == 0 then -- usually means we got a new goal/curve generator
 			elapsed = get_delta_time()
 		end
 
 		local old_value = self._cached_value :: any
-		local new_value, should_sleep = sync_dynamics(self, self._active_move(elapsed))
+		local new_value, should_sleep = sync_dynamics(self, self.active_curve(elapsed))
 
 		self._cached_value = new_value
 
@@ -145,7 +145,7 @@ local CLASS_METATABLE = table.freeze({ __index = CLASS })
 local function Motion<T>(
 	scope: memory.Scope,
 	goal: state.UsedAs<T>,
-	move_generator: state.UsedAs<motion.MoveGenerator<T>>
+	curve_generator: state.UsedAs<motion.CurveGenerator<T>>
 ): motion.Motion<T>
 	local new_motion: Self<T> = setmetatable({
 		scope = scope,
@@ -156,15 +156,15 @@ local function Motion<T>(
 
 		_cached_value = nil, -- this is handled by the evaluate call below, so we can just leave this nil :3
 
-		_goal = goal,
-		_generator = move_generator,
+		goal = goal,
+		generator = curve_generator,
 
-		_dynamics = { peek(goal) },
+		dynamics = { peek(goal) },
 
-		_regenerate = nil,
-		_active_goal = nil,
-		_active_generator = nil,
-		_active_move = nil,
+		regenerate = false,
+		active_goal = nil,
+		active_generator = nil,
+		active_move = nil,
 
 		_timer = Timer(scope),
 	}, CLASS_METATABLE) :: any

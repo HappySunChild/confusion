@@ -6,7 +6,7 @@ local cleanup = require("../../core_memory/cleanup")
 return SpecialKey(
 	"observer",
 	"OnRemoval",
-	function(scope: memory.Scope, apply_to: Instance, removal_chore: memory.Chore)
+	function(scope: memory.Scope, apply_to: Instance, removal_chore: any)
 		table.insert(
 			scope,
 			apply_to.AncestryChanged:Connect(function(_, parent: Instance?)
