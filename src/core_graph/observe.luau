@@ -10,7 +10,7 @@ local cast_to_graph = require("./cast_to_graph")
 local evaluate = require("./evaluate")
 
 local function observe_lifetime_formatter(_, b: unknown)
-	return `The subject '{name_of(b)}'`, "it could be observed"
+	return `The subject '{name_of(b, "unknown")}'`, "it could be observed"
 end
 
 --[[
@@ -30,19 +30,22 @@ local function observe(
 
 	check_lifetime(nil, subject, subject.scope, observe_lifetime_formatter)
 
-	if subject._observers == nil then
-		subject._observers = {}
+	local observers = subject._observers :: { () -> () }
+
+	if observers == nil then
+		observers = {}
+		subject._observers = observers
 	end
 
-	table.insert(subject._observers, callback)
+	table.insert(observers, callback)
 
 	evaluate(subject)
 
 	local function disconnect()
-		local observe_index = table.find(subject._observers, callback)
+		local observe_index = table.find(observers, callback)
 
 		if observe_index ~= nil then
-			table.remove(subject._observers, observe_index)
+			table.remove(observers, observe_index)
 		end
 
 		local disconnect_index = table.find(scope, disconnect)

@@ -5,7 +5,7 @@ local untrack_scope = ExternalDebug.untrack_scope
 
 local log_error = require("../core_logging/log_error")
 
-local ALREADY_DESTROYING: { [memory.Chore]: true } = {}
+local ALREADY_DESTROYING: { [any]: true } = {}
 
 --[[
 	Cleans up the chores passed in as the arguments.
@@ -19,7 +19,7 @@ local ALREADY_DESTROYING: { [memory.Chore]: true } = {}
 	
 	Anything else passed in will be ignored.
 ]]
-local function cleanup(chore: memory.Chore?)
+local function cleanup(chore: any?): ()
 	if chore == nil then
 		return
 	end
@@ -31,18 +31,14 @@ local function cleanup(chore: memory.Chore?)
 	ALREADY_DESTROYING[chore] = true
 
 	if typeof(chore) == "Instance" then -- Roblox Instances
-		chore:Destroy()
+		(chore :: Instance):Destroy()
 	elseif typeof(chore) == "RBXScriptConnection" then -- Roblox Connections
-		chore = chore :: RBXScriptConnection
-
-		chore:Disconnect()
+		(chore :: RBXScriptConnection):Disconnect()
 	elseif typeof(chore) == "function" then -- callback functions
-		chore = chore :: () -> ()
-
-		chore()
+		(chore :: () -> ())()
 	elseif typeof(chore) == "table" then
 		if chore[1] ~= nil then -- scope/array of chores
-			chore = chore :: { memory.Chore }
+			chore = chore :: { any }
 
 			for i = #chore, 1, -1 do
 				cleanup(chore[i])

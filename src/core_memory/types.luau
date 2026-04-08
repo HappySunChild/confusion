@@ -1,7 +1,6 @@
-export type Chore = any
-export type Scope<T = any> = { Chore } & T
+export type Scope<T = any> = { any } & T
 
-export type Cleanup = (Chore) -> ()
+export type Cleanup = (any?) -> ()
 export type Scoped = <T, M>(base: T, methods: M?) -> Scope<T & M>
 export type Insert = <Tasks...>(scope: Scope, Tasks...) -> Tasks...
 

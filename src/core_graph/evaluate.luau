@@ -28,7 +28,7 @@ local function evaluate(node: graph.GraphNode, force_computation: boolean?): boo
 		for dependency in node.using do
 			evaluate(dependency, false)
 
-			if dependency.last_change > node.last_compute then
+			if dependency.last_change :: number > node.last_compute :: number then
 				needs_computation = true
 
 				break
