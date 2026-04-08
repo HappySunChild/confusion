@@ -26,10 +26,10 @@ local motion = require("./motion/types")
 local springs = require("./motion_springs/types")
 local tweens = require("./motion_tweens/types")
 
-local binds = require("./roblox-binds/types")
-local instances = require("./roblox-instances/types")
-local stylesheets = require("./roblox-stylesheets/types")
-local templates = require("./roblox-templates/types")
+local binds = require("./roblox_binds/types")
+local instances = require("./roblox_instances/types")
+local stylesheets = require("./roblox_stylesheets/types")
+local templates = require("./roblox_templates/types")
 
 local confusion = require("./confusion")
 
@@ -207,13 +207,13 @@ local confusion_for_roblox = confusion({
 		AttributeOf = require("./roblox-binds/AttributeOf"),
 
 		-- Roblox: Stylesheets
-		StyleRule = require("./roblox-stylesheets/StyleRule"),
-		StyleSheet = require("./roblox-stylesheets/StyleSheet"),
+		StyleRule = require("./roblox_stylesheets/StyleRule"),
+		StyleSheet = require("./roblox_stylesheets/StyleSheet"),
 
-		StyleDerives = require("././roblox-stylesheets/keys/StyleDerives"),
-		StyleLink = require("././roblox-stylesheets/keys/StyleLink"),
-		StyleProperties = require("././roblox-stylesheets/keys/StyleProperties"),
-		StyleRules = require("./roblox-stylesheets/keys/StyleRules"),
+		StyleDerives = require("././roblox_stylesheets/keys/StyleDerives"),
+		StyleLink = require("././roblox_stylesheets/keys/StyleLink"),
+		StyleProperties = require("././roblox_stylesheets/keys/StyleProperties"),
+		StyleRules = require("./roblox_stylesheets/keys/StyleRules"),
 	},
 })
 
