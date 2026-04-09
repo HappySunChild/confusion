@@ -2,7 +2,6 @@ local instances = require("../types")
 local memory = require("../../core_memory/types")
 local state = require("../../core_state/types")
 
-local SpecialKey = require("../SpecialKey")
 local cast_to_state = require("../../core_state/cast_to_state")
 local cleanup = require("../../core_memory/cleanup")
 local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
@@ -110,13 +109,12 @@ local function process_child(
 	end
 end
 
-local Children = SpecialKey(
-	"descendants",
-	"Children",
-	function(scope: memory.Scope, apply_to: Instance, root_child: instances.Child)
+return {
+	type = "SpecialKey",
+	kind = "Children",
+	stage = "descendants",
+	apply = function(scope: memory.Scope, apply_to: Instance, root_child: instances.Child)
 		local reconcile = create_reconciler(scope, process_child)
 		reconcile(root_child, apply_to)
-	end
-)
-
-return Children
+	end,
+} :: instances.SpecialKey<"Children">

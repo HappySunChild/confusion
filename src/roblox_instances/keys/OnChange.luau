@@ -1,7 +1,6 @@
 local instances = require("../types")
 local memory = require("../../core_memory/types")
 
-local SpecialKey = require("../SpecialKey")
 local log_error = require("../../core_logging/log_error")
 
 local KEY_CACHE = {}
@@ -10,10 +9,11 @@ local function OnChange(property: string): instances.SpecialKey<"OnChange">
 	local key = KEY_CACHE[property]
 
 	if key == nil then
-		key = SpecialKey(
-			"observer",
-			"OnChange",
-			function(scope: memory.Scope, apply_to: Instance, callback: (any) -> ())
+		key = {
+			type = "SpecialKey",
+			kind = "OnChange",
+			stage = "observer",
+			apply = function(scope: memory.Scope, apply_to: Instance, callback: (any) -> ())
 				local ok, event = pcall(apply_to.GetPropertyChangedSignal, apply_to, property)
 
 				if not ok then
@@ -26,8 +26,8 @@ local function OnChange(property: string): instances.SpecialKey<"OnChange">
 						callback(apply_to[property])
 					end)
 				)
-			end
-		)
+			end,
+		} :: instances.SpecialKey<"OnChange">
 
 		KEY_CACHE[property] = key
 	end

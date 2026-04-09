@@ -13,7 +13,6 @@ export type SpecialKey<T = string> = {
 	type: "SpecialKey",
 	kind: T,
 	stage: SpecialKeyStage,
-
 	apply: (scope: memory.Scope, instance: Instance, value: unknown) -> (),
 }
 
