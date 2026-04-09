@@ -203,8 +203,8 @@ local confusion_for_roblox = confusion({
 		QueryDescendants = require("./roblox_templates/QueryDescendants"),
 
 		-- Roblox: Binds
-		PropertyOf = require("./roblox-binds/PropertyOf"),
-		AttributeOf = require("./roblox-binds/AttributeOf"),
+		PropertyOf = require("./roblox_binds/PropertyOf"),
+		AttributeOf = require("./roblox_binds/AttributeOf"),
 
 		-- Roblox: Stylesheets
 		StyleRule = require("./roblox_stylesheets/StyleRule"),
