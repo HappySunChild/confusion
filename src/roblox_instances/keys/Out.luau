@@ -2,7 +2,6 @@ local instances = require("../types")
 local memory = require("../../core_memory/types")
 local state = require("../../core_state/types")
 
-local SpecialKey = require("../SpecialKey")
 local log_error = require("../../core_logging/log_error")
 local xtypeof = require("../../core_graph/xtypeof")
 
@@ -12,10 +11,11 @@ local function Out(property: string): instances.SpecialKey<"Out">
 	local key = KEY_CACHE[property]
 
 	if key == nil then
-		key = SpecialKey(
-			"observer",
-			"Out",
-			function(scope: memory.Scope, apply_to: Instance, value: state.Value<any>)
+		key = {
+			type = "SpecialKey",
+			kind = "Out",
+			stage = "observer",
+			apply = function(scope: memory.Scope, apply_to: Instance, value: state.Value<any>)
 				if xtypeof(value) ~= "State" or value.kind ~= "Value" then
 					log_error(instances.invalid_out_type, nil, typeof(value))
 				end
@@ -28,8 +28,8 @@ local function Out(property: string): instances.SpecialKey<"Out">
 						value:set(apply_to[property])
 					end)
 				)
-			end
-		)
+			end,
+		} :: instances.SpecialKey<"Out">
 
 		KEY_CACHE[property] = key
 	end

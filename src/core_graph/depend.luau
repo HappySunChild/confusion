@@ -22,7 +22,7 @@ local function depend(user: graph.GraphNode, dependency: any?)
 
 	check_lifetime(user, dependency, dependency.scope, depend_lifetime_formatter)
 
-	evaluate(dependency)
+	evaluate(dependency :: graph.GraphNode)
 
 	if table.isfrozen(user.using) then
 		log_error(

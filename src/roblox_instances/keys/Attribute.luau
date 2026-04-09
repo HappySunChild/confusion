@@ -2,7 +2,6 @@ local instances = require("../types")
 local memory = require("../../core_memory/types")
 local state = require("../../core_state/types")
 
-local SpecialKey = require("../SpecialKey")
 local observe_immediate = require("../../core_graph/observe_immediate")
 local peek = require("../../core_use/peek")
 
@@ -12,15 +11,16 @@ local function Attribute(attribute: string): instances.SpecialKey<"Attribute">
 	local key = KEY_CACHE[attribute]
 
 	if key == nil then
-		key = SpecialKey(
-			"self",
-			"Attribute",
-			function(scope: memory.Scope, apply_to: Instance, value: state.UsedAs<any>)
+		key = {
+			type = "SpecialKey",
+			kind = "Attribute",
+			stage = "self",
+			apply = function(scope: memory.Scope, apply_to: Instance, value: state.UsedAs<any>)
 				observe_immediate(scope, value, function()
 					apply_to:SetAttribute(attribute, peek(value))
 				end)
-			end
-		)
+			end,
+		} :: instances.SpecialKey<"Attribute">
 
 		KEY_CACHE[attribute] = key
 	end

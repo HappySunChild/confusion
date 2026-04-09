@@ -27,28 +27,28 @@ return table.freeze({
 
 	do_task_immediate = function<A...>(resume: (A...) -> () | thread, ...: A...): thread?
 		if active_scheduler == nil then
-			log_error(external.missing_scheduler)
+			return log_error(external.missing_scheduler)
 		end
 
 		return active_scheduler.do_task_immediate(resume, ...)
 	end,
 	do_task_deferred = function<A...>(resume: (A...) -> () | thread, ...: A...): thread?
 		if active_scheduler == nil then
-			log_error(external.missing_scheduler)
+			return log_error(external.missing_scheduler)
 		end
 
 		return active_scheduler.do_task_deferred(resume, ...)
 	end,
 	do_task_delayed = function<A...>(sec: number, resume: (A...) -> () | thread, ...: A...): thread?
 		if active_scheduler == nil then
-			log_error(external.missing_scheduler)
+			return log_error(external.missing_scheduler)
 		end
 
 		return active_scheduler.do_task_delayed(sec, resume, ...)
 	end,
 	cancel_task = function(task: thread): boolean
 		if active_scheduler == nil then
-			log_error(external.missing_scheduler)
+			return log_error(external.missing_scheduler)
 		end
 
 		return active_scheduler.cancel_task(task)

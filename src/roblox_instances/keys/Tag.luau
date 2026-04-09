@@ -2,7 +2,6 @@ local instances = require("../types")
 local memory = require("../../core_memory/types")
 local state = require("../../core_state/types")
 
-local SpecialKey = require("../SpecialKey")
 local observe_immediate = require("../../core_graph/observe_immediate")
 local peek = require("../../core_use/peek")
 
@@ -12,10 +11,15 @@ local function Tag(tag: string): instances.SpecialKey<"Tag">
 	local key = KEY_CACHE[tag]
 
 	if key == nil then
-		key = SpecialKey(
-			"self",
-			"Tag",
-			function(scope: memory.Scope, apply_to: Instance, enabled: state.UsedAs<boolean>)
+		key = {
+			type = "SpecialKey",
+			kind = "Tag",
+			stage = "self",
+			apply = function(
+				scope: memory.Scope,
+				apply_to: Instance,
+				enabled: state.UsedAs<boolean>
+			)
 				observe_immediate(scope, enabled, function()
 					local value = peek(enabled)
 
@@ -25,8 +29,8 @@ local function Tag(tag: string): instances.SpecialKey<"Tag">
 						apply_to:RemoveTag(tag)
 					end
 				end)
-			end
-		)
+			end,
+		} :: instances.SpecialKey<"Tag">
 
 		KEY_CACHE[tag] = key
 	end

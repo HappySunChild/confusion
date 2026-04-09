@@ -13,7 +13,7 @@ local EPSILON = 0.0001
 local function SpringMover<T>(
 	speed: state.UsedAs<number>,
 	damping: state.UsedAs<number>
-): motion.MoveGenerator<T>
+): motion.CurveGenerator<T>
 	local start_pos: { number } = {}
 	local start_vel: { number } = {}
 
@@ -25,7 +25,7 @@ local function SpringMover<T>(
 		target_position: T,
 		initial_position: T,
 		initial_velocity: { number }?
-	): motion.AnimationMove<T>
+	): motion.AnimationCurve<T>
 		local discontinuous = typeof(target_position) ~= active_type
 
 		local target_pos = unpack_type(target_position)

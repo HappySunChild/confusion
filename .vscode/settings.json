@@ -1,0 +1,27 @@
+{
+	"material-icon-theme.folders.associations": {
+		"motion_springs": "animation",
+		"motion_tweens": "animation",
+		"lerp": "animation",
+		"keyframes": "animation",
+		"roblox_binds": "roblox",
+		"iter": "functions",
+		"iter_for": "functions",
+		"iter_range": "functions",
+		"core_state": "core",
+		"core_external": "core",
+		"core_graph": "core",
+		"core_logging": "core",
+		"core_memory": "core",
+		"core_use": "core",
+		"async": "temp",
+		"chrono": "temp",
+		"safe": "functions",
+		"roblox_instances": "roblox",
+		"roblox_external": "roblox",
+		"roblox_templates": "roblox",
+	},
+	"luau-lsp.sourcemap.rojoProjectFile": "dev.project.json",
+	"luau-lsp.platform.type": "roblox",
+	"stylua.targetReleaseVersion": "latest"
+}

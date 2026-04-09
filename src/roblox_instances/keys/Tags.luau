@@ -2,7 +2,6 @@ local instances = require("../types")
 local memory = require("../../core_memory/types")
 local state = require("../../core_state/types")
 
-local SpecialKey = require("../SpecialKey")
 local cast_to_state = require("../../core_state/cast_to_state")
 local cleanup = require("../../core_memory/cleanup")
 local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
@@ -101,13 +100,12 @@ local function process_tag(
 	end
 end
 
-local Tags = SpecialKey(
-	"self",
-	"Tags",
-	function(scope: memory.Scope, apply_to: Instance, root_tag: instances.Tag?)
+return {
+	type = "SpecialKey",
+	kind = "Tags",
+	stage = "self",
+	apply = function(scope: memory.Scope, apply_to: Instance, root_tag: instances.Tag?)
 		local reconcile = create_reconciler(scope, process_tag)
 		reconcile(root_tag, apply_to)
-	end
-)
-
-return Tags
+	end,
+} :: instances.SpecialKey<"Tags">

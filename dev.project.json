@@ -15,8 +15,12 @@
 		"ServerScriptService": {
 			"$ignoreUnknownInstances": true,
 			"$className": "ServerScriptService",
-			"confusion-tests": {
-				"$path": "dev/roblox/server"
+			"devtests": {
+				"$className": "Folder",
+				"$ignoreUnknownInstances": true,
+				"confusion": {
+					"$path": "dev/roblox/server"
+				}
 			}
 		},
 		"StarterPlayer": {
@@ -25,8 +29,12 @@
 			"StarterPlayerScripts": {
 				"$className": "StarterPlayerScripts",
 				"$ignoreUnknownInstances": true,
-				"confusion-tests": {
-					"$path": "dev/roblox/client"
+				"devtests": {
+					"$className": "Folder",
+					"$ignoreUnknownInstances": true,
+					"confusion": {
+						"$path": "dev/roblox/client"
+					}
 				}
 			}
 		}

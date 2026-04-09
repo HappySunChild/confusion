@@ -1,8 +1,8 @@
 local memory = require("../core_memory/types")
 local state = require("../core_state/types")
 
-export type AnimationMove<T> = (elapsed: number) -> (boolean, T, ...any)
-export type MoveGenerator<T> = (goal: T, start: T, ...any) -> AnimationMove<T>
+export type AnimationCurve<T> = (elapsed: number) -> (boolean, T, ...any)
+export type CurveGenerator<T> = (goal: T, start: T, ...any) -> AnimationCurve<T>
 
 export type Motion<T> = {
 	kind: "Motion",
@@ -15,7 +15,7 @@ export type Motion<T> = {
 export type MotionConstructor = <T>(
 	scope: memory.Scope,
 	goal: state.UsedAs<T>,
-	move_generator: state.UsedAs<MoveGenerator<T>>
+	curve_generator: state.UsedAs<CurveGenerator<T>>
 ) -> Motion<T>
 
 return {

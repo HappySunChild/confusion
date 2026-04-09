@@ -29,7 +29,7 @@ export type EasingStyles = {
 	read Quart: EasingStyle,
 	read Quint: EasingStyle,
 
-	read new: {
+	read create: {
 		read Exponent: (exponent: number) -> EasingStyle,
 		read Overshoot: (amplitude: number) -> EasingStyle,
 		read Elastic: (period: number) -> EasingStyle,
@@ -40,20 +40,18 @@ export type EasingStyles = {
 export type TweenInfo = {
 	type: "TweenInfo",
 
-	easing_style: (number) -> number,
 	time: number,
-	delay_time: number,
-	reverses: boolean,
+	easing: (number) -> number,
 	repeat_count: number,
+	reverses: boolean,
+	delay_time: number,
 }
 export type TweenInfoConstructor = (
-	info: {
-		easing_style: ((number) -> number)?,
-		time: number?,
-		delay_time: number?,
-		reverses: boolean?,
-		repeat_count: number?,
-	}
+	time: number?,
+	easing: ((number) -> number)?,
+	repeat_count: number?,
+	reverses: boolean?,
+	delay_time: number?
 ) -> TweenInfo
 
 return nil

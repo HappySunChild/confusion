@@ -1,12 +1,13 @@
+local instances = require("../types")
 local memory = require("../../core_memory/types")
 
-local SpecialKey = require("../SpecialKey")
 local cleanup = require("../../core_memory/cleanup")
 
-return SpecialKey(
-	"observer",
-	"OnRemoval",
-	function(scope: memory.Scope, apply_to: Instance, removal_chore: memory.Chore)
+return {
+	type = "SpecialKey",
+	kind = "OnRemoval",
+	stage = "observer",
+	apply = function(scope: memory.Scope, apply_to: Instance, removal_chore: any)
 		table.insert(
 			scope,
 			apply_to.AncestryChanged:Connect(function(_, parent: Instance?)
@@ -15,5 +16,5 @@ return SpecialKey(
 				end
 			end)
 		)
-	end
-)
+	end,
+} :: instances.SpecialKey<"OnRemoval">

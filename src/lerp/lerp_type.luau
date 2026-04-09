@@ -3,7 +3,7 @@ local Oklab = require("../colour/Oklab")
 local function lerp_type<T>(a: T, b: T, alpha: number): T
 	local data_type = typeof(a)
 
-	if type(b) == data_type then
+	if typeof(b) == data_type then
 		if data_type == "number" then
 			return math.lerp(a :: number, b :: number, alpha)
 		elseif data_type == "vector" then
@@ -15,8 +15,7 @@ local function lerp_type<T>(a: T, b: T, alpha: number): T
 			local ok_from = Oklab.from_srgb_to_oklab(a_vec)
 			local ok_target = Oklab.from_srgb_to_oklab(b_vec)
 
-			local ok_result =
-				Oklab.from_oklab_to_srgb(vector.lerp(ok_from, ok_target, alpha))
+			local ok_result = Oklab.from_oklab_to_srgb(vector.lerp(ok_from, ok_target, alpha))
 
 			return Color3.new(ok_result.x, ok_result.y, ok_result.z)
 		elseif data_type == "Vector3" then

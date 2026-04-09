@@ -13,7 +13,7 @@ export type GraphNode = {
 	type: "graph",
 	kind: string?,
 
-	created_at: number?,
+	created_at: number,
 	validity: Validity,
 	timeliness: Timeliness,
 

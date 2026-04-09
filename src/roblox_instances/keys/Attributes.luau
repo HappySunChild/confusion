@@ -1,7 +1,7 @@
+local instances = require("../types")
 local memory = require("../../core_memory/types")
 local state = require("../../core_state/types")
 
-local SpecialKey = require("../SpecialKey")
 local observe_immediate = require("../../core_graph/observe_immediate")
 local peek = require("../../core_use/peek")
 
@@ -16,14 +16,17 @@ local function apply_attribute(
 	end)
 end
 
-local Attributes = SpecialKey(
-	"self",
-	"Attributes",
-	function(scope: memory.Scope, apply_to: Instance, attributes: { [string]: state.UsedAs<any> })
+return {
+	type = "SpecialKey",
+	kind = "Attributes",
+	stage = "self",
+	apply = function(
+		scope: memory.Scope,
+		apply_to: Instance,
+		attributes: { [string]: state.UsedAs<any> }
+	)
 		for attribute, value in attributes do
 			apply_attribute(scope, apply_to, attribute, value)
 		end
-	end
-)
-
-return Attributes
+	end,
+} :: instances.SpecialKey<"Attributes">

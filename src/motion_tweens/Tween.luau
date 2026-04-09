@@ -10,7 +10,7 @@ local lerp_type = require("../lerp/lerp_type")
 local peek = require("../core_use/peek")
 
 local function TweenMover<T>(info: state.UsedAs<tweens.TweenInfo>)
-	local curve_generator = function(target: T, start: T): motion.AnimationMove<T>
+	local curve_generator = function(target: T, start: T): motion.AnimationCurve<T>
 		local active_info = peek(info) :: tweens.TweenInfo
 		local duration = get_tween_duration(active_info)
 

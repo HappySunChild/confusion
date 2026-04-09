@@ -2,7 +2,6 @@ local instances = require("../types")
 local memory = require("../../core_memory/types")
 local state = require("../../core_state/types")
 
-local SpecialKey = require("../SpecialKey")
 local log_warn = require("../../core_logging/log_warn")
 local observe_immediate = require("../../core_graph/observe_immediate")
 local peek = require("../../core_use/peek")
@@ -17,12 +16,13 @@ local function set_parent(instance: Instance, parent: Instance?)
 	end
 end
 
-return SpecialKey(
-	"ancestor",
-	"Parent",
-	function(scope: memory.Scope, apply_to: Instance, parent: state.UsedAs<Instance?>)
+return {
+	type = "SpecialKey",
+	kind = "Parent",
+	stage = "ancestor",
+	apply = function(scope: memory.Scope, apply_to: Instance, parent: state.UsedAs<Instance?>)
 		observe_immediate(scope, parent, function()
 			set_parent(apply_to, peek(parent))
 		end)
 	end
-) :: instances.SpecialKey<"Parent">
+} :: instances.SpecialKey<"Parent">

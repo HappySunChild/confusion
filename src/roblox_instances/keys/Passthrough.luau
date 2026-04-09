@@ -1,6 +1,10 @@
-local SpecialKey = require("../SpecialKey")
+local instances = require("../types")
+
 local apply_properties = require("../apply_properties")
 
-local Passthrough = SpecialKey("properties", "Passthrough", apply_properties) -- TODO: not this
-
-return Passthrough
+return {
+	type = "SpecialKey",
+	kind = "Passthrough",
+	stage = "properties",
+	apply = apply_properties,
+} :: instances.SpecialKey<"Passthrough">
