@@ -20,6 +20,7 @@
 		"roblox_instances": "roblox",
 		"roblox_external": "roblox",
 		"roblox_templates": "roblox",
+		"roblox_stylesheets": "roblox",
 	},
 	"luau-lsp.sourcemap.rojoProjectFile": "dev.project.json",
 	"luau-lsp.platform.type": "roblox",
