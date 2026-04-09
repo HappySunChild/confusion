@@ -2,7 +2,6 @@ local instances = require("./types")
 local memory = require("../core_memory/types")
 
 local apply_properties = require("./apply_properties")
-local default_properties = require("./default_properties")
 local log_error = require("../core_logging/log_error")
 
 local function New(
