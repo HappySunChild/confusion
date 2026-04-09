@@ -1,12 +1,12 @@
-local calc = require("../core-calc/types")
-local memory = require("../core-memory/types")
+local memory = require("../core_memory/types")
+local state = require("../core_state/types")
 
 export type StyleSheetProperties = {
 	derives: { StyleSheet }?,
 	rules: { [number]: StyleRule }?,
-	tokens: { [string]: calc.UsedAs<any> }?,
+	tokens: { [string]: state.UsedAs<any> }?,
 
-	parent: calc.UsedAs<Instance>?,
+	parent: state.UsedAs<Instance>?,
 }
 
 export type StyleRuleConstructor = (

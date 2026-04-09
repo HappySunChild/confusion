@@ -1,10 +1,10 @@
-local memory = require("../core-memory/types")
+local memory = require("../core_memory/types")
 local style = require("./types")
 
-local Attributes = require("../roblox-instances/keys/Attributes")
+local Attributes = require("../roblox_instances/keys/Attributes")
 local StyleDerives = require("./keys/StyleDerives")
 local StyleRules = require("./keys/StyleRules")
-local apply_properties = require("../roblox-instances/apply_properties")
+local apply_properties = require("../roblox_instances/apply_properties")
 
 local function StyleSheet(scope: memory.Scope, properties: style.StyleSheetProperties): StyleSheet
 	local new_sheet = Instance.new("StyleSheet")

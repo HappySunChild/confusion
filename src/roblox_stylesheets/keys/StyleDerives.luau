@@ -1,4 +1,4 @@
-local SpecialKey = require("../../roblox-instances/SpecialKey")
+local SpecialKey = require("../../roblox_instances/SpecialKey")
 
 local StyleDerives = SpecialKey(
 	"self",
