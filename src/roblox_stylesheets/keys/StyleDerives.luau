@@ -1,11 +1,10 @@
-local SpecialKey = require("../../roblox_instances/SpecialKey")
+local instances = require("../../roblox_instances/types")
 
-local StyleDerives = SpecialKey(
-	"self",
-	"StyleDerives",
-	function(_, apply_to: StyleSheet, derives: { StyleSheet })
+return {
+	type = "SpecialKey",
+	kind = "StyleDerives",
+	stage = "self",
+	apply = function(_, apply_to: StyleSheet, derives: { StyleSheet })
 		apply_to:SetDerives(derives)
-	end
-)
-
-return StyleDerives
+	end,
+} :: instances.SpecialKey<"StyleDerives">
