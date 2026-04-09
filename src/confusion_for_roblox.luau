@@ -28,6 +28,7 @@ local tweens = require("./motion_tweens/types")
 
 local binds = require("./roblox_binds/types")
 local instances = require("./roblox_instances/types")
+local stylesheets = require("./roblox_stylesheets/types")
 local templates = require("./roblox_templates/types")
 
 local confusion = require("./confusion")
@@ -123,6 +124,15 @@ type ConFusionForRoblox = confusion.ConFusion<{
 	-- Roblox: Binds
 	read PropertyOf: binds.PropertyOfConstructor,
 	read AttributeOf: binds.AttributeOfConstructor,
+
+	-- Roblox: Stylesheets
+	read StyleRule: stylesheets.StyleRuleConstructor,
+	read StyleSheet: stylesheets.StyleSheetConstructor,
+
+	read StyleDerives: instances.SpecialKey<"StyleDerives">,
+	read StyleLink: instances.SpecialKey<"StyleLink">,
+	read StyleProperties: instances.SpecialKey<"StyleProperties">,
+	read StyleRules: instances.SpecialKey<"StyleRules">,
 }>
 
 local confusion_for_roblox = confusion({
@@ -195,6 +205,15 @@ local confusion_for_roblox = confusion({
 		-- Roblox: Binds
 		PropertyOf = require("./roblox_binds/PropertyOf"),
 		AttributeOf = require("./roblox_binds/AttributeOf"),
+
+		-- Roblox: Stylesheets
+		StyleRule = require("./roblox_stylesheets/StyleRule"),
+		StyleSheet = require("./roblox_stylesheets/StyleSheet"),
+
+		StyleDerives = require("././roblox_stylesheets/keys/StyleDerives"),
+		StyleLink = require("././roblox_stylesheets/keys/StyleLink"),
+		StyleProperties = require("././roblox_stylesheets/keys/StyleProperties"),
+		StyleRules = require("./roblox_stylesheets/keys/StyleRules"),
 	},
 })
 
