@@ -1,15 +1,7 @@
-local function merge(
-	overwrite: boolean,
-	into: { [unknown]: unknown },
-	...: { [unknown]: unknown }
-)
-	local sets = { ... }
-
-	for _, set in sets do
+local function merge(into: { [unknown]: unknown }, ...: { [unknown]: unknown })
+	for _, set in { ... } do
 		for key, value in set do
-			if overwrite or into[key] == nil then
-				into[key] = value
-			end
+			into[key] = value
 		end
 	end
 

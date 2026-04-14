@@ -12,7 +12,7 @@ local function derive_scope<S, M>(existing: memory.Scope<S>, methods: M?): memor
 		else {
 			__index = if old_metatable == nil or type(old_metatable.__index) ~= "table"
 				then methods -- just use the methods since we don't have anything to merge with.
-				else merge(true, table.clone(old_metatable.__index), methods), -- merge since both __index and methods are valid.
+				else merge(table.clone(old_metatable.__index), methods), -- merge since both __index and methods are valid.
 		}
 
 	local derived_scope = setmetatable({}, new_metatable)
