@@ -3,8 +3,9 @@ local memory = require("../core_memory/types")
 local state = require("../core_state/types")
 
 local Parent = require("./keys/Parent")
+local cast_to_state = require("../core_state/cast_to_state")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
-local observe_immediate = require("../core_graph/observe_immediate")
+local observe = require("../core_graph/observe")
 local parse_error = require("../core_logging/parse_error")
 local peek = require("../core_use/peek")
 local sort_keys = require("./sort_keys")
@@ -19,9 +20,9 @@ local function test_property_assignable(instance: Instance, property: string)
 end
 
 local function set_property(instance: Instance, property: string, value: any)
-	local success, err = xpcall(raw_set_property, parse_error, instance, property, value)
+	local ok, err = xpcall(raw_set_property, parse_error, instance, property, value)
 
-	if success then
+	if ok then
 		return
 	end
 
@@ -54,9 +55,13 @@ local function apply_property(
 	property: string,
 	value: state.UsedAs<any>
 )
-	observe_immediate(scope, value, function()
-		set_property(instance, property, peek(value))
-	end)
+	set_property(instance, property, peek(value))
+
+	if cast_to_state(value) ~= nil then
+		observe(scope, value, function()
+			set_property(instance, property, peek(value))
+		end)
+	end
 end
 
 local function apply_properties(
