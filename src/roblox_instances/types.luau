@@ -18,7 +18,7 @@ export type SpecialKey<T = string> = {
 
 export type Properties = { [any]: any }
 export type Child = Instance | ((Instance) -> Child?) | { Child } | state.StateNode<Child>
-export type Tag = string | { string } | state.StateNode<Tag>
+export type Tag = string | { Tag } | state.StateNode<Tag>
 
 export type NewConstructor = (
 	scope: memory.Scope,
