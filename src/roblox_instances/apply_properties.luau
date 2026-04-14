@@ -3,7 +3,6 @@ local memory = require("../core_memory/types")
 local state = require("../core_state/types")
 
 local Parent = require("./keys/Parent")
-local log_error = require("../core_logging/log_error")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local observe_immediate = require("../core_graph/observe_immediate")
 local parse_error = require("../core_logging/parse_error")
@@ -80,7 +79,7 @@ local function apply_properties(
 		elseif key_type == "SpecialKey" then
 			table.insert(special_keys, key)
 		else
-			log_error(instances.invalid_key_type, nil, key_type)
+			log_error_nonfatal(instances.invalid_key_type, nil, key_type)
 		end
 	end
 
