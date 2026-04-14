@@ -1,5 +1,9 @@
-# ConFusion
-A variant of [Fusion](https://github.com/dphfox/Fusion) with some very experimental and chaotic features I created!!!!
+<!-- <img align="left" src="./.github/assets/logo-dark-theme.svg#gh-dark-mode-only" alt="confusion"><img align="left" src="./gh-assets/logo-light-theme.svg#gh-light-mode-only" alt="confusion"> -->
 
-## Contributing
-Contributions are always welcome! Feel free to make suggestions. If you plan on submitting code in a pull request, please [follow the styleguide!](STYLEGUIDE.md)
+<!-- ![confusion](./.github/assets/logo-dark-theme.svg#gh-dark-mode-only)
+![confusion](./.github/assets/logo-light-theme.svg#gh-light-mode-only) -->
+
+<img src="./.github/assets/logo-dark-theme.svg#gh-dark-mode-only" alt="confusion">
+<img src="./.github/assets/logo-light-theme.svg#gh-light-mode-only" alt="confusion">
+
+A fork of [Fusion](https://github.com/dphfox/Fusion) with some very experimental and (mostly) untested features. Expect lots of bugs and breaking changes!
