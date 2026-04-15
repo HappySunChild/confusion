@@ -59,7 +59,7 @@ local CORE_CONFUSION = table.freeze({
 	observe = require("./core_graph/observe"),
 	observe_immediate = require("./core_graph/observe_immediate"),
 
-	flattern = require("./core_use/flatten"),
+	flatten = require("./core_use/flatten"),
 	peek = require("./core_use/peek"),
 })
 
