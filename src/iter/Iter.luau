@@ -21,7 +21,7 @@ local CLASS = table.freeze({
 			return false
 		end
 
-		local output = self._cached_value
+		local output = self._cached_result.value
 		local disassembly = self._disassembly
 
 		depend(self, disassembly)
@@ -43,7 +43,7 @@ local function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, 
 		using = {},
 		users = {},
 
-		_cached_value = {},
+		_cached_result = { is_ok = true, value = {} },
 
 		_disassembly = disassembly,
 	}, CLASS_METATABLE) :: any

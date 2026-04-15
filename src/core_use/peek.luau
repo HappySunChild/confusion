@@ -8,7 +8,13 @@ local function peek<T>(x: state.UsedAs<T>): T
 	if cast_to_state(x) ~= nil then
 		evaluate(x)
 
-		return x._cached_value :: T
+		local result = x._cached_result
+
+		if result.is_ok then
+			return result.value
+		end
+
+		error(result.value)
 	end
 
 	return x :: T

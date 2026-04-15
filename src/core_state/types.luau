@@ -1,9 +1,15 @@
 local graph = require("../core_graph/types")
+local logging = require("../core_logging/types")
 local memory = require("../core_memory/types")
 
-export type StateNode<T> = {
+export type Result<T, E> = {
+	is_ok: boolean,
+	value: T | E,
+}
+
+export type StateNode<T, E = logging.Error> = {
 	type: "state",
-	_cached_value: T,
+	_cached_result: Result<T, E>,
 } & graph.GraphNode
 
 export type UsedAs<T> = StateNode<T> | T

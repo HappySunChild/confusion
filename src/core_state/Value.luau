@@ -15,8 +15,10 @@ local CLASS = table.freeze({
 	using = table.freeze({}),
 
 	set = function<T>(self: Self<T>, new_value: T): T
-		if not is_similar(new_value, self._cached_value) then
-			self._cached_value = new_value
+		local result = self._cached_result
+
+		if not is_similar(new_value, result.value) then
+			result.value = new_value
 
 			change(self)
 		end
@@ -24,7 +26,7 @@ local CLASS = table.freeze({
 		return new_value
 	end,
 	update = function<T>(self: Self<T>, updater: (T) -> T): T
-		return self:set(updater(self._cached_value))
+		return self:set(updater(self._cached_result.value))
 	end,
 	_evaluate = function()
 		return true
@@ -39,7 +41,7 @@ local function Value<T>(scope: memory.Scope, initial_value: T): state.Value<T>
 		validity = "valid",
 		users = {},
 
-		_cached_value = initial_value,
+		_cached_result = { value = initial_value, is_ok = true },
 	}, CLASS_METATABLE) :: any
 
 	local oldest_task = destructor(new_value)

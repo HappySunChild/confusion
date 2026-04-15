@@ -1,4 +1,4 @@
-local logging = require("../core_logging/types")
+-- local logging = require("../core_logging/types")
 local memory = require("../core_memory/types")
 local state = require("./types")
 
@@ -7,7 +7,7 @@ local derive_scope = require("../core_memory/derive_scope")
 local destructor = require("../core_memory/destructor")
 local generic_use = require("../core_use/generic_use")
 local is_similar = require("./is_similar")
-local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
+-- local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local parse_error = require("../core_logging/parse_error")
 
 type Self<T, S> = {
@@ -26,27 +26,25 @@ local CLASS = table.freeze({
 			return false
 		end
 
+		local result = self._cached_result
+
 		local outer_scope = self.scope
 		local inner_scope = derive_scope(outer_scope)
 
 		local ok, new_value = xpcall(self._processor, parse_error, self._use, inner_scope)
+		local similar = is_similar(result.value, new_value)
+
+		result.is_ok, result.value = ok, new_value
 
 		if ok then
-			local similar = is_similar(self._cached_value, new_value)
-
 			cleanup(self._inner_scope)
 
 			self._inner_scope = inner_scope
-			self._cached_value = new_value
-
-			return not similar
+		else
+			cleanup(inner_scope)
 		end
 
-		cleanup(inner_scope)
-
-		log_error_nonfatal(state.callback_error, new_value :: logging.Error)
-
-		return false
+		return not similar
 	end,
 })
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
@@ -67,7 +65,7 @@ local function Computed<T, S>(
 		using = {},
 		users = {},
 
-		_cached_value = nil,
+		_cached_result = { is_ok = true, value = nil },
 
 		_inner_scope = nil,
 		_processor = processor,
