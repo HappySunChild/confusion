@@ -59,6 +59,8 @@ export type SpecialKey<T = string> = instances.SpecialKey
 export type Child = instances.Child
 
 type Confusion = {
+	version: { major: number, minor: number, patch: number },
+
 	-- Core: Memory
 	scoped: memory.Scoped,
 	derive_scope: memory.Scoped,
@@ -159,7 +161,7 @@ local ExternalScheduler = require("./core_external/ExternalScheduler")
 ExternalScheduler.set_scheduler(require("./roblox_external/RobloxScheduler"))
 
 local confusion_for_roblox = {
-	version = { major = 1, minor = 0 },
+	version = { major = 0, minor = 0, patch = 0 },
 
 	-- Core: Memory
 	scoped = require("./core_memory/scoped"),
