@@ -1,11 +1,11 @@
-local instances = require("../types")
 local memory = require("../../core_memory/types")
+local rbx_instances = require("../types")
 
 local log_error = require("../../core_logging/log_error")
 
 local KEY_CACHE = {}
 
-local function OnChange(property: string): instances.SpecialKey<"OnChange">
+local function OnChange(property: string): rbx_instances.SpecialKey<"OnChange">
 	local key = KEY_CACHE[property]
 
 	if key == nil then
@@ -17,7 +17,12 @@ local function OnChange(property: string): instances.SpecialKey<"OnChange">
 				local ok, event = pcall(apply_to.GetPropertyChangedSignal, apply_to, property)
 
 				if not ok then
-					log_error(instances.cannot_connect_change, nil, apply_to.ClassName, property)
+					log_error(
+						rbx_instances.cannot_connect_change,
+						nil,
+						apply_to.ClassName,
+						property
+					)
 				end
 
 				table.insert(
@@ -27,7 +32,7 @@ local function OnChange(property: string): instances.SpecialKey<"OnChange">
 					end)
 				)
 			end,
-		} :: instances.SpecialKey<"OnChange">
+		} :: rbx_instances.SpecialKey<"OnChange">
 
 		KEY_CACHE[property] = key
 	end

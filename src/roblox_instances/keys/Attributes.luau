@@ -1,5 +1,5 @@
-local instances = require("../types")
 local memory = require("../../core_memory/types")
+local rbx_instances = require("../types")
 local state = require("../../core_state/types")
 
 local observe_immediate = require("../../core_graph/observe_immediate")
@@ -29,4 +29,4 @@ return {
 			apply_attribute(scope, apply_to, attribute, value)
 		end
 	end,
-} :: instances.SpecialKey<"Attributes">
+} :: rbx_instances.SpecialKey<"Attributes">

@@ -1,4 +1,4 @@
-local instances = require("../types")
+local rbx_instances = require("../types")
 
 return {
 	type = "SpecialKey",
@@ -7,4 +7,4 @@ return {
 	apply = function(_, apply_to: Instance, callback: (Instance) -> ())
 		callback(apply_to)
 	end,
-} :: instances.SpecialKey<"OnStartup">
+} :: rbx_instances.SpecialKey<"OnStartup">

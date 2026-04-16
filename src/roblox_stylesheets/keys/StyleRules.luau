@@ -1,4 +1,4 @@
-local instances = require("../../roblox_instances/types")
+local rbx_instances = require("../../roblox_instances/types")
 
 return {
 	type = "SpecialKey",
@@ -9,4 +9,4 @@ return {
 			apply_to:InsertStyleRule(rule, priority)
 		end
 	end,
-} :: instances.SpecialKey<"StyleRules">
+} :: rbx_instances.SpecialKey<"StyleRules">

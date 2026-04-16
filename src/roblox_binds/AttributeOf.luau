@@ -1,12 +1,12 @@
-local instances = require("./types")
 local memory = require("../core_memory/types")
+local rbx_binds = require("./types")
 
 local change = require("../core_graph/change")
 local destructor = require("../core_memory/destructor")
 
 type Self<T> = {
 	_event: RBXScriptConnection,
-} & instances.AttributeOf<T>
+} & rbx_binds.AttributeOf<T>
 
 local CLASS = table.freeze({
 	type = "state",
@@ -28,7 +28,7 @@ local function AttributeOf<T>(
 	scope: memory.Scope,
 	instance: Instance,
 	attribute: string
-): instances.AttributeOf<T>
+): rbx_binds.AttributeOf<T>
 	local event = instance:GetAttributeChangedSignal(attribute)
 
 	local new_attribute: Self<T> = setmetatable({

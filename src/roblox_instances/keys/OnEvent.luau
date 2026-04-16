@@ -1,5 +1,5 @@
-local instances = require("../types")
 local memory = require("../../core_memory/types")
+local rbx_instances = require("../types")
 
 local log_error = require("../../core_logging/log_error")
 
@@ -9,7 +9,7 @@ end
 
 local KEY_CACHE = {}
 
-local function OnEvent(event_name: string): instances.SpecialKey<"OnEvent">
+local function OnEvent(event_name: string): rbx_instances.SpecialKey<"OnEvent">
 	local key = KEY_CACHE[event_name]
 
 	if key == nil then
@@ -21,12 +21,17 @@ local function OnEvent(event_name: string): instances.SpecialKey<"OnEvent">
 				local ok, event = pcall(get_property, apply_to, event_name)
 
 				if not ok or typeof(event) ~= "RBXScriptSignal" then
-					log_error(instances.cannot_connect_event, nil, apply_to.ClassName, event_name)
+					log_error(
+						rbx_instances.cannot_connect_event,
+						nil,
+						apply_to.ClassName,
+						event_name
+					)
 				end
 
 				table.insert(scope, event:Connect(callback))
 			end,
-		} :: instances.SpecialKey<"OnEvent">
+		} :: rbx_instances.SpecialKey<"OnEvent">
 
 		KEY_CACHE[event_name] = key
 	end

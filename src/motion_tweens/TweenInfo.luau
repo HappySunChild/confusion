@@ -1,11 +1,11 @@
-local tweens = require("./types")
+local motion_tweens = require("./types")
 
-local EasingStyles = require("./EasingStyles")
+local easing_styles = require("./easing_styles")
 
 local CLASS = table.freeze({
 	type = "TweenInfo",
 	time = 1,
-	easing = EasingStyles.Linear.Out,
+	easing = easing_styles.Linear.Out,
 	repeat_count = 0,
 	reverses = false,
 	delay_time = 0,
@@ -18,7 +18,7 @@ local function TweenInfo(
 	repeat_count: number?,
 	reverses: boolean?,
 	delay_time: number?
-): tweens.TweenInfo
+): motion_tweens.TweenInfo
 	return setmetatable({
 		time = time,
 		easing = easing,

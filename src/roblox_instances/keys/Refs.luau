@@ -1,4 +1,4 @@
-local instances = require("../types")
+local rbx_instances = require("../types")
 local state = require("../../core_state/types")
 
 local log_error = require("../../core_logging/log_error")
@@ -22,7 +22,7 @@ local function process_ref(instance: Instance, ref: OneOrMore<state.Value<Instan
 		return
 	end
 
-	log_error(instances.invalid_ref_type, nil, ref_type)
+	log_error(rbx_instances.invalid_ref_type, nil, ref_type)
 end
 
 return {

@@ -1,5 +1,5 @@
-local instances = require("../../roblox_instances/types")
 local memory = require("../../core_memory/types")
+local rbx_instances = require("../../roblox_instances/types")
 local state = require("../../core_state/types")
 
 local apply_properties = require("../../roblox_instances/apply_properties")
@@ -18,4 +18,4 @@ return {
 
 		table.insert(scope, link)
 	end,
-} :: instances.SpecialKey<"StyleLink">
+} :: rbx_instances.SpecialKey<"StyleLink">

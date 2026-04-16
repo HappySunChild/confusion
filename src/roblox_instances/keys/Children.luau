@@ -1,5 +1,5 @@
-local instances = require("../types")
 local memory = require("../../core_memory/types")
+local rbx_instances = require("../types")
 local state = require("../../core_state/types")
 
 local cast_to_state = require("../../core_state/cast_to_state")
@@ -9,12 +9,12 @@ local observe_immediate = require("../../core_graph/observe_immediate")
 local peek = require("../../core_use/peek")
 
 type ChildrenSet = { [Instance]: true }
-type ChildrenScopes = { [instances.Child]: memory.Scope }
+type ChildrenScopes = { [rbx_instances.Child]: memory.Scope }
 
 local function create_reconciler(
 	scope: memory.Scope,
 	processor: (
-		child: instances.Child,
+		child: rbx_instances.Child,
 		parent: Instance?,
 		new_children: ChildrenSet,
 		new_scopes: ChildrenScopes,
@@ -25,7 +25,7 @@ local function create_reconciler(
 	local old_children: ChildrenSet, new_children: ChildrenSet = {}, {}
 	local old_scopes: ChildrenScopes, new_scopes: ChildrenScopes = {}, {}
 
-	local function reconcile(new_child: instances.Child?, parent: Instance?)
+	local function reconcile(new_child: rbx_instances.Child?, parent: Instance?)
 		old_children, new_children = new_children, old_children
 		old_scopes, new_scopes = new_scopes, old_scopes
 
@@ -59,7 +59,7 @@ local function create_reconciler(
 end
 
 local function process_child(
-	child: instances.Child,
+	child: rbx_instances.Child,
 	parent: Instance?,
 	new_children: ChildrenSet,
 	new_scopes: ChildrenScopes,
@@ -74,7 +74,7 @@ local function process_child(
 		new_children[child] = true
 		old_children[child] = nil
 	elseif child_type == "function" then -- UNRESOLVED CASE
-		child = child :: (Instance) -> instances.Child
+		child = child :: (Instance) -> rbx_instances.Child
 
 		local actual_child = child(parent)
 
@@ -82,7 +82,7 @@ local function process_child(
 			process_child(actual_child, parent, new_children, new_scopes, old_children, old_scopes)
 		end
 	elseif cast_to_state(child) ~= nil then -- STATE CASE
-		child = child :: state.StateNode<instances.Child>
+		child = child :: state.StateNode<rbx_instances.Child>
 
 		local child_scope = old_scopes[child]
 
@@ -100,12 +100,12 @@ local function process_child(
 
 		new_scopes[child] = child_scope
 	elseif child_type == "table" then -- NESTED CASE
-		child = child :: { instances.Child }
+		child = child :: { rbx_instances.Child }
 		for _, descendant in child do
 			process_child(descendant, parent, new_children, new_scopes, old_children, old_scopes)
 		end
 	else
-		log_error_nonfatal(instances.invalid_child_type, debug.traceback(nil, 2), child_type)
+		log_error_nonfatal(rbx_instances.invalid_child_type, debug.traceback(nil, 2), child_type)
 	end
 end
 
@@ -113,8 +113,8 @@ return {
 	type = "SpecialKey",
 	kind = "Children",
 	stage = "descendants",
-	apply = function(scope: memory.Scope, apply_to: Instance, root_child: instances.Child)
+	apply = function(scope: memory.Scope, apply_to: Instance, root_child: rbx_instances.Child)
 		local reconcile = create_reconciler(scope, process_child)
 		reconcile(root_child, apply_to)
 	end,
-} :: instances.SpecialKey<"Children">
+} :: rbx_instances.SpecialKey<"Children">

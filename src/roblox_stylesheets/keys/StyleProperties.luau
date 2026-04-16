@@ -1,5 +1,5 @@
-local instances = require("../../roblox_instances/types")
 local memory = require("../../core_memory/types")
+local rbx_instances = require("../../roblox_instances/types")
 local state = require("../../core_state/types")
 
 local cast_to_state = require("../../core_state/cast_to_state")
@@ -25,4 +25,4 @@ return {
 			end
 		end
 	end,
-} :: instances.SpecialKey<"StyleProperties">
+} :: rbx_instances.SpecialKey<"StyleProperties">

@@ -1,5 +1,5 @@
-local instances = require("./types")
 local memory = require("../core_memory/types")
+local rbx_instances = require("./types")
 local state = require("../core_state/types")
 
 local Parent = require("./keys/Parent")
@@ -27,7 +27,7 @@ local function set_property(instance: Instance, property: string, value: any)
 	end
 
 	if pcall(test_property_assignable, instance, property) == false then
-		log_error_nonfatal(instances.property_cannot_assign, nil, instance.ClassName, property)
+		log_error_nonfatal(rbx_instances.property_cannot_assign, nil, instance.ClassName, property)
 
 		return
 	end
@@ -36,10 +36,10 @@ local function set_property(instance: Instance, property: string, value: any)
 	local expected_type = typeof(instance[property])
 
 	if given_type == expected_type then
-		log_error_nonfatal(instances.property_assign_error, err)
+		log_error_nonfatal(rbx_instances.property_assign_error, err)
 	else
 		log_error_nonfatal(
-			instances.invalid_property_type,
+			rbx_instances.invalid_property_type,
 			nil,
 			instance.ClassName,
 			property,
@@ -67,14 +67,14 @@ end
 local function apply_properties(
 	scope: memory.Scope,
 	instance: Instance,
-	properties: instances.Properties
+	properties: rbx_instances.Properties
 )
 	local n_properties = table.clone(properties)
 
 	n_properties[Parent] = n_properties.Parent
 	n_properties.Parent = nil
 
-	local special_keys: { instances.SpecialKey } = {}
+	local special_keys: { rbx_instances.SpecialKey } = {}
 
 	for key, value in n_properties do
 		local key_type = xtypeof(key)
@@ -84,13 +84,13 @@ local function apply_properties(
 		elseif key_type == "SpecialKey" then
 			table.insert(special_keys, key)
 		else
-			log_error_nonfatal(instances.invalid_key_type, nil, key_type)
+			log_error_nonfatal(rbx_instances.invalid_key_type, nil, key_type)
 		end
 	end
 
 	table.sort(special_keys, sort_keys)
 
-	for _, key: instances.SpecialKey in special_keys do
+	for _, key: rbx_instances.SpecialKey in special_keys do
 		local value = n_properties[key]
 		local ok, err = xpcall(key.apply, parse_error, scope, instance, value)
 
@@ -99,7 +99,7 @@ local function apply_properties(
 		end
 
 		log_error_nonfatal(
-			instances.specialkey_apply_error,
+			rbx_instances.specialkey_apply_error,
 			err,
 			key.kind,
 			instance.ClassName,

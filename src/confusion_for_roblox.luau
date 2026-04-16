@@ -21,13 +21,13 @@ local iter_for = require("./iter_for/types")
 local iter_range = require("./iter_range/types")
 
 local motion = require("./motion/types")
-local springs = require("./motion_springs/types")
-local tweens = require("./motion_tweens/types")
+local motion_springs = require("./motion_springs/types")
+local motion_tweens = require("./motion_tweens/types")
 
-local binds = require("./roblox_binds/types")
-local instances = require("./roblox_instances/types")
-local stylesheets = require("./roblox_stylesheets/types")
-local templates = require("./roblox_templates/types")
+local rbx_binds = require("./roblox_binds/types")
+local rbx_instances = require("./roblox_instances/types")
+local rbx_stylesheets = require("./roblox_stylesheets/types")
+local rbx_templates = require("./roblox_templates/types")
 
 export type Scope<T = Confusion> = memory.Scope<T>
 
@@ -42,7 +42,7 @@ export type Use = state.Use
 export type Iter<K, V> = iter.Iter<K, V>
 
 export type Motion<T> = motion.Motion<T>
-export type TweenInfo = tweens.TweenInfo
+export type TweenInfo = motion_tweens.TweenInfo
 
 export type Eventual<T> = async.Eventual<T>
 
@@ -52,8 +52,8 @@ export type Timer = chrono.Timer
 
 export type Pipe<T, S = unknown> = pipe.Pipe<S, T>
 
-export type SpecialKey<T = string> = instances.SpecialKey
-export type Child = instances.Child
+export type SpecialKey<T = string> = rbx_instances.SpecialKey
+export type Child = rbx_instances.Child
 
 type Confusion = {
 	version: { major: number, minor: number, patch: number },
@@ -105,50 +105,50 @@ type Confusion = {
 	read Motion: motion.MotionConstructor,
 
 	-- Motion: Springs
-	read Spring: springs.SpringConstructor,
+	read Spring: motion_springs.SpringConstructor,
 
 	-- Motion: Tweens
-	read Tween: tweens.TweenConstructor,
-	read EasingStyles: tweens.EasingStyles,
-	read TweenInfo: tweens.TweenInfoConstructor,
+	read Tween: motion_tweens.TweenConstructor,
+	read TweenInfo: motion_tweens.TweenInfoConstructor,
+	read easing_styles: motion_tweens.EasingStyles,
 
 	-- Pipeline
 	read Pipe: pipe.PipeConstructor,
 
 	-- Roblox: Instances
-	read New: instances.NewConstructor,
-	read Hydrate: instances.HydrateConstructor,
+	read New: rbx_instances.NewConstructor,
+	read Hydrate: rbx_instances.HydrateConstructor,
 
-	read Children: instances.SpecialKey<"Children">,
-	read OnStartup: instances.SpecialKey<"OnStartup">,
-	read OnRemoval: instances.SpecialKey<"OnRemoval">,
-	read Refs: instances.SpecialKey<"Refs">,
-	read Attribute: (attribute: string) -> instances.SpecialKey<"Attribute">,
-	read Attributes: instances.SpecialKey<"Attributes">,
-	read AttributeChange: (attribute: string) -> instances.SpecialKey<"AttributeChange">,
-	read AttributeOut: (attribute: string) -> instances.SpecialKey<"AttributeOut">,
-	read Tag: (tag: string) -> instances.SpecialKey<"Tag">,
-	read Tags: instances.SpecialKey<"Tags">,
-	read Out: (property: string) -> instances.SpecialKey<"Out">,
-	read OnEvent: (event: string) -> instances.SpecialKey<"OnEvent">,
-	read OnChange: (property: string) -> instances.SpecialKey<"OnChange">,
+	read Children: rbx_instances.SpecialKey<"Children">,
+	read OnStartup: rbx_instances.SpecialKey<"OnStartup">,
+	read OnRemoval: rbx_instances.SpecialKey<"OnRemoval">,
+	read Refs: rbx_instances.SpecialKey<"Refs">,
+	read Attribute: (attribute: string) -> rbx_instances.SpecialKey<"Attribute">,
+	read Attributes: rbx_instances.SpecialKey<"Attributes">,
+	read AttributeChange: (attribute: string) -> rbx_instances.SpecialKey<"AttributeChange">,
+	read AttributeOut: (attribute: string) -> rbx_instances.SpecialKey<"AttributeOut">,
+	read Tag: (tag: string) -> rbx_instances.SpecialKey<"Tag">,
+	read Tags: rbx_instances.SpecialKey<"Tags">,
+	read Out: (property: string) -> rbx_instances.SpecialKey<"Out">,
+	read OnEvent: (event: string) -> rbx_instances.SpecialKey<"OnEvent">,
+	read OnChange: (property: string) -> rbx_instances.SpecialKey<"OnChange">,
 
 	-- Roblox: Templates
-	read FromTemplate: templates.FromTemplateConstructor,
-	read QueryDescendants: templates.QueryDescendants,
+	read FromTemplate: rbx_templates.FromTemplateConstructor,
+	read QueryDescendants: rbx_templates.QueryDescendants,
 
 	-- Roblox: Binds
-	read PropertyOf: binds.PropertyOfConstructor,
-	read AttributeOf: binds.AttributeOfConstructor,
+	read PropertyOf: rbx_binds.PropertyOfConstructor,
+	read AttributeOf: rbx_binds.AttributeOfConstructor,
 
 	-- Roblox: Stylesheets
-	read StyleRule: stylesheets.StyleRuleConstructor,
-	read StyleSheet: stylesheets.StyleSheetConstructor,
+	read StyleRule: rbx_stylesheets.StyleRuleConstructor,
+	read StyleSheet: rbx_stylesheets.StyleSheetConstructor,
 
-	read StyleDerives: instances.SpecialKey<"StyleDerives">,
-	read StyleLink: instances.SpecialKey<"StyleLink">,
-	read StyleProperties: instances.SpecialKey<"StyleProperties">,
-	read StyleRules: instances.SpecialKey<"StyleRules">,
+	read StyleDerives: rbx_instances.SpecialKey<"StyleDerives">,
+	read StyleLink: rbx_instances.SpecialKey<"StyleLink">,
+	read StyleProperties: rbx_instances.SpecialKey<"StyleProperties">,
+	read StyleRules: rbx_instances.SpecialKey<"StyleRules">,
 }
 
 local ExternalLogger = require("./core_external/ExternalLogger")
@@ -212,7 +212,7 @@ local confusion_for_roblox = {
 	-- Motion: Tweens
 	Tween = require("./motion_tweens/Tween"),
 	TweenInfo = require("./motion_tweens/TweenInfo"),
-	EasingStyles = require("./motion_tweens/EasingStyles"),
+	easing_styles = require("./motion_tweens/easing_styles"),
 
 	-- Pipe
 	Pipe = require("./pipe/Pipe"),

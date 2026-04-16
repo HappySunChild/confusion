@@ -1,6 +1,6 @@
-local tweens = require("./types")
+local motion_tweens = require("./types")
 
-local function get_tween_duration(info: tweens.TweenInfo)
+local function get_tween_duration(info: motion_tweens.TweenInfo)
 	local repeat_count = info.repeat_count
 
 	if repeat_count == -1 then

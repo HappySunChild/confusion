@@ -1,5 +1,5 @@
-local instances = require("../types")
 local memory = require("../../core_memory/types")
+local rbx_instances = require("../types")
 local state = require("../../core_state/types")
 
 local log_warn = require("../../core_logging/log_warn")
@@ -24,5 +24,5 @@ return {
 		observe_immediate(scope, parent, function()
 			set_parent(apply_to, peek(parent))
 		end)
-	end
-} :: instances.SpecialKey<"Parent">
+	end,
+} :: rbx_instances.SpecialKey<"Parent">

@@ -1,5 +1,5 @@
-local instances = require("../types")
 local memory = require("../../core_memory/types")
+local rbx_instances = require("../types")
 local state = require("../../core_state/types")
 
 local cast_to_state = require("../../core_state/cast_to_state")
@@ -14,7 +14,7 @@ type TagsScopes = { [string]: memory.Scope }
 local function create_reconciler(
 	scope: memory.Scope,
 	processor: (
-		child: instances.Tag,
+		child: rbx_instances.Tag,
 		parent: Instance?,
 		new_tags: TagsSet,
 		new_scopes: TagsScopes,
@@ -25,7 +25,7 @@ local function create_reconciler(
 	local old_tags: TagsSet, new_tags: TagsSet = {}, {}
 	local old_scopes: TagsScopes, new_scopes: TagsScopes = {}, {}
 
-	local function reconcile(new_tag: instances.Tag?, apply_to: Instance)
+	local function reconcile(new_tag: rbx_instances.Tag?, apply_to: Instance)
 		old_tags, new_tags = new_tags, old_tags
 		old_scopes, new_scopes = new_scopes, old_scopes
 
@@ -58,7 +58,7 @@ local function create_reconciler(
 end
 
 local function process_tag(
-	tag: instances.Tag,
+	tag: rbx_instances.Tag,
 	apply_to: Instance,
 	new_tags: TagsSet,
 	new_scopes: TagsScopes,
@@ -73,7 +73,7 @@ local function process_tag(
 		new_tags[tag] = true
 		old_tags[tag] = nil
 	elseif cast_to_state(tag) ~= nil then -- STATE CASE
-		tag = tag :: state.StateNode<instances.Tag>
+		tag = tag :: state.StateNode<rbx_instances.Tag>
 
 		local tag_scope = old_scopes[tag]
 
@@ -91,12 +91,12 @@ local function process_tag(
 
 		new_scopes[tag] = tag_scope
 	elseif tag_type == "table" then -- NESTED CASE
-		tag = tag :: { instances.Tag }
+		tag = tag :: { rbx_instances.Tag }
 		for _, sub_tag in tag do
 			process_tag(sub_tag, apply_to, new_tags, new_scopes, old_tags, old_scopes)
 		end
 	else
-		log_error_nonfatal(instances.invalid_tag_type, debug.traceback(nil, 2), tag_type)
+		log_error_nonfatal(rbx_instances.invalid_tag_type, debug.traceback(nil, 2), tag_type)
 	end
 end
 
@@ -104,8 +104,8 @@ return {
 	type = "SpecialKey",
 	kind = "Tags",
 	stage = "self",
-	apply = function(scope: memory.Scope, apply_to: Instance, root_tag: instances.Tag?)
+	apply = function(scope: memory.Scope, apply_to: Instance, root_tag: rbx_instances.Tag?)
 		local reconcile = create_reconciler(scope, process_tag)
 		reconcile(root_tag, apply_to)
 	end,
-} :: instances.SpecialKey<"Tags">
+} :: rbx_instances.SpecialKey<"Tags">

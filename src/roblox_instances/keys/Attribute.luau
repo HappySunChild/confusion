@@ -1,5 +1,5 @@
-local instances = require("../types")
 local memory = require("../../core_memory/types")
+local rbx_instances = require("../types")
 local state = require("../../core_state/types")
 
 local observe_immediate = require("../../core_graph/observe_immediate")
@@ -7,7 +7,7 @@ local peek = require("../../core_use/peek")
 
 local KEY_CACHE = {}
 
-local function Attribute(attribute: string): instances.SpecialKey<"Attribute">
+local function Attribute(attribute: string): rbx_instances.SpecialKey<"Attribute">
 	local key = KEY_CACHE[attribute]
 
 	if key == nil then
@@ -20,7 +20,7 @@ local function Attribute(attribute: string): instances.SpecialKey<"Attribute">
 					apply_to:SetAttribute(attribute, peek(value))
 				end)
 			end,
-		} :: instances.SpecialKey<"Attribute">
+		} :: rbx_instances.SpecialKey<"Attribute">
 
 		KEY_CACHE[attribute] = key
 	end

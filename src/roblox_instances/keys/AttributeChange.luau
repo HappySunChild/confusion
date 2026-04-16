@@ -1,9 +1,9 @@
-local instances = require("../types")
 local memory = require("../../core_memory/types")
+local rbx_instances = require("../types")
 
 local KEY_CACHE = {}
 
-local function AttributeChange(attribute: string): instances.SpecialKey<"AttributeChange">
+local function AttributeChange(attribute: string): rbx_instances.SpecialKey<"AttributeChange">
 	local key = KEY_CACHE[attribute]
 
 	if key == nil then
@@ -21,7 +21,7 @@ local function AttributeChange(attribute: string): instances.SpecialKey<"Attribu
 					end)
 				)
 			end,
-		} :: instances.SpecialKey<"AttributeChange">
+		} :: rbx_instances.SpecialKey<"AttributeChange">
 
 		KEY_CACHE[attribute] = key
 	end

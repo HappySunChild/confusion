@@ -1,5 +1,5 @@
-local instances = require("../types")
 local memory = require("../../core_memory/types")
+local rbx_instances = require("../types")
 
 local cleanup = require("../../core_memory/cleanup")
 
@@ -17,4 +17,4 @@ return {
 			end)
 		)
 	end,
-} :: instances.SpecialKey<"OnRemoval">
+} :: rbx_instances.SpecialKey<"OnRemoval">

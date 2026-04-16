@@ -10,7 +10,7 @@ local unpack_type = require("./unpack_type")
 
 local EPSILON = 0.0001
 
-local function SpringMover<T>(
+local function spring_mover<T>(
 	speed: state.UsedAs<number>,
 	damping: state.UsedAs<number>
 ): motion.CurveGenerator<T>
@@ -113,7 +113,7 @@ local function Spring<T>(
 	speed: state.UsedAs<number>?,
 	damping: state.UsedAs<number>?
 ): motion.Motion<T>
-	return Motion(scope, goal, SpringMover(speed or 10, damping or 1))
+	return Motion(scope, goal, spring_mover(speed or 10, damping or 1))
 end
 
 return Spring

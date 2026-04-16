@@ -1,5 +1,5 @@
-local instances = require("../roblox_instances/types")
 local memory = require("../core_memory/types")
+local rbx_instances = require("../roblox_instances/types")
 local templates = require("../roblox_templates/types")
 
 local apply_properties = require("../roblox_instances/apply_properties")
@@ -8,7 +8,7 @@ local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local function QueryDescendants(
 	scope: memory.Scope,
 	selector: string,
-	properties: instances.Properties
+	properties: rbx_instances.Properties
 )
 	return function(parent: Instance): Instance?
 		local descendants = parent:QueryDescendants(selector)
