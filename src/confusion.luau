@@ -47,11 +47,11 @@ export type ConFusion<Included = any> = {
 } & Included
 
 local CORE_CONFUSION = table.freeze({
-	derive_scope = require("./core_memory/derive_scope"),
-	cleanup = require("./core_memory/cleanup"),
-	inner_scope = require("./core_memory/inner_scope"),
-	insert = require("./core_memory/insert"),
 	scoped = require("./core_memory/scoped"),
+	derive_scope = require("./core_memory/derive_scope"),
+	inner_scope = require("./core_memory/inner_scope"),
+	cleanup = require("./core_memory/cleanup"),
+	insert = require("./core_memory/insert"),
 
 	Computed = require("./core_state/Computed"),
 	Value = require("./core_state/Value"),
@@ -59,8 +59,8 @@ local CORE_CONFUSION = table.freeze({
 	observe = require("./core_graph/observe"),
 	observe_immediate = require("./core_graph/observe_immediate"),
 
-	flatten = require("./core_use/flatten"),
 	peek = require("./core_use/peek"),
+	flatten = require("./core_use/flatten"),
 })
 
 local function confusion<I>(options: Configuration<I>): ConFusion<I>
@@ -73,7 +73,6 @@ local function confusion<I>(options: Configuration<I>): ConFusion<I>
 	assert(type(include) == "table", "`include` field should be a table!")
 
 	local new_confusion = merge(
-		true,
 		table.clone(CORE_CONFUSION :: any),
 		include,
 		{ version = options.version } -- always override version field

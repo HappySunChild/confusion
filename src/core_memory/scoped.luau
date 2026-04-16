@@ -12,7 +12,7 @@ local function scoped<S, M>(base: S?, methods: M?): memory.Scope<S & M>
 			__index = if base == nil and methods ~= nil
 				then methods
 				elseif base ~= nil and methods == nil then base
-				else merge(true, table.clone(base), methods),
+				else merge(table.clone(base), methods),
 		})
 
 	track_scope(new_scope)
