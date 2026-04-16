@@ -10,6 +10,7 @@ Fusion on GitHub: https://github.com/dphfox/Fusion
 local graph = require("./core_graph/types")
 local memory = require("./core_memory/types")
 local state = require("./core_state/types")
+local use = require("./core_use/types")
 
 local async = require("./async/types")
 local chrono = require("./chrono/types")
@@ -31,9 +32,7 @@ local instances = require("./roblox_instances/types")
 local stylesheets = require("./roblox_stylesheets/types")
 local templates = require("./roblox_templates/types")
 
-local confusion = require("./confusion")
-
-export type Scope<T = ConFusionForRoblox> = memory.Scope<T>
+export type Scope<T = Confusion> = memory.Scope<T>
 
 export type GraphNode = graph.GraphNode
 export type StateNode<T> = state.StateNode<T>
@@ -59,7 +58,26 @@ export type Pipe<T, S = unknown> = pipe.Pipe<S, T>
 export type SpecialKey<T = string> = instances.SpecialKey
 export type Child = instances.Child
 
-type ConFusionForRoblox = confusion.ConFusion<{
+type Confusion = {
+	-- Core: Memory
+	scoped: memory.Scoped,
+	derive_scope: memory.Scoped,
+	inner_scope: memory.Scoped,
+	cleanup: memory.Cleanup,
+	insert: memory.Insert,
+
+	-- Core: State
+	Computed: state.ComputedConstructor,
+	Value: state.ValueConstructor,
+
+	-- Core: Graph
+	observe: graph.Observe,
+	observe_immediate: graph.Observe,
+
+	-- Core: Use
+	peek: state.Use,
+	flatten: use.Flatten,
+
 	-- Iter: For
 	read ForPairs: iter_for.ForPairsConstructor,
 	read ForKeys: iter_for.ForKeysConstructor,
@@ -132,87 +150,108 @@ type ConFusionForRoblox = confusion.ConFusion<{
 	read StyleLink: instances.SpecialKey<"StyleLink">,
 	read StyleProperties: instances.SpecialKey<"StyleProperties">,
 	read StyleRules: instances.SpecialKey<"StyleRules">,
-}>
+}
 
-local confusion_for_roblox = confusion({
+local ExternalLogger = require("./core_external/ExternalLogger")
+ExternalLogger.set_logger(require("./roblox_external/RobloxLogger"))
+
+local ExternalScheduler = require("./core_external/ExternalScheduler")
+ExternalScheduler.set_scheduler(require("./roblox_external/RobloxScheduler"))
+
+local confusion_for_roblox = {
 	version = { major = 1, minor = 0 },
-	scheduler = require("./roblox_external/RobloxScheduler"),
-	logger = require("./roblox_external/RobloxLogger"),
-	debugger = nil,
-	include = {
-		-- Iter: For
-		ForPairs = require("./iter_for/ForPairs"),
-		ForKeys = require("./iter_for/ForKeys"),
-		ForValues = require("./iter_for/ForValues"),
 
-		-- Iter: Range
-		ForRange = require("./iter_range/ForRange"),
+	-- Core: Memory
+	scoped = require("./core_memory/scoped"),
+	derive_scope = require("./core_memory/derive_scope"),
+	inner_scope = require("./core_memory/inner_scope"),
+	cleanup = require("./core_memory/cleanup"),
+	insert = require("./core_memory/insert"),
 
-		-- Async
-		Eventual = require("./async/Eventual"),
-		await = require("./async/await"),
+	-- Core: State
+	Computed = require("./core_state/Computed"),
+	Value = require("./core_state/Value"),
 
-		-- Context
-		Contextual = require("./context/Contextual"),
+	-- Core: Graph
+	observe = require("./core_graph/observe"),
+	observe_immediate = require("./core_graph/observe_immediate"),
 
-		-- Chrono
-		Timer = require("./chrono/Timer"),
+	-- Core: Use
+	peek = require("./core_use/peek"),
+	flatten = require("./core_use/flatten"),
 
-		-- Safe
-		Safe = require("./safe/Safe"),
+	-- Iter: For
+	ForPairs = require("./iter_for/ForPairs"),
+	ForKeys = require("./iter_for/ForKeys"),
+	ForValues = require("./iter_for/ForValues"),
 
-		-- Keyframes
-		Keyframes = require("./keyframes/Keyframes"),
+	-- Iter: Range
+	ForRange = require("./iter_range/ForRange"),
 
-		-- Motion
-		Motion = require("./motion/Motion"),
+	-- Async
+	Eventual = require("./async/Eventual"),
+	await = require("./async/await"),
 
-		-- Motion: Springs
-		Spring = require("./motion_springs/Spring"),
+	-- Context
+	Contextual = require("./context/Contextual"),
 
-		-- Motion: Tweens
-		Tween = require("./motion_tweens/Tween"),
-		TweenInfo = require("./motion_tweens/TweenInfo"),
-		EasingStyles = require("./motion_tweens/EasingStyles"),
+	-- Chrono
+	Timer = require("./chrono/Timer"),
 
-		-- Pipe
-		Pipe = require("./pipe/Pipe"),
+	-- Safe
+	Safe = require("./safe/Safe"),
 
-		-- Roblox: Instances
-		New = require("./roblox_instances/New"),
-		Hydrate = require("./roblox_instances/Hydrate"),
+	-- Keyframes
+	Keyframes = require("./keyframes/Keyframes"),
 
-		Children = require("./roblox_instances/keys/Children"),
-		OnStartup = require("./roblox_instances/keys/OnStartup"),
-		OnRemoval = require("./roblox_instances/keys/OnRemoval"),
-		Refs = require("./roblox_instances/keys/Refs"),
-		Attribute = require("./roblox_instances/keys/Attribute"),
-		Attributes = require("./roblox_instances/keys/Attributes"),
-		AttributeChange = require("./roblox_instances/keys/AttributeChange"),
-		AttributeOut = require("./roblox_instances/keys/AttributeOut"),
-		Tag = require("./roblox_instances/keys/Tag"),
-		Tags = require("./roblox_instances/keys/Tags"),
-		Out = require("./roblox_instances/keys/Out"),
-		OnEvent = require("./roblox_instances/keys/OnEvent"),
-		OnChange = require("./roblox_instances/keys/OnChange"),
+	-- Motion
+	Motion = require("./motion/Motion"),
 
-		-- Roblox: Templates
-		FromTemplate = require("./roblox_templates/FromTemplate"),
-		QueryDescendants = require("./roblox_templates/QueryDescendants"),
+	-- Motion: Springs
+	Spring = require("./motion_springs/Spring"),
 
-		-- Roblox: Binds
-		PropertyOf = require("./roblox_binds/PropertyOf"),
-		AttributeOf = require("./roblox_binds/AttributeOf"),
+	-- Motion: Tweens
+	Tween = require("./motion_tweens/Tween"),
+	TweenInfo = require("./motion_tweens/TweenInfo"),
+	EasingStyles = require("./motion_tweens/EasingStyles"),
 
-		-- Roblox: Stylesheets
-		StyleRule = require("./roblox_stylesheets/StyleRule"),
-		StyleSheet = require("./roblox_stylesheets/StyleSheet"),
+	-- Pipe
+	Pipe = require("./pipe/Pipe"),
 
-		StyleDerives = require("././roblox_stylesheets/keys/StyleDerives"),
-		StyleLink = require("././roblox_stylesheets/keys/StyleLink"),
-		StyleProperties = require("././roblox_stylesheets/keys/StyleProperties"),
-		StyleRules = require("./roblox_stylesheets/keys/StyleRules"),
-	},
-})
+	-- Roblox: Instances
+	New = require("./roblox_instances/New"),
+	Hydrate = require("./roblox_instances/Hydrate"),
 
-return confusion_for_roblox :: ConFusionForRoblox
+	Children = require("./roblox_instances/keys/Children"),
+	OnStartup = require("./roblox_instances/keys/OnStartup"),
+	OnRemoval = require("./roblox_instances/keys/OnRemoval"),
+	Refs = require("./roblox_instances/keys/Refs"),
+	Attribute = require("./roblox_instances/keys/Attribute"),
+	Attributes = require("./roblox_instances/keys/Attributes"),
+	AttributeChange = require("./roblox_instances/keys/AttributeChange"),
+	AttributeOut = require("./roblox_instances/keys/AttributeOut"),
+	Tag = require("./roblox_instances/keys/Tag"),
+	Tags = require("./roblox_instances/keys/Tags"),
+	Out = require("./roblox_instances/keys/Out"),
+	OnEvent = require("./roblox_instances/keys/OnEvent"),
+	OnChange = require("./roblox_instances/keys/OnChange"),
+
+	-- Roblox: Templates
+	FromTemplate = require("./roblox_templates/FromTemplate"),
+	QueryDescendants = require("./roblox_templates/QueryDescendants"),
+
+	-- Roblox: Binds
+	PropertyOf = require("./roblox_binds/PropertyOf"),
+	AttributeOf = require("./roblox_binds/AttributeOf"),
+
+	-- Roblox: Stylesheets
+	StyleRule = require("./roblox_stylesheets/StyleRule"),
+	StyleSheet = require("./roblox_stylesheets/StyleSheet"),
+
+	StyleDerives = require("././roblox_stylesheets/keys/StyleDerives"),
+	StyleLink = require("././roblox_stylesheets/keys/StyleLink"),
+	StyleProperties = require("././roblox_stylesheets/keys/StyleProperties"),
+	StyleRules = require("./roblox_stylesheets/keys/StyleRules"),
+}
+
+return confusion_for_roblox :: Confusion
