@@ -19,7 +19,7 @@ export type ExternalDebugger = {
 }
 
 export type ExternalLogger = {
-	read log_error: (message: string) -> never,
+	read log_error: (message: string, level: number?) -> never,
 	read log_error_nonfatal: (message: string) -> (),
 	read log_warn: (message: string) -> (),
 }
