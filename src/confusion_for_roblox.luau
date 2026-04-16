@@ -1,10 +1,7 @@
 --[[
 package: confusion_for_roblox
-
-ConFusion - A variant of Fusion that will cause confusion.
-
-GitHub Repository: https://github.com/HappySunChild/ConFusion
-Fusion on GitHub: https://github.com/dphfox/Fusion
+author: HappySunChild (Eli)
+repository: https://github.com/HappySunChild/confusion
 --]]
 
 local graph = require("./core_graph/types")
