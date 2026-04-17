@@ -1,14 +1,10 @@
 local memory = require("../core_memory/types")
 local rbx_instances = require("./types")
 
-local apply_properties = require("./apply_properties")
+local apply_instance_properties = require("./apply_instance_properties")
 local log_error = require("../core_logging/log_error")
 
-local function New(
-	scope: memory.Scope,
-	class_name: string,
-	properties: rbx_instances.Properties
-): Instance
+local function New(scope: memory.Scope, class_name: string, properties: rbx_instances.Properties): Instance
 	local success, new_instance = pcall(Instance.new, class_name, nil) -- ok
 
 	if not success then
@@ -17,7 +13,7 @@ local function New(
 
 	table.insert(scope, new_instance)
 
-	apply_properties(scope, new_instance, properties)
+	apply_instance_properties(scope, new_instance, properties)
 
 	return new_instance
 end
