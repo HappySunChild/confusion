@@ -27,7 +27,7 @@ export type GraphNode = {
 	_oldest_task: () -> (),
 }
 
-export type Observe = (scope: memory.Scope, subject: GraphNode, callback: () -> ()) -> (() -> ())?
+export type Observe = (scope: memory.Scope, subject: any, callback: () -> ()) -> (() -> ())?
 
 return {
 	infinite_loop = "Detected an infinite loop. Consider adding an explicit breakpoint to your code to prevent a cyclic dependency.",

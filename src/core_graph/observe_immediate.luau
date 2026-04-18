@@ -1,4 +1,3 @@
-local graph = require("./types")
 local memory = require("../core_memory/types")
 
 local ExternalScheduler = require("../core_external/ExternalScheduler")
@@ -12,7 +11,7 @@ local observe = require("./observe")
 	
 	Returns a disconnect function that removes the observer callback from the node.
 ]]
-local function observe_immediate(scope: memory.Scope, subject: graph.GraphNode, callback: () -> ()): (() -> ())?
+local function observe_immediate(scope: memory.Scope, subject: any, callback: () -> ()): (() -> ())?
 	do_task_immediate(callback)
 
 	return observe(scope, subject, callback)

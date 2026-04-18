@@ -1,4 +1,3 @@
-local graph = require("./types")
 local memory = require("../core_memory/types")
 
 local name_of = require("../core_logging/name_of")
@@ -19,7 +18,7 @@ end
 	
 	Returns a disconnect function that removes the observer callback from the node.
 ]]
-local function observe(scope: memory.Scope, subject: graph.GraphNode, callback: () -> ()): (() -> ())?
+local function observe(scope: memory.Scope, subject: any, callback: () -> ()): (() -> ())?
 	if cast_to_graph(subject) == nil then
 		return nil
 	end
