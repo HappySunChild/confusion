@@ -163,8 +163,7 @@ local CLASS = table.freeze({
 
 		-- create new pair objects for any remaining pairs that couldn't be reused.
 		for pending_key, pending_value in pending_pairs do
-			new_pairs[pending_key] =
-				pair_constructor(inner_scope(pair_scope), pending_key, pending_value)
+			new_pairs[pending_key] = pair_constructor(inner_scope(pair_scope), pending_key, pending_value)
 		end
 
 		self._active_pairs = new_pairs

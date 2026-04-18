@@ -15,11 +15,7 @@ local function Tag(tag: string): rbx_instances.SpecialKey<"Tag">
 			type = "SpecialKey",
 			kind = "Tag",
 			stage = "self",
-			apply = function(
-				scope: memory.Scope,
-				apply_to: Instance,
-				enabled: state.UsedAs<boolean>
-			)
+			apply = function(scope: memory.Scope, apply_to: Instance, enabled: state.UsedAs<boolean>)
 				observe_immediate(scope, enabled, function()
 					local value = peek(enabled)
 

@@ -9,11 +9,7 @@ export type Eventual<T> = {
 	is_pending: (Eventual<T>) -> boolean,
 } & state.StateNode<T>
 
-export type EventualProcessor<S, T> = (
-	use: state.Use,
-	scope: memory.Scope<S>,
-	become: (T) -> ()
-) -> ()
+export type EventualProcessor<S, T> = (use: state.Use, scope: memory.Scope<S>, become: (T) -> ()) -> ()
 export type EventualConstructor = <S, T>(
 	scope: memory.Scope<S>,
 	processor: EventualProcessor<S, T>,

@@ -24,18 +24,12 @@ local CLASS = table.freeze({
 	resolve = function<T>(self: Self<any, T>): T
 		return self._current
 	end,
-	modify = function<S, T>(
-		self: Self<S, T>,
-		processor: (latest: T, scope: memory.Scope<S>) -> any
-	): Self<S, T>
+	modify = function<S, T>(self: Self<S, T>, processor: (latest: T, scope: memory.Scope<S>) -> any): Self<S, T>
 		self._current = processor(self._current, self._internal_scope)
 		return self
 	end,
 
-	map = function<S, T, O>(
-		self: Self<S, T>,
-		processor: (value: T, use: state.Use, scope: memory.Scope<S>) -> O
-	): Self<S, O>
+	map = function<S, T, O>(self: Self<S, T>, processor: (value: T, use: state.Use, scope: memory.Scope<S>) -> O): Self<S, O>
 		local latest = self._current
 		self._current = Computed(self._internal_scope, function(use, scope)
 			return processor(use(latest), use, scope)
@@ -44,11 +38,7 @@ local CLASS = table.freeze({
 		return self
 	end,
 
-	spring = function<S, T>(
-		self: Self<S, T>,
-		speed: state.UsedAs<number>?,
-		damping: state.UsedAs<number>?
-	): Self<S, T>
+	spring = function<S, T>(self: Self<S, T>, speed: state.UsedAs<number>?, damping: state.UsedAs<number>?): Self<S, T>
 		self._current = Spring(self._internal_scope, self._current, speed, damping)
 
 		return self
@@ -61,13 +51,7 @@ local CLASS = table.freeze({
 
 	for_pairs = function<S, IK, IV, OK, OV>(
 		self: Self<S, { [IK]: IV }>,
-		processor: iter_for.ForPairsProcessor<
-			unknown,
-			IK,
-			IV,
-			OK,
-			OV
-		>
+		processor: iter_for.ForPairsProcessor<unknown, IK, IV, OK, OV>
 	): Self<S, { [OK]: OV }>
 		self._current = ForPairs(self._internal_scope, self._current, processor)
 

@@ -13,22 +13,13 @@ local function ForValues<S, IK, IV, OV>(
 	input_table: state.UsedAs<{ [IK]: IV }>,
 	processor: iter_for.ForValuesProcessor<S, IV, OV>
 ): iter.Iter<IK, OV> | { [IK]: OV }
-	local augmented_processor = function(
-		use: state.Use,
-		scope: memory.Scope<S>,
-		input_key: IK,
-		input_value: IV
-	)
+	local augmented_processor = function(use: state.Use, scope: memory.Scope<S>, input_key: IK, input_value: IV)
 		local new_value = processor(use, scope, input_value)
 
 		return input_key, new_value
 	end
 
-	local augmented_constructor = function(
-		scope: memory.Scope<S>,
-		initial_key: IK,
-		initial_value: IV
-	)
+	local augmented_constructor = function(scope: memory.Scope<S>, initial_key: IK, initial_value: IV)
 		return ComputedPair(
 			scope,
 			initial_key,

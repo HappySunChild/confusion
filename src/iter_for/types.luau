@@ -24,22 +24,14 @@ export type ForPairsConstructor = <S, IK, IV, OK, OV>(
 	processor: ForPairsProcessor<S, IK, IV, OK, OV>
 ) -> iter.Iter<OK, OV>
 
-export type ForKeysProcessor<S, IK, OK> = (
-	use: state.Use,
-	scope: memory.Scope<S>,
-	input_key: IK
-) -> OK
+export type ForKeysProcessor<S, IK, OK> = (use: state.Use, scope: memory.Scope<S>, input_key: IK) -> OK
 export type ForKeysConstructor = <S, IK, IV, OK>(
 	scope: memory.Scope<S>,
 	input_table: state.UsedAs<{ [IK]: IV }>,
 	processor: ForKeysProcessor<S, IK, OK>
 ) -> iter.Iter<OK, IV>
 
-export type ForValuesProcessor<S, IV, OV> = (
-	use: state.Use,
-	scope: memory.Scope<S>,
-	input_value: IV
-) -> OV
+export type ForValuesProcessor<S, IV, OV> = (use: state.Use, scope: memory.Scope<S>, input_value: IV) -> OV
 export type ForValuesConstructor = <S, IK, IV, OV>(
 	scope: memory.Scope<S>,
 	input_table: state.UsedAs<{ [IK]: IV }>,

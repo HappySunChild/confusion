@@ -30,12 +30,7 @@ type Self<T> = {
 	_timer: chrono.Timer,
 } & motion.Motion<T>
 
-local function sync_dynamics<T>(
-	motion_obj: Self<T>,
-	should_sleep: boolean,
-	output_value: T,
-	...: any
-): (T, boolean)
+local function sync_dynamics<T>(motion_obj: Self<T>, should_sleep: boolean, output_value: T, ...: any): (T, boolean)
 	local dynamics = motion_obj.dynamics
 
 	table.clear(dynamics)
@@ -106,11 +101,7 @@ local CLASS = table.freeze({
 		depend(self, timer)
 
 		-- wake
-		if
-			new_goal ~= self.active_goal
-			or new_generator ~= self.active_generator
-			or self.regenerate
-		then
+		if new_goal ~= self.active_goal or new_generator ~= self.active_generator or self.regenerate then
 			self.active_goal = new_goal
 			self.active_generator = new_generator
 			self.active_curve = generator(new_goal, unpack(self.dynamics))

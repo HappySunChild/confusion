@@ -13,11 +13,7 @@ local function ForPairs<S, IK, IV, OK, OV>(
 	input_table: state.UsedAs<{ [IK]: IV }>,
 	processor: iter_for.ForPairsProcessor<S, IK, IV, OK, OV>
 ): iter.Iter<OK, OV> | { [OK]: OV }
-	local augmented_constructor = function(
-		scope: memory.Scope<S>,
-		initial_key: IK,
-		initial_value: IV
-	)
+	local augmented_constructor = function(scope: memory.Scope<S>, initial_key: IK, initial_value: IV)
 		return ComputedPair(scope, initial_key, initial_value, false, false, processor)
 	end
 

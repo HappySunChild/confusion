@@ -24,11 +24,7 @@ local function destroy_attributeof<T>(attributeof: Self<T>)
 	attributeof._event:Disconnect()
 end
 
-local function AttributeOf<T>(
-	scope: memory.Scope,
-	instance: Instance,
-	attribute: string
-): rbx_binds.AttributeOf<T>
+local function AttributeOf<T>(scope: memory.Scope, instance: Instance, attribute: string): rbx_binds.AttributeOf<T>
 	local event = instance:GetAttributeChangedSignal(attribute)
 
 	local new_attribute: Self<T> = setmetatable({

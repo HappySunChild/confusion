@@ -12,11 +12,7 @@ local observe = require("./observe")
 	
 	Returns a disconnect function that removes the observer callback from the node.
 ]]
-local function observe_immediate(
-	scope: memory.Scope,
-	subject: graph.GraphNode,
-	callback: () -> ()
-): (() -> ())?
+local function observe_immediate(scope: memory.Scope, subject: graph.GraphNode, callback: () -> ()): (() -> ())?
 	do_task_immediate(callback)
 
 	return observe(scope, subject, callback)

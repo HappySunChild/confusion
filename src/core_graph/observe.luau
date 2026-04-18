@@ -19,11 +19,7 @@ end
 	
 	Returns a disconnect function that removes the observer callback from the node.
 ]]
-local function observe(
-	scope: memory.Scope,
-	subject: graph.GraphNode,
-	callback: () -> ()
-): (() -> ())?
+local function observe(scope: memory.Scope, subject: graph.GraphNode, callback: () -> ()): (() -> ())?
 	if cast_to_graph(subject) == nil then
 		return nil
 	end

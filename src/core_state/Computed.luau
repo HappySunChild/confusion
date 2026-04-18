@@ -56,10 +56,7 @@ local function destroy_computed<T, S>(computed: Self<T, S>)
 	computed._inner_scope = nil
 end
 
-local function Computed<T, S>(
-	scope: memory.Scope<S>,
-	processor: state.ComputedProcessor<S, T>
-): state.Computed<T>
+local function Computed<T, S>(scope: memory.Scope<S>, processor: state.ComputedProcessor<S, T>): state.Computed<T>
 	local new_computed: Self<T, S> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),

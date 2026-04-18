@@ -18,11 +18,7 @@ local function get_bounding_keys(eval_time: number, keyframes: { any }): (number
 	return prev_time, next_time
 end
 
-local function evaluate_keyframes<T>(
-	eval_time: number,
-	keyframes: { state.UsedAs<T> },
-	use: state.Use
-): T?
+local function evaluate_keyframes<T>(eval_time: number, keyframes: { state.UsedAs<T> }, use: state.Use): T?
 	local prev_time, next_time = get_bounding_keys(eval_time, keyframes)
 
 	if prev_time == nil and next_time == nil then -- neither keys were present, which means no keyframes were defined

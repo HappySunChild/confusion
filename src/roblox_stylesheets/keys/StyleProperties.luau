@@ -10,11 +10,7 @@ return {
 	type = "SpecialKey",
 	kind = "StyleProperties",
 	stage = "self",
-	apply = function(
-		scope: memory.Scope,
-		apply_to: StyleRule,
-		properties: { [string]: state.UsedAs<any> }
-	)
+	apply = function(scope: memory.Scope, apply_to: StyleRule, properties: { [string]: state.UsedAs<any> })
 		for property, value in properties do
 			apply_to:SetProperty(property, peek(value))
 

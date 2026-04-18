@@ -1,8 +1,4 @@
-local function spring_coefficients(
-	time: number,
-	damping: number,
-	speed: number
-): (number, number, number, number)
+local function spring_coefficients(time: number, damping: number, speed: number): (number, number, number, number)
 	-- if time or speed is 0, then the spring won't move
 	if time == 0 or speed == 0 then
 		return 1, 0, 0, 1
@@ -48,8 +44,7 @@ local function spring_coefficients(
 
 		pos_pos = exp_sin_speed_damping_overAlpha + exp_cos
 		pos_vel = exp_sin * over_alpha
-		vel_pos = -1
-			* (exp_sin * alpha + speed * damping * exp_sin_speed_damping_overAlpha)
+		vel_pos = -1 * (exp_sin * alpha + speed * damping * exp_sin_speed_damping_overAlpha)
 		vel_vel = exp_cos - exp_sin_speed_damping_overAlpha
 	end
 

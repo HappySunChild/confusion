@@ -26,11 +26,7 @@ local function destroy_propertyof<T>(propertyof: Self<T>)
 	propertyof._event:Disconnect()
 end
 
-local function PropertyOf(
-	scope: memory.Scope,
-	instance: Instance,
-	property: string
-): rbx_binds.PropertyOf<unknown>
+local function PropertyOf(scope: memory.Scope, instance: Instance, property: string): rbx_binds.PropertyOf<unknown>
 	local ok, event: RBXScriptSignal = pcall(instance.GetPropertyChangedSignal, instance, property)
 
 	if not ok then

@@ -60,14 +60,8 @@ local CLASS = table.freeze({
 		local output = self._cached_value
 
 		local inner_scope = derive_scope(self.scope)
-		local ok, new_key, new_value = xpcall(
-			self._processor,
-			parse_error,
-			self._use,
-			inner_scope,
-			self._input_key,
-			self._input_value
-		)
+		local ok, new_key, new_value =
+			xpcall(self._processor, parse_error, self._use, inner_scope, self._input_key, self._input_value)
 
 		cleanup(self._inner_scope) -- for some reason the spec also calls for clearing the current scope as well? I guess it makes it consistent with omitting the pair. this is all weird
 

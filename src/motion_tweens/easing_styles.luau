@@ -129,9 +129,7 @@ local easing_styles = {
 			return 1 - math.sqrt(1 - x ^ 2)
 		end,
 		InOut = function(x: number): number
-			return if x < 0.5
-				then 1 - math.sqrt(1 - (2 * x) ^ 2) / 2
-				else (math.sqrt(1 - (-2 * x + 2) ^ 2) + 1) / 2
+			return if x < 0.5 then 1 - math.sqrt(1 - (2 * x) ^ 2) / 2 else (math.sqrt(1 - (-2 * x + 2) ^ 2) + 1) / 2
 		end,
 	},
 	Sine = {

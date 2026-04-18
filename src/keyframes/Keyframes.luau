@@ -36,11 +36,7 @@ local CLASS = table.freeze({
 })
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function Keyframes<T>(
-	scope: memory.Scope,
-	alpha: state.UsedAs<number>,
-	keyframes: { T }
-): keyframes.Keyframes<T> | T
+local function Keyframes<T>(scope: memory.Scope, alpha: state.UsedAs<number>, keyframes: { T }): keyframes.Keyframes<T> | T
 	local new_keyframes: Self<T> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),

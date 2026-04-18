@@ -1,8 +1,7 @@
 local motion_tweens = require("./types")
 
 local function get_tween_alpha(info: motion_tweens.TweenInfo, current_time: number)
-	local tween_time, delay_time, repeat_count, reverses =
-		info.time, info.delay_time, info.repeat_count, info.reverses
+	local tween_time, delay_time, repeat_count, reverses = info.time, info.delay_time, info.repeat_count, info.reverses
 
 	local cycle_count = repeat_count + 1
 	local cycle_duration = delay_time + tween_time

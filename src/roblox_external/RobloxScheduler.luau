@@ -21,11 +21,7 @@ local RobloxScheduler: external.ExternalScheduler = {
 		if RunService:IsClient() then
 			local id = "FusionUpdateStep_" .. HttpService:GenerateGUID(false)
 
-			RunService:BindToRenderStep(
-				id,
-				Enum.RenderPriority.First.Value,
-				ExternalScheduler.perform_update_step
-			)
+			RunService:BindToRenderStep(id, Enum.RenderPriority.First.Value, ExternalScheduler.perform_update_step)
 
 			scheduler_disconnect = function()
 				RunService:UnbindFromRenderStep(id)

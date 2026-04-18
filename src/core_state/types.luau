@@ -26,10 +26,7 @@ export type Computed<T> = {
 } & StateNode<T>
 
 export type ComputedProcessor<S, T> = (use: Use, scope: memory.Scope<S>) -> T
-export type ComputedConstructor = <S, T>(
-	scope: memory.Scope<S>,
-	processor: ComputedProcessor<S, T>
-) -> Computed<T>
+export type ComputedConstructor = <S, T>(scope: memory.Scope<S>, processor: ComputedProcessor<S, T>) -> Computed<T>
 
 return {
 	callback_error = "Error in callback:\nERROR_MESSAGE",

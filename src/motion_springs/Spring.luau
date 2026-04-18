@@ -10,10 +10,7 @@ local unpack_type = require("./unpack_type")
 
 local EPSILON = 0.0001
 
-local function spring_mover<T>(
-	speed: state.UsedAs<number>,
-	damping: state.UsedAs<number>
-): motion.CurveGenerator<T>
+local function spring_mover<T>(speed: state.UsedAs<number>, damping: state.UsedAs<number>): motion.CurveGenerator<T>
 	local start_pos: { number } = {}
 	local start_vel: { number } = {}
 
@@ -58,8 +55,7 @@ local function spring_mover<T>(
 			elseif elapsed <= 0 then
 				new_value = initial_position
 			else
-				local pos_pos, pos_vel, vel_pos, vel_vel =
-					spring_coefficients(elapsed, peek(damping), peek(speed))
+				local pos_pos, pos_vel, vel_pos, vel_vel = spring_coefficients(elapsed, peek(damping), peek(speed))
 
 				local is_moving = false
 
@@ -75,10 +71,7 @@ local function spring_mover<T>(
 						latest_d, latest_v = 0, 0
 					end
 
-					if
-						not is_moving
-						and (math.abs(latest_d) > EPSILON or math.abs(latest_v) > EPSILON)
-					then
+					if not is_moving and (math.abs(latest_d) > EPSILON or math.abs(latest_v) > EPSILON) then
 						is_moving = true
 					end
 

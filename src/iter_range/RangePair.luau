@@ -41,8 +41,7 @@ local CLASS = table.freeze({
 		end
 
 		local inner_scope = derive_scope(self.scope)
-		local ok, output_value =
-			xpcall(self._processor, parse_error, self._use, inner_scope, self._input_index)
+		local ok, output_value = xpcall(self._processor, parse_error, self._use, inner_scope, self._input_index)
 
 		cleanup(self._inner_scope)
 

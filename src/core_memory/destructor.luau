@@ -19,10 +19,7 @@ local function destroy_node(node: graph.GraphNode)
 	end
 end
 
-local function destructor(
-	node: graph.GraphNode,
-	auxiliary: (node: graph.GraphNode) -> ()?
-): () -> ()
+local function destructor(node: graph.GraphNode, auxiliary: (node: graph.GraphNode) -> ()?): () -> ()
 	local function destroy()
 		destroy_node(node)
 

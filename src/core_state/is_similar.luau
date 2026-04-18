@@ -6,10 +6,8 @@ local function is_similar(a: unknown, b: unknown): boolean
 
 	return if not (is_table or is_userdata)
 		then a == b or a ~= a and b ~= b
-		elseif
-			type_a == typeof(b)
-			and (is_userdata or table.isfrozen(a :: any) or getmetatable(a :: any) ~= nil)
-		then a == b
+		elseif type_a == typeof(b) and (is_userdata or table.isfrozen(a :: any) or getmetatable(a :: any) ~= nil) then a
+			== b
 		else false
 end
 
