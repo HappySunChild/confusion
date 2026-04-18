@@ -247,9 +247,9 @@ local confusion_for_roblox = {
 	StyleRule = require("./roblox_stylesheets/StyleRule"),
 	StyleSheet = require("./roblox_stylesheets/StyleSheet"),
 
-	StyleDerives = require("././roblox_stylesheets/keys/StyleDerives"),
-	StyleLink = require("././roblox_stylesheets/keys/StyleLink"),
-	StyleProperties = require("././roblox_stylesheets/keys/StyleProperties"),
+	StyleDerives = require("./roblox_stylesheets/keys/StyleDerives"),
+	StyleLink = require("./roblox_stylesheets/keys/StyleLink"),
+	StyleProperties = require("./roblox_stylesheets/keys/StyleProperties"),
 	StyleRules = require("./roblox_stylesheets/keys/StyleRules"),
 }
 
