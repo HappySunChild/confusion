@@ -4,17 +4,28 @@ local StyleProperties = require("./keys/StyleProperties")
 local StyleRules = require("./keys/StyleRules")
 local apply_instance_properties = require("../roblox_instances/apply_instance_properties")
 
-local function StyleRule(scope: memory.Scope, selector: string, properties: { [string]: any }, subrules: { StyleRule }?)
+local function StyleRule(scope: memory.Scope, selector: string, properties: { [string | number]: any })
 	local new_rule = Instance.new("StyleRule")
 
 	table.insert(scope, new_rule)
+
+	local style_properties = {}
+	local style_subrules = {}
+
+	for key, value in properties do
+		if key == "string" then
+			StyleProperties[key] = value
+		elseif key == "number" then
+			style_subrules[key] = value
+		end
+	end
 
 	apply_instance_properties(scope, new_rule, {
 		Selector = selector,
 		Name = selector,
 
-		[StyleRules] = subrules,
-		[StyleProperties] = properties,
+		[StyleRules] = style_subrules,
+		[StyleProperties] = style_properties,
 	})
 
 	return new_rule
