@@ -9,13 +9,15 @@ local function StyleRule(scope: memory.Scope, selector: string, properties: { [s
 
 	table.insert(scope, new_rule)
 
-	local style_properties = {}
-	local style_subrules = {}
+	local style_properties: { [string]: any } = {}
+	local style_subrules: { StyleRule } = {}
 
 	for key, value in properties do
-		if key == "string" then
-			StyleProperties[key] = value
-		elseif key == "number" then
+		local key_type = type(key)
+
+		if key_type == "string" then
+			style_properties[key] = value
+		elseif key_type == "number" then
 			style_subrules[key] = value
 		end
 	end
