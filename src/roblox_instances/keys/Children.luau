@@ -116,6 +116,6 @@ return {
 	stage = "descendants",
 	apply = function(scope: memory.Scope, apply_to: Instance, root_child: rbx_instances.Child)
 		local reconcile = create_reconciler(scope, apply_to, process_child)
-		reconcile(root_child, apply_to)
+		reconcile(root_child)
 	end,
 } :: rbx_instances.SpecialKey<"Children">
