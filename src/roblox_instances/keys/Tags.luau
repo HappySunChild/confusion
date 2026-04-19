@@ -9,13 +9,14 @@ local observe_immediate = require("../../core_graph/observe_immediate")
 local peek = require("../../core_use/peek")
 
 type TagsSet = { [string]: true }
-type TagsScopes = { [string]: memory.Scope }
+type TagsScopes = { [rbx_instances.Tag]: memory.Scope }
 
 local function create_reconciler(
 	scope: memory.Scope,
+	apply_to: Instance,
 	processor: (
 		child: rbx_instances.Tag,
-		parent: Instance?,
+		apply_to: Instance,
 		new_tags: TagsSet,
 		new_scopes: TagsScopes,
 		old_tags: TagsSet,
@@ -25,7 +26,7 @@ local function create_reconciler(
 	local old_tags: TagsSet, new_tags: TagsSet = {}, {}
 	local old_scopes: TagsScopes, new_scopes: TagsScopes = {}, {}
 
-	local function reconcile(new_tag: rbx_instances.Tag?, apply_to: Instance)
+	local function reconcile(new_tag: rbx_instances.Tag?)
 		old_tags, new_tags = new_tags, old_tags
 		old_scopes, new_scopes = new_scopes, old_scopes
 
@@ -80,10 +81,10 @@ local function process_tag(
 		if tag_scope == nil then
 			tag_scope = {}
 
-			local reconcile = create_reconciler(tag_scope, process_tag)
+			local reconcile = create_reconciler(tag_scope, apply_to, process_tag)
 
 			observe_immediate(tag_scope, tag, function()
-				reconcile(peek(tag), apply_to)
+				reconcile(peek(tag))
 			end)
 		else
 			old_scopes[tag] = nil
@@ -105,7 +106,7 @@ return {
 	kind = "Tags",
 	stage = "self",
 	apply = function(scope: memory.Scope, apply_to: Instance, root_tag: rbx_instances.Tag?)
-		local reconcile = create_reconciler(scope, process_tag)
-		reconcile(root_tag, apply_to)
+		local reconcile = create_reconciler(scope, apply_to, process_tag)
+		reconcile(root_tag)
 	end,
 } :: rbx_instances.SpecialKey<"Tags">

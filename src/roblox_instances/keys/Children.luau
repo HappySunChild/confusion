@@ -13,9 +13,10 @@ type ChildrenScopes = { [rbx_instances.Child]: memory.Scope }
 
 local function create_reconciler(
 	scope: memory.Scope,
+	parent: Instance,
 	processor: (
 		child: rbx_instances.Child,
-		parent: Instance?,
+		parent: Instance,
 		new_children: ChildrenSet,
 		new_scopes: ChildrenScopes,
 		old_children: ChildrenSet,
@@ -25,7 +26,7 @@ local function create_reconciler(
 	local old_children: ChildrenSet, new_children: ChildrenSet = {}, {}
 	local old_scopes: ChildrenScopes, new_scopes: ChildrenScopes = {}, {}
 
-	local function reconcile(new_child: rbx_instances.Child?, parent: Instance?)
+	local function reconcile(new_child: rbx_instances.Child?)
 		old_children, new_children = new_children, old_children
 		old_scopes, new_scopes = new_scopes, old_scopes
 
@@ -60,7 +61,7 @@ end
 
 local function process_child(
 	child: rbx_instances.Child,
-	parent: Instance?,
+	parent: Instance,
 	new_children: ChildrenSet,
 	new_scopes: ChildrenScopes,
 	old_children: ChildrenSet,
@@ -89,10 +90,10 @@ local function process_child(
 		if child_scope == nil then
 			child_scope = {}
 
-			local reconcile = create_reconciler(child_scope, process_child)
+			local reconcile = create_reconciler(child_scope, parent, process_child)
 
 			observe_immediate(child_scope, child, function()
-				reconcile(peek(child), parent)
+				reconcile(peek(child))
 			end)
 		else
 			old_scopes[child] = nil
@@ -114,7 +115,7 @@ return {
 	kind = "Children",
 	stage = "descendants",
 	apply = function(scope: memory.Scope, apply_to: Instance, root_child: rbx_instances.Child)
-		local reconcile = create_reconciler(scope, process_child)
+		local reconcile = create_reconciler(scope, apply_to, process_child)
 		reconcile(root_child, apply_to)
 	end,
 } :: rbx_instances.SpecialKey<"Children">
