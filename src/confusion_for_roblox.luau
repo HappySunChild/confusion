@@ -78,77 +78,77 @@ type Confusion = {
 	flatten: use.Flatten,
 
 	-- Iter: For
-	read ForPairs: iter_for.ForPairsConstructor,
-	read ForKeys: iter_for.ForKeysConstructor,
-	read ForValues: iter_for.ForValuesConstructor,
+	ForPairs: iter_for.ForPairsConstructor,
+	ForKeys: iter_for.ForKeysConstructor,
+	ForValues: iter_for.ForValuesConstructor,
 
 	-- Iter: Range
-	read ForRange: iter_range.ForRangeConstructor,
+	ForRange: iter_range.ForRangeConstructor,
 
 	-- Async
-	read Eventual: async.EventualConstructor,
-	read await: async.Await,
+	Eventual: async.EventualConstructor,
+	await: async.Await,
 
 	-- Context
-	read Contextual: context.ContextConstructor,
+	Contextual: context.ContextConstructor,
 
 	-- Chrono
-	read Timer: chrono.TimerConstructor,
+	Timer: chrono.TimerConstructor,
 
 	-- Safe
-	read Safe: safe.Safe,
+	Safe: safe.Safe,
 
 	-- Keyframes
-	read Keyframes: keyframes.KeyframesConstructor,
+	Keyframes: keyframes.KeyframesConstructor,
 
 	-- Motion
-	read Motion: motion.MotionConstructor,
+	Motion: motion.MotionConstructor,
 
 	-- Motion: Springs
-	read Spring: motion_springs.SpringConstructor,
+	Spring: motion_springs.SpringConstructor,
 
 	-- Motion: Tweens
-	read Tween: motion_tweens.TweenConstructor,
-	read TweenInfo: motion_tweens.TweenInfoConstructor,
-	read easing_styles: motion_tweens.EasingStyles,
+	Tween: motion_tweens.TweenConstructor,
+	TweenInfo: motion_tweens.TweenInfoConstructor,
+	easing_styles: motion_tweens.EasingStyles,
 
 	-- Pipeline
-	read Pipe: pipe.PipeConstructor,
+	Pipe: pipe.PipeConstructor,
 
 	-- Roblox: Instances
-	read New: rbx_instances.NewConstructor,
-	read Hydrate: rbx_instances.HydrateConstructor,
+	New: rbx_instances.NewConstructor,
+	Hydrate: rbx_instances.HydrateConstructor,
 
-	read Children: rbx_instances.SpecialKey<"Children">,
-	read OnStartup: rbx_instances.SpecialKey<"OnStartup">,
-	read OnRemoval: rbx_instances.SpecialKey<"OnRemoval">,
-	read Refs: rbx_instances.SpecialKey<"Refs">,
-	read Attribute: (attribute: string) -> rbx_instances.SpecialKey<"Attribute">,
-	read Attributes: rbx_instances.SpecialKey<"Attributes">,
-	read AttributeChange: (attribute: string) -> rbx_instances.SpecialKey<"AttributeChange">,
-	read AttributeOut: (attribute: string) -> rbx_instances.SpecialKey<"AttributeOut">,
-	read Tag: (tag: string) -> rbx_instances.SpecialKey<"Tag">,
-	read Tags: rbx_instances.SpecialKey<"Tags">,
-	read Out: (property: string) -> rbx_instances.SpecialKey<"Out">,
-	read OnEvent: (event: string) -> rbx_instances.SpecialKey<"OnEvent">,
-	read OnChange: (property: string) -> rbx_instances.SpecialKey<"OnChange">,
+	Children: rbx_instances.SpecialKey<"Children">,
+	OnStartup: rbx_instances.SpecialKey<"OnStartup">,
+	OnRemoval: rbx_instances.SpecialKey<"OnRemoval">,
+	Refs: rbx_instances.SpecialKey<"Refs">,
+	Attribute: (attribute: string) -> rbx_instances.SpecialKey<"Attribute">,
+	Attributes: rbx_instances.SpecialKey<"Attributes">,
+	AttributeChange: (attribute: string) -> rbx_instances.SpecialKey<"AttributeChange">,
+	AttributeOut: (attribute: string) -> rbx_instances.SpecialKey<"AttributeOut">,
+	Tag: (tag: string) -> rbx_instances.SpecialKey<"Tag">,
+	Tags: rbx_instances.SpecialKey<"Tags">,
+	Out: (property: string) -> rbx_instances.SpecialKey<"Out">,
+	OnEvent: (event: string) -> rbx_instances.SpecialKey<"OnEvent">,
+	OnChange: (property: string) -> rbx_instances.SpecialKey<"OnChange">,
 
 	-- Roblox: Templates
-	read FromTemplate: rbx_templates.FromTemplateConstructor,
-	read QueryDescendants: rbx_templates.QueryDescendants,
+	FromTemplate: rbx_templates.FromTemplateConstructor,
+	QueryDescendants: rbx_templates.QueryDescendants,
 
 	-- Roblox: Binds
-	read PropertyOf: rbx_binds.PropertyOfConstructor,
-	read AttributeOf: rbx_binds.AttributeOfConstructor,
+	PropertyOf: rbx_binds.PropertyOfConstructor,
+	AttributeOf: rbx_binds.AttributeOfConstructor,
 
 	-- Roblox: Stylesheets
-	read StyleRule: rbx_stylesheets.StyleRuleConstructor,
-	read StyleSheet: rbx_stylesheets.StyleSheetConstructor,
+	StyleRule: rbx_stylesheets.StyleRuleConstructor,
+	StyleSheet: rbx_stylesheets.StyleSheetConstructor,
 
-	read StyleDerives: rbx_instances.SpecialKey<"StyleDerives">,
-	read StyleLink: rbx_instances.SpecialKey<"StyleLink">,
-	read StyleProperties: rbx_instances.SpecialKey<"StyleProperties">,
-	read StyleRules: rbx_instances.SpecialKey<"StyleRules">,
+	StyleDerives: rbx_instances.SpecialKey<"StyleDerives">,
+	StyleLink: rbx_instances.SpecialKey<"StyleLink">,
+	StyleProperties: rbx_instances.SpecialKey<"StyleProperties">,
+	StyleRules: rbx_instances.SpecialKey<"StyleRules">,
 }
 
 local ExternalLogger = require("./core_external/ExternalLogger")
