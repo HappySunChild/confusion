@@ -1,6 +1,5 @@
 local memory = require("../../core_memory/types")
 local rbx_instances = require("../types")
-local state = require("../../core_state/types")
 
 local cast_to_state = require("../../core_state/cast_to_state")
 local cleanup = require("../../core_memory/cleanup")
@@ -22,7 +21,7 @@ local function create_reconciler(
 		old_children: ChildrenSet,
 		old_scopes: ChildrenScopes
 	) -> ()
-)
+): (rbx_instances.Child) -> ()
 	local old_children: ChildrenSet, new_children: ChildrenSet = {}, {}
 	local old_scopes: ChildrenScopes, new_scopes: ChildrenScopes = {}, {}
 
@@ -75,7 +74,7 @@ local function process_child(
 		new_children[child] = true
 		old_children[child] = nil
 	elseif child_type == "function" then -- UNRESOLVED CASE
-		child = child :: (Instance) -> rbx_instances.Child
+		child = child :: rbx_instances.ChildUnresolved
 
 		local actual_child = child(parent)
 
@@ -83,7 +82,7 @@ local function process_child(
 			process_child(actual_child, parent, new_children, new_scopes, old_children, old_scopes)
 		end
 	elseif cast_to_state(child) ~= nil then -- STATE CASE
-		child = child :: state.StateNode<rbx_instances.Child>
+		child = child :: rbx_instances.ChildState
 
 		local child_scope = old_scopes[child]
 
@@ -101,7 +100,7 @@ local function process_child(
 
 		new_scopes[child] = child_scope
 	elseif child_type == "table" then -- NESTED CASE
-		child = child :: { rbx_instances.Child }
+		child = child :: rbx_instances.ChildMany
 		for _, descendant in child do
 			process_child(descendant, parent, new_children, new_scopes, old_children, old_scopes)
 		end
