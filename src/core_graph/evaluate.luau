@@ -13,7 +13,7 @@ local function evaluate(node: graph.GraphNode, force_computation: boolean?): boo
 		log_error(graph.infinite_loop)
 	end
 
-	local first_evaluation = node.last_change == nil or node.last_compute == nil
+	local first_evaluation = node.last_change == nil and node.last_compute == nil
 	local is_dirty = node.validity == "dirty"
 	local is_invalid = node.validity == "invalid"
 
