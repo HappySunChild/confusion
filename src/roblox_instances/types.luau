@@ -16,7 +16,7 @@ export type ChildDescription = { [number | string]: any }
 export type ChildMany = { Child }
 export type Child = Instance | ChildState | ChildUnresolved | ChildDescription | ChildMany
 
-export type Properties = { [any]: any }
+export type Properties = { [string | number | SpecialKey]: any }
 export type Tag = string | { Tag } | state.StateNode<Tag>
 
 export type NewConstructor = (scope: memory.Scope, class_name: string, properties: Properties) -> Instance
