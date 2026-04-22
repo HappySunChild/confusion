@@ -2,7 +2,6 @@ local memory = require("../core_memory/types")
 local rbx_instances = require("./types")
 local state = require("../core_state/types")
 
-local Children = require("./keys/Children")
 local Parent = require("./keys/Parent")
 local cast_to_state = require("../core_state/cast_to_state")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
@@ -67,8 +66,6 @@ local function apply_instance_properties(scope: memory.Scope, instance: Instance
 		special_key_values[Parent] = properties.Parent
 	end
 
-	local implicit_children = {}
-
 	for key, value in properties do
 		if key == "Parent" then
 			continue
@@ -78,20 +75,13 @@ local function apply_instance_properties(scope: memory.Scope, instance: Instance
 
 		if key_type == "string" then
 			apply_property(scope, instance, key, value)
-		elseif key_type == "number" then
-			table.insert(implicit_children, value)
 		elseif key_type == "SpecialKey" then
 			special_key_values[key] = value
+		elseif key_type == "number" then -- they're technically allowed, but they don't do anything
+			continue
 		else
 			log_error_nonfatal(rbx_instances.invalid_key_type, nil, key_type)
 		end
-	end
-
-	-- if we have implicit children then merge and overwrite our implicit children with any explicitly set children
-	if #implicit_children > 0 then
-		table.insert(implicit_children, special_key_values[Children])
-
-		special_key_values[Children] = implicit_children
 	end
 
 	local special_keys: { rbx_instances.SpecialKey } = {}

@@ -3,12 +3,21 @@ local rbx_instances = require("../types")
 
 local cast_to_state = require("../../core_state/cast_to_state")
 local cleanup = require("../../core_memory/cleanup")
+local from_description = require("../from_description")
 local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
 local observe_immediate = require("../../core_graph/observe_immediate")
 local peek = require("../../core_use/peek")
 
 type ChildrenSet = { [Instance]: true }
 type ChildrenScopes = { [rbx_instances.Child]: memory.Scope }
+
+local Children = {
+	type = "SpecialKey",
+	kind = "Children",
+	stage = "descendants",
+	-- define everything except the apply function, this is done so we can access the SpecialKey within the apply function itself
+	apply = nil,
+} :: rbx_instances.SpecialKey<"Children">
 
 local function create_reconciler(
 	scope: memory.Scope,
@@ -99,6 +108,22 @@ local function process_child(
 		end
 
 		new_scopes[child] = child_scope
+	elseif child_type == "table" and type(child[1]) == "string" then -- DESCRIPTION CASE
+		child = child :: rbx_instances.ChildDescription
+
+		local child_scope = old_scopes[child]
+
+		if child_scope == nil then
+			child_scope = {}
+
+			local new_instance = from_description(child_scope, child, Children)
+
+			process_child(new_instance, parent, new_children, new_scopes, old_children, old_scopes)
+		else
+			old_scopes[child] = nil
+		end
+
+		new_scopes[child] = child_scope
 	elseif child_type == "table" then -- NESTED CASE
 		child = child :: rbx_instances.ChildMany
 		for _, descendant in child do
@@ -109,12 +134,9 @@ local function process_child(
 	end
 end
 
-return {
-	type = "SpecialKey",
-	kind = "Children",
-	stage = "descendants",
-	apply = function(scope: memory.Scope, apply_to: Instance, root_child: rbx_instances.Child)
-		local reconcile = create_reconciler(scope, apply_to, process_child)
-		reconcile(root_child)
-	end,
-} :: rbx_instances.SpecialKey<"Children">
+function Children.apply(scope: memory.Scope, apply_to: Instance, root_child: rbx_instances.Child)
+	local reconcile = create_reconciler(scope, apply_to, process_child)
+	reconcile(root_child)
+end
+
+return Children

@@ -25,6 +25,7 @@ export type HydrateConstructor = <InstanceT>(
 	instance: InstanceT,
 	properties: Properties
 ) -> InstanceT
+export type DescribeConstructor = (scope: memory.Scope, description: ChildDescription) -> Instance
 
 return {
 	cannot_create_class = "Unable to create instance of type '%s'.",

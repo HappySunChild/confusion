@@ -118,6 +118,7 @@ type Confusion = {
 	-- Roblox: Instances
 	New: rbx_instances.NewConstructor,
 	Hydrate: rbx_instances.HydrateConstructor,
+	Describe: rbx_instances.DescribeConstructor,
 
 	Children: rbx_instances.SpecialKey<"Children">,
 	OnStartup: rbx_instances.SpecialKey<"OnStartup">,
@@ -220,6 +221,7 @@ local confusion_for_roblox = {
 	-- Roblox: Instances
 	New = require("./roblox_instances/New"),
 	Hydrate = require("./roblox_instances/Hydrate"),
+	Describe = require("./roblox_instances/Describe"),
 
 	Children = require("./roblox_instances/keys/Children"),
 	OnStartup = require("./roblox_instances/keys/OnStartup"),
