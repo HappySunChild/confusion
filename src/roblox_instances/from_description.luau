@@ -11,7 +11,7 @@ local function from_description(
 	implicit_merge_key: any
 ): Instance
 	local class_name = table.remove(description, 1)
-	local ok, new_instance = pcall(Instance.new, class_name, nil)
+	local ok, new_instance = pcall(Instance.new, class_name)
 
 	if not ok then
 		log_error(rbx_instances.cannot_create_class, nil, class_name)
