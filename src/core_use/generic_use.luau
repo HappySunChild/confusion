@@ -2,13 +2,13 @@ local graph = require("../core_graph/types")
 local state = require("../core_state/types")
 local use = require("./types")
 
-local cast_to_state = require("../core_state/cast_to_state")
+local cast_to_graph = require("../core_graph/cast_to_graph")
 local depend = require("../core_graph/depend")
 local log_error = require("../core_logging/log_error")
 local peek = require("./peek")
 
 local function generic_use(user: graph.GraphNode): state.Use
-	if cast_to_state(user) == nil then
+	if cast_to_graph(user) == nil then
 		log_error(use.invalid_user, nil, typeof(user), user)
 	end
 
