@@ -32,9 +32,7 @@ local function butler_pretty(options: Options)
 		local ansi_code = `\x1b[{table.concat({ ... }, ";")}m`
 
 		return function(text: any): string
-			return if DISABLE_COLOR
-				then tostring(text)
-				else ansi_code .. tostring(text) .. ANSI_RESET
+			return if DISABLE_COLOR then tostring(text) else ansi_code .. tostring(text) .. ANSI_RESET
 		end
 	end
 
@@ -74,12 +72,8 @@ local function butler_pretty(options: Options)
 	local ARROW = if DISABLE_UNICODE then " > " else " ▸ "
 	local BULLET = if DISABLE_UNICODE then "-" else "•"
 
-	local PASS_ICON = if DISABLE_EMOJI
-		then pass_bright(if DISABLE_UNICODE then "[PASS]" else "✔")
-		else "✅"
-	local FAIL_ICON = if DISABLE_EMOJI
-		then fail_bright(if DISABLE_UNICODE then "[FAIL]" else "✖")
-		else "❌"
+	local PASS_ICON = if DISABLE_EMOJI then pass_bright(if DISABLE_UNICODE then "[PASS]" else "✔") else "✅"
+	local FAIL_ICON = if DISABLE_EMOJI then fail_bright(if DISABLE_UNICODE then "[FAIL]" else "✖") else "❌"
 
 	local function title(text: string)
 		local no_ansi = text:gsub("\x1b.-m", "")
@@ -165,12 +159,9 @@ local function butler_pretty(options: Options)
 					local line = tostring(err.line or "??")
 					local empty_margin = string.rep(" ", #line + 1) .. dim(MARGIN_LINE)
 
-					local formatted_snippet = syntax(snippet):gsub(
-						"[^\n\r]+[\n\r]",
-						function(line: string)
-							return `{line}{empty_margin} `
-						end
-					)
+					local formatted_snippet = syntax(snippet):gsub("[^\n\r]+[\n\r]", function(line: string)
+						return `{line}{empty_margin} `
+					end)
 
 					table.insert(lines, empty_margin)
 					table.insert(lines, `{trace(line)} {dim(MARGIN_LINE)} {formatted_snippet}`)
@@ -192,10 +183,7 @@ local function butler_pretty(options: Options)
 		-- TOTAL TALLY SECTION
 		local total_tally = units_results.total_tally
 
-		table.insert(
-			lines,
-			title(`{pass(total_tally.pass)} passed, {fail(total_tally.fail)} failed`)
-		)
+		table.insert(lines, title(`{pass(total_tally.pass)} passed, {fail(total_tally.fail)} failed`))
 
 		-- BONUS ITEMS SECTION
 		local line_items = {}

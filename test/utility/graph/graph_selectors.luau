@@ -30,9 +30,7 @@ local function distance(
 					continue
 				end
 
-				local search_set = if kind == "using"
-					then search_target.using
-					else search_target.users
+				local search_set = if kind == "using" then search_target.using else search_target.users
 
 				for other_node in search_set do
 					search_next[other_node] = true

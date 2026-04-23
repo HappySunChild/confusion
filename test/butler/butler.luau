@@ -72,8 +72,7 @@ local function unit(label: string, body: UnitBody): UnitRunner
 				table.insert(remarks, text)
 			end
 
-			local ok, err: Error? =
-				xpcall(run :: ((string) -> ()) -> any?, test_error_handler, remark)
+			local ok, err: Error? = xpcall(run :: ((string) -> ()) -> any?, test_error_handler, remark)
 
 			local test_run_result: TestRunResult = {
 				label = label,

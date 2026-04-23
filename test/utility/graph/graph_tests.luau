@@ -6,8 +6,7 @@ local function validity(...: graph.Validity)
 
 	return function(node: graph.GraphNode): (boolean, string?)
 		if table.find(possibilities, node.validity) == nil then
-			return false,
-				`Node was {node.validity} instead of {table.concat(possibilities, " or ")}`
+			return false, `Node was {node.validity} instead of {table.concat(possibilities, " or ")}`
 		end
 
 		return true, nil

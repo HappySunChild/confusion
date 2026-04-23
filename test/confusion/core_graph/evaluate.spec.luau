@@ -126,8 +126,7 @@ return function(configured: butler.Configured)
 				local targets = graph_selectors.no_connections(graph.all_nodes, "users")
 
 				for _, target in targets do
-					local dependencies =
-						graph_selectors.distance(graph.all_nodes, { target }, "dependency", 1)
+					local dependencies = graph_selectors.distance(graph.all_nodes, { target }, "dependency", 1)
 					evaluate(target)
 
 					local ok, diagnosis = check_graph(dependencies, graph_tests.validity("valid"))
