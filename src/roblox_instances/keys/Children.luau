@@ -90,6 +90,22 @@ local function process_child(
 		if actual_child ~= nil then
 			process_child(actual_child, parent, new_children, new_scopes, old_children, old_scopes)
 		end
+	elseif child_type == "table" and type(child[1]) == "string" then -- DESCRIPTION CASE
+		child = child :: rbx_instances.ChildDescription
+
+		local child_scope = old_scopes[child]
+
+		if child_scope == nil then
+			child_scope = {}
+
+			local new_instance = from_description(child_scope, child, Children)
+
+			process_child(new_instance, parent, new_children, new_scopes, old_children, old_scopes)
+		else
+			old_scopes[child] = nil
+		end
+
+		new_scopes[child] = child_scope
 	elseif cast_to_state(child) ~= nil then -- STATE CASE
 		child = child :: rbx_instances.ChildState
 
@@ -103,22 +119,6 @@ local function process_child(
 			observe_immediate(child_scope, child, function()
 				reconcile(peek(child))
 			end)
-		else
-			old_scopes[child] = nil
-		end
-
-		new_scopes[child] = child_scope
-	elseif child_type == "table" and type(child[1]) == "string" then -- DESCRIPTION CASE
-		child = child :: rbx_instances.ChildDescription
-
-		local child_scope = old_scopes[child]
-
-		if child_scope == nil then
-			child_scope = {}
-
-			local new_instance = from_description(child_scope, child, Children)
-
-			process_child(new_instance, parent, new_children, new_scopes, old_children, old_scopes)
 		else
 			old_scopes[child] = nil
 		end
