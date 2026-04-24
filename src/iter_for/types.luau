@@ -3,13 +3,11 @@ local memory = require("../core_memory/types")
 local state = require("../core_state/types")
 
 export type ComputedPair<IK, IV, OK, OV> = {
-	_input_key: IK,
-	_input_value: IV,
+	input_key: IK,
+	input_value: IV,
 
 	roam_keys: boolean,
 	roam_values: boolean,
-
-	invalidate_pair: (ComputedPair<IK, IV, OK, OV>, new_key: IK, new_value: IV) -> (),
 } & state.StateNode<{ key: OK, value: OV }>
 
 export type ForPairsProcessor<S, IK, IV, OK, OV> = (

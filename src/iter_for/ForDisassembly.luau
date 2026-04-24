@@ -7,7 +7,9 @@ local cleanup = require("../core_memory/cleanup")
 local depend = require("../core_graph/depend")
 local destructor = require("../core_memory/destructor")
 local inner_scope = require("../core_memory/inner_scope")
+local is_similar = require("../core_state/is_similar")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
+local mark_dirty = require("../core_graph/mark_dirty")
 local peek = require("../core_use/peek")
 
 type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {
@@ -16,12 +18,28 @@ type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {
 	_active_pairs: { [IK]: iter_for.ComputedPair<IK, IV, OK, OV> },
 	_pair_scope: memory.Scope<S>,
 
-	_constructor: (
-		memory.Scope<S>,
-		initial_key: IK,
-		initial_value: IV
-	) -> iter_for.ComputedPair<IK, IV, OK, OV>,
+	_constructor: (memory.Scope<S>, initial_key: IK, initial_value: IV) -> iter_for.ComputedPair<IK, IV, OK, OV>,
 }
+
+local function invalidate_pair<IK, IV, OK, OV>(pair: iter_for.ComputedPair<IK, IV, OK, OV>, new_key: IK, new_value: IV)
+	local old_key, old_value = pair.input_key, pair.input_value
+	local output = pair._cached_value
+
+	pair.input_key = new_key
+	pair.input_value = new_value
+
+	if pair.roam_keys then -- is this bad?? observers aren't being fired, but we *may* have meaningfully changed.. (doing this to avoid recomputations)
+		output.key = new_key
+	elseif not is_similar(old_key, new_key) then
+		mark_dirty(pair)
+	end
+
+	if pair.roam_values then
+		output.value = new_value
+	elseif not is_similar(old_value, new_value) then
+		mark_dirty(pair)
+	end
+end
 
 local CLASS = table.freeze({
 	type = "graph",
@@ -62,7 +80,7 @@ local CLASS = table.freeze({
 			end
 		end
 
-		if has_holes and max_array_index > min_array_index then -- this has been broken for HOW LONG??
+		if has_holes and max_array_index > min_array_index then
 			local move_to_index = min_array_index
 
 			for move_from_index = min_array_index, max_array_index do
@@ -83,79 +101,62 @@ local CLASS = table.freeze({
 
 		local pending_pairs = table.clone(peek(self._input_table)) :: { [IK]: IV }
 
-		local old_pairs = self._active_pairs
-		local new_pairs = {}
+		local old_computedpairs = self._active_pairs
+		local new_computedpairs = {}
 
-		for index, pair in old_pairs do
-			old_pairs[index] = nil
+		local unmatched_computedpairs: { iter_for.ComputedPair<IK, IV, OK, OV> } = {}
 
-			local roam_keys, roam_values = pair.roam_keys, pair.roam_values
+		for index, computedpair in old_computedpairs do
+			old_computedpairs[index] = nil
 
-			local can_reuse = false
+			local old_input_key, old_input_value = computedpair.input_key, computedpair.input_value
+			local roam_keys, roam_values = computedpair.roam_keys, computedpair.roam_values
 
-			local old_input_key = pair._input_key
-			local old_input_value = pair._input_value
-
-			local new_input_key: IK
+			local new_input_key: IK, new_input_value: IV
 
 			if not roam_keys and pending_pairs[old_input_key] ~= nil then
-				can_reuse = true
 				new_input_key = old_input_key
+				new_input_value = pending_pairs[old_input_key]
 			else
-				local claimed_values = {}
-
-				if not roam_values then
-					for _, other_pair in old_pairs do
-						claimed_values[other_pair._input_value] = true
-					end
+				if roam_values then
+					table.insert(unmatched_computedpairs, computedpair)
+					continue
 				end
 
 				for pending_key, pending_value in pending_pairs do
-					if
-						-- "predict" that this key is going to be reused by another existing object that is
-						-- expecting it to be available. if it is going to be reused, then don't.
-						not roam_keys and old_pairs[pending_key] ~= nil
-					then
-						continue
-					end
-
-					if
-						-- "selfless" check
-						-- don't use values that are "claimed" by other objects.
-						not roam_values
-						and old_input_value ~= pending_value
-						and claimed_values[pending_value] == true
-					then
-						continue
-					end
-
-					can_reuse = true
-					new_input_key = pending_key
-
-					if roam_values then
-						break
-					end
-
 					if pending_value == old_input_value then
+						new_input_key = pending_key
+						new_input_value = pending_value
 						break
 					end
 				end
+
+				if new_input_key == nil then -- failed to find any available pairs, we should probably be cleaned up
+					table.insert(unmatched_computedpairs, computedpair)
+					continue
+				end
 			end
 
-			-- cleanup pairs that can't be reused
-			if not can_reuse then
-				cleanup(pair.scope)
+			-- "claim" pair and invalidate with new parameters
+			new_computedpairs[new_input_key] = computedpair
+			pending_pairs[new_input_key] = nil
+
+			invalidate_pair(computedpair, new_input_key, new_input_value)
+		end
+
+		for _, computedpair in unmatched_computedpairs do
+			local new_input_key, new_input_value = next(pending_pairs)
+
+			if new_input_key == nil then -- no pending pairs remaining, we should just clean up
+				cleanup(computedpair.scope)
 
 				continue
 			end
 
-			local new_input_value: IV = pending_pairs[new_input_key]
-
+			new_computedpairs[new_input_key] = computedpair
 			pending_pairs[new_input_key] = nil
 
-			-- "claim" pair and invalidate with new parameters
-			new_pairs[new_input_key] = pair
-			pair:invalidate_pair(new_input_key, new_input_value)
+			invalidate_pair(computedpair, new_input_key, new_input_value)
 		end
 
 		local pair_scope = self._pair_scope
@@ -163,10 +164,10 @@ local CLASS = table.freeze({
 
 		-- create new pair objects for any remaining pairs that couldn't be reused.
 		for pending_key, pending_value in pending_pairs do
-			new_pairs[pending_key] = pair_constructor(inner_scope(pair_scope), pending_key, pending_value)
+			new_computedpairs[pending_key] = pair_constructor(inner_scope(pair_scope), pending_key, pending_value)
 		end
 
-		self._active_pairs = new_pairs
+		self._active_pairs = new_computedpairs
 
 		return true
 	end,
