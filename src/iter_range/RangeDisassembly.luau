@@ -12,9 +12,9 @@ local inner_scope = require("../core_memory/inner_scope")
 local peek = require("../core_use/peek")
 
 type Self<S, T> = {
-	_start: state.UsedAs<number>,
-	_finish: state.UsedAs<number>,
-	_step: state.UsedAs<number>,
+	start: state.UsedAs<number>,
+	finish: state.UsedAs<number>,
+	increment: state.UsedAs<number>,
 
 	_pairs_scope: memory.Scope<S>,
 	_current_pairs: { iter_range.RangePair<T> },
@@ -33,9 +33,9 @@ local CLASS = table.freeze({
 		end
 	end,
 	_evaluate = function<S, T>(self: Self<S, T>)
-		depend(self, self._start)
-		depend(self, self._finish)
-		depend(self, self._step)
+		depend(self, self.start)
+		depend(self, self.finish)
+		depend(self, self.increment)
 
 		local ordered_pairs = self._ordered_pairs
 		local cur_pairs = self._current_pairs
@@ -43,7 +43,7 @@ local CLASS = table.freeze({
 
 		table.clear(ordered_pairs)
 
-		for new_index = peek<<number>>(self._start), peek<<number>>(self._finish), peek<<number>>(self._step) do
+		for new_index = peek<<number>>(self.start), peek<<number>>(self.finish), peek<<number>>(self.increment) do
 			-- directly reuse objects that are the same
 			local cur_pair = cur_pairs[new_index]
 
@@ -111,9 +111,9 @@ local function RangeDisassembly<S, T>(
 		users = {},
 		using = {},
 
-		_start = start,
-		_finish = finish,
-		_step = step,
+		start = start,
+		finish = finish,
+		increment = step,
 
 		_ordered_pairs = {},
 		_current_pairs = {},

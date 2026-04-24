@@ -13,7 +13,7 @@ local mark_dirty = require("../core_graph/mark_dirty")
 local parse_error = require("../core_logging/parse_error")
 
 type Self<T, S> = {
-	_inner_scope: memory.Scope<S>,
+	_active_scope: memory.Scope<S>,
 	_processor: iter_range.RangeDisassemblyProcessor<T, S>,
 	_use: state.Use,
 
@@ -43,7 +43,7 @@ local CLASS = table.freeze({
 		local inner_scope = derive_scope(self.scope)
 		local ok, output_value = xpcall(self._processor, parse_error, self._use, inner_scope, self._input_index)
 
-		cleanup(self._inner_scope)
+		cleanup(self._active_scope)
 
 		if not ok then
 			self._cached_value = nil
@@ -55,7 +55,7 @@ local CLASS = table.freeze({
 			return false
 		end
 
-		self._inner_scope = inner_scope
+		self._active_scope = inner_scope
 
 		local old_value = self._cached_value
 
@@ -67,8 +67,8 @@ local CLASS = table.freeze({
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_rangepair<T, S>(rangepair: Self<T, S>)
-	cleanup(rangepair._inner_scope)
-	rangepair._inner_scope = nil
+	cleanup(rangepair._active_scope)
+	rangepair._active_scope = nil
 end
 
 local function RangePair<S, T>(
@@ -87,7 +87,7 @@ local function RangePair<S, T>(
 
 		_input_index = initial_index,
 
-		_inner_scope = nil,
+		_active_scope = nil,
 		_processor = processor,
 	}, CLASS_METATABLE) :: any
 
