@@ -12,10 +12,10 @@ local function lerp_type<T>(a: T, b: T, alpha: number): T
 			local a_vec = vector.create(a.R, a.G, a.B)
 			local b_vec = vector.create(b.R, b.G, b.B)
 
-			local ok_from = Oklab.from_srgb_to_oklab(a_vec)
-			local ok_target = Oklab.from_srgb_to_oklab(b_vec)
+			local ok_from = Oklab.from_srgb(a_vec)
+			local ok_target = Oklab.from_srgb(b_vec)
 
-			local ok_result = Oklab.from_oklab_to_srgb(vector.lerp(ok_from, ok_target, alpha))
+			local ok_result = Oklab.to_srgb(vector.lerp(ok_from, ok_target, alpha))
 
 			return Color3.new(ok_result.x, ok_result.y, ok_result.z)
 		elseif data_type == "Vector3" then

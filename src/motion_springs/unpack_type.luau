@@ -8,7 +8,7 @@ local function unpack_type(value: any): { number }
 	elseif data_type == "vector" then
 		return { value.x, value.y, value.z }
 	elseif data_type == "Color3" then
-		local lab = Oklab.from_srgb_to_oklab(value)
+		local lab = Oklab.from_srgb(value)
 
 		return { lab.x, lab.y, lab.z }
 	elseif data_type == "Vector3" then

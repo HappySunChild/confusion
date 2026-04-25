@@ -6,7 +6,7 @@ local function pack_type(data_type: string, numbers: { number }): unknown
 	elseif data_type == "vector" then
 		return vector.create(numbers[1], numbers[2], numbers[3])
 	elseif data_type == "Color3" then
-		local ok_result = Oklab.from_oklab_to_srgb(vector.create(numbers[1], numbers[2], numbers[3]), false)
+		local ok_result = Oklab.to_srgb(vector.create(numbers[1], numbers[2], numbers[3]))
 
 		return Color3.new(ok_result.x, ok_result.y, ok_result.z)
 	elseif data_type == "Vector3" then
