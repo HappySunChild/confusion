@@ -33,4 +33,18 @@ return table.freeze({
 
 		active_debugger.untrack_scope(scope)
 	end,
+	begin_profile = function(label: string)
+		if active_debugger == nil then
+			return
+		end
+
+		active_debugger.begin_profile(label)
+	end,
+	end_profile = function()
+		if active_debugger == nil then
+			return
+		end
+
+		active_debugger.end_profile()
+	end,
 })
