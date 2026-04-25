@@ -18,7 +18,7 @@ type Self<S, T> = {
 } & pipeline.Chain<S, T>
 
 local CLASS = table.freeze({
-	type = "Pipe",
+	type = "Chain",
 
 	modify = function<S, T>(self: Self<S, T>, processor: (scope: memory.Scope<S>, latent: T) -> any): Self<S, T>
 		self.latent = processor(self.scope, self.latent)
@@ -66,13 +66,13 @@ local CLASS = table.freeze({
 })
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function Pipe<S, T>(scope: memory.Scope<S>, initial_value: state.UsedAs<T>): pipeline.Chain<S, T>
-	local new_pipe: Self<S, T> = setmetatable({
+local function Chain<S, T>(scope: memory.Scope<S>, initial_value: state.UsedAs<T>): pipeline.Chain<S, T>
+	local new_chain: Self<S, T> = setmetatable({
 		scope = inner_scope(scope),
 		latent = initial_value,
 	}, CLASS_METATABLE) :: any
 
-	return new_pipe
+	return new_chain
 end
 
-return Pipe
+return Chain

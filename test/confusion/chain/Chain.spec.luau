@@ -1,4 +1,4 @@
-local Pipe = require("@fusion/pipe/Pipe")
+local Chain = require("@fusion/chain/Chain")
 local cleanup = require("@fusion/core_memory/cleanup")
 
 local butler = require("@butler/butler")
@@ -6,49 +6,49 @@ local butler = require("@butler/butler")
 return function(configured: butler.Configured)
 	local expect = configured.expect
 
-	return configured.unit("Pipe", function(test: butler.Test)
+	return configured.unit("Chain", function(test: butler.Test)
 		test("constructs", function()
 			local scope = {}
-			local pipe = Pipe(scope, nil)
+			local pipe = Chain(scope, nil)
 
 			expect(pipe):to_be_a("table")
-			expect(pipe.type):to_equal("Pipe")
+			expect(pipe.type):to_equal("Chain")
 
 			cleanup(scope)
 		end)
 		test("resolves", function()
 			local scope = {}
-			local pipe = Pipe(scope, "foo")
+			local pipe = Chain(scope, "foo")
 
-			expect(pipe:resolve()):to_equal("foo")
+			expect(pipe.latent):to_equal("foo")
 
 			cleanup(scope)
 		end)
 		test("modify", function()
 			local scope = {}
-			local pipe = Pipe(scope, 0)
+			local pipe = Chain(scope, 0)
 
-			local function incr(current: number)
+			local function incr(_, current: number)
 				return current + 1
 			end
 
-			expect(pipe:resolve()):to_equal(0)
+			expect(pipe.latent):to_equal(0)
 
 			pipe:modify(incr)
-			expect(pipe:resolve()):to_equal(1)
+			expect(pipe.latent):to_equal(1)
 
 			pipe:modify(incr)
-			expect(pipe:resolve()):to_equal(2)
+			expect(pipe.latent):to_equal(2)
 
 			cleanup(scope)
 		end)
 		test("scope", function()
 			local scope = {}
-			local pipe = Pipe(scope, 0)
+			local pipe = Chain(scope, 0)
 
 			local external_count = 0
 
-			local function func(current: any, scope: { any })
+			local function func(scope: { any }, current: any)
 				table.insert(scope, function()
 					external_count += 1
 				end)

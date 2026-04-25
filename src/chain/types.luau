@@ -4,7 +4,7 @@ local state = require("../core_state/types")
 local tweens = require("../motion_tweens/types")
 
 export type Chain<S, T> = {
-	type: "Pipe",
+	type: "Chain",
 
 	latent: T,
 

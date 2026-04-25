@@ -34,6 +34,6 @@ return {
 		require("./confusion/lerp/lerp_type.spec"),
 		require("./confusion/safe/safe.spec"),
 		require("./confusion/context/Contextual.spec"),
-		require("./confusion/pipe/Pipe.spec"),
+		require("./confusion/chain/Chain.spec"),
 	},
 }
