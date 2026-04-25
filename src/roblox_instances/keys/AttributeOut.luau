@@ -16,7 +16,7 @@ local function AttributeOut(attribute: string): rbx_instances.SpecialKey<"Attrib
 			kind = "AttributeOut",
 			stage = "observer",
 			apply = function(scope: memory.Scope, apply_to: Instance, value: state.Value<any>)
-				if xtypeof(value) ~= "State" or value.Kind ~= "Value" then
+				if xtypeof(value) ~= "state" or value.Kind ~= "Value" then
 					log_error(rbx_instances.invalid_out_type, nil, typeof(value))
 				end
 

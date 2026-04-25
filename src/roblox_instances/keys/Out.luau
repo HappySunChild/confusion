@@ -16,7 +16,7 @@ local function Out(property: string): rbx_instances.SpecialKey<"Out">
 			kind = "Out",
 			stage = "observer",
 			apply = function(scope: memory.Scope, apply_to: Instance, value: state.Value<any>)
-				if xtypeof(value) ~= "State" or value.kind ~= "Value" then
+				if xtypeof(value) ~= "state" or value.kind ~= "Value" then
 					log_error(rbx_instances.invalid_out_type, nil, typeof(value))
 				end
 
