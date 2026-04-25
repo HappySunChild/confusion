@@ -9,30 +9,30 @@ export type TweenConstructor = <T>(
 ) -> motion.Motion<T>
 
 export type EasingStyle = {
-	read Out: (number) -> number,
-	read In: (number) -> number,
-	read InOut: (number) -> number,
+	Out: (number) -> number,
+	In: (number) -> number,
+	InOut: (number) -> number,
 }
 
 export type EasingStyles = {
-	read Constant: EasingStyle,
-	read Linear: EasingStyle,
-	read Exponential: EasingStyle,
-	read Circular: EasingStyle,
-	read Sine: EasingStyle,
+	Constant: EasingStyle,
+	Linear: EasingStyle,
+	Exponential: EasingStyle,
+	Circular: EasingStyle,
+	Sine: EasingStyle,
 
-	read Back: EasingStyle,
-	read Elastic: EasingStyle,
+	Back: EasingStyle,
+	Elastic: EasingStyle,
 
-	read Quad: EasingStyle,
-	read Cubic: EasingStyle,
-	read Quart: EasingStyle,
-	read Quint: EasingStyle,
+	Quad: EasingStyle,
+	Cubic: EasingStyle,
+	Quart: EasingStyle,
+	Quint: EasingStyle,
 
-	read create: {
-		read Exponent: (exponent: number) -> EasingStyle,
-		read Overshoot: (amplitude: number) -> EasingStyle,
-		read Elastic: (period: number) -> EasingStyle,
+	create: {
+		Exponent: (exponent: number) -> EasingStyle,
+		Overshoot: (amplitude: number) -> EasingStyle,
+		Elastic: (period: number) -> EasingStyle,
 	},
 }
 
