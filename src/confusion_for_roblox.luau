@@ -96,7 +96,7 @@ type Confusion = {
 	Timer: chrono.TimerConstructor,
 
 	-- Safe
-	Safe: safe.Safe,
+	safe: safe.Safe,
 
 	-- Keyframes
 	Keyframes: keyframes.KeyframesConstructor,
@@ -198,7 +198,7 @@ local confusion_for_roblox = {
 	Timer = require("./chrono/Timer"),
 
 	-- Safe
-	Safe = require("./safe/Safe"),
+	safe = require("./safe/Safe"),
 
 	-- Keyframes
 	Keyframes = require("./keyframes/Keyframes"),
