@@ -1,4 +1,4 @@
-local Safe = require("@fusion/safe/Safe")
+local safe = require("@fusion/safe/safe")
 
 local butler = require("@butler/butler")
 
@@ -7,7 +7,7 @@ return function(configured: butler.Configured)
 
 	return configured.unit("Safe", function(test: butler.Test)
 		test("success", function()
-			local value = Safe({
+			local value = safe({
 				try = function()
 					return 1
 				end,
@@ -19,7 +19,7 @@ return function(configured: butler.Configured)
 			expect(value):to_equal(1)
 		end)
 		test("fallback", function()
-			local value = Safe({
+			local value = safe({
 				try = function()
 					error("TEST ERROR", 0)
 					return 1
@@ -32,7 +32,7 @@ return function(configured: butler.Configured)
 			expect(value):to_equal(0)
 		end)
 		test("fallback error handling", function()
-			local value = Safe({
+			local value = safe({
 				try = function()
 					error("TEST ERROR", 0)
 					return 1
