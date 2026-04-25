@@ -15,6 +15,7 @@
 		"core_memory": "core",
 		"core_use": "core",
 		"async": "temp",
+		"chain": "pipe",
 		"chrono": "temp",
 		"safe": "functions",
 		"roblox_instances": "roblox",
