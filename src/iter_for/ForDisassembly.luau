@@ -21,23 +21,23 @@ type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {
 	_constructor: (memory.Scope<S>, initial_key: IK, initial_value: IV) -> iter_for.ComputedPair<IK, IV, OK, OV>,
 }
 
-local function invalidate_pair<IK, IV, OK, OV>(pair: iter_for.ComputedPair<IK, IV, OK, OV>, new_key: IK, new_value: IV)
-	local old_key, old_value = pair.input_key, pair.input_value
-	local output = pair._cached_value
+local function invalidate_pair<IK, IV, OK, OV>(computedpair: iter_for.ComputedPair<IK, IV, OK, OV>, new_key: IK, new_value: IV)
+	local old_key, old_value = computedpair.input_key, computedpair.input_value
+	local output = computedpair._cached_value
 
-	pair.input_key = new_key
-	pair.input_value = new_value
+	computedpair.input_key = new_key
+	computedpair.input_value = new_value
 
-	if pair.roam_keys then -- is this bad?? observers aren't being fired, but we *may* have meaningfully changed.. (doing this to avoid recomputations)
+	if computedpair.roam_keys then -- is this bad?? observers aren't being fired, but we *may* have meaningfully changed.. (doing this to avoid recomputations)
 		output.key = new_key
 	elseif not is_similar(old_key, new_key) then
-		mark_dirty(pair)
+		mark_dirty(computedpair)
 	end
 
-	if pair.roam_values then
+	if computedpair.roam_values then
 		output.value = new_value
 	elseif not is_similar(old_value, new_value) then
-		mark_dirty(pair)
+		mark_dirty(computedpair)
 	end
 end
 
