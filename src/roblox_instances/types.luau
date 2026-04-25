@@ -10,12 +10,13 @@ export type SpecialKey<T = string> = {
 	apply: (scope: memory.Scope, instance: Instance, value: unknown) -> (),
 }
 
-export type ChildUnresolved = (parent: Instance) -> Child?
-export type ChildMany = { Child }
 export type ChildState = state.StateNode<Child>
-export type Child = Instance | ChildUnresolved | ChildMany | ChildState
+export type ChildUnresolved = (parent: Instance) -> Child?
+export type ChildDescription = { [number | string]: any }
+export type ChildMany = { Child }
+export type Child = Instance | ChildState | ChildUnresolved | ChildDescription | ChildMany
 
-export type Properties = { [any]: any }
+export type Properties = { [string | number | SpecialKey]: any }
 export type Tag = string | { Tag } | state.StateNode<Tag>
 
 export type NewConstructor = (scope: memory.Scope, class_name: string, properties: Properties) -> Instance
@@ -24,6 +25,7 @@ export type HydrateConstructor = <InstanceT>(
 	instance: InstanceT,
 	properties: Properties
 ) -> InstanceT
+export type DescribeConstructor = (scope: memory.Scope, description: ChildDescription) -> Instance
 
 return {
 	cannot_create_class = "Unable to create instance of type '%s'.",
@@ -34,7 +36,7 @@ return {
 	property_assign_error = "Error while setting property:\nERROR_MESSAGE",
 
 	invalid_key_type = "Invalid key type: expected a 'string | SpecialKey' type, but got a '%s' type.",
-	invalid_child_type = "Invalid child type: expected a 'Instance | (Scope, Instance) -> [RECURSE] | { [RECURSE] } | StateNode<[RECURSE]>' type, but got a '%s' type.",
+	invalid_child_type = "Invalid child type: expected a 'Instance | (Instance) -> [RECURSE] | { [RECURSE] } | StateNode<[RECURSE]>' type, but got a '%s' type.",
 	invalid_tag_type = "Invalid tag type: expected a 'string | { [RECURSE] } | StateNode<[RECURSE]>' type, but got a '%s' type.",
 	invalid_ref_type = "Invalid ref type: expected a 'Value' type, but got a '%s' type.",
 	invalid_out_type = "Invalid out type: expected a 'Value' type, but got a '%s' type.",
