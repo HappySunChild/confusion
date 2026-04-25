@@ -13,13 +13,13 @@ return function(configured: butler.Configured)
 			local user_node = GraphNode(scope)
 
 			depend(user_node, 123)
-			expect(next(user_node.using)):to_never_exist()
+			expect(user_node.using):to_be_empty()
 
 			depend(user_node, "foo")
-			expect(next(user_node.using)):to_never_exist()
+			expect(user_node.using):to_be_empty()
 
 			depend(user_node, {})
-			expect(next(user_node.using)):to_never_exist()
+			expect(user_node.using):to_be_empty()
 
 			cleanup(scope)
 		end)

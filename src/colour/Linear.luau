@@ -17,10 +17,10 @@ local function to_srgb(channel: number): number
 end
 
 return table.freeze({
-	from_linear_to_srgb = @native function(rgb: vector): vector
+	to_srgb = @native function(rgb: vector): vector
 		return vector.create(to_srgb(rgb.x), to_srgb(rgb.y), to_srgb(rgb.z))
 	end,
-	from_srgb_to_linear = @native function(srgb: vector): vector
+	from_srgb = @native function(srgb: vector): vector
 		return vector.create(to_linear(srgb.x), to_linear(srgb.y), to_linear(srgb.z))
 	end,
 })

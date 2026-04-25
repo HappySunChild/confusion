@@ -14,18 +14,14 @@ local Tween = require("../motion_tweens/Tween")
 local inner_scope = require("../core_memory/inner_scope")
 
 type Self<S, T> = {
-	latent: state.UsedAs<T>,
 	scope: memory.Scope<S>,
-} & pipeline.Pipe<S, T>
+} & pipeline.Chain<S, T>
 
 local CLASS = table.freeze({
 	type = "Pipe",
 
-	resolve = function<T>(self: Self<any, T>): T
-		return self.latent
-	end,
-	modify = function<S, T>(self: Self<S, T>, processor: (latest: T, scope: memory.Scope<S>) -> any): Self<S, T>
-		self.latent = processor(self.latent, self.scope)
+	modify = function<S, T>(self: Self<S, T>, processor: (scope: memory.Scope<S>, latent: T) -> any): Self<S, T>
+		self.latent = processor(self.scope, self.latent)
 		return self
 	end,
 
@@ -70,7 +66,7 @@ local CLASS = table.freeze({
 })
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function Pipe<S, T>(scope: memory.Scope<S>, initial_value: state.UsedAs<T>): pipeline.Pipe<S, T>
+local function Pipe<S, T>(scope: memory.Scope<S>, initial_value: state.UsedAs<T>): pipeline.Chain<S, T>
 	local new_pipe: Self<S, T> = setmetatable({
 		scope = inner_scope(scope),
 		latent = initial_value,

@@ -1,4 +1,5 @@
 local Oklab = require("../colour/Oklab")
+local oklab_from_srgb, oklab_to_srgb = Oklab.from_srgb, Oklab.to_srgb
 
 local function lerp_type<T>(a: T, b: T, alpha: number): T
 	local data_type = typeof(a)
@@ -9,21 +10,18 @@ local function lerp_type<T>(a: T, b: T, alpha: number): T
 		elseif data_type == "vector" then
 			return vector.lerp(a :: vector, b :: vector, alpha)
 		elseif data_type == "Color3" then
-			local a_vec = vector.create(a.R, a.G, a.B)
-			local b_vec = vector.create(b.R, b.G, b.B)
+			local oklab_from = oklab_from_srgb(vector.create(a.R, a.G, a.B))
+			local oklab_target = oklab_from_srgb(vector.create(b.R, b.G, b.B))
+			local oklab_result =
+				vector.clamp(oklab_to_srgb(vector.lerp(oklab_from, oklab_target, alpha)), vector.zero, vector.one)
 
-			local ok_from = Oklab.from_srgb_to_oklab(a_vec)
-			local ok_target = Oklab.from_srgb_to_oklab(b_vec)
-
-			local ok_result = Oklab.from_oklab_to_srgb(vector.lerp(ok_from, ok_target, alpha))
-
-			return Color3.new(ok_result.x, ok_result.y, ok_result.z)
+			return Color3.new(oklab_result.x, oklab_result.y, oklab_result.z)
 		elseif data_type == "Vector3" then
-			return (a :: Vector3):lerp(b :: Vector3, alpha)
+			return (a :: Vector3):Lerp(b :: Vector3, alpha)
 		elseif data_type == "Vector2" then
-			return (a :: Vector2):lerp(b :: Vector2, alpha)
+			return (a :: Vector2):Lerp(b :: Vector2, alpha)
 		elseif data_type == "CFrame" then
-			return (a :: CFrame):lerp(b :: CFrame, alpha)
+			return (a :: CFrame):Lerp(b :: CFrame, alpha)
 		elseif data_type == "UDim" then
 			return UDim.new(
 				math.lerp((a :: UDim).Scale, (b :: UDim).Scale, alpha),

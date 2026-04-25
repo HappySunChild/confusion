@@ -10,10 +10,10 @@ local state = require("./core_state/types")
 local use = require("./core_use/types")
 
 local async = require("./async/types")
+local chain = require("./chain/types")
 local chrono = require("./chrono/types")
 local context = require("./context/types")
 local keyframes = require("./keyframes/types")
-local pipe = require("./pipe/types")
 local safe = require("./safe/types")
 
 local iter = require("./iter/types")
@@ -50,7 +50,7 @@ export type Contextual<T> = context.Contextual<T>
 
 export type Timer = chrono.Timer
 
-export type Pipe<T, S = unknown> = pipe.Pipe<S, T>
+export type Chain<T, S = unknown> = chain.Chain<S, T>
 
 export type SpecialKey<T = string> = rbx_instances.SpecialKey
 export type Child = rbx_instances.Child
@@ -96,7 +96,7 @@ type Confusion = {
 	Timer: chrono.TimerConstructor,
 
 	-- Safe
-	Safe: safe.Safe,
+	safe: safe.Safe,
 
 	-- Keyframes
 	Keyframes: keyframes.KeyframesConstructor,
@@ -112,8 +112,8 @@ type Confusion = {
 	TweenInfo: motion_tweens.TweenInfoConstructor,
 	easing_styles: motion_tweens.EasingStyles,
 
-	-- Pipeline
-	Pipe: pipe.PipeConstructor,
+	-- Chain
+	Chain: chain.ChainConstructor,
 
 	-- Roblox: Instances
 	New: rbx_instances.NewConstructor,
@@ -199,7 +199,7 @@ local confusion_for_roblox = {
 	Timer = require("./chrono/Timer"),
 
 	-- Safe
-	Safe = require("./safe/Safe"),
+	safe = require("./safe/safe"),
 
 	-- Keyframes
 	Keyframes = require("./keyframes/Keyframes"),
@@ -215,8 +215,8 @@ local confusion_for_roblox = {
 	TweenInfo = require("./motion_tweens/TweenInfo"),
 	easing_styles = require("./motion_tweens/easing_styles"),
 
-	-- Pipe
-	Pipe = require("./pipe/Pipe"),
+	-- Chain
+	Chain = require("./chain/Chain"),
 
 	-- Roblox: Instances
 	New = require("./roblox_instances/New"),

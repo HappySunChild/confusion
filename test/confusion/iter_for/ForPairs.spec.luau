@@ -22,9 +22,7 @@ return function(configured: butler.Configured)
 			local forpairs = ForPairs(scope, data, function(_, _, key, value)
 				return value, key
 			end)
-			expect(peek(forpairs))
-				:to_never_have_keys({ "foo", "baz" })
-				:to_have_pairs({ bar = "foo", qux = "baz" })
+			expect(peek(forpairs)):to_never_have_keys({ "foo", "baz" }):to_have_pairs({ bar = "foo", qux = "baz" })
 			cleanup(scope)
 		end)
 		test("iterates, state", function()
@@ -33,13 +31,9 @@ return function(configured: butler.Configured)
 			local forpairs = ForPairs(scope, data, function(_, _, key, value)
 				return value, key
 			end)
-			expect(peek(forpairs))
-				:to_never_have_keys({ "foo", "baz" })
-				:to_have_pairs({ bar = "foo", qux = "baz" })
+			expect(peek(forpairs)):to_never_have_keys({ "foo", "baz" }):to_have_pairs({ bar = "foo", qux = "baz" })
 			data:set({ zab = "xuq", bar = "oof" })
-			expect(peek(forpairs))
-				:to_never_have_keys({ "bar", "qux" })
-				:to_have_pairs({ xuq = "zab", oof = "bar" })
+			expect(peek(forpairs)):to_never_have_keys({ "bar", "qux" }):to_have_pairs({ xuq = "zab", oof = "bar" })
 			cleanup(scope)
 		end)
 		test("use, constants", function()
@@ -70,21 +64,17 @@ return function(configured: butler.Configured)
 			local data = { foo = "oof", bar = "rab", baz = "zab" }
 			local suffix = Value(scope, "first")
 			local destroyed = {}
-			local forpairs = ForPairs(
-				scope,
-				data,
-				function(use, inner_scope, key: string, value: string)
-					local generated_key = value .. use(suffix)
-					local generated_value = key .. use(suffix)
-					table.insert(inner_scope, function()
-						destroyed[generated_key] = true
-					end)
-					if key == "bar" and use(suffix) == "second" then
-						error("This is an intentional error from a unit test")
-					end
-					return generated_key, generated_value
+			local forpairs = ForPairs(scope, data, function(use, inner_scope, key: string, value: string)
+				local generated_key = value .. use(suffix)
+				local generated_value = key .. use(suffix)
+				table.insert(inner_scope, function()
+					destroyed[generated_key] = true
+				end)
+				if key == "bar" and use(suffix) == "second" then
+					error("This is an intentional error from a unit test")
 				end
-			)
+				return generated_key, generated_value
+			end)
 			expect(peek(forpairs)):to_have_pairs({
 				ooffirst = "foofirst",
 				rabfirst = "barfirst",
@@ -127,33 +117,23 @@ return function(configured: butler.Configured)
 				end
 				return value, key
 			end)
-			expect(peek(forpairs))
-				:to_never_have_keys({ "rab" })
-				:to_have_pairs({ oof = "foo", zab = "baz" })
+			expect(peek(forpairs)):to_never_have_keys({ "rab" }):to_have_pairs({ oof = "foo", zab = "baz" })
 			omit_third:set(true)
-			expect(peek(forpairs))
-				:to_never_have_keys({ "rab", "zab" })
-				:to_have_pairs({ oof = "foo" })
+			expect(peek(forpairs)):to_never_have_keys({ "rab", "zab" }):to_have_pairs({ oof = "foo" })
 			omit_third:set(false)
-			expect(peek(forpairs))
-				:to_never_have_keys({ "rab" })
-				:to_have_pairs({ oof = "foo", zab = "baz" })
+			expect(peek(forpairs)):to_never_have_keys({ "rab" }):to_have_pairs({ oof = "foo", zab = "baz" })
 			cleanup(scope)
 		end)
 		test("cleanup, state change", function()
 			local scope = {}
 			local destructed = {}
 			local data = Value(scope, { foo = "oof", bar = "rab" })
-			local forpairs = ForPairs(
-				scope,
-				data,
-				function(_, inner_scope, key: string, value: string)
-					table.insert(inner_scope, function()
-						destructed[key] = true
-					end)
-					return value, key
-				end
-			)
+			local forpairs = ForPairs(scope, data, function(_, inner_scope, key: string, value: string)
+				table.insert(inner_scope, function()
+					destructed[key] = true
+				end)
+				return value, key
+			end)
 			peek(forpairs)
 			expect(destructed):to_never_have_keys({ "foo", "bar" })
 			data:set({ baz = "zab" })
@@ -165,16 +145,12 @@ return function(configured: butler.Configured)
 			local scope = {}
 			local destructed = {}
 			local data = Value(scope, { foo = "oof", bar = "rab" })
-			local forpairs = ForPairs(
-				scope,
-				data,
-				function(_, inner_scope, key: string, value: string)
-					table.insert(inner_scope, function()
-						destructed[key] = true
-					end)
-					return value, key
-				end
-			)
+			local forpairs = ForPairs(scope, data, function(_, inner_scope, key: string, value: string)
+				table.insert(inner_scope, function()
+					destructed[key] = true
+				end)
+				return value, key
+			end)
 			peek(forpairs)
 			expect(destructed):to_never_have_keys({ "foo", "bar" })
 			cleanup(scope)

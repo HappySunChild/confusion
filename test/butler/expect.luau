@@ -288,10 +288,7 @@ local CLASS = table.freeze({
 
 		return self
 	end,
-	to_never_only_have_keys = function(
-		self: Self<Indexable>,
-		target_keys: { any }
-	): Self<Indexable>
+	to_never_only_have_keys = function(self: Self<Indexable>, target_keys: { any }): Self<Indexable>
 		local a = self.v
 
 		check_usage(can_index(a), ERR_INDEXABLE_TYPE)
@@ -370,10 +367,7 @@ local CLASS = table.freeze({
 
 		return self
 	end,
-	to_never_only_have_values = function(
-		self: Self<Indexable>,
-		target_values: { any }
-	): Self<Indexable>
+	to_never_only_have_values = function(self: Self<Indexable>, target_values: { any }): Self<Indexable>
 		local a = self.v
 
 		check_usage(can_index(a), ERR_INDEXABLE_TYPE)
@@ -384,11 +378,7 @@ local CLASS = table.freeze({
 			end
 		end
 
-		fail(
-			a,
-			`contained only disallowed values: {fmt_repr(target_values)}`,
-			fmt_repr(target_values)
-		)
+		fail(a, `contained only disallowed values: {fmt_repr(target_values)}`, fmt_repr(target_values))
 
 		return self
 	end,
@@ -406,17 +396,17 @@ local CLASS = table.freeze({
 
 		return self
 	end,
-	to_never_have_pairs = function(self: Self<Indexable>, target_pairs: {[any]: any}): Self<Indexable>
+	to_never_have_pairs = function(self: Self<Indexable>, target_pairs: { [any]: any }): Self<Indexable>
 		local a = self.v
-		
+
 		check_usage(can_index(a), ERR_INDEXABLE_TYPE)
-		
+
 		for key, value in target_pairs do
 			if a[key] == value then
 				fail(a, `value at key [{fmt_repr(key)}] == {fmt_repr(value)}`, fmt_repr(target_pairs))
 			end
 		end
-		
+
 		return self
 	end,
 
@@ -447,11 +437,7 @@ local CLASS = table.freeze({
 		return self
 	end,
 
-	to_throw_with = function<A...>(
-		self: Self<Callable<A...>>,
-		message: string,
-		...: A...
-	): Self<Callable<A...>>
+	to_throw_with = function<A...>(self: Self<Callable<A...>>, message: string, ...: A...): Self<Callable<A...>>
 		local f = self.v
 		local ok, err: string = pcall(f, ...)
 
@@ -465,11 +451,7 @@ local CLASS = table.freeze({
 
 		return self
 	end,
-	to_never_throw_with = function<A...>(
-		self: Self<Callable<A...>>,
-		message: string,
-		...: A...
-	): Self<Callable<A...>>
+	to_never_throw_with = function<A...>(self: Self<Callable<A...>>, message: string, ...: A...): Self<Callable<A...>>
 		local f = self.v
 		local ok, err: string = pcall(f, ...)
 
@@ -480,11 +462,7 @@ local CLASS = table.freeze({
 		return self
 	end,
 
-	to_evaluate_to = function<A...>(
-		self: Self<Callable<A...>>,
-		value: unknown,
-		...: A...
-	): Self<Callable<A...>>
+	to_evaluate_to = function<A...>(self: Self<Callable<A...>>, value: unknown, ...: A...): Self<Callable<A...>>
 		local f = self.v
 		local result = f(...)
 
@@ -494,11 +472,7 @@ local CLASS = table.freeze({
 
 		return self
 	end,
-	to_never_evaluate_to = function<A...>(
-		self: Self<Callable<A...>>,
-		value: unknown,
-		...: A...
-	): Self<Callable<A...>>
+	to_never_evaluate_to = function<A...>(self: Self<Callable<A...>>, value: unknown, ...: A...): Self<Callable<A...>>
 		local f = self.v
 		local result = f(...)
 

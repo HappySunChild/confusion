@@ -39,10 +39,7 @@ return function(configured: butler.Configured)
 
 			ExternalLogger.log_warn("warn message")
 			ExternalLogger.log_error_nonfatal("error_nonfatal message")
-			expect(ExternalLogger.log_error):to_never_throw_with(
-				"Expectation not met",
-				"error message"
-			)
+			expect(ExternalLogger.log_error):to_never_throw_with("Expectation not met", "error message")
 
 			expect(log_warn_called):to_equal(true)
 			expect(log_error_called):to_equal(true)

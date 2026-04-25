@@ -39,6 +39,8 @@ return table.freeze({
 		local formatted_message = format_error(message, err, ...)
 
 		active_log_error(formatted_message, 0)
+
+		error(formatted_message, 0) -- fallback error
 	end,
 	log_error_nonfatal = function(message: string, err: logging.Error?, ...: any)
 		local formatted_message = format_error(message, err, ...)
