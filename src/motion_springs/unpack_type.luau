@@ -1,4 +1,5 @@
 local Oklab = require("../colour/Oklab")
+local oklab_from_srgb = Oklab.from_srgb
 
 local function unpack_type(value: any): { number }
 	local data_type = typeof(value)
@@ -8,7 +9,7 @@ local function unpack_type(value: any): { number }
 	elseif data_type == "vector" then
 		return { value.x, value.y, value.z }
 	elseif data_type == "Color3" then
-		local lab = Oklab.from_srgb(value)
+		local lab = oklab_from_srgb(value)
 
 		return { lab.x, lab.y, lab.z }
 	elseif data_type == "Vector3" then
