@@ -9,15 +9,12 @@ local destructor = require("../core_memory/destructor")
 local generic_use = require("../core_use/generic_use")
 local is_similar = require("../core_state/is_similar")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
-local mark_dirty = require("../core_graph/mark_dirty")
 local parse_error = require("../core_logging/parse_error")
 
 type Self<T, S> = {
-	_inner_scope: memory.Scope<S>,
+	_active_scope: memory.Scope<S>,
 	_processor: iter_range.RangeDisassemblyProcessor<T, S>,
 	_use: state.Use,
-
-	_input_index: number,
 } & iter_range.RangePair<T>
 
 local CLASS = table.freeze({
@@ -25,25 +22,15 @@ local CLASS = table.freeze({
 	kind = "RangePair",
 	timeliness = "lazy",
 
-	invalidate_index = function<T, S>(self: Self<T, S>, new_index: number)
-		if is_similar(self._input_index, new_index) then
-			return
-		end
-
-		self._input_index = new_index
-
-		mark_dirty(self)
-	end,
-
 	_evaluate = function<T, S>(self: Self<T, S>)
 		if self.scope == nil then
 			return false
 		end
 
 		local inner_scope = derive_scope(self.scope)
-		local ok, output_value = xpcall(self._processor, parse_error, self._use, inner_scope, self._input_index)
+		local ok, output_value = xpcall(self._processor, parse_error, self._use, inner_scope, self.input_index)
 
-		cleanup(self._inner_scope)
+		cleanup(self._active_scope)
 
 		if not ok then
 			self._cached_value = nil
@@ -55,7 +42,7 @@ local CLASS = table.freeze({
 			return false
 		end
 
-		self._inner_scope = inner_scope
+		self._active_scope = inner_scope
 
 		local old_value = self._cached_value
 
@@ -67,8 +54,8 @@ local CLASS = table.freeze({
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 local function destroy_rangepair<T, S>(rangepair: Self<T, S>)
-	cleanup(rangepair._inner_scope)
-	rangepair._inner_scope = nil
+	cleanup(rangepair._active_scope)
+	rangepair._active_scope = nil
 end
 
 local function RangePair<S, T>(
@@ -85,9 +72,9 @@ local function RangePair<S, T>(
 
 		_cached_value = nil,
 
-		_input_index = initial_index,
+		input_index = initial_index,
 
-		_inner_scope = nil,
+		_active_scope = nil,
 		_processor = processor,
 	}, CLASS_METATABLE) :: any
 

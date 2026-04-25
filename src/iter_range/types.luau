@@ -14,7 +14,7 @@ export type RangeConstructor = (
 ) -> Range | { number }
 
 export type RangePair<T> = {
-	invalidate_index: (RangePair<T>, new_index: number) -> (),
+	input_index: number,
 } & state.StateNode<T>
 
 export type RangeDisassemblyProcessor<S, T> = (use: state.Use, scope: memory.Scope<S>, index: number) -> T
