@@ -62,15 +62,10 @@ end
 local function apply_instance_properties(scope: memory.Scope, instance: Instance, properties: rbx_instances.Properties)
 	local special_key_values: { [rbx_instances.SpecialKey]: any } = {}
 
-	if properties.Parent then
-		special_key_values[Parent] = properties.Parent
-	end
+	special_key_values[Parent] = properties.Parent
+	properties.Parent = nil
 
 	for key, value in properties do
-		if key == "Parent" then
-			continue
-		end
-
 		local key_type = xtypeof(key)
 
 		if key_type == "string" then
