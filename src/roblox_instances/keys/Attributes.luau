@@ -2,13 +2,18 @@ local memory = require("../../core_memory/types")
 local rbx_instances = require("../types")
 local state = require("../../core_state/types")
 
-local observe_immediate = require("../../core_graph/observe_immediate")
+local cast_to_state = require("../../core_state/cast_to_state")
+local observe = require("../../core_graph/observe")
 local peek = require("../../core_use/peek")
 
 local function apply_attribute(scope: memory.Scope, apply_to: Instance, attribute: string, value: state.UsedAs<any>)
-	observe_immediate(scope, value, function()
-		apply_to:SetAttribute(attribute, peek(value))
-	end)
+	apply_to:SetAttribute(attribute, peek(value))
+
+	if cast_to_state(value) ~= nil then
+		observe(function()
+			apply_to:SetAttribute(attribute, peek(value))
+		end)
+	end
 end
 
 return {
