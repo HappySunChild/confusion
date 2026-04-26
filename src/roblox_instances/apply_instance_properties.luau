@@ -62,25 +62,18 @@ end
 local function apply_instance_properties(scope: memory.Scope, instance: Instance, properties: rbx_instances.Properties)
 	local special_key_values: { [rbx_instances.SpecialKey]: any } = {}
 
-	if properties.Parent then
-		special_key_values[Parent] = properties.Parent
-	end
+	special_key_values[Parent] = properties.Parent
+	properties.Parent = nil
 
 	for key, value in properties do
-		if key == "Parent" then
-			continue
-		end
-
 		local key_type = xtypeof(key)
 
 		if key_type == "string" then
 			apply_property(scope, instance, key, value)
 		elseif key_type == "SpecialKey" then
 			special_key_values[key] = value
-		elseif key_type == "number" then -- they're technically allowed, but they don't do anything
-			continue
 		else
-			log_error_nonfatal(rbx_instances.invalid_key_type, nil, key_type)
+			log_error_nonfatal(rbx_instances.invalid_key_type, debug.traceback(), key_type)
 		end
 	end
 
