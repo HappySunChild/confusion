@@ -8,7 +8,7 @@ local peek = require("../../core_use/peek")
 
 return {
 	type = "SpecialKey",
-	kind = "StyleProperties",
+	kind = "StyleRuleProperties",
 	stage = "self",
 	apply = function(scope: memory.Scope, apply_to: StyleRule, properties: { [string]: state.UsedAs<any> })
 		for property, value in properties do
@@ -21,4 +21,4 @@ return {
 			end
 		end
 	end,
-} :: rbx_instances.SpecialKey<"StyleProperties">
+} :: rbx_instances.SpecialKey<"StyleRuleProperties">

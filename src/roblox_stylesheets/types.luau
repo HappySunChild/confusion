@@ -7,6 +7,7 @@ export type StyleSheetProperties = {
 	tokens: { [string]: state.UsedAs<any> }?,
 
 	parent: state.UsedAs<Instance>?,
+	name: state.UsedAs<string>?,
 }
 
 export type StyleSheetConstructor = (scope: memory.Scope, properties: StyleSheetProperties) -> StyleSheet
