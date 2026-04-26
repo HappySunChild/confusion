@@ -3,7 +3,7 @@ local rbx_instances = require("../types")
 
 local cast_to_state = require("../../core_state/cast_to_state")
 local cleanup = require("../../core_memory/cleanup")
-local from_description = require("../from_description")
+local instance_from_description = require("../instance_from_description")
 local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
 local observe_immediate = require("../../core_graph/observe_immediate")
 local peek = require("../../core_use/peek")
@@ -15,7 +15,6 @@ local Children = {
 	type = "SpecialKey",
 	kind = "Children",
 	stage = "descendants",
-	-- define everything except the apply function, this is done so we can access the SpecialKey within the apply function itself
 	apply = nil,
 } :: rbx_instances.SpecialKey<"Children">
 
@@ -98,7 +97,7 @@ local function process_child(
 		if child_scope == nil then
 			child_scope = {}
 
-			local new_instance = from_description(child_scope, child, Children)
+			local new_instance = instance_from_description(child_scope, child, Children)
 
 			process_child(new_instance, parent, new_children, new_scopes, old_children, old_scopes)
 		else

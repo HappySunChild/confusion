@@ -2,7 +2,6 @@ local memory = require("../core_memory/types")
 local rbx_instances = require("./types")
 
 local apply_instance_properties = require("./apply_instance_properties")
-local implicit_merge = require("./implicit_merge")
 local log_error = require("../core_logging/log_error")
 
 local function from_description(
@@ -19,8 +18,7 @@ local function from_description(
 
 	table.insert(scope, new_instance)
 
-	implicit_merge(description, implicit_merge_key)
-	apply_instance_properties(scope, new_instance, description)
+	apply_instance_properties(scope, new_instance, description, implicit_merge_key)
 
 	return new_instance
 end
