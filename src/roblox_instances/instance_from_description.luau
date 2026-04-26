@@ -19,9 +19,7 @@ local function from_description(
 
 	table.insert(scope, new_instance)
 
-	print(description)
 	implicit_numerical_merge(description, implicit_numerical_merge_key)
-	print(description)
 	apply_instance_properties(scope, new_instance, description)
 
 	return new_instance
