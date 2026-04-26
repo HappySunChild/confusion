@@ -59,28 +59,11 @@ local function apply_property(scope: memory.Scope, instance: Instance, property:
 	end
 end
 
-local function apply_instance_properties(
-	scope: memory.Scope,
-	instance: Instance,
-	properties: rbx_instances.Properties,
-	numerical_implicit_key: any?
-)
+local function apply_instance_properties(scope: memory.Scope, instance: Instance, properties: rbx_instances.Properties)
 	local special_key_values: { [rbx_instances.SpecialKey]: any } = {}
 
 	if properties.Parent then
 		special_key_values[Parent] = properties.Parent
-	end
-
-	if numerical_implicit_key ~= nil then
-		local implicit = { properties[numerical_implicit_key] }
-
-		for key, value in properties do
-			if type(key) == "number" then
-				table.insert(implicit, value)
-			end
-		end
-
-		properties[numerical_implicit_key] = implicit
 	end
 
 	for key, value in properties do
@@ -94,10 +77,8 @@ local function apply_instance_properties(
 			apply_property(scope, instance, key, value)
 		elseif key_type == "SpecialKey" then
 			special_key_values[key] = value
-		elseif key_type == "number" then -- they're technically allowed, but they don't do anything
-			continue
 		else
-			log_error_nonfatal(rbx_instances.invalid_key_type, nil, key_type)
+			log_error_nonfatal(rbx_instances.invalid_key_type, debug.traceback(), key_type)
 		end
 	end
 

@@ -2,12 +2,13 @@ local memory = require("../core_memory/types")
 local rbx_instances = require("./types")
 
 local apply_instance_properties = require("./apply_instance_properties")
+local implicit_numerical_merge = require("./implicit_numerical_merge")
 local log_error = require("../core_logging/log_error")
 
 local function from_description(
 	scope: memory.Scope,
 	description: rbx_instances.ChildDescription,
-	implicit_merge_key: any
+	implicit_numerical_merge_key: any
 ): Instance
 	local class_name = table.remove(description, 1)
 	local ok, new_instance = pcall(Instance.new, class_name)
@@ -18,7 +19,10 @@ local function from_description(
 
 	table.insert(scope, new_instance)
 
-	apply_instance_properties(scope, new_instance, description, implicit_merge_key)
+	print(description)
+	implicit_numerical_merge(description, implicit_numerical_merge_key)
+	print(description)
+	apply_instance_properties(scope, new_instance, description)
 
 	return new_instance
 end
