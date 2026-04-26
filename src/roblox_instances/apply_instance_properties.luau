@@ -59,11 +59,28 @@ local function apply_property(scope: memory.Scope, instance: Instance, property:
 	end
 end
 
-local function apply_instance_properties(scope: memory.Scope, instance: Instance, properties: rbx_instances.Properties)
+local function apply_instance_properties(
+	scope: memory.Scope,
+	instance: Instance,
+	properties: rbx_instances.Properties,
+	numerical_implicit_key: any?
+)
 	local special_key_values: { [rbx_instances.SpecialKey]: any } = {}
 
 	if properties.Parent then
 		special_key_values[Parent] = properties.Parent
+	end
+
+	if numerical_implicit_key ~= nil then
+		local implicit = { properties[numerical_implicit_key] }
+
+		for key, value in properties do
+			if type(key) == "number" then
+				table.insert(implicit, value)
+			end
+		end
+
+		properties[numerical_implicit_key] = implicit
 	end
 
 	for key, value in properties do
