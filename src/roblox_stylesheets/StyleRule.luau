@@ -22,6 +22,14 @@ local function StyleRule(scope: memory.Scope, selector: string, properties: { [s
 		end
 	end
 
+	-- implicit stylerule description handling
+	-- TODO: do something like this for Children/Describe, description syntax should be a Describe only thing i feel. also cleans up hacks i did
+	for key, subrule in style_subrules do
+		if type(subrule) == "table" and type(subrule[1]) == "string" then
+			style_subrules[key] = StyleRule(scope, subrule[1], subrule)
+		end
+	end
+
 	apply_instance_properties(scope, new_rule, {
 		Selector = selector,
 		Name = selector,
