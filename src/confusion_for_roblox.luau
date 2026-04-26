@@ -143,7 +143,6 @@ type Confusion = {
 	AttributeOf: rbx_binds.AttributeOfConstructor,
 
 	-- Roblox: Stylesheets
-	-- StyleRule: rbx_stylesheets.StyleRuleConstructor,
 	StyleSheet: rbx_stylesheets.StyleSheetConstructor,
 
 	StyleSheetDerives: rbx_instances.SpecialKey<"StyleSheetDerives">,
@@ -246,7 +245,6 @@ local confusion_for_roblox = {
 	AttributeOf = require("./roblox_binds/AttributeOf"),
 
 	-- Roblox: Stylesheets
-	-- StyleRule = require("./roblox_stylesheets/StyleRule"),
 	StyleSheet = require("./roblox_stylesheets/StyleSheet"),
 
 	StyleSheetDerives = require("./roblox_stylesheets/keys/StyleSheetDerives"),
