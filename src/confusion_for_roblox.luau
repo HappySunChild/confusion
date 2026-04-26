@@ -143,12 +143,12 @@ type Confusion = {
 	AttributeOf: rbx_binds.AttributeOfConstructor,
 
 	-- Roblox: Stylesheets
-	StyleRule: rbx_stylesheets.StyleRuleConstructor,
+	-- StyleRule: rbx_stylesheets.StyleRuleConstructor,
 	StyleSheet: rbx_stylesheets.StyleSheetConstructor,
 
-	StyleDerives: rbx_instances.SpecialKey<"StyleDerives">,
+	StyleSheetDerives: rbx_instances.SpecialKey<"StyleSheetDerives">,
+	StyleRuleProperties: rbx_instances.SpecialKey<"StyleRuleProperties">,
 	StyleLink: rbx_instances.SpecialKey<"StyleLink">,
-	StyleProperties: rbx_instances.SpecialKey<"StyleProperties">,
 	StyleRules: rbx_instances.SpecialKey<"StyleRules">,
 }
 
@@ -246,12 +246,12 @@ local confusion_for_roblox = {
 	AttributeOf = require("./roblox_binds/AttributeOf"),
 
 	-- Roblox: Stylesheets
-	StyleRule = require("./roblox_stylesheets/StyleRule"),
+	-- StyleRule = require("./roblox_stylesheets/StyleRule"),
 	StyleSheet = require("./roblox_stylesheets/StyleSheet"),
 
-	StyleDerives = require("./roblox_stylesheets/keys/StyleDerives"),
+	StyleSheetDerives = require("./roblox_stylesheets/keys/StyleSheetDerives"),
+	StyleRuleProperties = require("./roblox_stylesheets/keys/StyleRuleProperties"),
 	StyleLink = require("./roblox_stylesheets/keys/StyleLink"),
-	StyleProperties = require("./roblox_stylesheets/keys/StyleProperties"),
 	StyleRules = require("./roblox_stylesheets/keys/StyleRules"),
 }
 
