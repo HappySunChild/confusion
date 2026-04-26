@@ -8,7 +8,9 @@ local function implicit_numerical_merge(tbl: { [any]: any }, target_key: any)
 		end
 	end
 
-	tbl[target_key] = merged
+	if #merged > 0 then
+		tbl[target_key] = merged
+	end
 end
 
 return implicit_numerical_merge
