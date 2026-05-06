@@ -1,65 +1,67 @@
-local chrono = require("./types")
+local graph = require("../core_graph/types")
 local memory = require("../core_memory/types")
 
 local ExternalScheduler = require("../core_external/ExternalScheduler")
-local change = require("../core_graph/change")
-local destructor = require("../core_memory/destructor")
+local disconnect_observers = require("../core_graph/disconnect_observers")
+local notify_observers = require("../core_graph/notify_observers")
 
-type Self = chrono.ExternalTime
+local scheduler = require("../core_graph/scheduler")
+local flush = scheduler.flush
 
 local ALL_TIMERS = {}
+local current_time = 0
 
-local CLASS = {
-	type = "state",
-	kind = "ExternalTime",
-	timeliness = "lazy",
-	using = table.freeze({}),
-	_cached_value = ExternalScheduler.get_last_update(),
+local function update_all_timers(now: number)
+	current_time = now
 
-	enable = function(self: Self)
-		ALL_TIMERS[self] = true
-	end,
-	disable = function(self: Self)
-		ALL_TIMERS[self] = nil
-	end,
-	is_enabled = function(self: Self)
-		return ALL_TIMERS[self] ~= nil
-	end,
-	_evaluate = function(self: Self)
-		return true
-	end,
-}
-local CLASS_METATABLE = table.freeze({ __index = CLASS })
+	for update in ALL_TIMERS do
+		update()
+	end
 
-local function destroy_externaltime(externaltime: Self)
-	ALL_TIMERS[externaltime] = nil
+	flush()
 end
 
-local function ExternalTime(scope: memory.Scope): chrono.ExternalTime
-	local new_externaltime = setmetatable({
-		scope = scope,
-		created_at = os.clock(),
-		validity = "valid",
-		users = {},
-	}, CLASS_METATABLE) :: Self
+local function ExternalTime(scope: memory.Scope): graph.getter<number>
+	local observers: graph.ObserverSet = {}
 
-	ALL_TIMERS[new_externaltime] = true
+	local function source(observer: graph.observer?, remove: boolean?)
+		if observer ~= nil then
+			if remove == true then
+				observers[observer] = nil
+			else
+				observers[observer] = true
+			end
 
-	local oldest_task = destructor(new_externaltime, destroy_externaltime)
+			return 0
+		end
 
-	new_externaltime._oldest_task = oldest_task
+		return current_time
+	end
+
+	local function getter(capture: graph.capture?)
+		if capture ~= nil then
+			observers[capture(source)] = true
+		end
+
+		return current_time
+	end
+
+	local function update()
+		notify_observers(observers)
+	end
+
+	ALL_TIMERS[update] = true
+
+	local function oldest_task()
+		disconnect_observers(observers, source)
+		ALL_TIMERS[update] = nil
+	end
 
 	table.insert(scope, oldest_task)
 
-	return new_externaltime
+	return getter
 end
 
-ExternalScheduler.bind_to_update_step(function(now: number)
-	CLASS._cached_value = now
-
-	for timer in ALL_TIMERS do
-		change(timer)
-	end
-end)
+ExternalScheduler.bind_to_update_step(update_all_timers)
 
 return ExternalTime
