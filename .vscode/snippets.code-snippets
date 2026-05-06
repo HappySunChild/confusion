@@ -1,0 +1,20 @@
+{
+	"make_source": {
+		"prefix": ":mksrc",
+		"body": [
+			"local function source(observer: graph.observer?, remove: boolean?)",
+			"\tif observer ~= nil then",
+			"\t\tif remove == true then",
+			"\t\t\tobservers[observer] = nil",
+			"\t\telse",
+			"\t\t\tobservers[observer] = true",
+			"\t\tend",
+			"",
+			"\t\treturn 0",
+			"\tend",
+			"",
+			"\treturn $1",
+			"end",
+		]
+	}
+}
