@@ -1,37 +1,24 @@
 local memory = require("../core_memory/types")
 
-export type Validity =
-	| "busy" -- currently reevaluating
-	| "invalid" -- might need to be reevaluated
-	| "dirty" -- definitely needs to be reevaluated
-	| "valid" -- does not need to be reevaluated
-export type Timeliness = "lazy" | "eager"
+export type Set<T> = { [T]: true }
 
-export type GraphNode = {
-	scope: memory.Scope?,
+export type Validity = "valid" | "invalid" | "busy"
 
-	type: "graph",
-	kind: string?,
+export type observer = (source?) -> ()
+export type source = (observer?, boolean?) -> number
+export type capture = (source) -> observer
 
-	created_at: number,
-	validity: Validity,
-	timeliness: Timeliness,
+export type disconnect = () -> ()
 
-	last_change: number?,
-	last_compute: number?,
-	users: { [GraphNode]: true }, -- aka dependentSet
-	using: { [GraphNode]: true }, -- aka dependencySet
-	_observers: { () -> () }?,
+export type getter<T> = (capture?) -> T
+export type setter<T> = (T) -> ()
 
-	_evaluate: (GraphNode) -> boolean,
-	_oldest_task: () -> (),
-}
+export type UsedAs<T> = T | getter<T>
+export type use = <T>(UsedAs<T>) -> T
 
-export type Observe = (scope: memory.Scope, subject: any, callback: () -> ()) -> (() -> ())?
+export type ObserverCallback = (use) -> ()
+export type ObserverConstructor = (memory.Scope, ObserverCallback) -> disconnect
 
 return {
 	infinite_loop = "Detected an infinite loop. Consider adding an explicit breakpoint to your code to prevent a cyclic dependency.",
-
-	cannot_depend_dependency_frozen = "The user '%s' cannot depend on '%s', because the latter is frozen.",
-	cannot_depend_user_frozen = "The user '%s' cannot depend on '%s', because the former is frozen.",
 }
