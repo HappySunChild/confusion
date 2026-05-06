@@ -1,8 +1,8 @@
 export type Scope<T = any> = { any } & T
 
-export type Cleanup = (any?) -> ()
-export type Scoped = <T, M>(base: T, methods: M?) -> Scope<T & M>
-export type Insert = <Tasks...>(scope: Scope, Tasks...) -> Tasks...
+export type cleanup = (any?) -> ()
+export type scoped = <T, M>(base: T, methods: M?) -> Scope<T & M>
+export type insert = <Tasks...>(scope: Scope, Tasks...) -> Tasks...
 
 return {
 	use_after_destroy = "%s is no longer valid - it was destroyed before %s.",
