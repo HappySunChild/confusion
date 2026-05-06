@@ -1,5 +1,5 @@
+local graph = require("../core_graph/types")
 local memory = require("../core_memory/types")
-local state = require("../core_state/types")
 
 export type SpecialKeyStage = | "self" | "descendants" | "properties" | "ancestor" | "observer" | "last"
 
@@ -10,14 +10,14 @@ export type SpecialKey<T = string> = {
 	apply: (scope: memory.Scope, instance: Instance, value: unknown) -> (),
 }
 
-export type ChildState = state.StateNode<Child>
+export type ChildState = graph.getter<Child>
 export type ChildUnresolved = (parent: Instance) -> Child?
 export type ChildDescription = { [number | string]: any }
 export type ChildMany = { Child }
 export type Child = Instance | ChildState | ChildUnresolved | ChildDescription | ChildMany
 
 export type Properties = { [string | number | SpecialKey]: any }
-export type Tag = string | { Tag } | state.StateNode<Tag>
+export type Tag = string | { Tag } | graph.getter<Tag>
 
 export type NewConstructor = (scope: memory.Scope, class_name: string, properties: Properties) -> Instance
 export type HydrateConstructor = <InstanceT>(

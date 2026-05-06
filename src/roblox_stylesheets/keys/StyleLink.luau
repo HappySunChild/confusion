@@ -1,6 +1,6 @@
+local graph = require("../../core_graph/types")
 local memory = require("../../core_memory/types")
 local rbx_instances = require("../../roblox_instances/types")
-local state = require("../../core_state/types")
 
 local apply_instance_properties = require("../../roblox_instances/apply_instance_properties")
 
@@ -8,7 +8,7 @@ return {
 	type = "SpecialKey",
 	kind = "StyleLink",
 	stage = "descendants",
-	apply = function(scope: memory.Scope, apply_to: Instance, style: state.UsedAs<StyleSheet>)
+	apply = function(scope: memory.Scope, apply_to: Instance, style: graph.UsedAs<StyleSheet>)
 		local link = Instance.new("StyleLink")
 
 		apply_instance_properties(scope, link, {

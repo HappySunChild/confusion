@@ -1,23 +1,21 @@
+local graph = require("../../core_graph/types")
 local memory = require("../../core_memory/types")
 local rbx_instances = require("../../roblox_instances/types")
-local state = require("../../core_state/types")
 
-local cast_to_state = require("../../core_state/cast_to_state")
-local observe = require("../../core_graph/observe")
-local peek = require("../../core_use/peek")
+local Observer = require("../../core_graph/Observer")
 
 return {
 	type = "SpecialKey",
 	kind = "StyleRuleProperties",
 	stage = "self",
-	apply = function(scope: memory.Scope, apply_to: StyleRule, properties: { [string]: state.UsedAs<any> })
+	apply = function(scope: memory.Scope, apply_to: StyleRule, properties: { [string]: graph.UsedAs<any> })
 		for property, value in properties do
-			apply_to:SetProperty(property, peek(value))
-
-			if cast_to_state(value) ~= nil then
-				observe(scope, value, function()
-					apply_to:SetProperty(property)
+			if type(value) == "function" then
+				Observer(scope, function(use: graph.use)
+					apply_to:SetProperty(property, use(value))
 				end)
+			else
+				apply_to:SetProperty(property, value)
 			end
 		end
 	end,

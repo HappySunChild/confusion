@@ -1,12 +1,11 @@
+local graph = require("../../core_graph/types")
 local memory = require("../../core_memory/types")
 local rbx_instances = require("../types")
 
-local cast_to_state = require("../../core_state/cast_to_state")
+local Observer = require("../../core_graph/Observer")
 local cleanup = require("../../core_memory/cleanup")
 local instance_from_description = require("../instance_from_description")
 local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
-local observe_immediate = require("../../core_graph/observe_immediate")
-local peek = require("../../core_use/peek")
 
 type ChildrenSet = { [Instance]: true }
 type ChildrenScopes = { [rbx_instances.Child]: memory.Scope }
@@ -81,14 +80,33 @@ local function process_child(
 
 		new_children[child] = true
 		old_children[child] = nil
-	elseif child_type == "function" then -- UNRESOLVED CASE
-		child = child :: rbx_instances.ChildUnresolved
+	elseif child_type == "function" then -- STATE CASE
+		child = child :: rbx_instances.ChildState
 
-		local actual_child = child(parent)
+		local child_scope = old_scopes[child]
 
-		if actual_child ~= nil then
-			process_child(actual_child, parent, new_children, new_scopes, old_children, old_scopes)
+		if child_scope == nil then
+			child_scope = {}
+
+			local reconcile = create_reconciler(child_scope, parent, process_child)
+
+			Observer(child_scope, function(use: graph.use)
+				reconcile(use(child))
+			end)
+		else
+			old_scopes[child] = nil
 		end
+
+		new_scopes[child] = child_scope
+		-- TODO: figure out a workaround for this
+		-- elseif child_type == "function" then -- UNRESOLVED CASE
+		-- 	child = child :: rbx_instances.ChildUnresolved
+
+		-- 	local actual_child = child(parent)
+
+		-- 	if actual_child ~= nil then
+		-- 		process_child(actual_child, parent, new_children, new_scopes, old_children, old_scopes)
+		-- 	end
 	elseif child_type == "table" and type(child[1]) == "string" then -- DESCRIPTION CASE
 		child = child :: rbx_instances.ChildDescription
 
@@ -100,24 +118,6 @@ local function process_child(
 			local new_instance = instance_from_description(child_scope, child, Children)
 
 			process_child(new_instance, parent, new_children, new_scopes, old_children, old_scopes)
-		else
-			old_scopes[child] = nil
-		end
-
-		new_scopes[child] = child_scope
-	elseif cast_to_state(child) ~= nil then -- STATE CASE
-		child = child :: rbx_instances.ChildState
-
-		local child_scope = old_scopes[child]
-
-		if child_scope == nil then
-			child_scope = {}
-
-			local reconcile = create_reconciler(child_scope, parent, process_child)
-
-			observe_immediate(child_scope, child, function()
-				reconcile(peek(child))
-			end)
 		else
 			old_scopes[child] = nil
 		end

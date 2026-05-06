@@ -1,17 +1,15 @@
+local graph = require("../../core_graph/types")
 local rbx_instances = require("../types")
-local state = require("../../core_state/types")
 
 local log_error = require("../../core_logging/log_error")
-local xtypeof = require("../../core_graph/xtypeof")
 
 type OneOrMore<T> = T | { T }
 
-local function process_ref(instance: Instance, ref: OneOrMore<state.Value<Instance>>)
-	local ref_type = xtypeof(ref)
+local function process_ref(instance: Instance, ref: OneOrMore<graph.setter<Instance>>)
+	local ref_type = type(ref)
 
-	if ref_type == "state" and ref.kind == "Value" then
-		ref = ref :: state.Value<Instance>
-		ref:set(instance)
+	if ref_type == "function" then
+		ref(instance)
 
 		return
 	elseif ref_type == "table" then
@@ -29,7 +27,7 @@ return {
 	type = "SpecialKey",
 	kind = "Refs",
 	stage = "self",
-	apply = function(scope, apply_to: Instance, root_ref: OneOrMore<state.Value<Instance>>)
+	apply = function(scope, apply_to: Instance, root_ref: OneOrMore<graph.setter<Instance>>)
 		process_ref(apply_to, root_ref)
 	end,
 }

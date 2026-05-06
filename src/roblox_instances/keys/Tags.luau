@@ -1,12 +1,10 @@
+local graph = require("../../core_graph/types")
 local memory = require("../../core_memory/types")
 local rbx_instances = require("../types")
-local state = require("../../core_state/types")
 
-local cast_to_state = require("../../core_state/cast_to_state")
+local Observer = require("../../core_graph/Observer")
 local cleanup = require("../../core_memory/cleanup")
 local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
-local observe_immediate = require("../../core_graph/observe_immediate")
-local peek = require("../../core_use/peek")
 
 type TagsSet = { [string]: true }
 type TagsScopes = { [rbx_instances.Tag]: memory.Scope }
@@ -73,8 +71,8 @@ local function process_tag(
 
 		new_tags[tag] = true
 		old_tags[tag] = nil
-	elseif cast_to_state(tag) ~= nil then -- STATE CASE
-		tag = tag :: state.StateNode<rbx_instances.Tag>
+	elseif tag_type == "function" then -- STATE CASE
+		tag = tag :: graph.getter<rbx_instances.Tag>
 
 		local tag_scope = old_scopes[tag]
 
@@ -83,8 +81,8 @@ local function process_tag(
 
 			local reconcile = create_reconciler(tag_scope, apply_to, process_tag)
 
-			observe_immediate(tag_scope, tag, function()
-				reconcile(peek(tag))
+			Observer(tag_scope, function(use: graph.use)
+				reconcile(use(tag))
 			end)
 		else
 			old_scopes[tag] = nil

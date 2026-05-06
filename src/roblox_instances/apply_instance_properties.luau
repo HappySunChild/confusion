@@ -1,15 +1,13 @@
+local graph = require("../core_graph/types")
 local memory = require("../core_memory/types")
 local rbx_instances = require("./types")
-local state = require("../core_state/types")
 
+local Observer = require("../core_graph/Observer")
 local Parent = require("./keys/Parent")
-local cast_to_state = require("../core_state/cast_to_state")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
-local observe = require("../core_graph/observe")
 local parse_error = require("../core_logging/parse_error")
-local peek = require("../core_use/peek")
 local sort_keys = require("./sort_keys")
-local xtypeof = require("../core_graph/xtypeof")
+local xtypeof = require("./xtypeof")
 
 local function raw_set_property(instance: Instance, property: string, value: any)
 	instance[property] = value
@@ -49,13 +47,13 @@ local function set_property(instance: Instance, property: string, value: any)
 	end
 end
 
-local function apply_property(scope: memory.Scope, instance: Instance, property: string, value: state.UsedAs<any>)
-	set_property(instance, property, peek(value))
-
-	if cast_to_state(value) ~= nil then
-		observe(scope, value, function()
-			set_property(instance, property, peek(value))
+local function apply_property(scope: memory.Scope, instance: Instance, property: string, value: graph.UsedAs<any>)
+	if type(value) == "function" then
+		Observer(scope, function(use: graph.use)
+			set_property(instance, property, use(value))
 		end)
+	else
+		set_property(instance, property, value)
 	end
 end
 

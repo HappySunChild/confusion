@@ -1,5 +1,5 @@
 local memory = require("../core_memory/types")
-local state = require("../core_state/types")
+local state = require("../core_calc/types")
 
 export type StyleRuleDescription = {
 	[string | number]: any,

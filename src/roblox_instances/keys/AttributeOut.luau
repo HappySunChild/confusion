@@ -1,9 +1,8 @@
+local graph = require("../../core_graph/types")
 local memory = require("../../core_memory/types")
 local rbx_instances = require("../types")
-local state = require("../../core_state/types")
 
 local log_error = require("../../core_logging/log_error")
-local xtypeof = require("../../core_graph/xtypeof")
 
 local KEY_CACHE = {}
 
@@ -15,9 +14,12 @@ local function AttributeOut(attribute: string): rbx_instances.SpecialKey<"Attrib
 			type = "SpecialKey",
 			kind = "AttributeOut",
 			stage = "observer",
-			apply = function(scope: memory.Scope, apply_to: Instance, value: state.Value<any>)
-				if xtypeof(value) ~= "state" or value.Kind ~= "Value" then
-					log_error(rbx_instances.invalid_out_type, nil, typeof(value))
+			apply = function(scope: memory.Scope, apply_to: Instance, set_value: graph.setter<any>)
+				-- if xtypeof(set_value) ~= "state" or set_value.Kind ~= "Value" then
+				-- 	log_error(rbx_instances.invalid_out_type, nil, typeof(set_value))
+				-- end
+				if type(set_value) ~= "function" then
+					log_error(rbx_instances.invalid_out_type, nil, type(set_value))
 				end
 
 				local event = apply_to:GetAttributeChangedSignal(attribute)
@@ -25,7 +27,7 @@ local function AttributeOut(attribute: string): rbx_instances.SpecialKey<"Attrib
 				table.insert(
 					scope,
 					event:Connect(function()
-						value:set(apply_to:GetAttribute(attribute))
+						set_value(apply_to:GetAttribute(attribute))
 					end)
 				)
 
