@@ -1,11 +1,11 @@
 local graph = require("./types")
 
-local function schedule_observers(observers: graph.Set<graph.observer>)
-	for observer in observers do
+local function notify_observers(observer_set: graph.Set<graph.observer>)
+	for observer in observer_set do
 		observer()
 	end
 
-	table.clear(observers)
+	table.clear(observer_set)
 end
 
-return schedule_observers
+return notify_observers

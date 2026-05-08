@@ -15,13 +15,13 @@ local function Observer(scope: memory.Scope, callback: graph.ObserverCallback)
 	local is_scheduled: boolean = false
 	local cached_version: number = -1
 
-	local sources: graph.Set<graph.source> = {}
+	local source_set: graph.Set<graph.source> = {}
 
 	local evaluate = nil -- pretty horrific forwards declaration, oh well
 
 	local function observer(source: graph.source?)
 		if source ~= nil then
-			sources[source] = nil
+			source_set[source] = nil
 			return
 		end
 
@@ -33,7 +33,7 @@ local function Observer(scope: memory.Scope, callback: graph.ObserverCallback)
 		schedule(evaluate)
 	end
 
-	local use = make_use(make_capture(sources, observer))
+	local use = make_use(make_capture(source_set, observer))
 
 	function evaluate()
 		if is_disconnected then
@@ -45,11 +45,11 @@ local function Observer(scope: memory.Scope, callback: graph.ObserverCallback)
 		local should_recompute = is_outdated(cached_version, source_set)
 
 		if not should_recompute then
-			maintain_sources(sources, observer)
+			maintain_sources(source_set, observer)
 			return
 		end
 
-		disconnect_sources(sources, observer)
+		disconnect_sources(source_set, observer)
 		cached_version = os.clock()
 		callback(use)
 	end
@@ -60,13 +60,13 @@ local function Observer(scope: memory.Scope, callback: graph.ObserverCallback)
 		end
 
 		is_disconnected = true
-		disconnect_sources(sources, observer)
+		disconnect_sources(source_set, observer)
 	end
 
 	evaluate()
 
 	local function oldest_task()
-		disconnect_sources(sources, observer)
+		disconnect_sources(source_set, observer)
 		disconnect()
 	end
 

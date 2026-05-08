@@ -11,14 +11,14 @@ local function Value<T>(scope: memory.Scope, initial_value: T): (graph.getter<T>
 	local cached_version = -1
 	local cached_value: T = initial_value
 
-	local observers: graph.Set<graph.observer> = {}
+	local observer_set: graph.Set<graph.observer> = {}
 
 	local function source(observer: graph.observer?, remove: boolean?)
 		if observer ~= nil then
 			if remove == true then
-				observers[observer] = nil
+				observer_set[observer] = nil
 			else
-				observers[observer] = true
+				observer_set[observer] = true
 			end
 
 			return 0
@@ -29,7 +29,7 @@ local function Value<T>(scope: memory.Scope, initial_value: T): (graph.getter<T>
 
 	local function getter(other_capture: graph.capture?): T
 		if other_capture ~= nil then
-			observers[other_capture(source)] = true
+			observer_set[capture(source)] = true
 		end
 
 		return cached_value
@@ -43,12 +43,12 @@ local function Value<T>(scope: memory.Scope, initial_value: T): (graph.getter<T>
 		cached_version = os.clock()
 		cached_value = new_value
 
-		notify_observers(observers)
+		notify_observers(observer_set)
 		flush()
 	end
 
 	local function oldest_task()
-		disconnect_observers(observers, source)
+		disconnect_observers(observer_set, source)
 	end
 
 	table.insert(scope, oldest_task)

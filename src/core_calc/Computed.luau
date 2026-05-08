@@ -23,12 +23,13 @@ local function Computed<S, T>(scope: memory.Scope<S>, processor: state.ComputedP
 	local cached_value: T? = nil
 	local active_scope: memory.Scope<S>? = nil
 
-	local observers: graph.Set<graph.observer> = {}
-	local sources: graph.Set<graph.source> = {}
+	local observer_set: graph.Set<graph.observer> = {}
+	local source_set: graph.Set<graph.source> = {}
 
-	local function observer(source: graph.source?)
-		if source ~= nil then
-			sources[source] = nil
+	local function observer(disconnect_source: graph.source?)
+		if disconnect_source ~= nil then
+			source_set[disconnect_source] = nil
+
 			return
 		end
 
@@ -37,10 +38,10 @@ local function Computed<S, T>(scope: memory.Scope<S>, processor: state.ComputedP
 		end
 
 		validity = "invalid"
-		notify_observers(observers)
+		notify_observers(observer_set)
 	end
 
-	local use = make_use(make_capture(sources, observer))
+	local use = make_use(make_capture(source_set, observer))
 
 	local function evaluate()
 		if validity == "busy" then
@@ -54,12 +55,13 @@ local function Computed<S, T>(scope: memory.Scope<S>, processor: state.ComputedP
 			validity = "valid"
 
 			maintain_sources(sources, observer)
+			maintain_sources(source_set, observer)
 			return
 		end
 
 		validity = "busy"
 
-		disconnect_sources(sources, observer)
+		disconnect_sources(source_set, observer)
 
 		local computation_scope = derive_scope(scope)
 		local ok, new_value = xpcall(processor, parse_error, use, computation_scope)
@@ -89,9 +91,9 @@ local function Computed<S, T>(scope: memory.Scope<S>, processor: state.ComputedP
 	local function source(observer: graph.observer?, remove: boolean?)
 		if observer ~= nil then
 			if remove == true then
-				observers[observer] = nil
+				observer_set[observer] = nil
 			else
-				observers[observer] = true
+				observer_set[observer] = true
 			end
 
 			return 0
@@ -106,15 +108,15 @@ local function Computed<S, T>(scope: memory.Scope<S>, processor: state.ComputedP
 		evaluate()
 
 		if other_capture ~= nil then
-			observers[other_capture(source)] = true
+			observer_set[other_capture(source)] = true
 		end
 
 		return cached_value
 	end
 
 	local function oldest_task()
-		disconnect_sources(sources, observer)
-		disconnect_observers(observers, source)
+		disconnect_observers(observer_set, source)
+		disconnect_sources(source_set, observer)
 		cleanup(active_scope)
 	end
 
