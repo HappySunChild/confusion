@@ -78,12 +78,14 @@ local function Computed<S, T>(scope: memory.Scope<S>, processor: state.ComputedP
 
 		cleanup(active_scope)
 
+		local similar = is_similar(new_value, cached_value)
+
 		cached_value = new_value
 		active_scope = computation_scope
 
 		absolute_version = os.clock()
 
-		if not is_similar(new_value, cached_value) then
+		if not similar then
 			cached_version = os.clock()
 		end
 	end
