@@ -1,93 +1,77 @@
-local chrono = require("./types")
+local graph = require("../core_graph/types")
 local memory = require("../core_memory/types")
 
 local ExternalTime = require("./ExternalTime")
+local make_capture = require("../core_graph/make_capture")
+local make_getter = require("../core_graph/make_getter")
+local notify_observers = require("../core_graph/notify_observers")
 
-local change = require("../core_graph/change")
-local depend = require("../core_graph/depend")
-local destructor = require("../core_memory/destructor")
-local peek = require("../core_use/peek")
+local function Timer(scope: memory.Scope): (graph.usegetter<number>, () -> ())
+	local is_valid = false
+	local reference_point = os.clock()
+	local cached_version: number = -1
+	local cached_value: number = 0
 
-type Self = {
-	_timer: chrono.ExternalTime,
-} & chrono.Timer
+	local now = ExternalTime(scope)
 
-local CLASS = table.freeze({
-	type = "state",
-	kind = "Timer",
-	timeliness = "lazy",
+	local observers: graph.Set<graph.observer> = {}
+	local sources: graph.Set<graph.source> = {}
 
-	unpause = function(self: Self)
-		if not self.is_paused then
+	local function observer()
+		if not is_valid then
 			return
 		end
 
-		self._timer:enable()
-		self.reference_point = peek(self._timer) - self._cached_value
-		self.is_paused = false
+		is_valid = false
+		notify_observers(observers)
+	end
 
-		change(self)
-	end,
-	pause = function(self: Self)
-		if self.is_paused then
+	local capture = make_capture(sources, observer)
+
+	local function evaluate()
+		if is_valid then
 			return
 		end
 
-		self._timer:disable()
-		self.is_paused = true
+		is_valid = true
 
-		change(self)
-	end,
-	zero = function(self: Self)
-		self.reference_point = peek(self._timer) :: number
-		self._cached_value = 0
+		cached_version = os.clock()
+		cached_value = now(capture) - reference_point
+	end
 
-		change(self)
-	end,
+	local function source(observer: graph.observer?, remove: boolean?)
+		if observer ~= nil then
+			if remove == true then
+				observers[observer] = nil
+			else
+				observers[observer] = true
+			end
 
-	_evaluate = function(self: Self)
-		if self.is_paused then
-			return false
+			return 0
 		end
 
-		depend(self, self._timer)
+		evaluate()
 
-		local now = peek(self._timer) :: number
+		return cached_version
+	end
 
-		local old_value = self._cached_value
-		local new_value = now - self.reference_point
+	local function rawgetter(other_capture: graph.capture?)
+		if other_capture ~= nil then
+			observers[other_capture(source)] = true
+		end
 
-		self._cached_value = new_value
+		evaluate()
 
-		return old_value ~= new_value
-	end,
-})
-local CLASS_METATABLE = table.freeze({ __index = CLASS })
+		return cached_value
+	end
 
-local function Timer(scope: memory.Scope): chrono.Timer
-	local externaltime = ExternalTime(scope)
-	local new_timer = setmetatable({
-		scope = scope,
-		created_at = os.clock(),
-		validity = "valid",
-		using = {},
-		users = {},
-		_cached_value = 0,
+	local function zero()
+		reference_point = os.clock()
 
-		is_paused = false,
-		reference_point = peek(externaltime),
+		notify_observers(observers)
+	end
 
-		_timer = externaltime,
-	}, CLASS_METATABLE) :: Self
-
-	local oldest_task = destructor(new_timer)
-	new_timer._oldest_task = oldest_task
-
-	table.insert(scope, oldest_task)
-
-	depend(new_timer, externaltime)
-
-	return new_timer
+	return make_getter(rawgetter), zero
 end
 
 return Timer
