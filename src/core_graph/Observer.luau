@@ -7,6 +7,9 @@ local maintain_sources = require("./maintain_sources")
 local make_capture = require("./make_capture")
 local make_use = require("../core_use/make_use")
 
+local ExternalScheduler = require("../core_external/ExternalScheduler")
+local do_task_immediate = ExternalScheduler.do_task_immediate
+
 local scheduler = require("./scheduler")
 local schedule = scheduler.schedule
 
@@ -51,7 +54,8 @@ local function Observer(scope: memory.Scope, callback: graph.ObserverCallback)
 
 		disconnect_sources(source_set, observer)
 		cached_version = os.clock()
-		callback(use)
+
+		do_task_immediate(callback, use)
 	end
 
 	local function disconnect()
