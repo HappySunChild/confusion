@@ -4,16 +4,17 @@ export type Set<T> = { [T]: true }
 
 export type Validity = "valid" | "invalid" | "busy"
 
-export type observer = (source?) -> ()
-export type source = (observer?, boolean?) -> number
-export type capture = (source) -> observer
+export type observer = (disconnect_source: source?) -> ()
+export type source = (target: observer?, remove: boolean?) -> number
+export type capture = (using: source) -> observer
 
 export type disconnect = () -> ()
 
-export type getter<T> = (capture?) -> T
+export type usegetter<T> = { type: "getter", raw: rawgetter<T> }
+export type rawgetter<T> = (capture: capture?) -> T
 export type setter<T> = (T) -> ()
 
-export type UsedAs<T> = T | getter<T>
+export type UsedAs<T> = T | usegetter<T>
 export type use = <T>(UsedAs<T>) -> T
 
 export type ObserverCallback = (use) -> ()

@@ -2,12 +2,13 @@ local graph = require("../core_graph/types")
 local memory = require("../core_memory/types")
 
 local disconnect_observers = require("../core_graph/disconnect_observers")
+local make_getter = require("../core_graph/make_getter")
 local notify_observers = require("../core_graph/notify_observers")
 
 local scheduler = require("../core_graph/scheduler")
 local flush = scheduler.flush
 
-local function Value<T>(scope: memory.Scope, initial_value: T): (graph.getter<T>, graph.setter<T>)
+local function Value<T>(scope: memory.Scope, initial_value: T): (graph.usegetter<T>, graph.setter<T>)
 	local cached_version = -1
 	local cached_value: T = initial_value
 
@@ -27,8 +28,8 @@ local function Value<T>(scope: memory.Scope, initial_value: T): (graph.getter<T>
 		return cached_version
 	end
 
-	local function getter(other_capture: graph.capture?): T
-		if other_capture ~= nil then
+	local function rawgetter(capture: graph.capture?): T
+		if capture ~= nil then
 			observer_set[capture(source)] = true
 		end
 
@@ -53,7 +54,7 @@ local function Value<T>(scope: memory.Scope, initial_value: T): (graph.getter<T>
 
 	table.insert(scope, oldest_task)
 
-	return getter, setter
+	return make_getter(rawgetter), setter
 end
 
 return Value

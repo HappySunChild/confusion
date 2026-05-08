@@ -12,11 +12,12 @@ local log_error = require("../core_logging/log_error")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local maintain_sources = require("../core_graph/maintain_sources")
 local make_capture = require("../core_graph/make_capture")
+local make_getter = require("../core_graph/make_getter")
 local make_use = require("../core_use/make_use")
 local notify_observers = require("../core_graph/notify_observers")
 local parse_error = require("../core_logging/parse_error")
 
-local function Computed<S, T>(scope: memory.Scope<S>, processor: state.ComputedProcessor<S, T>): graph.getter<T>
+local function Computed<S, T>(scope: memory.Scope<S>, processor: state.ComputedProcessor<S, T>): graph.usegetter<T>
 	local validity: graph.Validity = "invalid"
 	local absolute_version: number = -1
 	local cached_version: number = -1
@@ -54,7 +55,6 @@ local function Computed<S, T>(scope: memory.Scope<S>, processor: state.ComputedP
 		if not should_recompute then
 			validity = "valid"
 
-			maintain_sources(sources, observer)
 			maintain_sources(source_set, observer)
 			return
 		end
@@ -106,7 +106,7 @@ local function Computed<S, T>(scope: memory.Scope<S>, processor: state.ComputedP
 		return cached_version
 	end
 
-	local function getter(other_capture: graph.capture?)
+	local function rawgetter(other_capture: graph.capture?)
 		evaluate()
 
 		if other_capture ~= nil then
@@ -124,7 +124,7 @@ local function Computed<S, T>(scope: memory.Scope<S>, processor: state.ComputedP
 
 	table.insert(scope, oldest_task)
 
-	return getter
+	return make_getter(rawgetter)
 end
 
 return Computed
