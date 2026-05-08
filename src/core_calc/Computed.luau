@@ -2,11 +2,11 @@ local graph = require("../core_graph/types")
 local memory = require("../core_memory/types")
 local state = require("./types")
 
-local check_outdated = require("../core_graph/check_outdated")
 local cleanup = require("../core_memory/cleanup")
 local derive_scope = require("../core_memory/derive_scope")
 local disconnect_observers = require("../core_graph/disconnect_observers")
 local disconnect_sources = require("../core_graph/disconnect_sources")
+local is_outdated = require("../core_graph/is_outdated")
 local is_similar = require("./is_similar")
 local log_error = require("../core_logging/log_error")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
@@ -49,7 +49,7 @@ local function Computed<S, T>(scope: memory.Scope<S>, processor: state.ComputedP
 			return
 		end
 
-		local should_recompute = check_outdated(sources, absolute_version)
+		local should_recompute = is_outdated(absolute_version, source_set)
 		if not should_recompute then
 			validity = "valid"
 

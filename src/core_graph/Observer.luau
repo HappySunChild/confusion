@@ -1,8 +1,8 @@
 local graph = require("./types")
 local memory = require("../core_memory/types")
 
-local check_outdated = require("./check_outdated")
 local disconnect_sources = require("./disconnect_sources")
+local is_outdated = require("./is_outdated")
 local maintain_sources = require("./maintain_sources")
 local make_capture = require("./make_capture")
 local make_use = require("../core_use/make_use")
@@ -42,7 +42,7 @@ local function Observer(scope: memory.Scope, callback: graph.ObserverCallback)
 
 		is_scheduled = false
 
-		local should_recompute = check_outdated(sources, cached_version)
+		local should_recompute = is_outdated(cached_version, source_set)
 
 		if not should_recompute then
 			maintain_sources(sources, observer)
