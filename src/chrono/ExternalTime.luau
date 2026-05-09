@@ -31,6 +31,14 @@ local CLASS = {
 }
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
+ExternalScheduler.bind_to_update_step(function(now: number)
+	CLASS._cached_value = now
+
+	for timer in ALL_TIMERS do
+		change(timer)
+	end
+end)
+
 local function destroy_externaltime(externaltime: Self)
 	ALL_TIMERS[externaltime] = nil
 end
@@ -53,13 +61,5 @@ local function ExternalTime(scope: memory.Scope): chrono.ExternalTime
 
 	return new_externaltime
 end
-
-ExternalScheduler.bind_to_update_step(function(now: number)
-	CLASS._cached_value = now
-
-	for timer in ALL_TIMERS do
-		change(timer)
-	end
-end)
 
 return ExternalTime
