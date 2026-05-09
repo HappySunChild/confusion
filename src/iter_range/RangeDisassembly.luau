@@ -9,7 +9,6 @@ local depend = require("../core_graph/depend")
 local destructor = require("../core_memory/destructor")
 local inner_scope = require("../core_memory/inner_scope")
 local is_similar = require("../core_state/is_similar")
-local mark_dirty = require("../core_graph/mark_dirty")
 local peek = require("../core_use/peek")
 
 type Self<S, T> = {
@@ -29,8 +28,7 @@ local function invalidate_index<T>(rangepair: iter_range.RangePair<T>, new_index
 	end
 
 	rangepair.input_index = new_index
-
-	mark_dirty(rangepair)
+	rangepair.validity = "dirty"
 end
 
 local CLASS = table.freeze({

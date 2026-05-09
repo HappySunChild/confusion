@@ -9,7 +9,6 @@ local destructor = require("../core_memory/destructor")
 local inner_scope = require("../core_memory/inner_scope")
 local is_similar = require("../core_state/is_similar")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
-local mark_dirty = require("../core_graph/mark_dirty")
 local peek = require("../core_use/peek")
 
 type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {
@@ -28,16 +27,16 @@ local function invalidate_pair<IK, IV, OK, OV>(computedpair: iter_for.ComputedPa
 	computedpair.input_key = new_key
 	computedpair.input_value = new_value
 
-	if computedpair.roam_keys then -- is this bad?? observers aren't being fired, but we *may* have meaningfully changed.. (doing this to avoid recomputations)
+	if computedpair.roam_keys then
 		output.key = new_key
 	elseif not is_similar(old_key, new_key) then
-		mark_dirty(computedpair)
+		computedpair.validity = "dirty"
 	end
 
 	if computedpair.roam_values then
 		output.value = new_value
 	elseif not is_similar(old_value, new_value) then
-		mark_dirty(computedpair)
+		computedpair.validity = "dirty"
 	end
 end
 

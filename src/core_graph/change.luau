@@ -4,7 +4,6 @@ local ExternalScheduler = require("../core_external/ExternalScheduler")
 local do_task_immediate = ExternalScheduler.do_task_immediate
 
 local evaluate = require("./evaluate")
-local is_eager = require("./is_eager")
 local log_error = require("../core_logging/log_error")
 
 local function fire_node_observers(node: graph.GraphNode)
@@ -15,6 +14,20 @@ local function fire_node_observers(node: graph.GraphNode)
 	for _, callback in node._observers do
 		do_task_immediate(callback)
 	end
+end
+
+-- locally redefining this as i'd like to reap the benefits of -O2 compilation inlining
+-- which we isn't currently possible because of a lack of cross script compilation
+local function is_eager(node: graph.GraphNode): boolean
+	if node.timeliness == "eager" then
+		return true
+	end
+
+	if node._observers ~= nil then
+		return next(node._observers) ~= nil
+	end
+
+	return false
 end
 
 --[[

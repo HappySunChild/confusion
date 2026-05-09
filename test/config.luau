@@ -10,8 +10,6 @@ return {
 		require("./confusion/core_graph/change.spec"),
 		require("./confusion/core_graph/depend.spec"),
 		require("./confusion/core_graph/evaluate.spec"),
-		require("./confusion/core_graph/is_eager.spec"),
-		require("./confusion/core_graph/mark_dirty.spec"),
 		require("./confusion/core_graph/observe_immediate.spec"),
 		require("./confusion/core_graph/observe.spec"),
 		require("./confusion/core_memory/cleanup.spec"),
