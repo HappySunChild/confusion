@@ -1,10 +1,10 @@
+local graph = require("../core_graph/types")
 local iter_for = require("../iter_for/types")
 local memory = require("../core_memory/types")
 local pipeline = require("./types")
-local state = require("../core_state/types")
 local tweens = require("../motion_tweens/types")
 
-local Computed = require("../core_state/Computed")
+local Computed = require("../core_calc/Computed")
 local ForKeys = require("../iter_for/ForKeys")
 local ForPairs = require("../iter_for/ForPairs")
 local ForValues = require("../iter_for/ForValues")
@@ -20,12 +20,12 @@ type Self<S, T> = {
 local CLASS = table.freeze({
 	type = "Chain",
 
-	modify = function<S, T>(self: Self<S, T>, processor: (scope: memory.Scope<S>, latent: T) -> any): Self<S, T>
+	modify = function<S, T, O>(self: Self<S, T>, processor: (scope: memory.Scope<S>, latent: T) -> O): Self<S, O>
 		self.latent = processor(self.scope, self.latent)
 		return self
 	end,
 
-	map = function<S, T, O>(self: Self<S, T>, processor: (value: T, use: state.Use, scope: memory.Scope<S>) -> O): Self<S, O>
+	map = function<S, T, O>(self: Self<S, T>, processor: (value: T, use: graph.use, scope: memory.Scope<S>) -> O): Self<S, O>
 		local latent = self.latent
 		self.latent = Computed(self.scope, function(use, scope)
 			return processor(use(latent), use, scope)
@@ -33,11 +33,11 @@ local CLASS = table.freeze({
 		return self
 	end,
 
-	spring = function<S, T>(self: Self<S, T>, speed: state.UsedAs<number>?, damping: state.UsedAs<number>?): Self<S, T>
+	spring = function<S, T>(self: Self<S, T>, speed: graph.UsedAs<number>?, damping: graph.UsedAs<number>?): Self<S, T>
 		self.latent = Spring(self.scope, self.latent, speed, damping)
 		return self
 	end,
-	tween = function<S, T>(self: Self<S, T>, info: state.UsedAs<tweens.TweenInfo>): Self<S, T>
+	tween = function<S, T>(self: Self<S, T>, info: graph.UsedAs<tweens.TweenInfo>): Self<S, T>
 		self.latent = Tween(self.scope, self.latent, info)
 		return self
 	end,
@@ -66,7 +66,7 @@ local CLASS = table.freeze({
 })
 local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function Chain<S, T>(scope: memory.Scope<S>, initial_value: state.UsedAs<T>): pipeline.Chain<S, T>
+local function Chain<S, T>(scope: memory.Scope<S>, initial_value: T): pipeline.Chain<S, T>
 	local new_chain: Self<S, T> = setmetatable({
 		scope = inner_scope(scope),
 		latent = initial_value,

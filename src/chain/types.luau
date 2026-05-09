@@ -1,6 +1,6 @@
+local graph = require("../core_graph/types")
 local iter_for = require("../iter_for/types")
 local memory = require("../core_memory/types")
-local state = require("../core_state/types")
 local tweens = require("../motion_tweens/types")
 
 export type Chain<S, T> = {
@@ -8,11 +8,11 @@ export type Chain<S, T> = {
 
 	latent: T,
 
-	map: <O>(Chain<S, T>, processor: (value: T, use: state.Use, scope: memory.Scope<S>) -> O) -> Chain<S, T>,
+	map: <O>(Chain<S, T>, processor: (value: T, use: graph.use, scope: memory.Scope<S>) -> O) -> Chain<S, T>,
 	modify: <O>(Chain<S, T>, processor: (scope: memory.Scope<S>, latent: T) -> O) -> Chain<S, T>,
 
-	spring: (Chain<S, T>, speed: state.UsedAs<number>?, damping: state.UsedAs<number>?) -> Chain<S, T>,
-	tween: (Chain<S, T>, info: state.UsedAs<tweens.TweenInfo>) -> Chain<S, T>,
+	spring: (Chain<S, T>, speed: graph.UsedAs<number>?, damping: graph.UsedAs<number>?) -> Chain<S, T>,
+	tween: (Chain<S, T>, info: graph.UsedAs<tweens.TweenInfo>) -> Chain<S, T>,
 
 	for_pairs: <IK, IV, OK, OV>(
 		Chain<S, T>,
