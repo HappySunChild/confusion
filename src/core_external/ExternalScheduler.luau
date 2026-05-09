@@ -3,7 +3,12 @@ local external = require("./types")
 local log_error = require("../core_logging/log_error")
 
 local bound_callbacks = {}
+
 local active_scheduler: external.ExternalScheduler? = nil
+local active_do_task_immediate: (<A...>(resume: (A...) -> () | thread, A...) -> thread?)? = nil
+local active_do_task_deferred: (<A...>(resume: (A...) -> () | thread, A...) -> thread?)? = nil
+local active_do_task_delayed: (<A...>(sec: number, resume: (A...) -> () | thread, A...) -> thread?)? = nil
+local active_cancel_task: ((task: thread) -> boolean)? = nil
 
 local last_update = os.clock()
 local delta_time = 0
@@ -18,6 +23,16 @@ return table.freeze({
 
 		if new_scheduler ~= nil then
 			new_scheduler.start_scheduler()
+
+			active_do_task_immediate = new_scheduler.do_task_immediate
+			active_do_task_deferred = new_scheduler.do_task_deferred
+			active_do_task_delayed = new_scheduler.do_task_delayed
+			active_cancel_task = new_scheduler.cancel_task
+		else
+			active_do_task_immediate = nil
+			active_do_task_deferred = nil
+			active_do_task_delayed = nil
+			active_cancel_task = nil
 		end
 
 		active_scheduler = new_scheduler
@@ -30,28 +45,28 @@ return table.freeze({
 			return log_error(external.missing_scheduler)
 		end
 
-		return active_scheduler.do_task_immediate(resume, ...)
+		return active_do_task_immediate(resume, ...)
 	end,
 	do_task_deferred = function<A...>(resume: (A...) -> () | thread, ...: A...): thread?
 		if active_scheduler == nil then
 			return log_error(external.missing_scheduler)
 		end
 
-		return active_scheduler.do_task_deferred(resume, ...)
+		return active_do_task_deferred(resume, ...)
 	end,
 	do_task_delayed = function<A...>(sec: number, resume: (A...) -> () | thread, ...: A...): thread?
 		if active_scheduler == nil then
 			return log_error(external.missing_scheduler)
 		end
 
-		return active_scheduler.do_task_delayed(sec, resume, ...)
+		return active_do_task_delayed(sec, resume, ...)
 	end,
 	cancel_task = function(task: thread): boolean
 		if active_scheduler == nil then
 			return log_error(external.missing_scheduler)
 		end
 
-		return active_scheduler.cancel_task(task)
+		return active_cancel_task(task)
 	end,
 
 	bind_to_update_step = function(callback: (now: number, dt: number) -> ()): () -> ()
