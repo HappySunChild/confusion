@@ -3,6 +3,7 @@ local memory = require("../../core_memory/types")
 local rbx_instances = require("../types")
 
 local Observer = require("../../core_graph/Observer")
+local cast_to_getter = require("../../core_graph/cast_to_getter")
 local cleanup = require("../../core_memory/cleanup")
 local instance_from_description = require("../instance_from_description")
 local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
@@ -80,7 +81,31 @@ local function process_child(
 
 		new_children[child] = true
 		old_children[child] = nil
-	elseif child_type == "function" then -- STATE CASE
+	elseif child_type == "function" then -- UNRESOLVED CASE
+		child = child :: rbx_instances.ChildUnresolved
+
+		local actual_child = child(parent)
+
+		if actual_child ~= nil then
+			process_child(actual_child, parent, new_children, new_scopes, old_children, old_scopes)
+		end
+	elseif child_type == "table" and type(child[1]) == "string" then -- DESCRIPTION CASE
+		child = child :: rbx_instances.ChildDescription
+
+		local child_scope = old_scopes[child]
+
+		if child_scope == nil then
+			child_scope = {}
+
+			local new_instance = instance_from_description(child_scope, child, Children)
+
+			process_child(new_instance, parent, new_children, new_scopes, old_children, old_scopes)
+		else
+			old_scopes[child] = nil
+		end
+
+		new_scopes[child] = child_scope
+	elseif cast_to_getter(child) ~= nil then -- STATE CASE
 		child = child :: rbx_instances.ChildState
 
 		local child_scope = old_scopes[child]
@@ -93,31 +118,6 @@ local function process_child(
 			Observer(child_scope, function(use: graph.use)
 				reconcile(use(child))
 			end)
-		else
-			old_scopes[child] = nil
-		end
-
-		new_scopes[child] = child_scope
-		-- TODO: figure out a workaround for this
-		-- elseif child_type == "function" then -- UNRESOLVED CASE
-		-- 	child = child :: rbx_instances.ChildUnresolved
-
-		-- 	local actual_child = child(parent)
-
-		-- 	if actual_child ~= nil then
-		-- 		process_child(actual_child, parent, new_children, new_scopes, old_children, old_scopes)
-		-- 	end
-	elseif child_type == "table" and type(child[1]) == "string" then -- DESCRIPTION CASE
-		child = child :: rbx_instances.ChildDescription
-
-		local child_scope = old_scopes[child]
-
-		if child_scope == nil then
-			child_scope = {}
-
-			local new_instance = instance_from_description(child_scope, child, Children)
-
-			process_child(new_instance, parent, new_children, new_scopes, old_children, old_scopes)
 		else
 			old_scopes[child] = nil
 		end

@@ -4,6 +4,7 @@ local rbx_instances = require("./types")
 
 local Observer = require("../core_graph/Observer")
 local Parent = require("./keys/Parent")
+local cast_to_getter = require("../core_graph/cast_to_getter")
 local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 local parse_error = require("../core_logging/parse_error")
 local sort_keys = require("./sort_keys")
@@ -48,7 +49,7 @@ local function set_property(instance: Instance, property: string, value: any)
 end
 
 local function apply_property(scope: memory.Scope, instance: Instance, property: string, value: graph.UsedAs<any>)
-	if type(value) == "function" then
+	if cast_to_getter(value) ~= nil then
 		Observer(scope, function(use: graph.use)
 			set_property(instance, property, use(value))
 		end)

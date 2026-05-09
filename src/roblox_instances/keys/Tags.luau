@@ -3,6 +3,7 @@ local memory = require("../../core_memory/types")
 local rbx_instances = require("../types")
 
 local Observer = require("../../core_graph/Observer")
+local cast_to_getter = require("../../core_graph/cast_to_getter")
 local cleanup = require("../../core_memory/cleanup")
 local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
 
@@ -71,8 +72,8 @@ local function process_tag(
 
 		new_tags[tag] = true
 		old_tags[tag] = nil
-	elseif tag_type == "function" then -- STATE CASE
-		tag = tag :: graph.getter<rbx_instances.Tag>
+	elseif cast_to_getter(tag) ~= nil then -- STATE CASE
+		tag = tag :: graph.usegetter<rbx_instances.Tag>
 
 		local tag_scope = old_scopes[tag]
 
