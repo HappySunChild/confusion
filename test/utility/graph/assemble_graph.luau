@@ -26,7 +26,7 @@ local function assemble_graph(shape: standard_graph_shapes.GraphShape): Graph
 			type = "graph",
 			timeliness = "lazy",
 			validity = "valid",
-			_evaluate = function()
+			evaluate = function()
 				return true
 			end,
 			_oldest_task = function() end,

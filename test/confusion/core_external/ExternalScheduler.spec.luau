@@ -51,49 +51,49 @@ return function(configured: butler.Configured)
 		test("task functions throw with no set scheduler", function()
 			local initial_scheduler = ExternalScheduler.set_scheduler(nil)
 
-			expect(ExternalScheduler.do_task_immediate):to_throw_with(external.missing_scheduler)
-			expect(ExternalScheduler.do_task_delayed):to_throw_with(external.missing_scheduler)
-			expect(ExternalScheduler.do_task_deferred):to_throw_with(external.missing_scheduler)
+			expect(ExternalScheduler.schedule_task_immediate):to_throw_with(external.missing_scheduler)
+			expect(ExternalScheduler.schedule_task_delayed):to_throw_with(external.missing_scheduler)
+			expect(ExternalScheduler.schedule_task_deferred):to_throw_with(external.missing_scheduler)
 			expect(ExternalScheduler.cancel_task):to_throw_with(external.missing_scheduler)
 
 			ExternalScheduler.set_scheduler(initial_scheduler)
 		end)
 		test("task functions call scheduler functions", function()
-			local do_task_immediate_called = false
-			local do_task_delayed_called = false
-			local do_task_deferred_called = false
+			local schedule_task_immediate_called = false
+			local schedule_task_delayed_called = false
+			local schedule_task_deferred_called = false
 			local cancel_task_called = false
 
 			local initial_scheduler = ExternalScheduler.set_scheduler({
 				start_scheduler = function() end,
 				stop_scheduler = function() end,
-				do_task_immediate = function()
-					do_task_immediate_called = true
+				schedule_task_immediate = function()
+					schedule_task_immediate_called = true
 				end,
-				do_task_delayed = function()
-					do_task_delayed_called = true
+				schedule_task_delayed = function()
+					schedule_task_delayed_called = true
 				end,
-				do_task_deferred = function()
-					do_task_deferred_called = true
+				schedule_task_deferred = function()
+					schedule_task_deferred_called = true
 				end,
 				cancel_task = function()
 					cancel_task_called = true
 				end,
 			})
 
-			expect(do_task_immediate_called):to_equal(false)
-			expect(do_task_delayed_called):to_equal(false)
-			expect(do_task_deferred_called):to_equal(false)
+			expect(schedule_task_immediate_called):to_equal(false)
+			expect(schedule_task_delayed_called):to_equal(false)
+			expect(schedule_task_deferred_called):to_equal(false)
 			expect(cancel_task_called):to_equal(false)
 
-			ExternalScheduler.do_task_immediate()
-			ExternalScheduler.do_task_delayed()
-			ExternalScheduler.do_task_deferred()
+			ExternalScheduler.schedule_task_immediate()
+			ExternalScheduler.schedule_task_delayed()
+			ExternalScheduler.schedule_task_deferred()
 			ExternalScheduler.cancel_task()
 
-			expect(do_task_immediate_called):to_equal(true)
-			expect(do_task_delayed_called):to_equal(true)
-			expect(do_task_deferred_called):to_equal(true)
+			expect(schedule_task_immediate_called):to_equal(true)
+			expect(schedule_task_delayed_called):to_equal(true)
+			expect(schedule_task_deferred_called):to_equal(true)
 			expect(cancel_task_called):to_equal(true)
 
 			ExternalScheduler.set_scheduler(initial_scheduler)

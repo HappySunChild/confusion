@@ -52,86 +52,87 @@ const function sync_dynamics<T>(motion_obj: Self<T>, should_sleep: boolean, outp
 	return output_value, should_sleep
 end
 
-const CLASS = table.freeze({
-	type = "state",
-	kind = "Motion",
-	timeliness = "eager",
+const CLASS_MT = table.freeze({
+	__index = table.freeze({
+		type = "state",
+		kind = "Motion",
+		timeliness = "eager",
 
-	set_dynamic = function<T>(self: Self<T>, index: number, value: any)
-		self.dynamics[index] = value
-		self.regenerate = true
+		set_dynamic = function<T>(self: Self<T>, index: number, value: any)
+			self.dynamics[index] = value
+			self.regenerate = true
 
-		change(self)
-	end,
-	set_dynamics = function<T>(self: Self<T>, new_dynamics: { any }, at_index: number?)
-		table.move(new_dynamics, 1, #new_dynamics, at_index or 1, self.dynamics)
-		self.regenerate = true
+			change(self)
+		end,
+		set_dynamics = function<T>(self: Self<T>, new_dynamics: { any }, at_index: number?)
+			table.move(new_dynamics, 1, #new_dynamics, at_index or 1, self.dynamics)
+			self.regenerate = true
 
-		change(self)
-	end,
-	get_dynamic = function<T>(self: Self<T>, index: number)
-		return self.dynamics[index]
-	end,
-	get_dynamics = function<T>(self: Self<T>): { any }
-		-- considered cloning, but i don't think it's worth it
-		-- WARNING TO ANYONE USING THIS, DIRECTLY MODIFYING THE DYNAMICS TABLE
-		-- IS VERY MUCH NOT RECOMMENDED, DO NOT DO IT UNLESS YOU KNOW WHAT YOU'RE DOING!!!
-		return self.dynamics
-	end,
+			change(self)
+		end,
+		get_dynamic = function<T>(self: Self<T>, index: number)
+			return self.dynamics[index]
+		end,
+		get_dynamics = function<T>(self: Self<T>): { any }
+			-- considered cloning, but i don't think it's worth it
+			-- WARNING TO ANYONE USING THIS, DIRECTLY MODIFYING THE DYNAMICS TABLE
+			-- IS VERY MUCH NOT RECOMMENDED, DO NOT DO IT UNLESS YOU KNOW WHAT YOU'RE DOING!!!
+			return self.dynamics
+		end,
 
-	_evaluate = function<T>(self: Self<T>)
-		const timer = self._timer
-		const goal = self.goal
-		const generator = self.generator
+		evaluate = function<T>(self: Self<T>)
+			const timer = self._timer
+			const goal = self.goal
+			const generator = self.generator
 
-		const new_goal = peek(goal) :: T
+			const new_goal = peek(goal) :: T
 
-		depend(self, goal)
+			depend(self, goal)
 
-		-- protect against NaN goals
-		if new_goal ~= new_goal then
-			log_warn(motion.animated_invalid_goal, new_goal)
+			-- protect against NaN goals
+			if new_goal ~= new_goal then
+				log_warn(motion.animated_invalid_goal, new_goal)
 
-			return false
-		end
+				return false
+			end
 
-		const new_generator = peek(generator) :: motion.CurveGenerator<T>
+			const new_generator = peek(generator) :: motion.CurveGenerator<T>
 
-		depend(self, generator)
-		depend(self, timer)
+			depend(self, generator)
+			depend(self, timer)
 
-		-- wake
-		if new_goal ~= self.active_goal or new_generator ~= self.active_generator or self.regenerate then
-			self.active_goal = new_goal
-			self.active_generator = new_generator
-			self.active_curve = generator(new_goal, unpack(self.dynamics))
+			-- wake
+			if new_goal ~= self.active_goal or new_generator ~= self.active_generator or self.regenerate then
+				self.active_goal = new_goal
+				self.active_generator = new_generator
+				self.active_curve = generator(new_goal, unpack(self.dynamics))
 
-			self.regenerate = false
+				self.regenerate = false
 
-			timer:zero()
-			timer:unpause()
-		end
+				timer:zero()
+				timer:unpause()
+			end
 
-		local elapsed = peek(timer)
+			local elapsed = peek(timer)
 
-		-- fix Motions following eachother
-		if elapsed == 0 then -- usually means we got a new goal/curve generator
-			elapsed = get_delta_time()
-		end
+			-- fix Motions following eachother
+			if elapsed == 0 then -- usually means we got a new goal/curve generator
+				elapsed = get_delta_time()
+			end
 
-		const old_value = self._cached_value :: any
-		const new_value, should_sleep = sync_dynamics(self, self.active_curve(elapsed))
+			const old_value = self.cached_value :: any
+			const new_value, should_sleep = sync_dynamics(self, self.active_curve(elapsed))
 
-		self._cached_value = new_value
+			self.cached_value = new_value
 
-		if should_sleep then
-			timer:pause()
-		end
+			if should_sleep then
+				timer:pause()
+			end
 
-		return not is_similar(old_value, new_value)
-	end,
+			return not is_similar(old_value, new_value)
+		end,
+	}),
 })
-const CLASS_METATABLE = table.freeze({ __index = CLASS })
 
 const function Motion<T>(
 	scope: memory.Scope,
@@ -145,7 +146,7 @@ const function Motion<T>(
 		using = {},
 		users = {},
 
-		_cached_value = nil, -- this is handled by the evaluate call below, so we can just leave this nil :3
+		cached_value = nil, -- this is handled by the evaluate call below, so we can just leave this nil :3
 
 		goal = goal,
 		generator = curve_generator,
@@ -158,7 +159,7 @@ const function Motion<T>(
 		active_move = nil,
 
 		_timer = Timer(scope),
-	}, CLASS_METATABLE) :: any
+	}, CLASS_MT) :: any
 
 	const oldest_task = destructor(new_motion)
 

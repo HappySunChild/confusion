@@ -66,7 +66,7 @@ local function format_graph(graph: assemble_graph.Graph): string
 			local node = graph.nodes[node_id]
 
 			if node ~= nil then
-				change_line ..= `{node_id} ◷ {node.last_change}`
+				change_line ..= `{node_id} ◷ {node.cached_version}`
 			end
 		end
 

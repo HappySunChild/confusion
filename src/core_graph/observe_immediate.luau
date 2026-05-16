@@ -1,7 +1,7 @@
 const memory = require("../core_memory/types")
 
 const ExternalScheduler = require("../core_external/ExternalScheduler")
-const do_task_immediate = ExternalScheduler.do_task_immediate
+const schedule_task_immediate = ExternalScheduler.schedule_task_immediate
 
 const observe = require("./observe")
 
@@ -12,7 +12,7 @@ const observe = require("./observe")
 	Returns a disconnect function that removes the observer callback from the node.
 ]]
 const function observe_immediate(scope: memory.Scope, subject: any, callback: () -> ()): (() -> ())?
-	do_task_immediate(callback)
+	schedule_task_immediate(callback)
 
 	return observe(scope, subject, callback)
 end

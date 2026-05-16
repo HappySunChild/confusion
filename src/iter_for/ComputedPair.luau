@@ -32,12 +32,12 @@ const CLASS_MT = table.freeze({
 		type = "state",
 		kind = "ComputedPair",
 
-		_evaluate = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>)
+		evaluate = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>)
 			if self.scope == nil then
 				return false
 			end
 
-			const output = self._cached_value
+			const output = self.cached_value
 
 			const active_scope = derive_scope(self.scope)
 			const ok, new_key, new_value =
@@ -72,7 +72,7 @@ const function destroy_computedpair<S, IK, IV, OK, OV>(computedpair: Self<S, IK,
 
 	computedpair.input_key = nil
 	computedpair.input_value = nil
-	computedpair._cached_value = nil
+	computedpair.cached_value = nil
 end
 
 const function ComputedPair<S, IK, IV, OK, OV>(
@@ -90,7 +90,7 @@ const function ComputedPair<S, IK, IV, OK, OV>(
 		users = {},
 		using = {},
 
-		_cached_value = { key = nil, value = nil },
+		cached_value = { key = nil, value = nil },
 
 		input_key = initial_key,
 		input_value = initial_value,

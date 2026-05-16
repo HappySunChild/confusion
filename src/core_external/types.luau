@@ -4,9 +4,9 @@ export type ExternalScheduler = {
 	start_scheduler: () -> (),
 	stop_scheduler: () -> (),
 
-	do_task_immediate: <A...>(resume: (A...) -> () | thread, A...) -> thread?,
-	do_task_deferred: <A...>(resume: (A...) -> () | thread, A...) -> thread?,
-	do_task_delayed: <A...>(sec: number, resume: (A...) -> () | thread, A...) -> thread?,
+	schedule_task_immediate: <A...>(resume: (A...) -> () | thread, A...) -> thread?,
+	schedule_task_deferred: <A...>(resume: (A...) -> () | thread, A...) -> thread?,
+	schedule_task_delayed: <A...>(sec: number, resume: (A...) -> () | thread, A...) -> thread?,
 	cancel_task: (task: thread) -> boolean,
 }
 

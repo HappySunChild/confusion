@@ -1,6 +1,7 @@
-const graph = require("./types")
-
 const log_error = require("../core_logging/log_error")
+const next_version = require("./next_version")
+
+const graph = require("./types")
 
 --[[
 	Evaluates the graph object if necessary, so that it is up to date.
@@ -13,7 +14,7 @@ const function evaluate(node: graph.GraphNode, force_computation: boolean?): boo
 		log_error(graph.infinite_loop)
 	end
 
-	const first_evaluation = node.last_change == nil and node.last_compute == nil
+	const first_evaluation = node.cached_version == nil and node.absolute_version == nil
 	const is_dirty = node.validity == "dirty"
 	const is_invalid = node.validity == "invalid"
 
@@ -28,7 +29,7 @@ const function evaluate(node: graph.GraphNode, force_computation: boolean?): boo
 		for dependency in node.using do
 			evaluate(dependency, false)
 
-			if (dependency.last_change :: number) > (node.last_compute :: number) then
+			if (dependency.cached_version :: number) > (node.absolute_version :: number) then
 				needs_computation = true
 
 				break
@@ -47,13 +48,13 @@ const function evaluate(node: graph.GraphNode, force_computation: boolean?): boo
 
 		node.validity = "busy"
 
-		meaningfully_changed = node:_evaluate() or first_evaluation
+		meaningfully_changed = node:evaluate() or first_evaluation
 
-		node.last_compute = os.clock()
-	end
+		node.absolute_version = next_version()
 
-	if meaningfully_changed then
-		node.last_change = os.clock()
+		if meaningfully_changed then
+			node.cached_version = node.absolute_version
+		end
 	end
 
 	node.validity = "valid"

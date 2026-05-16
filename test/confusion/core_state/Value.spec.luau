@@ -38,35 +38,35 @@ return function(configured: butler.Configured)
 
 			cleanup(scope)
 		end)
-		test("updates last_change on set", function()
+		test("updates cached_version on set", function()
 			local scope = {}
 			local value = Value(scope, 1)
 
-			local before = value.last_change
+			local before = value.cached_version
 			value:set(2)
-			expect(value.last_change):to_never_equal(before)
+			expect(value.cached_version):to_never_equal(before)
 
-			before = value.last_change
+			before = value.cached_version
 			value:set(3)
-			expect(value.last_change):to_never_equal(before)
+			expect(value.cached_version):to_never_equal(before)
 
-			before = value.last_change
+			before = value.cached_version
 			value:set("foo")
-			expect(value.last_change):to_never_equal(before)
+			expect(value.cached_version):to_never_equal(before)
 
 			cleanup(scope)
 		end)
-		test("doesn't update last_change on similar sets", function()
+		test("doesn't update cached_version on similar sets", function()
 			local scope = {}
 			local value = Value(scope, 1)
 
-			local before = value.last_change
+			local before = value.cached_version
 			value:set(2)
-			expect(value.last_change):to_never_equal(before)
+			expect(value.cached_version):to_never_equal(before)
 
-			before = value.last_change
+			before = value.cached_version
 			value:set(2)
-			expect(value.last_change):to_equal(before)
+			expect(value.cached_version):to_equal(before)
 
 			cleanup(scope)
 		end)

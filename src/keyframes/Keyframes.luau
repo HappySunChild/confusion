@@ -20,17 +20,17 @@ const CLASS_MT = table.freeze({
 		kind = "Keyframes",
 		timeliness = "lazy",
 
-		_evaluate = function<T>(self: Self<T>): boolean
+		evaluate = function<T>(self: Self<T>): boolean
 			if self.scope == nil then
 				return false
 			end
 
 			const use = self._use
 
-			const old_value = self._cached_value
+			const old_value = self.cached_value
 			const new_value = evaluate_keyframes(use(self._alpha), self._keyframes, use)
 
-			self._cached_value = new_value
+			self.cached_value = new_value
 
 			return not is_similar(old_value, new_value)
 		end,

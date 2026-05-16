@@ -42,7 +42,7 @@ const CLASS_MT = table.freeze({
 				output[index] = use(pair)
 			end
 		end,
-		_evaluate = function<S, T>(self: Self<S, T>)
+		evaluate = function<S, T>(self: Self<S, T>)
 			depend(self, self.start)
 			depend(self, self.finish)
 			depend(self, self.increment)

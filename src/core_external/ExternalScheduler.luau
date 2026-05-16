@@ -24,9 +24,9 @@ return table.freeze({
 		if new_scheduler ~= nil then
 			new_scheduler.start_scheduler()
 
-			active_do_task_immediate = new_scheduler.do_task_immediate
-			active_do_task_deferred = new_scheduler.do_task_deferred
-			active_do_task_delayed = new_scheduler.do_task_delayed
+			active_do_task_immediate = new_scheduler.schedule_task_immediate
+			active_do_task_deferred = new_scheduler.schedule_task_deferred
+			active_do_task_delayed = new_scheduler.schedule_task_delayed
 			active_cancel_task = new_scheduler.cancel_task
 		else
 			active_do_task_immediate = nil
@@ -40,21 +40,21 @@ return table.freeze({
 		return old_scheduler
 	end,
 
-	do_task_immediate = function<A...>(resume: (A...) -> () | thread, ...: A...): thread?
+	schedule_task_immediate = function<A...>(resume: (A...) -> () | thread, ...: A...): thread?
 		if active_scheduler == nil then
 			return log_error(external.missing_scheduler)
 		end
 
 		return active_do_task_immediate(resume, ...)
 	end,
-	do_task_deferred = function<A...>(resume: (A...) -> () | thread, ...: A...): thread?
+	schedule_task_deferred = function<A...>(resume: (A...) -> () | thread, ...: A...): thread?
 		if active_scheduler == nil then
 			return log_error(external.missing_scheduler)
 		end
 
 		return active_do_task_deferred(resume, ...)
 	end,
-	do_task_delayed = function<A...>(sec: number, resume: (A...) -> () | thread, ...: A...): thread?
+	schedule_task_delayed = function<A...>(sec: number, resume: (A...) -> () | thread, ...: A...): thread?
 		if active_scheduler == nil then
 			return log_error(external.missing_scheduler)
 		end

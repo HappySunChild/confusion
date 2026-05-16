@@ -17,12 +17,12 @@ const CLASS_MT = table.freeze({
 		kind = "Iter",
 		timeliness = "lazy",
 
-		_evaluate = function<K, V>(self: Self<K, V>): boolean
+		evaluate = function<K, V>(self: Self<K, V>): boolean
 			if self.scope == nil then
 				return false
 			end
 
-			const output = self._cached_value
+			const output = self.cached_value
 			const disassembly = self._disassembly
 
 			depend(self, disassembly)
@@ -44,7 +44,7 @@ const function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, 
 		using = {},
 		users = {},
 
-		_cached_value = {},
+		cached_value = {},
 
 		_disassembly = disassembly,
 	}, CLASS_MT) :: any

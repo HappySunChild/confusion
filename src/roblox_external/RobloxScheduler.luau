@@ -8,9 +8,9 @@ const ExternalScheduler = require("../core_external/ExternalScheduler")
 local scheduler_disconnect: () -> ()? = nil
 
 const RobloxScheduler: external.ExternalScheduler = {
-	do_task_immediate = task.spawn,
-	do_task_deferred = task.defer,
-	do_task_delayed = task.delay,
+	schedule_task_immediate = task.spawn,
+	schedule_task_deferred = task.defer,
+	schedule_task_delayed = task.delay,
 	cancel_task = function(thread: thread)
 		const success = pcall(task.cancel, thread)
 

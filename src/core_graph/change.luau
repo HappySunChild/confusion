@@ -1,7 +1,7 @@
 const graph = require("./types")
 
 const ExternalScheduler = require("../core_external/ExternalScheduler")
-const do_task_immediate = ExternalScheduler.do_task_immediate
+const schedule_task_immediate = ExternalScheduler.schedule_task_immediate
 
 const evaluate = require("./evaluate")
 const log_error = require("../core_logging/log_error")
@@ -12,7 +12,7 @@ const function fire_node_observers(node: graph.GraphNode)
 	end
 
 	for _, callback in node._observers do
-		do_task_immediate(callback)
+		schedule_task_immediate(callback)
 	end
 end
 

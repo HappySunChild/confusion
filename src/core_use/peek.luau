@@ -8,7 +8,7 @@ const function peek<T>(x: state.UsedAs<T>): T
 	if cast_to_state(x) ~= nil then
 		evaluate(x)
 
-		return x._cached_value :: T
+		return x.cached_value :: T
 	end
 
 	return x :: T

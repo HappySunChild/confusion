@@ -23,50 +23,50 @@ return function(configured: butler.Configured)
 				return check_graph(graph.all_nodes, graph_tests.validity("valid"))
 			end,
 		})
-		generate_tests("last_compute, last_change", {
+		generate_tests("absolute_version, cached_version", {
 			filters = { graph_filters.well_formed },
 			test = test,
 			perform = function(graph: generate_tests.Graph)
 				for _, node in graph.all_nodes do
-					local before_change = node.last_change
-					local before_compute = node.last_compute
+					local before_change = node.cached_version
+					local before_compute = node.absolute_version
 
 					change(node)
 
-					if node.last_change == before_change then
-						return false, `{node.id} didn't change it's last_change time`
-					elseif node.last_compute == before_compute then
-						return false, `{node.id} didn't change it's last_compute time`
+					if node.cached_version == before_change then
+						return false, `{node.id} didn't change it's cached_version time`
+					elseif node.absolute_version == before_compute then
+						return false, `{node.id} didn't change it's absolute_version time`
 					end
 				end
 
 				return true, nil
 			end,
 		})
-		generate_tests("last_compute, no last_change", {
+		generate_tests("absolute_version, no cached_version", {
 			filters = { graph_filters.well_formed },
 			test = test,
 			setup = function(graph: generate_tests.Graph)
 				for _, node in graph.all_nodes do
 					-- set these to 0 so it doesn't count as a first time computation
-					node.last_change = 0
-					node.last_compute = 0
-					node._evaluate = function()
+					node.cached_version = 0
+					node.absolute_version = 0
+					node.evaluate = function()
 						return false
 					end
 				end
 			end,
 			perform = function(graph: generate_tests.Graph)
 				for _, node in graph.all_nodes do
-					local before_change = node.last_change
-					local before_compute = node.last_compute
+					local before_change = node.cached_version
+					local before_compute = node.absolute_version
 
 					change(node)
 
-					if node.last_change ~= before_change then
-						return false, `{node.id} changed it's last_change time`
-					elseif node.last_compute == before_compute then
-						return false, `{node.id} didn't change it's last_compute time`
+					if node.cached_version ~= before_change then
+						return false, `{node.id} changed it's cached_version time`
+					elseif node.absolute_version == before_compute then
+						return false, `{node.id} didn't change it's absolute_version time`
 					end
 				end
 
@@ -178,7 +178,7 @@ return function(configured: butler.Configured)
 
 				for _, node in tips do
 					node.timeliness = "eager"
-					node._evaluate = function()
+					node.evaluate = function()
 						if do_not_invalidate == nil then
 							do_not_invalidate = {}
 
@@ -229,7 +229,7 @@ return function(configured: butler.Configured)
 
 					table.insert(graph.proper_order, node)
 
-					node._evaluate = function()
+					node.evaluate = function()
 						table.insert(graph.execution_order, node)
 						return true
 					end

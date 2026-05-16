@@ -23,7 +23,7 @@ const CLASS_MT = table.freeze({
 		kind = "RangePair",
 		timeliness = "lazy",
 
-		_evaluate = function<T, S>(self: Self<T, S>)
+		evaluate = function<T, S>(self: Self<T, S>)
 			if self.scope == nil then
 				return false
 			end
@@ -34,7 +34,7 @@ const CLASS_MT = table.freeze({
 			cleanup(self._active_scope)
 
 			if not ok then
-				self._cached_value = nil
+				self.cached_value = nil
 
 				cleanup(inner_scope)
 
@@ -45,9 +45,9 @@ const CLASS_MT = table.freeze({
 
 			self._active_scope = inner_scope
 
-			const old_value = self._cached_value
+			const old_value = self.cached_value
 
-			self._cached_value = output_value
+			self.cached_value = output_value
 
 			return not is_similar(old_value, output_value)
 		end,
@@ -71,7 +71,7 @@ const function RangePair<S, T>(
 		using = {},
 		users = {},
 
-		_cached_value = nil,
+		cached_value = nil,
 
 		input_index = initial_index,
 

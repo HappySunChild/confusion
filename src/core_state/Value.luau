@@ -16,8 +16,8 @@ const CLASS_MT = table.freeze({
 		using = table.freeze({}),
 
 		set = function<T>(self: Self<T>, new_value: T): T
-			if not is_similar(new_value, self._cached_value) then
-				self._cached_value = new_value
+			if not is_similar(new_value, self.cached_value) then
+				self.cached_value = new_value
 
 				change(self)
 			end
@@ -25,9 +25,9 @@ const CLASS_MT = table.freeze({
 			return new_value
 		end,
 		update = function<T>(self: Self<T>, updater: (T) -> T): T
-			return self:set(updater(self._cached_value))
+			return self:set(updater(self.cached_value))
 		end,
-		_evaluate = function()
+		evaluate = function()
 			return true
 		end,
 	}),
@@ -40,7 +40,7 @@ const function Value<T>(scope: memory.Scope, initial_value: T): state.Value<T>
 		validity = "valid",
 		users = {},
 
-		_cached_value = initial_value,
+		cached_value = initial_value,
 	}, CLASS_MT) :: any
 
 	const oldest_task = destructor(new_value)

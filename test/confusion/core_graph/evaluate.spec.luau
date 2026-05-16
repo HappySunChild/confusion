@@ -20,7 +20,7 @@ return function(configured: butler.Configured)
 				for index, node in graph.all_nodes do
 					local using_copy = table.clone(node.using)
 					node.validity = if index % 2 == 0 then "valid" else "invalid"
-					node._evaluate = function()
+					node.evaluate = function()
 						node.using = table.clone(using_copy)
 
 						for dependency in node.using do
@@ -39,14 +39,14 @@ return function(configured: butler.Configured)
 				return check_graph(graph.all_nodes, graph_tests.validity("valid"))
 			end,
 		})
-		generate_tests("last_change exists", {
+		generate_tests("cached_version exists", {
 			filters = { graph_filters.well_formed },
 			test = test,
 			setup = function(graph: generate_tests.Graph)
 				for index, node in graph.all_nodes do
 					local using_copy = table.clone(node.using)
 					node.validity = if index % 2 == 0 then "valid" else "invalid"
-					node._evaluate = function()
+					node.evaluate = function()
 						node.using = table.clone(using_copy)
 
 						for dependency in node.using do
@@ -71,7 +71,7 @@ return function(configured: butler.Configured)
 			setup = function(graph: generate_tests.Graph)
 				for index, node in graph.all_nodes do
 					local using_copy = table.clear(node.using)
-					node._evaluate(function()
+					node.evaluate(function()
 						node.using = table.clone(using_copy)
 
 						for dependency in node.using do
@@ -111,7 +111,7 @@ return function(configured: butler.Configured)
 				for index, node in graph.all_nodes do
 					local using_copy = table.clone(node.using)
 					node.validity = "invalid"
-					node._evaluate = function()
+					node.evaluate = function()
 						node.using = table.clone(using_copy)
 
 						for dependency in node.using do
@@ -146,7 +146,7 @@ return function(configured: butler.Configured)
 				for _, node in graph.all_nodes do
 					node.validity = "invalid"
 					node._old_deps = table.clone(node.using)
-					node._evaluate = function()
+					node.evaluate = function()
 						return false
 					end
 				end
@@ -176,7 +176,7 @@ return function(configured: butler.Configured)
 				for index, node in graph.all_nodes do
 					local using_copy = table.clone(node.using)
 					node.validity = "invalid"
-					node._evaluate = function()
+					node.evaluate = function()
 						node.using = table.clone(using_copy)
 
 						for dependency in node.using do
@@ -210,7 +210,7 @@ return function(configured: butler.Configured)
 				for index, node in graph.all_nodes do
 					local using_clone = table.clone(node.using)
 					node.validity = "invalid"
-					node._evaluate = function()
+					node.evaluate = function()
 						node.using = table.clone(using_clone)
 
 						for dependency in node.using do
@@ -225,7 +225,7 @@ return function(configured: butler.Configured)
 				local users = graph_selectors.distance(graph.all_nodes, targets, "users", 1)
 
 				for _, user in users do
-					user._evaluate = function()
+					user.evaluate = function()
 						error(`{user.id} was evaluated`, 0)
 					end
 				end
@@ -246,9 +246,9 @@ return function(configured: butler.Configured)
 			setup = function(graph: generate_tests.Graph)
 				for _, node in graph.all_nodes do
 					node.validity = "valid"
-					node.last_change = math.huge
-					node.last_compute = math.huge -- gotta add this since it wasn't accounted for in base fusion :3
-					node._evaluate = function()
+					node.cached_version = math.huge
+					node.absolute_version = math.huge -- gotta add this since it wasn't accounted for in base fusion :3
+					node.evaluate = function()
 						error(`{node.id} was evaluated when it should not have been`, 0)
 					end
 				end
@@ -266,13 +266,13 @@ return function(configured: butler.Configured)
 			test = test,
 			setup = function(graph: generate_tests.Graph)
 				for _, node in graph.all_nodes do
-					node._evaluate = function()
+					node.evaluate = function()
 						node.TEST_MARKER = true
 						return false
 					end
 					node.validity = "valid"
-					node.last_change = math.huge
-					node.last_compute = math.huge
+					node.cached_version = math.huge
+					node.absolute_version = math.huge
 				end
 			end,
 			perform = function(graph: generate_tests.Graph)
@@ -293,9 +293,9 @@ return function(configured: butler.Configured)
 			setup = function(graph: generate_tests.Graph)
 				for _, node in graph.all_nodes do
 					node.validity = "invalid"
-					node.last_change = 0
-					node.last_compute = 0
-					node._evaluate = function()
+					node.cached_version = 0
+					node.absolute_version = 0
+					node.evaluate = function()
 						node.TEST_MARKER = true
 						return false
 					end
@@ -303,7 +303,7 @@ return function(configured: butler.Configured)
 			end,
 			perform = function(graph: generate_tests.Graph)
 				for _, node in graph.all_nodes do
-					if node.validity ~= "invalid" or node.last_change ~= nil then
+					if node.validity ~= "invalid" or node.cached_version ~= nil then
 						continue
 					end
 
@@ -323,9 +323,9 @@ return function(configured: butler.Configured)
 			setup = function(graph: generate_tests.Graph)
 				for _, node in graph.all_nodes do
 					node.validity = "dirty"
-					node.last_change = 0
-					node.last_compute = 0
-					node._evaluate = function()
+					node.cached_version = 0
+					node.absolute_version = 0
+					node.evaluate = function()
 						node.TEST_MARKER = true
 						return false
 					end
@@ -333,7 +333,7 @@ return function(configured: butler.Configured)
 			end,
 			perform = function(graph: generate_tests.Graph)
 				for _, node in graph.all_nodes do
-					if node.validity ~= "dirty" or node.last_change ~= nil then
+					if node.validity ~= "dirty" or node.cached_version ~= nil then
 						continue
 					end
 
@@ -375,7 +375,7 @@ return function(configured: butler.Configured)
 			setup = function(graph: generate_tests.Graph)
 				for _, node in graph.all_nodes do
 					local using_copy = table.clone(node.using)
-					node._evaluate = function()
+					node.evaluate = function()
 						node.using = table.clone(using_copy)
 
 						for dependency in node.using do
@@ -391,8 +391,8 @@ return function(configured: butler.Configured)
 					for _, node in graph.all_nodes do
 						for _, other_node in graph.all_nodes do
 							other_node.validity = "invalid"
-							other_node.last_change = nil
-							other_node.last_compute = nil
+							other_node.cached_version = nil
+							other_node.absolute_version = nil
 						end
 
 						evaluate(node)

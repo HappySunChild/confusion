@@ -5,9 +5,9 @@ local SpecTask = require("./SpecTask")
 local do_update_steps = false
 
 local SpecScheduler = {
-	do_task_immediate = SpecTask.spawn,
-	do_task_deferred = SpecTask.defer,
-	do_task_delayed = SpecTask.delay,
+	schedule_task_immediate = SpecTask.spawn,
+	schedule_task_deferred = SpecTask.defer,
+	schedule_task_delayed = SpecTask.delay,
 	cancel_task = function(thread: thread)
 		coroutine.close(thread)
 	end,

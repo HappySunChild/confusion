@@ -14,7 +14,7 @@ local function validity(...: graph.Validity)
 end
 
 local function change_time_exists(node: graph.GraphNode): (boolean, string?)
-	if node.last_change == nil then
+	if node.cached_version == nil then
 		return false, "Node had a nil change_time"
 	end
 

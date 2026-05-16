@@ -14,7 +14,7 @@ const CLASS = {
 	kind = "ExternalTime",
 	timeliness = "lazy",
 	using = table.freeze({}),
-	_cached_value = ExternalScheduler.get_last_update(),
+	cached_value = ExternalScheduler.get_last_update(),
 
 	enable = function(self: Self)
 		ALL_TIMERS[self] = true
@@ -25,14 +25,14 @@ const CLASS = {
 	is_enabled = function(self: Self)
 		return ALL_TIMERS[self] ~= nil
 	end,
-	_evaluate = function(self: Self)
+	evaluate = function(self: Self)
 		return true
 	end,
 }
 const CLASS_MT = table.freeze({ __index = CLASS })
 
 ExternalScheduler.bind_to_update_step(function(now: number)
-	CLASS._cached_value = now
+	CLASS.cached_value = now
 
 	for timer in ALL_TIMERS do
 		change(timer)

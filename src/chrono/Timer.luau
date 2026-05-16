@@ -24,7 +24,7 @@ const CLASS_MT = table.freeze({
 			end
 
 			self._timer:enable()
-			self.reference_point = peek(self._timer) - self._cached_value
+			self.reference_point = peek(self._timer) - self.cached_value
 			self.is_paused = false
 
 			change(self)
@@ -41,12 +41,12 @@ const CLASS_MT = table.freeze({
 		end,
 		zero = function(self: Self)
 			self.reference_point = peek(self._timer) :: number
-			self._cached_value = 0
+			self.cached_value = 0
 
 			change(self)
 		end,
 
-		_evaluate = function(self: Self)
+		evaluate = function(self: Self)
 			if self.is_paused then
 				return false
 			end
@@ -55,10 +55,10 @@ const CLASS_MT = table.freeze({
 
 			const now = peek(self._timer) :: number
 
-			const old_value = self._cached_value
+			const old_value = self.cached_value
 			const new_value = now - self.reference_point
 
-			self._cached_value = new_value
+			self.cached_value = new_value
 
 			return old_value ~= new_value
 		end,
@@ -73,7 +73,7 @@ const function Timer(scope: memory.Scope): chrono.Timer
 		validity = "valid",
 		using = {},
 		users = {},
-		_cached_value = 0,
+		cached_value = 0,
 
 		is_paused = false,
 		reference_point = peek(externaltime),

@@ -22,7 +22,7 @@ const CLASS_MT = table.freeze({
 		kind = "Computed",
 		timeliness = "lazy",
 
-		_evaluate = function<T, S>(self: Self<T, S>): boolean
+		evaluate = function<T, S>(self: Self<T, S>): boolean
 			if self.scope == nil then
 				return false
 			end
@@ -33,12 +33,12 @@ const CLASS_MT = table.freeze({
 			const ok, new_value = xpcall(self._processor, parse_error, self._use, inner_scope)
 
 			if ok then
-				const similar = is_similar(self._cached_value, new_value)
+				const similar = is_similar(self.cached_value, new_value)
 
 				cleanup(self._inner_scope)
 
 				self._inner_scope = inner_scope
-				self._cached_value = new_value
+				self.cached_value = new_value
 
 				return not similar
 			end
@@ -65,7 +65,7 @@ const function Computed<T, S>(scope: memory.Scope<S>, processor: state.ComputedP
 		using = {},
 		users = {},
 
-		_cached_value = nil,
+		cached_value = nil,
 
 		_inner_scope = nil,
 		_processor = processor,

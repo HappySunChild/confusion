@@ -22,7 +22,7 @@ type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {
 
 const function invalidate_pair<IK, IV, OK, OV>(computedpair: iter_for.ComputedPair<IK, IV, OK, OV>, new_key: IK, new_value: IV)
 	const old_key, old_value = computedpair.input_key, computedpair.input_value
-	const output = computedpair._cached_value
+	const output = computedpair.cached_value
 
 	computedpair.input_key = new_key
 	computedpair.input_value = new_value
@@ -96,7 +96,7 @@ const CLASS_MT = table.freeze({
 				end
 			end
 		end,
-		_evaluate = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>)
+		evaluate = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>)
 			depend(self, self._input_table)
 
 			const pending_pairs = table.clone(peek(self._input_table)) :: { [IK]: IV }

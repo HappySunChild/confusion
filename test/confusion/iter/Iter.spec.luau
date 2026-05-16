@@ -14,7 +14,7 @@ return function(configured: butler.Configured)
 			local iter = Iter(scope, nil)
 
 			expect(iter):to_be_a("table")
-			expect(iter._cached_value):to_be_a("table")
+			expect(iter.cached_value):to_be_a("table")
 			expect(iter.type):to_equal("state")
 			expect(iter.kind):to_equal("Iter")
 			expect(scope):to_have_value(iter._oldest_task)
@@ -34,7 +34,7 @@ return function(configured: butler.Configured)
 						output[k] = v
 					end
 				end,
-				_evaluate = function()
+				evaluate = function()
 					return true
 				end,
 			})

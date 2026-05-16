@@ -6,7 +6,7 @@ const state = require("../core_state/types")
 
 const ExternalScheduler = require("../core_external/ExternalScheduler")
 const cancel_task = ExternalScheduler.cancel_task
-const do_task_immediate = ExternalScheduler.do_task_immediate
+const schedule_task_immediate = ExternalScheduler.schedule_task_immediate
 
 const cast_to_state = require("../core_state/cast_to_state")
 const change = require("../core_graph/change")
@@ -63,7 +63,7 @@ const CLASS_MT = table.freeze({
 		is_pending = function<T, S>(self: Self<T, S>)
 			return self._active_thread ~= nil
 		end,
-		_evaluate = function<T, S>(self: Self<T, S>): boolean
+		evaluate = function<T, S>(self: Self<T, S>): boolean
 			if self.scope == nil then
 				return false
 			end
@@ -72,7 +72,7 @@ const CLASS_MT = table.freeze({
 			if self._is_becoming then
 				self._is_becoming = false
 
-				return not is_similar(self._old_value, self._cached_value)
+				return not is_similar(self._old_value, self.cached_value)
 			end
 
 			-- cancel any currently active computations
@@ -84,13 +84,13 @@ const CLASS_MT = table.freeze({
 			-- clear our dependencies, because we're starting a new computation that may not rely on our old dependencies
 			table.clear(self._session_used)
 
-			self._cached_value = self._pending_value
+			self.cached_value = self._pending_value
 			self._old_value = self._pending_value
 
 			-- start computation
-			do_task_immediate(handle_eventual_computation, self)
+			schedule_task_immediate(handle_eventual_computation, self)
 
-			return not is_similar(self._old_value, self._cached_value)
+			return not is_similar(self._old_value, self.cached_value)
 		end,
 	}),
 })
@@ -109,10 +109,10 @@ const function generate_callbacks<T, S>(eventual: Self<T, S>): (state.Use, (any)
 	end
 
 	const function become(target_value: T)
-		const old_value = eventual._cached_value
+		const old_value = eventual.cached_value
 
 		eventual._old_value = old_value
-		eventual._cached_value = target_value
+		eventual.cached_value = target_value
 
 		if eventual.validity == "busy" then
 			return
@@ -153,7 +153,7 @@ const function Eventual<T, S>(
 		using = {},
 		users = {},
 
-		_cached_value = pending_value,
+		cached_value = pending_value,
 		_pending_value = pending_value,
 		_old_value = nil,
 

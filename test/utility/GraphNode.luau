@@ -8,7 +8,7 @@ local CLASS = table.freeze({
 	timeliness = "lazy",
 	type = "graph",
 
-	_evaluate = function()
+	evaluate = function()
 		return true
 	end,
 })
@@ -28,7 +28,7 @@ local function GraphNode(scope: memory.Scope, options: Options?): graph.GraphNod
 		created_at = os.clock(),
 		validity = "valid",
 		timeliness = if options ~= nil then options.timeliness else nil,
-		_evaluate = if options ~= nil then options.evaluate else nil,
+		evaluate = if options ~= nil then options.evaluate else nil,
 
 		users = {},
 		using = {},

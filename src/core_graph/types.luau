@@ -17,13 +17,15 @@ export type GraphNode = {
 	validity: Validity,
 	timeliness: Timeliness,
 
-	last_change: number?,
-	last_compute: number?,
+	cached_version: number?,
+	absolute_version: number?,
+
 	users: { [GraphNode]: true }, -- aka dependentSet
 	using: { [GraphNode]: true }, -- aka dependencySet
+
 	_observers: { () -> () }?,
 
-	_evaluate: (GraphNode) -> boolean,
+	evaluate: (GraphNode) -> boolean,
 	_oldest_task: () -> (),
 }
 
