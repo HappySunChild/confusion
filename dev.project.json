@@ -19,7 +19,7 @@
 				"$className": "Folder",
 				"$ignoreUnknownInstances": true,
 				"confusion": {
-					"$path": "dev/roblox/server"
+					"$path": "dev/server"
 				}
 			}
 		},
@@ -33,7 +33,7 @@
 					"$className": "Folder",
 					"$ignoreUnknownInstances": true,
 					"confusion": {
-						"$path": "dev/roblox/client"
+						"$path": "dev/client"
 					}
 				}
 			}
