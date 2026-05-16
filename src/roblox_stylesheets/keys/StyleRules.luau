@@ -1,32 +1,32 @@
-local memory = require("../../core_memory/types")
-local rbx_instances = require("../../roblox_instances/types")
-local rbx_stylesheets = require("../types")
+const memory = require("../../core_memory/types")
+const rbx_instances = require("../../roblox_instances/types")
+const rbx_stylesheets = require("../types")
 
-local StyleRuleProperties = require("./StyleRuleProperties")
-local apply_instance_properties = require("../../roblox_instances/apply_instance_properties")
+const StyleRuleProperties = require("./StyleRuleProperties")
+const apply_instance_properties = require("../../roblox_instances/apply_instance_properties")
 
-local StyleRules = {
+const StyleRules = {
 	type = "SpecialKey",
 	kind = "StyleRules",
 	stage = "self",
 	apply = nil,
 } :: rbx_instances.SpecialKey<"StyleRules">
 
-local function stylerule_from_description(
+const function stylerule_from_description(
 	scope: memory.Scope,
 	description: rbx_stylesheets.StyleRuleDescription
 ): StyleRule
-	local rule = Instance.new("StyleRule")
+	const rule = Instance.new("StyleRule")
 
 	table.insert(scope, rule)
 
-	local selector = table.remove(description, 1)
+	const selector = table.remove(description, 1)
 
-	local rule_properties: { [string]: any } = {}
-	local rule_subrules: { StyleRule | rbx_stylesheets.StyleRuleDescription } = {}
+	const rule_properties: { [string]: any } = {}
+	const rule_subrules: { StyleRule | rbx_stylesheets.StyleRuleDescription } = {}
 
 	for key, value in description do
-		local key_type = type(key)
+		const key_type = type(key)
 
 		if key_type == "string" then
 			rule_properties[key] = value
@@ -46,13 +46,13 @@ local function stylerule_from_description(
 	return rule
 end
 
-local function process_rule(
+const function process_rule(
 	scope: memory.Scope,
 	apply_to: StyleBase,
 	priority: number,
 	rule: StyleRule | rbx_stylesheets.StyleRuleDescription
 )
-	local rule_type = typeof(rule)
+	const rule_type = typeof(rule)
 
 	if rule_type == "Instance" then -- ROOT CASE
 		apply_to:InsertStyleRule(rule, priority)

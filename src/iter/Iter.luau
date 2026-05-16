@@ -1,42 +1,43 @@
-local iter = require("./types")
-local memory = require("../core_memory/types")
-local state = require("../core_state/types")
+const iter = require("./types")
+const memory = require("../core_memory/types")
+const state = require("../core_state/types")
 
-local depend = require("../core_graph/depend")
-local destructor = require("../core_memory/destructor")
-local generic_use = require("../core_use/generic_use")
+const depend = require("../core_graph/depend")
+const destructor = require("../core_memory/destructor")
+const generic_use = require("../core_use/generic_use")
 
 type Self<K, V> = {
 	_use: state.Use,
 	_disassembly: iter.Disassembly<K, V>,
 } & iter.Iter<K, V>
 
-local CLASS = table.freeze({
-	type = "state",
-	kind = "Iter",
-	timeliness = "lazy",
+const CLASS_MT = table.freeze({
+	__index = table.freeze({
+		type = "state",
+		kind = "Iter",
+		timeliness = "lazy",
 
-	_evaluate = function<K, V>(self: Self<K, V>): boolean
-		if self.scope == nil then
-			return false
-		end
+		_evaluate = function<K, V>(self: Self<K, V>): boolean
+			if self.scope == nil then
+				return false
+			end
 
-		local output = self._cached_value
-		local disassembly = self._disassembly
+			const output = self._cached_value
+			const disassembly = self._disassembly
 
-		depend(self, disassembly)
+			depend(self, disassembly)
 
-		table.clear(output)
+			table.clear(output)
 
-		disassembly:populate(self._use, output)
+			disassembly:populate(self._use, output)
 
-		return true
-	end,
+			return true
+		end,
+	}),
 })
-local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, V>): iter.Iter<K, V>
-	local new_iter: Self<K, V> = setmetatable({
+const function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, V>): iter.Iter<K, V>
+	const new_iter: Self<K, V> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
@@ -46,13 +47,12 @@ local function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, 
 		_cached_value = {},
 
 		_disassembly = disassembly,
-	}, CLASS_METATABLE) :: any
+	}, CLASS_MT) :: any
 
-	local oldest_task = destructor(new_iter)
-
-	new_iter._oldest_task = oldest_task
 	new_iter._use = generic_use(new_iter)
 
+	const oldest_task = destructor(new_iter)
+	new_iter._oldest_task = oldest_task
 	table.insert(scope, oldest_task)
 
 	return new_iter

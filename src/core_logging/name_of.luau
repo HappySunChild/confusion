@@ -1,7 +1,7 @@
-local nicknames = require("./nicknames")
+const nicknames = require("./nicknames")
 
-local function name_of(x: unknown, default: string)
-	local nickname = nicknames[x]
+const function name_of(x: unknown, default: string)
+	const nickname = nicknames[x]
 
 	if type(nickname) == "string" then
 		return nickname

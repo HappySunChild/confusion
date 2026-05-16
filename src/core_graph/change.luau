@@ -1,12 +1,12 @@
-local graph = require("./types")
+const graph = require("./types")
 
-local ExternalScheduler = require("../core_external/ExternalScheduler")
-local do_task_immediate = ExternalScheduler.do_task_immediate
+const ExternalScheduler = require("../core_external/ExternalScheduler")
+const do_task_immediate = ExternalScheduler.do_task_immediate
 
-local evaluate = require("./evaluate")
-local log_error = require("../core_logging/log_error")
+const evaluate = require("./evaluate")
+const log_error = require("../core_logging/log_error")
 
-local function fire_node_observers(node: graph.GraphNode)
+const function fire_node_observers(node: graph.GraphNode)
 	if node._observers == nil then
 		return
 	end
@@ -18,7 +18,7 @@ end
 
 -- locally redefining this as i'd like to reap the benefits of -O2 compilation inlining
 -- which we isn't currently possible because of a lack of cross script compilation
-local function is_eager(node: graph.GraphNode): boolean
+const function is_eager(node: graph.GraphNode): boolean
 	if node.timeliness == "eager" then
 		return true
 	end
@@ -37,12 +37,12 @@ end
 
 	https://fluff.blog/2024/04/16/monotonic-painting.html
 ]]
-local function change(node: graph.GraphNode)
+const function change(node: graph.GraphNode)
 	if not evaluate(node, true) then
 		return false
 	end
 
-	local eager_users: { graph.GraphNode } = {}
+	const eager_users: { graph.GraphNode } = {}
 
 	local search_now: { graph.GraphNode } = { node }
 	local search_next: { graph.GraphNode } = {}

@@ -1,11 +1,11 @@
-local memory = require("../core_memory/types")
-local rbx_instances = require("./types")
+const memory = require("../core_memory/types")
+const rbx_instances = require("./types")
 
-local Children = require("./keys/Children")
-local apply_instance_properties = require("./apply_instance_properties")
-local implicit_numerical_merge = require("./implicit_numerical_merge")
+const Children = require("./keys/Children")
+const apply_instance_properties = require("./apply_instance_properties")
+const implicit_numerical_merge = require("./implicit_numerical_merge")
 
-local function Hydrate<InstanceT>(scope: memory.Scope, instance: InstanceT, properties: rbx_instances.Properties): InstanceT
+const function Hydrate<InstanceT>(scope: memory.Scope, instance: InstanceT, properties: rbx_instances.Properties): InstanceT
 	-- should we take accountability of destroying this object?
 	table.insert(scope, instance)
 

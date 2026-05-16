@@ -1,9 +1,8 @@
-local motion_tweens = require("./types")
+const motion_tweens = require("./types")
 
-local function get_tween_alpha(info: motion_tweens.TweenInfo, current_time: number)
-	local tween_time, delay_time, repeat_count, reverses = info.time, info.delay_time, info.repeat_count, info.reverses
-
-	local cycle_count = repeat_count + 1
+const function get_tween_alpha(info: motion_tweens.TweenInfo, current_time: number)
+	const tween_time, delay_time, repeat_count, reverses = info.time, info.delay_time, info.repeat_count, info.reverses
+	const cycle_count = repeat_count + 1
 	local cycle_duration = delay_time + tween_time
 
 	if reverses then
@@ -18,7 +17,7 @@ local function get_tween_alpha(info: motion_tweens.TweenInfo, current_time: numb
 		return 1
 	end
 
-	local cycle_time = current_time % cycle_duration
+	const cycle_time = current_time % cycle_duration
 
 	if cycle_time < delay_time then
 		return 0

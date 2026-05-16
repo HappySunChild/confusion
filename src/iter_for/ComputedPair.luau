@@ -1,15 +1,15 @@
-local iter_for = require("./types")
-local logging = require("../core_logging/types")
-local memory = require("../core_memory/types")
-local state = require("../core_state/types")
+const iter_for = require("./types")
+const logging = require("../core_logging/types")
+const memory = require("../core_memory/types")
+const state = require("../core_state/types")
 
-local cleanup = require("../core_memory/cleanup")
-local derive_scope = require("../core_memory/derive_scope")
-local destructor = require("../core_memory/destructor")
-local generic_use = require("../core_use/generic_use")
-local is_similar = require("../core_state/is_similar")
-local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
-local parse_error = require("../core_logging/parse_error")
+const cleanup = require("../core_memory/cleanup")
+const derive_scope = require("../core_memory/derive_scope")
+const destructor = require("../core_memory/destructor")
+const generic_use = require("../core_use/generic_use")
+const is_similar = require("../core_state/is_similar")
+const log_error_nonfatal = require("../core_logging/log_error_nonfatal")
+const parse_error = require("../core_logging/parse_error")
 
 type ComputedPairProcessor<S, IK, IV, OK, OV> = (
 	use: state.Use,
@@ -27,45 +27,46 @@ type Self<S, IK, IV, OK, OV> = iter_for.ComputedPair<IK, IV, OK, OV> & {
 	_use: state.Use,
 }
 
-local CLASS = table.freeze({
-	type = "state",
-	kind = "ComputedPair",
+const CLASS_MT = table.freeze({
+	__index = table.freeze({
+		type = "state",
+		kind = "ComputedPair",
 
-	_evaluate = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>)
-		if self.scope == nil then
-			return false
-		end
+		_evaluate = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>)
+			if self.scope == nil then
+				return false
+			end
 
-		local output = self._cached_value
+			const output = self._cached_value
 
-		local active_scope = derive_scope(self.scope)
-		local ok, new_key, new_value =
-			xpcall(self._processor, parse_error, self._use, active_scope, self.input_key, self.input_value)
+			const active_scope = derive_scope(self.scope)
+			const ok, new_key, new_value =
+				xpcall(self._processor, parse_error, self._use, active_scope, self.input_key, self.input_value)
 
-		cleanup(self._active_scope) -- for some reason the spec also calls for clearing the current scope as well? I guess it makes it consistent with omitting the pair. this is all weird
+			cleanup(self._active_scope) -- for some reason the spec also calls for clearing the current scope as well? I guess it makes it consistent with omitting the pair. this is all weird
 
-		if not ok then
-			output.key, output.value = nil, nil -- this behavior isn't congruent with how Computeds work, but the spec says that this is how it should work...
+			if not ok then
+				output.key, output.value = nil, nil -- this behavior isn't congruent with how Computeds work, but the spec says that this is how it should work...
 
-			cleanup(active_scope)
+				cleanup(active_scope)
 
-			log_error_nonfatal(state.callback_error, new_key :: logging.Error)
+				log_error_nonfatal(state.callback_error, new_key :: logging.Error)
 
-			return false
-		end
+				return false
+			end
 
-		self._active_scope = active_scope
+			self._active_scope = active_scope
 
-		local old_key, old_value = output.key, output.value
+			const old_key, old_value = output.key, output.value
 
-		output.key, output.value = new_key, new_value
+			output.key, output.value = new_key, new_value
 
-		return not (is_similar(old_key, new_key) and is_similar(old_value, new_value))
-	end,
+			return not (is_similar(old_key, new_key) and is_similar(old_value, new_value))
+		end,
+	}),
 })
-local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function destroy_computedpair<S, IK, IV, OK, OV>(computedpair: Self<S, IK, IV, OK, OV>)
+const function destroy_computedpair<S, IK, IV, OK, OV>(computedpair: Self<S, IK, IV, OK, OV>)
 	cleanup(computedpair._active_scope)
 	computedpair._active_scope = nil
 
@@ -74,7 +75,7 @@ local function destroy_computedpair<S, IK, IV, OK, OV>(computedpair: Self<S, IK,
 	computedpair._cached_value = nil
 end
 
-local function ComputedPair<S, IK, IV, OK, OV>(
+const function ComputedPair<S, IK, IV, OK, OV>(
 	scope: memory.Scope<S>,
 	initial_key: IK,
 	initial_value: IV,
@@ -82,7 +83,7 @@ local function ComputedPair<S, IK, IV, OK, OV>(
 	roam_values: boolean,
 	processor: ComputedPairProcessor<S, IK, IV, OK, OV>
 )
-	local new_computedpair: Self<S, IK, IV, OK, OV> = setmetatable({
+	const new_computedpair: Self<S, IK, IV, OK, OV> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
@@ -99,9 +100,9 @@ local function ComputedPair<S, IK, IV, OK, OV>(
 
 		_active_scope = nil,
 		_processor = processor,
-	}, CLASS_METATABLE) :: any
+	}, CLASS_MT) :: any
 
-	local oldest_task = destructor(new_computedpair, destroy_computedpair)
+	const oldest_task = destructor(new_computedpair, destroy_computedpair)
 
 	new_computedpair._oldest_task = oldest_task
 	new_computedpair._use = generic_use(new_computedpair)

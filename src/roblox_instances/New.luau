@@ -1,13 +1,13 @@
-local memory = require("../core_memory/types")
-local rbx_instances = require("./types")
+const memory = require("../core_memory/types")
+const rbx_instances = require("./types")
 
-local Children = require("./keys/Children")
-local apply_instance_properties = require("./apply_instance_properties")
-local implicit_numerical_merge = require("./implicit_numerical_merge")
-local log_error = require("../core_logging/log_error")
+const Children = require("./keys/Children")
+const apply_instance_properties = require("./apply_instance_properties")
+const implicit_numerical_merge = require("./implicit_numerical_merge")
+const log_error = require("../core_logging/log_error")
 
-local function New(scope: memory.Scope, class_name: string, properties: rbx_instances.Properties): Instance
-	local ok, new_instance = pcall(Instance.new, class_name)
+const function New(scope: memory.Scope, class_name: string, properties: rbx_instances.Properties): Instance
+	const ok, new_instance = pcall(Instance.new, class_name)
 
 	if not ok then
 		log_error(rbx_instances.cannot_create_class, nil, class_name)

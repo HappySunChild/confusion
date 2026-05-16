@@ -1,14 +1,14 @@
-local memory = require("../core_memory/types")
-local rbx_instances = require("../roblox_instances/types")
-local templates = require("./types")
+const memory = require("../core_memory/types")
+const rbx_instances = require("../roblox_instances/types")
+const templates = require("./types")
 
-local Hydrate = require("../roblox_instances/Hydrate")
-local log_error = require("../core_logging/log_error")
+const Hydrate = require("../roblox_instances/Hydrate")
+const log_error = require("../core_logging/log_error")
 
-local function FromTemplate<InstanceT>(scope: memory.Scope, template: InstanceT, properties: rbx_instances.Properties): InstanceT
+const function FromTemplate<InstanceT>(scope: memory.Scope, template: InstanceT, properties: rbx_instances.Properties): InstanceT
 	template = template :: Instance
 
-	local new_instance = template:Clone()
+	const new_instance = template:Clone()
 
 	if new_instance == nil then
 		log_error(

@@ -1,13 +1,13 @@
-local memory = require("../../core_memory/types")
-local rbx_instances = require("../types")
-local state = require("../../core_state/types")
+const memory = require("../../core_memory/types")
+const rbx_instances = require("../types")
+const state = require("../../core_state/types")
 
-local log_warn = require("../../core_logging/log_warn")
-local observe_immediate = require("../../core_graph/observe_immediate")
-local peek = require("../../core_use/peek")
+const log_warn = require("../../core_logging/log_warn")
+const observe_immediate = require("../../core_graph/observe_immediate")
+const peek = require("../../core_use/peek")
 
-local function set_parent(instance: Instance, parent: Instance?)
-	local success, err = pcall(function()
+const function set_parent(instance: Instance, parent: Instance?)
+	const success, err = pcall(function()
 		instance.Parent = parent
 	end)
 

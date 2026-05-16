@@ -1,15 +1,15 @@
-local Oklab = require("../colour/Oklab")
-local oklab_from_srgb = Oklab.from_srgb
+const Oklab = require("../colour/Oklab")
+const oklab_from_srgb = Oklab.from_srgb
 
-local function unpack_type(value: any): { number }
-	local data_type = typeof(value)
+const function unpack_type(value: any): { number }
+	const data_type = typeof(value)
 
 	if data_type == "number" then
 		return { value }
 	elseif data_type == "vector" then
 		return { value.x, value.y, value.z }
 	elseif data_type == "Color3" then
-		local lab = oklab_from_srgb(value)
+		const lab = oklab_from_srgb(value)
 
 		return { lab.x, lab.y, lab.z }
 	elseif data_type == "Vector3" then
@@ -21,7 +21,7 @@ local function unpack_type(value: any): { number }
 	elseif data_type == "UDim" then
 		return { value.Scale, value.Offset }
 	elseif data_type == "CFrame" then
-		local axis, angle = value:ToAxisAngle()
+		const axis, angle = value:ToAxisAngle()
 
 		return { value.X, value.Y, value.Z, axis.X, axis.Y, axis.Z, angle }
 	end

@@ -1,8 +1,8 @@
-local state = require("../core_state/types")
+const state = require("../core_state/types")
 
-local lerp_type = require("../lerp/lerp_type")
+const lerp_type = require("../lerp/lerp_type")
 
-local function get_bounding_keys(eval_time: number, keyframes: { any }): (number?, number?)
+const function get_bounding_keys(eval_time: number, keyframes: { any }): (number?, number?)
 	local prev_time, next_time = nil, nil
 
 	for keyframe_time in keyframes do
@@ -18,8 +18,8 @@ local function get_bounding_keys(eval_time: number, keyframes: { any }): (number
 	return prev_time, next_time
 end
 
-local function evaluate_keyframes<T>(eval_time: number, keyframes: { state.UsedAs<T> }, use: state.Use): T?
-	local prev_time, next_time = get_bounding_keys(eval_time, keyframes)
+const function evaluate_keyframes<T>(eval_time: number, keyframes: { state.UsedAs<T> }, use: state.Use): T?
+	const prev_time, next_time = get_bounding_keys(eval_time, keyframes)
 
 	if prev_time == nil and next_time == nil then -- neither keys were present, which means no keyframes were defined
 		return nil
@@ -29,10 +29,10 @@ local function evaluate_keyframes<T>(eval_time: number, keyframes: { state.UsedA
 		return use(keyframes[eval_time])
 	end
 
-	local prev_value, next_value = use(keyframes[prev_time]), use(keyframes[next_time])
+	const prev_value, next_value = use(keyframes[prev_time]), use(keyframes[next_time])
 
 	if prev_time ~= nil and next_time ~= nil then -- both bounding keys are present
-		local intermediate_alpha = (eval_time - prev_time) / (next_time - prev_time)
+		const intermediate_alpha = (eval_time - prev_time) / (next_time - prev_time)
 
 		return lerp_type(prev_value, next_value, intermediate_alpha)
 	end

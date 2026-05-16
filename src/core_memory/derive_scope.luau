@@ -1,13 +1,13 @@
-local memory = require("./types")
+const memory = require("./types")
 
-local ExternalDebug = require("../core_external/ExternalDebug")
-local track_scope = ExternalDebug.track_scope
+const ExternalDebug = require("../core_external/ExternalDebug")
+const track_scope = ExternalDebug.track_scope
 
-local merge = require("./merge")
+const merge = require("./merge")
 
-local function derive_scope<S, M>(existing: memory.Scope<S>, methods: M?): memory.Scope<S & M>
-	local old_metatable = getmetatable(existing) :: S?
-	local new_metatable = if methods == nil
+const function derive_scope<S, M>(existing: memory.Scope<S>, methods: M?): memory.Scope<S & M>
+	const old_metatable = getmetatable(existing) :: S?
+	const new_metatable = if methods == nil
 		then old_metatable -- reuse old metatable because nothing is being changed.
 		else {
 			__index = if old_metatable == nil or type(old_metatable.__index) ~= "table"
@@ -15,7 +15,7 @@ local function derive_scope<S, M>(existing: memory.Scope<S>, methods: M?): memor
 				else merge(table.clone(old_metatable.__index), methods), -- merge since both __index and methods are valid.
 		}
 
-	local derived_scope = setmetatable({}, new_metatable)
+	const derived_scope = setmetatable({}, new_metatable)
 
 	track_scope(derived_scope)
 

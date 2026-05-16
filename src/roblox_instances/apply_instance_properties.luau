@@ -1,26 +1,26 @@
-local memory = require("../core_memory/types")
-local rbx_instances = require("./types")
-local state = require("../core_state/types")
+const memory = require("../core_memory/types")
+const rbx_instances = require("./types")
+const state = require("../core_state/types")
 
-local Parent = require("./keys/Parent")
-local cast_to_state = require("../core_state/cast_to_state")
-local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
-local observe = require("../core_graph/observe")
-local parse_error = require("../core_logging/parse_error")
-local peek = require("../core_use/peek")
-local sort_keys = require("./sort_keys")
-local xtypeof = require("../core_graph/xtypeof")
+const Parent = require("./keys/Parent")
+const cast_to_state = require("../core_state/cast_to_state")
+const log_error_nonfatal = require("../core_logging/log_error_nonfatal")
+const observe = require("../core_graph/observe")
+const parse_error = require("../core_logging/parse_error")
+const peek = require("../core_use/peek")
+const sort_keys = require("./sort_keys")
+const xtypeof = require("../core_graph/xtypeof")
 
-local function raw_set_property(instance: Instance, property: string, value: any)
+const function raw_set_property(instance: Instance, property: string, value: any)
 	instance[property] = value
 end
 
-local function test_property_assignable(instance: Instance, property: string)
+const function test_property_assignable(instance: Instance, property: string)
 	instance[property] = instance[property]
 end
 
-local function set_property(instance: Instance, property: string, value: any)
-	local ok, err = xpcall(raw_set_property, parse_error, instance, property, value)
+const function set_property(instance: Instance, property: string, value: any)
+	const ok, err = xpcall(raw_set_property, parse_error, instance, property, value)
 
 	if ok then
 		return
@@ -32,8 +32,8 @@ local function set_property(instance: Instance, property: string, value: any)
 		return
 	end
 
-	local given_type = typeof(value)
-	local expected_type = typeof(instance[property])
+	const given_type = typeof(value)
+	const expected_type = typeof(instance[property])
 
 	if given_type == expected_type then
 		log_error_nonfatal(rbx_instances.property_assign_error, err)
@@ -49,7 +49,7 @@ local function set_property(instance: Instance, property: string, value: any)
 	end
 end
 
-local function apply_property(scope: memory.Scope, instance: Instance, property: string, value: state.UsedAs<any>)
+const function apply_property(scope: memory.Scope, instance: Instance, property: string, value: state.UsedAs<any>)
 	set_property(instance, property, peek(value))
 
 	if cast_to_state(value) ~= nil then
@@ -59,14 +59,14 @@ local function apply_property(scope: memory.Scope, instance: Instance, property:
 	end
 end
 
-local function apply_instance_properties(scope: memory.Scope, instance: Instance, properties: rbx_instances.Properties)
-	local special_key_values: { [rbx_instances.SpecialKey]: any } = {}
+const function apply_instance_properties(scope: memory.Scope, instance: Instance, properties: rbx_instances.Properties)
+	const special_key_values: { [rbx_instances.SpecialKey]: any } = {}
 
 	special_key_values[Parent] = properties.Parent
 	properties.Parent = nil
 
 	for key, value in properties do
-		local key_type = xtypeof(key)
+		const key_type = xtypeof(key)
 
 		if key_type == "string" then
 			apply_property(scope, instance, key, value)
@@ -77,7 +77,7 @@ local function apply_instance_properties(scope: memory.Scope, instance: Instance
 		end
 	end
 
-	local special_keys: { rbx_instances.SpecialKey } = {}
+	const special_keys: { rbx_instances.SpecialKey } = {}
 
 	for key in special_key_values do
 		table.insert(special_keys, key)
@@ -86,8 +86,8 @@ local function apply_instance_properties(scope: memory.Scope, instance: Instance
 	table.sort(special_keys, sort_keys)
 
 	for _, key: rbx_instances.SpecialKey in special_keys do
-		local value = special_key_values[key]
-		local ok, err = xpcall(key.apply, parse_error, scope, instance, value)
+		const value = special_key_values[key]
+		const ok, err = xpcall(key.apply, parse_error, scope, instance, value)
 
 		if ok then
 			continue

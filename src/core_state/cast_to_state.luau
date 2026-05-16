@@ -1,8 +1,8 @@
-local state = require("./types")
+const state = require("./types")
 
-local xtypeof = require("../core_graph/xtypeof")
+const xtypeof = require("../core_graph/xtypeof")
 
-local function cast_to_state(x: unknown): state.StateNode<unknown>?
+const function cast_to_state(x: unknown): state.StateNode<unknown>?
 	if xtypeof(x) == "state" then
 		return x
 	end

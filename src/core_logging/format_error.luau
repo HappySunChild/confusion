@@ -1,8 +1,8 @@
-local logging = require("./types")
+const logging = require("./types")
 
-local function format_error(message: string, error_or_trace: logging.Error | string?, ...: unknown)
-	local err = if typeof(error_or_trace) == "table" then error_or_trace else nil
-	local trace = if typeof(error_or_trace) == "table" then error_or_trace.trace else error_or_trace
+const function format_error(message: string, error_or_trace: logging.Error | string?, ...: unknown)
+	const err = if typeof(error_or_trace) == "table" then error_or_trace else nil
+	const trace = if typeof(error_or_trace) == "table" then error_or_trace.trace else error_or_trace
 
 	message = string.format(message, ...)
 

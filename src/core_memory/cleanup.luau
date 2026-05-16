@@ -1,11 +1,11 @@
-local memory = require("./types")
+const memory = require("./types")
 
-local ExternalDebug = require("../core_external/ExternalDebug")
-local untrack_scope = ExternalDebug.untrack_scope
+const ExternalDebug = require("../core_external/ExternalDebug")
+const untrack_scope = ExternalDebug.untrack_scope
 
-local log_error = require("../core_logging/log_error")
+const log_error = require("../core_logging/log_error")
 
-local ALREADY_DESTROYING: { [any]: true } = {}
+const ALREADY_DESTROYING: { [any]: true } = {}
 
 --[[
 	Cleans up the chores passed in as the arguments.
@@ -19,7 +19,7 @@ local ALREADY_DESTROYING: { [any]: true } = {}
 	
 	Anything else passed in will be ignored.
 ]]
-local function cleanup(chore: any?): ()
+const function cleanup(chore: any?): ()
 	if chore == nil then
 		return
 	end

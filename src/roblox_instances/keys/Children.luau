@@ -1,24 +1,24 @@
-local memory = require("../../core_memory/types")
-local rbx_instances = require("../types")
+const memory = require("../../core_memory/types")
+const rbx_instances = require("../types")
 
-local cast_to_state = require("../../core_state/cast_to_state")
-local cleanup = require("../../core_memory/cleanup")
-local instance_from_description = require("../instance_from_description")
-local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
-local observe_immediate = require("../../core_graph/observe_immediate")
-local peek = require("../../core_use/peek")
+const cast_to_state = require("../../core_state/cast_to_state")
+const cleanup = require("../../core_memory/cleanup")
+const instance_from_description = require("../instance_from_description")
+const log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
+const observe_immediate = require("../../core_graph/observe_immediate")
+const peek = require("../../core_use/peek")
 
 type ChildrenSet = { [Instance]: true }
 type ChildrenScopes = { [rbx_instances.Child]: memory.Scope }
 
-local Children = {
+const Children = {
 	type = "SpecialKey",
 	kind = "Children",
 	stage = "descendants",
 	apply = nil,
 } :: rbx_instances.SpecialKey<"Children">
 
-local function create_reconciler(
+const function create_reconciler(
 	scope: memory.Scope,
 	parent: Instance,
 	processor: (
@@ -33,7 +33,7 @@ local function create_reconciler(
 	local old_children: ChildrenSet, new_children: ChildrenSet = {}, {}
 	local old_scopes: ChildrenScopes, new_scopes: ChildrenScopes = {}, {}
 
-	local function reconcile(new_child: rbx_instances.Child?)
+	const function reconcile(new_child: rbx_instances.Child?)
 		old_children, new_children = new_children, old_children
 		old_scopes, new_scopes = new_scopes, old_scopes
 
@@ -66,7 +66,7 @@ local function create_reconciler(
 	return reconcile
 end
 
-local function process_child(
+const function process_child(
 	child: rbx_instances.Child,
 	parent: Instance,
 	new_children: ChildrenSet,
@@ -74,7 +74,7 @@ local function process_child(
 	old_children: ChildrenSet,
 	old_scopes: ChildrenScopes
 )
-	local child_type = typeof(child)
+	const child_type = typeof(child)
 
 	if child_type == "Instance" then -- ROOT CASE
 		child = child :: Instance
@@ -84,7 +84,7 @@ local function process_child(
 	elseif child_type == "function" then -- UNRESOLVED CASE
 		child = child :: rbx_instances.ChildUnresolved
 
-		local actual_child = child(parent)
+		const actual_child = child(parent)
 
 		if actual_child ~= nil then
 			process_child(actual_child, parent, new_children, new_scopes, old_children, old_scopes)
@@ -97,7 +97,7 @@ local function process_child(
 		if child_scope == nil then
 			child_scope = {}
 
-			local new_instance = instance_from_description(child_scope, child, Children)
+			const new_instance = instance_from_description(child_scope, child, Children)
 
 			process_child(new_instance, parent, new_children, new_scopes, old_children, old_scopes)
 		else
@@ -113,7 +113,7 @@ local function process_child(
 		if child_scope == nil then
 			child_scope = {}
 
-			local reconcile = create_reconciler(child_scope, parent, process_child)
+			const reconcile = create_reconciler(child_scope, parent, process_child)
 
 			observe_immediate(child_scope, child, function()
 				reconcile(peek(child))
@@ -134,7 +134,7 @@ local function process_child(
 end
 
 function Children.apply(scope: memory.Scope, apply_to: Instance, root_child: rbx_instances.Child)
-	local reconcile = create_reconciler(scope, apply_to, process_child)
+	const reconcile = create_reconciler(scope, apply_to, process_child)
 	reconcile(root_child)
 end
 

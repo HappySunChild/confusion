@@ -1,5 +1,5 @@
-local function implicit_numerical_merge(tbl: { [any]: any }, target_key: any)
-	local merged = { tbl[target_key] }
+const function implicit_numerical_merge(tbl: { [any]: any }, target_key: any)
+	const merged = { tbl[target_key] }
 
 	for key, value in tbl do
 		if type(key) == "number" then

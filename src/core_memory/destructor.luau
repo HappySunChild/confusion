@@ -1,17 +1,17 @@
-local graph = require("../core_graph/types")
+const graph = require("../core_graph/types")
 
-local function destructor(node: graph.GraphNode, auxiliary: (node: graph.GraphNode) -> ()?): () -> ()
-	local function destroy()
+const function destructor(node: graph.GraphNode, auxiliary: (node: graph.GraphNode) -> ()?): () -> ()
+	const function destroy()
 		node.scope = nil
 
-		local using = node.using
+		const using = node.using
 
 		for dependency in using do
 			dependency.users[node] = nil
 			using[dependency] = nil
 		end
 
-		local users = node.users
+		const users = node.users
 
 		for user in users do
 			user.using[node] = nil

@@ -1,18 +1,19 @@
-local motion_tweens = require("./types")
+const motion_tweens = require("./types")
 
-local easing_styles = require("./easing_styles")
+const easing_styles = require("./easing_styles")
 
-local CLASS = table.freeze({
-	type = "TweenInfo",
-	time = 1,
-	easing = easing_styles.Linear.Out,
-	repeat_count = 0,
-	reverses = false,
-	delay_time = 0,
+const CLASS_MT = table.freeze({
+	__index = table.freeze({
+		type = "TweenInfo",
+		time = 1,
+		easing = easing_styles.Linear.Out,
+		repeat_count = 0,
+		reverses = false,
+		delay_time = 0,
+	}),
 })
-local CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function TweenInfo(
+const function TweenInfo(
 	time: number?,
 	easing: ((number) -> number)?,
 	repeat_count: number?,
@@ -25,7 +26,7 @@ local function TweenInfo(
 		repeat_count = repeat_count,
 		reverses = reverses,
 		delay_time = delay_time,
-	}, CLASS_METATABLE) :: any
+	}, CLASS_MT) :: any
 end
 
 return TweenInfo

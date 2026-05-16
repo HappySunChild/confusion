@@ -1,13 +1,13 @@
-local memory = require("../core_memory/types")
-local rbx_stylesheets = require("./types")
+const memory = require("../core_memory/types")
+const rbx_stylesheets = require("./types")
 
-local Attributes = require("../roblox_instances/keys/Attributes")
-local StyleRules = require("./keys/StyleRules")
-local StyleSheetDerives = require("./keys/StyleSheetDerives")
-local apply_instance_properties = require("../roblox_instances/apply_instance_properties")
+const Attributes = require("../roblox_instances/keys/Attributes")
+const StyleRules = require("./keys/StyleRules")
+const StyleSheetDerives = require("./keys/StyleSheetDerives")
+const apply_instance_properties = require("../roblox_instances/apply_instance_properties")
 
-local function StyleSheet(scope: memory.Scope, properties: rbx_stylesheets.StyleSheetProperties): StyleSheet
-	local new_sheet = Instance.new("StyleSheet")
+const function StyleSheet(scope: memory.Scope, properties: rbx_stylesheets.StyleSheetProperties): StyleSheet
+	const new_sheet = Instance.new("StyleSheet")
 
 	table.insert(scope, new_sheet)
 

@@ -1,33 +1,33 @@
-local memory = require("../core_memory/types")
-local motion = require("../motion/types")
-local state = require("../core_state/types")
+const memory = require("../core_memory/types")
+const motion = require("../motion/types")
+const state = require("../core_state/types")
 
-local Motion = require("../motion/Motion")
-local pack_type = require("./pack_type")
-local peek = require("../core_use/peek")
-local spring_coefficients = require("./spring_coefficients")
-local unpack_type = require("./unpack_type")
+const Motion = require("../motion/Motion")
+const pack_type = require("./pack_type")
+const peek = require("../core_use/peek")
+const spring_coefficients = require("./spring_coefficients")
+const unpack_type = require("./unpack_type")
 
-local EPSILON = 0.0001
+const EPSILON = 0.0001
 
-local function spring_mover<T>(speed: state.UsedAs<number>, damping: state.UsedAs<number>): motion.CurveGenerator<T>
+const function spring_mover<T>(speed: state.UsedAs<number>, damping: state.UsedAs<number>): motion.CurveGenerator<T>
 	local start_pos: { number } = {}
 	local start_vel: { number } = {}
 
-	local active_pos: { number } = {}
+	const active_pos: { number } = {}
 	local active_vel: { number } = {}
 	local active_type: string = ""
 
-	local curve_generator = function(
+	const curve_generator = function(
 		target_position: T,
 		initial_position: T,
 		initial_velocity: { number }?
 	): motion.AnimationCurve<T>
-		local discontinuous = typeof(target_position) ~= active_type
+		const discontinuous = typeof(target_position) ~= active_type
 
-		local target_pos = unpack_type(target_position)
+		const target_pos = unpack_type(target_position)
 
-		local spring_count = #target_pos
+		const spring_count = #target_pos
 
 		if discontinuous then
 			-- start_pos = table.clone(target_pos)
@@ -46,7 +46,7 @@ local function spring_mover<T>(speed: state.UsedAs<number>, damping: state.UsedA
 
 		active_type = typeof(target_position)
 
-		local new_curve = function(elapsed: number): (boolean, T, { number })
+		const new_curve = function(elapsed: number): (boolean, T, { number })
 			local should_sleep = false
 			local new_value
 
@@ -55,15 +55,15 @@ local function spring_mover<T>(speed: state.UsedAs<number>, damping: state.UsedA
 			elseif elapsed <= 0 then
 				new_value = initial_position
 			else
-				local pos_pos, pos_vel, vel_pos, vel_vel = spring_coefficients(elapsed, peek(damping), peek(speed))
+				const pos_pos, pos_vel, vel_pos, vel_vel = spring_coefficients(elapsed, peek(damping), peek(speed))
 
 				local is_moving = false
 
 				for index = 1, spring_count do
-					local start_p: number = start_pos[index]
-					local target_p: number = target_pos[index]
-					local start_v: number = start_vel[index]
-					local start_d = start_p - target_p
+					const start_p: number = start_pos[index]
+					const target_p: number = target_pos[index]
+					const start_v: number = start_vel[index]
+					const start_d = start_p - target_p
 					local latest_d = start_d * pos_pos + start_v * pos_vel
 					local latest_v = start_d * vel_pos + start_v * vel_vel
 
@@ -75,7 +75,7 @@ local function spring_mover<T>(speed: state.UsedAs<number>, damping: state.UsedA
 						is_moving = true
 					end
 
-					local latest_p = latest_d + target_p
+					const latest_p = latest_d + target_p
 
 					active_pos[index] = latest_p
 					active_vel[index] = latest_v
@@ -100,7 +100,7 @@ local function spring_mover<T>(speed: state.UsedAs<number>, damping: state.UsedA
 	return curve_generator
 end
 
-local function Spring<T>(
+const function Spring<T>(
 	scope: memory.Scope,
 	goal: state.UsedAs<T>,
 	speed: state.UsedAs<number>?,

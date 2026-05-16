@@ -1,19 +1,19 @@
-local graph = require("./types")
+const graph = require("./types")
 
-local cast_to_graph = require("./cast_to_graph")
-local check_lifetime = require("../core_memory/check_lifetime")
-local evaluate = require("./evaluate")
-local log_error = require("../core_logging/log_error")
-local name_of = require("../core_logging/name_of")
+const cast_to_graph = require("./cast_to_graph")
+const check_lifetime = require("../core_memory/check_lifetime")
+const evaluate = require("./evaluate")
+const log_error = require("../core_logging/log_error")
+const name_of = require("../core_logging/name_of")
 
-local function depend_lifetime_formatter(a: unknown, b: unknown): (string, string)
+const function depend_lifetime_formatter(a: unknown, b: unknown): (string, string)
 	return `The dependency '{name_of(b, "object")}'`, `being used by the user '{name_of(a, "object")}'`
 end
 
 --[[
 	Forms a dependency on a graph object.
 ]]
-local function depend(user: graph.GraphNode, dependency: any?)
+const function depend(user: graph.GraphNode, dependency: any?)
 	if cast_to_graph(dependency) == nil then
 		return
 	end

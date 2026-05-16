@@ -1,12 +1,12 @@
-local iter = require("../iter/types")
-local iter_range = require("./types")
-local memory = require("../core_memory/types")
-local state = require("../core_state/types")
+const iter = require("../iter/types")
+const iter_range = require("./types")
+const memory = require("../core_memory/types")
+const state = require("../core_state/types")
 
-local Iter = require("../iter/Iter")
-local RangeDisassembly = require("./RangeDisassembly")
+const Iter = require("../iter/Iter")
+const RangeDisassembly = require("./RangeDisassembly")
 
-local function ForRange<S, T>(
+const function ForRange<S, T>(
 	scope: memory.Scope<S>,
 	start: state.UsedAs<number>,
 	finish: state.UsedAs<number>,

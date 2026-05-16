@@ -1,13 +1,13 @@
-local rbx_instances = require("../types")
-local state = require("../../core_state/types")
+const rbx_instances = require("../types")
+const state = require("../../core_state/types")
 
-local log_error = require("../../core_logging/log_error")
-local xtypeof = require("../../core_graph/xtypeof")
+const log_error = require("../../core_logging/log_error")
+const xtypeof = require("../../core_graph/xtypeof")
 
 type OneOrMore<T> = T | { T }
 
-local function process_ref(instance: Instance, ref: OneOrMore<state.Value<Instance>>)
-	local ref_type = xtypeof(ref)
+const function process_ref(instance: Instance, ref: OneOrMore<state.Value<Instance>>)
+	const ref_type = xtypeof(ref)
 
 	if ref_type == "state" and ref.kind == "Value" then
 		ref = ref :: state.Value<Instance>

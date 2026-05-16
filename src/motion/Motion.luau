@@ -1,19 +1,19 @@
-local chrono = require("../chrono/types")
-local memory = require("../core_memory/types")
-local motion = require("./types")
-local state = require("../core_state/types")
+const chrono = require("../chrono/types")
+const memory = require("../core_memory/types")
+const motion = require("./types")
+const state = require("../core_state/types")
 
-local ExternalScheduler = require("../core_external/ExternalScheduler")
-local get_delta_time = ExternalScheduler.get_delta_time
+const ExternalScheduler = require("../core_external/ExternalScheduler")
+const get_delta_time = ExternalScheduler.get_delta_time
 
-local Timer = require("../chrono/Timer")
-local change = require("../core_graph/change")
-local depend = require("../core_graph/depend")
-local destructor = require("../core_memory/destructor")
-local evaluate = require("../core_graph/evaluate")
-local is_similar = require("../core_state/is_similar")
-local log_warn = require("../core_logging/log_warn")
-local peek = require("../core_use/peek")
+const Timer = require("../chrono/Timer")
+const change = require("../core_graph/change")
+const depend = require("../core_graph/depend")
+const destructor = require("../core_memory/destructor")
+const evaluate = require("../core_graph/evaluate")
+const is_similar = require("../core_state/is_similar")
+const log_warn = require("../core_logging/log_warn")
+const peek = require("../core_use/peek")
 
 type Self<T> = {
 	goal: state.UsedAs<T>,
@@ -30,13 +30,13 @@ type Self<T> = {
 	_timer: chrono.Timer,
 } & motion.Motion<T>
 
-local function sync_dynamics<T>(motion_obj: Self<T>, should_sleep: boolean, output_value: T, ...: any): (T, boolean)
-	local dynamics = motion_obj.dynamics
+const function sync_dynamics<T>(motion_obj: Self<T>, should_sleep: boolean, output_value: T, ...: any): (T, boolean)
+	const dynamics = motion_obj.dynamics
 
 	table.clear(dynamics)
 
 	if output_value ~= output_value then
-		local goal = motion_obj.active_goal
+		const goal = motion_obj.active_goal
 
 		log_warn(motion.animated_invalid_motion, output_value, goal)
 
@@ -52,7 +52,7 @@ local function sync_dynamics<T>(motion_obj: Self<T>, should_sleep: boolean, outp
 	return output_value, should_sleep
 end
 
-local CLASS = table.freeze({
+const CLASS = table.freeze({
 	type = "state",
 	kind = "Motion",
 	timeliness = "eager",
@@ -80,11 +80,11 @@ local CLASS = table.freeze({
 	end,
 
 	_evaluate = function<T>(self: Self<T>)
-		local timer = self._timer
-		local goal = self.goal
-		local generator = self.generator
+		const timer = self._timer
+		const goal = self.goal
+		const generator = self.generator
 
-		local new_goal = peek(goal) :: T
+		const new_goal = peek(goal) :: T
 
 		depend(self, goal)
 
@@ -95,7 +95,7 @@ local CLASS = table.freeze({
 			return false
 		end
 
-		local new_generator = peek(generator) :: motion.CurveGenerator<T>
+		const new_generator = peek(generator) :: motion.CurveGenerator<T>
 
 		depend(self, generator)
 		depend(self, timer)
@@ -119,8 +119,8 @@ local CLASS = table.freeze({
 			elapsed = get_delta_time()
 		end
 
-		local old_value = self._cached_value :: any
-		local new_value, should_sleep = sync_dynamics(self, self.active_curve(elapsed))
+		const old_value = self._cached_value :: any
+		const new_value, should_sleep = sync_dynamics(self, self.active_curve(elapsed))
 
 		self._cached_value = new_value
 
@@ -131,14 +131,14 @@ local CLASS = table.freeze({
 		return not is_similar(old_value, new_value)
 	end,
 })
-local CLASS_METATABLE = table.freeze({ __index = CLASS })
+const CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function Motion<T>(
+const function Motion<T>(
 	scope: memory.Scope,
 	goal: state.UsedAs<T>,
 	curve_generator: state.UsedAs<motion.CurveGenerator<T>>
 ): motion.Motion<T>
-	local new_motion: Self<T> = setmetatable({
+	const new_motion: Self<T> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
@@ -160,7 +160,7 @@ local function Motion<T>(
 		_timer = Timer(scope),
 	}, CLASS_METATABLE) :: any
 
-	local oldest_task = destructor(new_motion)
+	const oldest_task = destructor(new_motion)
 
 	new_motion._oldest_task = oldest_task
 

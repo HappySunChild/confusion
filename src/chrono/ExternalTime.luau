@@ -1,15 +1,15 @@
-local chrono = require("./types")
-local memory = require("../core_memory/types")
+const chrono = require("./types")
+const memory = require("../core_memory/types")
 
-local ExternalScheduler = require("../core_external/ExternalScheduler")
-local change = require("../core_graph/change")
-local destructor = require("../core_memory/destructor")
+const ExternalScheduler = require("../core_external/ExternalScheduler")
+const change = require("../core_graph/change")
+const destructor = require("../core_memory/destructor")
 
 type Self = chrono.ExternalTime
 
-local ALL_TIMERS = {}
+const ALL_TIMERS = {}
 
-local CLASS = {
+const CLASS = {
 	type = "state",
 	kind = "ExternalTime",
 	timeliness = "lazy",
@@ -29,7 +29,7 @@ local CLASS = {
 		return true
 	end,
 }
-local CLASS_METATABLE = table.freeze({ __index = CLASS })
+const CLASS_MT = table.freeze({ __index = CLASS })
 
 ExternalScheduler.bind_to_update_step(function(now: number)
 	CLASS._cached_value = now
@@ -39,24 +39,22 @@ ExternalScheduler.bind_to_update_step(function(now: number)
 	end
 end)
 
-local function destroy_externaltime(externaltime: Self)
+const function destroy_externaltime(externaltime: Self)
 	ALL_TIMERS[externaltime] = nil
 end
 
-local function ExternalTime(scope: memory.Scope): chrono.ExternalTime
-	local new_externaltime = setmetatable({
+const function ExternalTime(scope: memory.Scope): chrono.ExternalTime
+	const new_externaltime = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
 		users = {},
-	}, CLASS_METATABLE) :: Self
+	}, CLASS_MT) :: Self
 
 	ALL_TIMERS[new_externaltime] = true
 
-	local oldest_task = destructor(new_externaltime, destroy_externaltime)
-
+	const oldest_task = destructor(new_externaltime, destroy_externaltime)
 	new_externaltime._oldest_task = oldest_task
-
 	table.insert(scope, oldest_task)
 
 	return new_externaltime

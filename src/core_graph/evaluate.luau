@@ -1,6 +1,6 @@
-local graph = require("./types")
+const graph = require("./types")
 
-local log_error = require("../core_logging/log_error")
+const log_error = require("../core_logging/log_error")
 
 --[[
 	Evaluates the graph object if necessary, so that it is up to date.
@@ -8,14 +8,14 @@ local log_error = require("../core_logging/log_error")
 
 	https://fluff.blog/2024/04/16/monotonic-painting.html
 ]]
-local function evaluate(node: graph.GraphNode, force_computation: boolean?): boolean
+const function evaluate(node: graph.GraphNode, force_computation: boolean?): boolean
 	if node.validity == "busy" then
 		log_error(graph.infinite_loop)
 	end
 
-	local first_evaluation = node.last_change == nil and node.last_compute == nil
-	local is_dirty = node.validity == "dirty"
-	local is_invalid = node.validity == "invalid"
+	const first_evaluation = node.last_change == nil and node.last_compute == nil
+	const is_dirty = node.validity == "dirty"
+	const is_invalid = node.validity == "invalid"
 
 	if not (first_evaluation or is_dirty or is_invalid or force_computation) then
 		return false

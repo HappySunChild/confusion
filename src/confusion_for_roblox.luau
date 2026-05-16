@@ -4,30 +4,30 @@ author: HappySunChild (Eli)
 repository: https://github.com/HappySunChild/confusion
 --]]
 
-local graph = require("./core_graph/types")
-local memory = require("./core_memory/types")
-local state = require("./core_state/types")
-local use = require("./core_use/types")
+const graph = require("./core_graph/types")
+const memory = require("./core_memory/types")
+const state = require("./core_state/types")
+const use = require("./core_use/types")
 
-local async = require("./async/types")
-local chain = require("./chain/types")
-local chrono = require("./chrono/types")
-local context = require("./context/types")
-local keyframes = require("./keyframes/types")
-local safe = require("./safe/types")
+const async = require("./async/types")
+const chain = require("./chain/types")
+const chrono = require("./chrono/types")
+const context = require("./context/types")
+const keyframes = require("./keyframes/types")
+const safe = require("./safe/types")
 
-local iter = require("./iter/types")
-local iter_for = require("./iter_for/types")
-local iter_range = require("./iter_range/types")
+const iter = require("./iter/types")
+const iter_for = require("./iter_for/types")
+const iter_range = require("./iter_range/types")
 
-local motion = require("./motion/types")
-local motion_springs = require("./motion_springs/types")
-local motion_tweens = require("./motion_tweens/types")
+const motion = require("./motion/types")
+const motion_springs = require("./motion_springs/types")
+const motion_tweens = require("./motion_tweens/types")
 
-local rbx_binds = require("./roblox_binds/types")
-local rbx_instances = require("./roblox_instances/types")
-local rbx_stylesheets = require("./roblox_stylesheets/types")
-local rbx_templates = require("./roblox_templates/types")
+const rbx_binds = require("./roblox_binds/types")
+const rbx_instances = require("./roblox_instances/types")
+const rbx_stylesheets = require("./roblox_stylesheets/types")
+const rbx_templates = require("./roblox_templates/types")
 
 export type Scope<T = Confusion> = memory.Scope<T>
 
@@ -147,13 +147,13 @@ type Confusion = {
 	StyleRules: rbx_instances.SpecialKey<"StyleRules">,
 }
 
-local ExternalLogger = require("./core_external/ExternalLogger")
+const ExternalLogger = require("./core_external/ExternalLogger")
 ExternalLogger.set_logger(require("./roblox_external/RobloxLogger"))
 
-local ExternalScheduler = require("./core_external/ExternalScheduler")
+const ExternalScheduler = require("./core_external/ExternalScheduler")
 ExternalScheduler.set_scheduler(require("./roblox_external/RobloxScheduler"))
 
-local confusion_for_roblox = {
+const confusion_for_roblox = {
 	version = { major = 0, minor = 0, patch = 0 },
 
 	-- Core: Memory

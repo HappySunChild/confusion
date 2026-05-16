@@ -1,16 +1,16 @@
-local instances = require("../roblox_instances/types")
-local memory = require("../core_memory/types")
-local rbx_binds = require("./types")
+const instances = require("../roblox_instances/types")
+const memory = require("../core_memory/types")
+const rbx_binds = require("./types")
 
-local change = require("../core_graph/change")
-local destructor = require("../core_memory/destructor")
-local log_error = require("../core_logging/log_error")
+const change = require("../core_graph/change")
+const destructor = require("../core_memory/destructor")
+const log_error = require("../core_logging/log_error")
 
 type Self<T> = {
 	_event: RBXScriptConnection,
 } & rbx_binds.PropertyOf<T>
 
-local CLASS = table.freeze({
+const CLASS = table.freeze({
 	type = "state",
 	kind = "PropertyOf",
 	timeliness = "lazy",
@@ -20,20 +20,20 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local CLASS_METATABLE = table.freeze({ __index = CLASS })
+const CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function destroy_propertyof<T>(propertyof: Self<T>)
+const function destroy_propertyof<T>(propertyof: Self<T>)
 	propertyof._event:Disconnect()
 end
 
-local function PropertyOf(scope: memory.Scope, instance: Instance, property: string): rbx_binds.PropertyOf<unknown>
-	local ok, event: RBXScriptSignal = pcall(instance.GetPropertyChangedSignal, instance, property)
+const function PropertyOf(scope: memory.Scope, instance: Instance, property: string): rbx_binds.PropertyOf<unknown>
+	const ok, event: RBXScriptSignal = pcall(instance.GetPropertyChangedSignal, instance, property)
 
 	if not ok then
 		log_error(instances.cannot_connect_change, nil, instance.ClassName, tostring(property))
 	end
 
-	local new_property: rbx_binds.PropertyOf<unknown> = setmetatable({
+	const new_property: rbx_binds.PropertyOf<unknown> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
@@ -47,7 +47,7 @@ local function PropertyOf(scope: memory.Scope, instance: Instance, property: str
 		change(new_property)
 	end)
 
-	local oldest_task = destructor(new_property, destroy_propertyof)
+	const oldest_task = destructor(new_property, destroy_propertyof)
 
 	new_property._oldest_task = oldest_task
 

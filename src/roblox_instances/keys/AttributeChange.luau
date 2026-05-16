@@ -1,9 +1,9 @@
-local memory = require("../../core_memory/types")
-local rbx_instances = require("../types")
+const memory = require("../../core_memory/types")
+const rbx_instances = require("../types")
 
-local KEY_CACHE = {}
+const KEY_CACHE = {}
 
-local function AttributeChange(attribute: string): rbx_instances.SpecialKey<"AttributeChange">
+const function AttributeChange(attribute: string): rbx_instances.SpecialKey<"AttributeChange">
 	local key = KEY_CACHE[attribute]
 
 	if key == nil then
@@ -12,7 +12,7 @@ local function AttributeChange(attribute: string): rbx_instances.SpecialKey<"Att
 			kind = "AttributeChange",
 			stage = "observer",
 			apply = function(scope: memory.Scope, apply_to: Instance, callback: (any) -> ())
-				local event = apply_to:GetAttributeChangedSignal(attribute)
+				const event = apply_to:GetAttributeChangedSignal(attribute)
 
 				table.insert(
 					scope,

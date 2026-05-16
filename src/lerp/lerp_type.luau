@@ -1,8 +1,8 @@
-local Oklab = require("../colour/Oklab")
-local oklab_from_srgb, oklab_to_srgb = Oklab.from_srgb, Oklab.to_srgb
+const Oklab = require("../colour/Oklab")
+const oklab_from_srgb, oklab_to_srgb = Oklab.from_srgb, Oklab.to_srgb
 
-local function lerp_type<T>(a: T, b: T, alpha: number): T
-	local data_type = typeof(a)
+const function lerp_type<T>(a: T, b: T, alpha: number): T
+	const data_type = typeof(a)
 
 	if typeof(b) == data_type then
 		if data_type == "number" then
@@ -10,9 +10,9 @@ local function lerp_type<T>(a: T, b: T, alpha: number): T
 		elseif data_type == "vector" then
 			return vector.lerp(a :: vector, b :: vector, alpha)
 		elseif data_type == "Color3" then
-			local oklab_from = oklab_from_srgb(vector.create(a.R, a.G, a.B))
-			local oklab_target = oklab_from_srgb(vector.create(b.R, b.G, b.B))
-			local oklab_result =
+			const oklab_from = oklab_from_srgb(vector.create(a.R, a.G, a.B))
+			const oklab_target = oklab_from_srgb(vector.create(b.R, b.G, b.B))
+			const oklab_result =
 				vector.clamp(oklab_to_srgb(vector.lerp(oklab_from, oklab_target, alpha)), vector.zero, vector.one)
 
 			return Color3.new(oklab_result.x, oklab_result.y, oklab_result.z)

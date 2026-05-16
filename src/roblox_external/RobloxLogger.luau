@@ -1,6 +1,6 @@
-local external = require("../core_external/types")
+const external = require("../core_external/types")
 
-local RobloxLogger: external.ExternalLogger = {
+const RobloxLogger: external.ExternalLogger = {
 	log_error_nonfatal = function(message: string)
 		task.spawn(error, message, 0)
 	end,

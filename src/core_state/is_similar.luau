@@ -1,8 +1,8 @@
 --- Returns whether `a` and `b` are meaningfully similar.
-local function is_similar(a: unknown, b: unknown): boolean
-	local type_a = typeof(a)
-	local is_table = type_a == "table"
-	local is_userdata = type_a == "userdata"
+const function is_similar(a: unknown, b: unknown): boolean
+	const type_a = typeof(a)
+	const is_table = type_a == "table"
+	const is_userdata = type_a == "userdata"
 
 	return if not (is_table or is_userdata)
 		then a == b or a ~= a and b ~= b

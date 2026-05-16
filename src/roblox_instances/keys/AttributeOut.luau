@@ -1,13 +1,13 @@
-local memory = require("../../core_memory/types")
-local rbx_instances = require("../types")
-local state = require("../../core_state/types")
+const memory = require("../../core_memory/types")
+const rbx_instances = require("../types")
+const state = require("../../core_state/types")
 
-local log_error = require("../../core_logging/log_error")
-local xtypeof = require("../../core_graph/xtypeof")
+const log_error = require("../../core_logging/log_error")
+const xtypeof = require("../../core_graph/xtypeof")
 
-local KEY_CACHE = {}
+const KEY_CACHE = {}
 
-local function AttributeOut(attribute: string): rbx_instances.SpecialKey<"AttributeOut">
+const function AttributeOut(attribute: string): rbx_instances.SpecialKey<"AttributeOut">
 	local key = KEY_CACHE[attribute]
 
 	if key == nil then
@@ -20,7 +20,7 @@ local function AttributeOut(attribute: string): rbx_instances.SpecialKey<"Attrib
 					log_error(rbx_instances.invalid_out_type, nil, typeof(value))
 				end
 
-				local event = apply_to:GetAttributeChangedSignal(attribute)
+				const event = apply_to:GetAttributeChangedSignal(attribute)
 
 				table.insert(
 					scope,

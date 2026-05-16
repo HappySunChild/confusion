@@ -1,8 +1,8 @@
-local memory = require("./types")
+const memory = require("./types")
 
-local log_error = require("../core_logging/log_error")
+const log_error = require("../core_logging/log_error")
 
-local function check_lifetime<A, B, C...>(
+const function check_lifetime<A, B, C...>(
 	a: A,
 	b: B,
 	scope_b: memory.Scope?,

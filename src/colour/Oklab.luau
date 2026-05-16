@@ -1,16 +1,16 @@
-local Linear = require("./Linear")
-local linear_to_srgb = Linear.to_srgb
-local linear_from_srgb = Linear.from_srgb
+const Linear = require("./Linear")
+const linear_to_srgb = Linear.to_srgb
+const linear_from_srgb = Linear.from_srgb
 
-local L_COLUMN = vector.create(0.4122214708, 0.5363325363, 0.0514459929)
-local M_COLUMN = vector.create(0.2119034982, 0.6806995451, 0.1073969566)
-local S_COLUMN = vector.create(0.0883024619, 0.2817188376, 0.6299787005)
+const L_COLUMN = vector.create(0.4122214708, 0.5363325363, 0.0514459929)
+const M_COLUMN = vector.create(0.2119034982, 0.6806995451, 0.1073969566)
+const S_COLUMN = vector.create(0.0883024619, 0.2817188376, 0.6299787005)
 
 @native
-local function from_linear_to_oklab(lrgb: vector): vector
-	local l_root = vector.dot(lrgb, L_COLUMN) ^ (1 / 3)
-	local m_root = vector.dot(lrgb, M_COLUMN) ^ (1 / 3)
-	local s_root = vector.dot(lrgb, S_COLUMN) ^ (1 / 3)
+const function from_linear_to_oklab(lrgb: vector): vector
+	const l_root = vector.dot(lrgb, L_COLUMN) ^ (1 / 3)
+	const m_root = vector.dot(lrgb, M_COLUMN) ^ (1 / 3)
+	const s_root = vector.dot(lrgb, S_COLUMN) ^ (1 / 3)
 
 	return vector.create(
 		l_root * 0.2104542553 + m_root * 0.7936177850 - s_root * 0.0040720468,
@@ -20,20 +20,20 @@ local function from_linear_to_oklab(lrgb: vector): vector
 end
 
 @native
-local function from_oklab_to_linear(lab: vector): vector
-	local L, a, b = lab.x, lab.y, lab.z
+const function from_oklab_to_linear(lab: vector): vector
+	const L, a, b = lab.x, lab.y, lab.z
 
-	local root = vector.create(
+	const root = vector.create(
 		L + a * 0.3963377774 + b * 0.2158037573,
 		L - a * 0.1055613458 - b * 0.0638541728,
 		L - a * 0.0894841775 - b * 1.2914855480
 	)
 
-	local cubed = root * root * root
+	const cubed = root * root * root
 
-	local l = cubed.x
-	local m = cubed.y
-	local s = cubed.z
+	const l = cubed.x
+	const m = cubed.y
+	const s = cubed.z
 
 	return vector.create(
 		l * 4.0767416621 - m * 3.3077115913 + s * 0.2309699292,

@@ -1,17 +1,17 @@
-local memory = require("../../core_memory/types")
-local rbx_instances = require("../types")
-local state = require("../../core_state/types")
+const memory = require("../../core_memory/types")
+const rbx_instances = require("../types")
+const state = require("../../core_state/types")
 
-local cast_to_state = require("../../core_state/cast_to_state")
-local cleanup = require("../../core_memory/cleanup")
-local log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
-local observe_immediate = require("../../core_graph/observe_immediate")
-local peek = require("../../core_use/peek")
+const cast_to_state = require("../../core_state/cast_to_state")
+const cleanup = require("../../core_memory/cleanup")
+const log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
+const observe_immediate = require("../../core_graph/observe_immediate")
+const peek = require("../../core_use/peek")
 
 type TagsSet = { [string]: true }
 type TagsScopes = { [rbx_instances.Tag]: memory.Scope }
 
-local function create_reconciler(
+const function create_reconciler(
 	scope: memory.Scope,
 	apply_to: Instance,
 	processor: (
@@ -26,7 +26,7 @@ local function create_reconciler(
 	local old_tags: TagsSet, new_tags: TagsSet = {}, {}
 	local old_scopes: TagsScopes, new_scopes: TagsScopes = {}, {}
 
-	local function reconcile(new_tag: rbx_instances.Tag?)
+	const function reconcile(new_tag: rbx_instances.Tag?)
 		old_tags, new_tags = new_tags, old_tags
 		old_scopes, new_scopes = new_scopes, old_scopes
 
@@ -58,7 +58,7 @@ local function create_reconciler(
 	return reconcile
 end
 
-local function process_tag(
+const function process_tag(
 	tag: rbx_instances.Tag,
 	apply_to: Instance,
 	new_tags: TagsSet,
@@ -66,7 +66,7 @@ local function process_tag(
 	old_tags: TagsSet,
 	old_scopes: TagsScopes
 )
-	local tag_type = typeof(tag)
+	const tag_type = typeof(tag)
 
 	if tag_type == "string" then -- ROOT CASE
 		tag = tag :: string
@@ -81,7 +81,7 @@ local function process_tag(
 		if tag_scope == nil then
 			tag_scope = {}
 
-			local reconcile = create_reconciler(tag_scope, apply_to, process_tag)
+			const reconcile = create_reconciler(tag_scope, apply_to, process_tag)
 
 			observe_immediate(tag_scope, tag, function()
 				reconcile(peek(tag))
@@ -106,7 +106,7 @@ return {
 	kind = "Tags",
 	stage = "self",
 	apply = function(scope: memory.Scope, apply_to: Instance, root_tag: rbx_instances.Tag?)
-		local reconcile = create_reconciler(scope, apply_to, process_tag)
+		const reconcile = create_reconciler(scope, apply_to, process_tag)
 		reconcile(root_tag)
 	end,
 } :: rbx_instances.SpecialKey<"Tags">

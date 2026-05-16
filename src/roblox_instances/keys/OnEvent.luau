@@ -1,15 +1,15 @@
-local memory = require("../../core_memory/types")
-local rbx_instances = require("../types")
+const memory = require("../../core_memory/types")
+const rbx_instances = require("../types")
 
-local log_error = require("../../core_logging/log_error")
+const log_error = require("../../core_logging/log_error")
 
-local function get_property(instance: Instance, key: string)
+const function get_property(instance: Instance, key: string)
 	return instance[key]
 end
 
-local KEY_CACHE = {}
+const KEY_CACHE = {}
 
-local function OnEvent(event_name: string): rbx_instances.SpecialKey<"OnEvent">
+const function OnEvent(event_name: string): rbx_instances.SpecialKey<"OnEvent">
 	local key = KEY_CACHE[event_name]
 
 	if key == nil then
@@ -18,7 +18,7 @@ local function OnEvent(event_name: string): rbx_instances.SpecialKey<"OnEvent">
 			kind = "OnChange",
 			stage = "observer",
 			apply = function(scope: memory.Scope, apply_to: Instance, callback: (...unknown) -> ())
-				local ok, event = pcall(get_property, apply_to, event_name)
+				const ok, event = pcall(get_property, apply_to, event_name)
 
 				if not ok or typeof(event) ~= "RBXScriptSignal" then
 					log_error(rbx_instances.cannot_connect_event, nil, apply_to.ClassName, event_name)

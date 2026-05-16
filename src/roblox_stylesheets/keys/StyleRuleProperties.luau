@@ -1,10 +1,10 @@
-local memory = require("../../core_memory/types")
-local rbx_instances = require("../../roblox_instances/types")
-local state = require("../../core_state/types")
+const memory = require("../../core_memory/types")
+const rbx_instances = require("../../roblox_instances/types")
+const state = require("../../core_state/types")
 
-local cast_to_state = require("../../core_state/cast_to_state")
-local observe = require("../../core_graph/observe")
-local peek = require("../../core_use/peek")
+const cast_to_state = require("../../core_state/cast_to_state")
+const observe = require("../../core_graph/observe")
+const peek = require("../../core_use/peek")
 
 return {
 	type = "SpecialKey",

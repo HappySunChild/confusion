@@ -1,12 +1,12 @@
-local memory = require("./types")
+const memory = require("./types")
 
-local ExternalDebug = require("../core_external/ExternalDebug")
-local track_scope = ExternalDebug.track_scope
+const ExternalDebug = require("../core_external/ExternalDebug")
+const track_scope = ExternalDebug.track_scope
 
-local merge = require("./merge")
+const merge = require("./merge")
 
-local function scoped<S, M>(base: S?, methods: M?): memory.Scope<S & M>
-	local new_scope = if base == nil and methods == nil
+const function scoped<S, M>(base: S?, methods: M?): memory.Scope<S & M>
+	const new_scope = if base == nil and methods == nil
 		then {}
 		else setmetatable({}, {
 			__index = if base == nil and methods ~= nil

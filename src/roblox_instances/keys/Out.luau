@@ -1,13 +1,13 @@
-local memory = require("../../core_memory/types")
-local rbx_instances = require("../types")
-local state = require("../../core_state/types")
+const memory = require("../../core_memory/types")
+const rbx_instances = require("../types")
+const state = require("../../core_state/types")
 
-local log_error = require("../../core_logging/log_error")
-local xtypeof = require("../../core_graph/xtypeof")
+const log_error = require("../../core_logging/log_error")
+const xtypeof = require("../../core_graph/xtypeof")
 
-local KEY_CACHE = {}
+const KEY_CACHE = {}
 
-local function Out(property: string): rbx_instances.SpecialKey<"Out">
+const function Out(property: string): rbx_instances.SpecialKey<"Out">
 	local key = KEY_CACHE[property]
 
 	if key == nil then
@@ -20,7 +20,7 @@ local function Out(property: string): rbx_instances.SpecialKey<"Out">
 					log_error(rbx_instances.invalid_out_type, nil, typeof(value))
 				end
 
-				local event = apply_to:GetPropertyChangedSignal(property)
+				const event = apply_to:GetPropertyChangedSignal(property)
 
 				table.insert(
 					scope,

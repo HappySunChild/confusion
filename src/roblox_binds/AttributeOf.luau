@@ -1,14 +1,14 @@
-local memory = require("../core_memory/types")
-local rbx_binds = require("./types")
+const memory = require("../core_memory/types")
+const rbx_binds = require("./types")
 
-local change = require("../core_graph/change")
-local destructor = require("../core_memory/destructor")
+const change = require("../core_graph/change")
+const destructor = require("../core_memory/destructor")
 
 type Self<T> = {
 	_event: RBXScriptConnection,
 } & rbx_binds.AttributeOf<T>
 
-local CLASS = table.freeze({
+const CLASS = table.freeze({
 	type = "state",
 	kind = "AttributeOf",
 	timeliness = "lazy",
@@ -18,16 +18,16 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local CLASS_METATABLE = table.freeze({ __index = CLASS })
+const CLASS_METATABLE = table.freeze({ __index = CLASS })
 
-local function destroy_attributeof<T>(attributeof: Self<T>)
+const function destroy_attributeof<T>(attributeof: Self<T>)
 	attributeof._event:Disconnect()
 end
 
-local function AttributeOf<T>(scope: memory.Scope, instance: Instance, attribute: string): rbx_binds.AttributeOf<T>
-	local event = instance:GetAttributeChangedSignal(attribute)
+const function AttributeOf<T>(scope: memory.Scope, instance: Instance, attribute: string): rbx_binds.AttributeOf<T>
+	const event = instance:GetAttributeChangedSignal(attribute)
 
-	local new_attribute: Self<T> = setmetatable({
+	const new_attribute: Self<T> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
@@ -41,7 +41,7 @@ local function AttributeOf<T>(scope: memory.Scope, instance: Instance, attribute
 		change(new_attribute)
 	end)
 
-	local oldest_task = destructor(new_attribute, destroy_attributeof)
+	const oldest_task = destructor(new_attribute, destroy_attributeof)
 
 	new_attribute._oldest_task = oldest_task
 

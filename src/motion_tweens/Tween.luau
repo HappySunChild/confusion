@@ -1,21 +1,21 @@
-local memory = require("../core_memory/types")
-local motion = require("../motion/types")
-local motion_tweens = require("./types")
-local state = require("../core_state/types")
+const memory = require("../core_memory/types")
+const motion = require("../motion/types")
+const motion_tweens = require("./types")
+const state = require("../core_state/types")
 
-local Motion = require("../motion/Motion")
-local get_tween_alpha = require("./get_tween_alpha")
-local get_tween_duration = require("./get_tween_duration")
-local lerp_type = require("../lerp/lerp_type")
-local peek = require("../core_use/peek")
+const Motion = require("../motion/Motion")
+const get_tween_alpha = require("./get_tween_alpha")
+const get_tween_duration = require("./get_tween_duration")
+const lerp_type = require("../lerp/lerp_type")
+const peek = require("../core_use/peek")
 
-local function tween_mover<T>(info: state.UsedAs<motion_tweens.TweenInfo>)
-	local curve_generator = function(target: T, start: T): motion.AnimationCurve<T>
-		local active_info = peek(info) :: motion_tweens.TweenInfo
-		local duration = get_tween_duration(active_info)
+const function tween_mover<T>(info: state.UsedAs<motion_tweens.TweenInfo>)
+	const curve_generator = function(target: T, start: T): motion.AnimationCurve<T>
+		const active_info = peek(info) :: motion_tweens.TweenInfo
+		const duration = get_tween_duration(active_info)
 
-		local new_curve = function(elapsed: number): (boolean, T)
-			local alpha = get_tween_alpha(active_info, elapsed)
+		const new_curve = function(elapsed: number): (boolean, T)
+			const alpha = get_tween_alpha(active_info, elapsed)
 
 			return elapsed >= duration, lerp_type(start, target, alpha)
 		end
@@ -26,7 +26,7 @@ local function tween_mover<T>(info: state.UsedAs<motion_tweens.TweenInfo>)
 	return curve_generator
 end
 
-local function Tween<T>(
+const function Tween<T>(
 	scope: memory.Scope,
 	goal: state.UsedAs<T>,
 	info: state.UsedAs<motion_tweens.TweenInfo>

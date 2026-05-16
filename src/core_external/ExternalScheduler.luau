@@ -1,8 +1,8 @@
-local external = require("./types")
+const external = require("./types")
 
-local log_error = require("../core_logging/log_error")
+const log_error = require("../core_logging/log_error")
 
-local bound_callbacks = {}
+const bound_callbacks = {}
 
 local active_scheduler: external.ExternalScheduler? = nil
 local active_do_task_immediate: (<A...>(resume: (A...) -> () | thread, A...) -> thread?)? = nil
@@ -10,12 +10,12 @@ local active_do_task_deferred: (<A...>(resume: (A...) -> () | thread, A...) -> t
 local active_do_task_delayed: (<A...>(sec: number, resume: (A...) -> () | thread, A...) -> thread?)? = nil
 local active_cancel_task: ((task: thread) -> boolean)? = nil
 
-local last_update = os.clock()
+local last_update_time = os.clock()
 local delta_time = 0
 
 return table.freeze({
 	set_scheduler = function(new_scheduler: external.ExternalScheduler?)
-		local old_scheduler = active_scheduler
+		const old_scheduler = active_scheduler
 
 		if old_scheduler ~= nil then
 			old_scheduler.stop_scheduler()
@@ -70,7 +70,7 @@ return table.freeze({
 	end,
 
 	bind_to_update_step = function(callback: (now: number, dt: number) -> ()): () -> ()
-		local unique_identifier = {}
+		const unique_identifier = {}
 		bound_callbacks[unique_identifier] = callback
 
 		return function()
@@ -78,10 +78,10 @@ return table.freeze({
 		end
 	end,
 	perform_update_step = function(): ()
-		local now = os.clock()
+		const now = os.clock()
 
-		delta_time = now - last_update
-		last_update = now
+		delta_time = now - last_update_time
+		last_update_time = now
 
 		for _, callback in bound_callbacks do
 			callback(now, delta_time)
@@ -92,6 +92,6 @@ return table.freeze({
 		return delta_time
 	end,
 	get_last_update = function(): number
-		return last_update
+		return last_update_time
 	end,
 })

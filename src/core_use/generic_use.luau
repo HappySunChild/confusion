@@ -1,18 +1,18 @@
-local graph = require("../core_graph/types")
-local state = require("../core_state/types")
-local use = require("./types")
+const graph = require("../core_graph/types")
+const state = require("../core_state/types")
+const use = require("./types")
 
-local cast_to_graph = require("../core_graph/cast_to_graph")
-local depend = require("../core_graph/depend")
-local log_error = require("../core_logging/log_error")
-local peek = require("./peek")
+const cast_to_graph = require("../core_graph/cast_to_graph")
+const depend = require("../core_graph/depend")
+const log_error = require("../core_logging/log_error")
+const peek = require("./peek")
 
-local function generic_use(user: graph.GraphNode): state.Use
+const function generic_use(user: graph.GraphNode): state.Use
 	if cast_to_graph(user) == nil then
 		log_error(use.invalid_user, nil, typeof(user), user)
 	end
 
-	local function use<T>(target: state.UsedAs<T>): T
+	const function use<T>(target: state.UsedAs<T>): T
 		depend(user, target)
 		return peek(target)
 	end

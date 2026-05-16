@@ -1,6 +1,6 @@
-local memory = require("./types")
+const memory = require("./types")
 
-local function insert<Tasks...>(scope: memory.Scope, ...: Tasks...): Tasks...
+const function insert<Tasks...>(scope: memory.Scope, ...: Tasks...): Tasks...
 	for i = 1, select("#", ...) do
 		table.insert(scope, (select(i, ...)))
 	end

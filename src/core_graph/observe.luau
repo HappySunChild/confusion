@@ -1,14 +1,14 @@
-local memory = require("../core_memory/types")
+const memory = require("../core_memory/types")
 
-local name_of = require("../core_logging/name_of")
-local nicknames = require("../core_logging/nicknames")
+const name_of = require("../core_logging/name_of")
+const nicknames = require("../core_logging/nicknames")
 
-local check_lifetime = require("../core_memory/check_lifetime")
+const check_lifetime = require("../core_memory/check_lifetime")
 
-local cast_to_graph = require("./cast_to_graph")
-local evaluate = require("./evaluate")
+const cast_to_graph = require("./cast_to_graph")
+const evaluate = require("./evaluate")
 
-local function observe_lifetime_formatter(_, b: unknown)
+const function observe_lifetime_formatter(_, b: unknown)
 	return `The subject '{name_of(b, "unknown")}'`, "it could be observed"
 end
 
@@ -18,7 +18,7 @@ end
 	
 	Returns a disconnect function that removes the observer callback from the node.
 ]]
-local function observe(scope: memory.Scope, subject: any, callback: () -> ()): (() -> ())?
+const function observe(scope: memory.Scope, subject: any, callback: () -> ()): (() -> ())?
 	if cast_to_graph(subject) == nil then
 		return nil
 	end
@@ -36,14 +36,14 @@ local function observe(scope: memory.Scope, subject: any, callback: () -> ()): (
 
 	evaluate(subject)
 
-	local function disconnect()
-		local observe_index = table.find(observers, callback)
+	const function disconnect()
+		const observe_index = table.find(observers, callback)
 
 		if observe_index ~= nil then
 			table.remove(observers, observe_index)
 		end
 
-		local disconnect_index = table.find(scope, disconnect)
+		const disconnect_index = table.find(scope, disconnect)
 
 		if disconnect_index ~= nil then
 			table.remove(scope, disconnect_index)

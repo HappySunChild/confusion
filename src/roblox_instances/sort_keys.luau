@@ -1,8 +1,8 @@
-local rbx_instances = require("./types")
+const rbx_instances = require("./types")
 
-local log_warn = require("../core_logging/log_warn")
+const log_warn = require("../core_logging/log_warn")
 
-local STAGE_ORDER = table.freeze({
+const STAGE_ORDER = table.freeze({
 	self = 1,
 	descendants = 2,
 	properties = 4,
@@ -11,9 +11,9 @@ local STAGE_ORDER = table.freeze({
 	last = math.huge,
 })
 
-local function sort_keys(a: rbx_instances.SpecialKey, b: rbx_instances.SpecialKey)
-	local a_order = STAGE_ORDER[a.stage]
-	local b_order = STAGE_ORDER[b.stage]
+const function sort_keys(a: rbx_instances.SpecialKey, b: rbx_instances.SpecialKey)
+	const a_order = STAGE_ORDER[a.stage]
+	const b_order = STAGE_ORDER[b.stage]
 
 	if a_order == nil then
 		log_warn(

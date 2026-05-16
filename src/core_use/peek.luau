@@ -1,9 +1,9 @@
-local state = require("../core_state/types")
+const state = require("../core_state/types")
 
-local cast_to_state = require("../core_state/cast_to_state")
-local evaluate = require("../core_graph/evaluate")
+const cast_to_state = require("../core_state/cast_to_state")
+const evaluate = require("../core_graph/evaluate")
 
-local function peek<T>(x: state.UsedAs<T>): T
+const function peek<T>(x: state.UsedAs<T>): T
 	-- should peek error with use_after_destroy on invalid objects?
 	if cast_to_state(x) ~= nil then
 		evaluate(x)

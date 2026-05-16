@@ -1,14 +1,14 @@
-local memory = require("../core_memory/types")
-local rbx_instances = require("../roblox_instances/types")
-local templates = require("../roblox_templates/types")
+const memory = require("../core_memory/types")
+const rbx_instances = require("../roblox_instances/types")
+const templates = require("../roblox_templates/types")
 
-local apply_instance_properties = require("../roblox_instances/apply_instance_properties")
-local log_error_nonfatal = require("../core_logging/log_error_nonfatal")
+const apply_instance_properties = require("../roblox_instances/apply_instance_properties")
+const log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 
-local function QueryDescendants(scope: memory.Scope, selector: string, properties: rbx_instances.Properties)
+const function QueryDescendants(scope: memory.Scope, selector: string, properties: rbx_instances.Properties)
 	return function(parent: Instance): Instance?
-		local descendants = parent:QueryDescendants(selector)
-		local child = descendants[1]
+		const descendants = parent:QueryDescendants(selector)
+		const child = descendants[1]
 
 		if child == nil then
 			log_error_nonfatal(templates.missing_query_descendant, nil, selector)

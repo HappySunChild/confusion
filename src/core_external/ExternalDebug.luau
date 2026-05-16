@@ -1,11 +1,11 @@
-local external = require("./types")
-local memory = require("../core_memory/types")
+const external = require("./types")
+const memory = require("../core_memory/types")
 
 local active_debugger: external.ExternalDebugger? = nil
 
 return table.freeze({
 	set_debugger = function(new_debugger: external.ExternalDebugger?)
-		local old_debugger = active_debugger
+		const old_debugger = active_debugger
 
 		if old_debugger ~= nil then
 			old_debugger.stop_debugging()

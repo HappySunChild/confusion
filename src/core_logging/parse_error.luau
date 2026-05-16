@@ -1,4 +1,4 @@
-local function parse_error(message: string)
+const function parse_error(message: string)
 	return {
 		type = "Error",
 		raw = message,

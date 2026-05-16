@@ -1,12 +1,12 @@
-local memory = require("../../core_memory/types")
-local rbx_instances = require("../types")
-local state = require("../../core_state/types")
+const memory = require("../../core_memory/types")
+const rbx_instances = require("../types")
+const state = require("../../core_state/types")
 
-local cast_to_state = require("../../core_state/cast_to_state")
-local observe = require("../../core_graph/observe")
-local peek = require("../../core_use/peek")
+const cast_to_state = require("../../core_state/cast_to_state")
+const observe = require("../../core_graph/observe")
+const peek = require("../../core_use/peek")
 
-local function apply_attribute(scope: memory.Scope, apply_to: Instance, attribute: string, value: state.UsedAs<any>)
+const function apply_attribute(scope: memory.Scope, apply_to: Instance, attribute: string, value: state.UsedAs<any>)
 	apply_to:SetAttribute(attribute, peek(value))
 
 	if cast_to_state(value) ~= nil then

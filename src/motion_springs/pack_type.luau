@@ -1,13 +1,13 @@
-local Oklab = require("../colour/Oklab")
-local oklab_to_srgb = Oklab.to_srgb
+const Oklab = require("../colour/Oklab")
+const oklab_to_srgb = Oklab.to_srgb
 
-local function pack_type(data_type: string, array: { number }): unknown
+const function pack_type(data_type: string, array: { number }): unknown
 	if data_type == "number" then
 		return array[1]
 	elseif data_type == "vector" then
 		return vector.create(array[1], array[2], array[3])
 	elseif data_type == "Color3" then
-		local ok_result =
+		const ok_result =
 			vector.clamp(oklab_to_srgb(vector.create(array[1], array[2], array[3])), vector.zero, vector.one)
 
 		return Color3.new(ok_result.x, ok_result.y, ok_result.z)
