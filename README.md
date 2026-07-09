@@ -33,13 +33,11 @@ const full_name = scope:Computed(function(use)
 	return use(first_name) .. " " .. use(last_name)
 end)
 
-print(peek(full_name))
---> Jane Doe
+print(peek(full_name)) --> Jane Doe
 
 first_name:set("John")
 
-print(peek(full_name))
---> John Doe
+print(peek(full_name)) --> John Doe
 ```
 
 ## Platform Support
