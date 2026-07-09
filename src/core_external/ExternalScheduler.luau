@@ -4,8 +4,22 @@ const log_error = require("../core_logging/log_error")
 
 const bound_callbacks = {}
 
+const function default_do_task_immediate<A...>(resume: (A...) -> () | thread, ...: A...): thread
+	if type(resume) == "thread" then
+		coroutine.resume(resume)
+
+		return resume
+	end
+
+	const thread = coroutine.create(resume)
+
+	coroutine.resume(thread, ...)
+
+	return thread
+end
+
 local active_scheduler: external.ExternalScheduler? = nil
-local active_do_task_immediate: (<A...>(resume: (A...) -> () | thread, A...) -> thread?)? = nil
+local active_do_task_immediate: (<A...>(resume: (A...) -> () | thread, A...) -> thread?)? = default_do_task_immediate
 local active_do_task_deferred: (<A...>(resume: (A...) -> () | thread, A...) -> thread?)? = nil
 local active_do_task_delayed: (<A...>(sec: number, resume: (A...) -> () | thread, A...) -> thread?)? = nil
 local active_cancel_task: ((task: thread) -> boolean)? = nil
@@ -29,7 +43,7 @@ return table.freeze({
 			active_do_task_delayed = new_scheduler.schedule_task_delayed
 			active_cancel_task = new_scheduler.cancel_task
 		else
-			active_do_task_immediate = nil
+			active_do_task_immediate = default_do_task_immediate
 			active_do_task_deferred = nil
 			active_do_task_delayed = nil
 			active_cancel_task = nil
@@ -41,10 +55,6 @@ return table.freeze({
 	end,
 
 	schedule_task_immediate = function<A...>(resume: (A...) -> () | thread, ...: A...): thread?
-		if active_scheduler == nil then
-			return log_error(external.missing_scheduler)
-		end
-
 		return active_do_task_immediate(resume, ...)
 	end,
 	schedule_task_deferred = function<A...>(resume: (A...) -> () | thread, ...: A...): thread?
