@@ -4,7 +4,7 @@
 `confusion` is an experimental, platform-agnostic fork of dphfox's [Fusion](https://github.com/dphfox/Fusion). Rather than focusing on a single runtime, such as Roblox in Fusion's case, it acts as a collection of reusable reactive primitives and utilities that can be integrated into environments like [Lute](https://lute.luau.org/), [Lune](https://github.com/lune-org/lune), or other custom runtimes.
 
 ## Compatibility with Fusion
-Since this fork was initially based on Fusion 0.3, a lot of the features in 0.3 do translate near seamlessly, such as scopes, Values, and Computeds. You can find a full list of API differences in [`FUSION_COMPATIBILITY.md`](FUSION_COMPATIBILITY.md)
+If you're looking to switch to `confusion` from Fusion, and are wondering how much work is required to switch, you can find a full list of API changes at [`FUSION_COMPATIBILITY.md`](FUSION_COMPATIBILITY.md).
 
 ## Example Usage
 This example demonstrates the reactive primitives provided by `confusion`.
