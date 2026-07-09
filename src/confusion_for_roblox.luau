@@ -24,10 +24,10 @@ const motion = require("./motion/types")
 const motion_springs = require("./motion_springs/types")
 const motion_tweens = require("./motion_tweens/types")
 
-const rbx_binds = require("./roblox_binds/types")
-const rbx_instances = require("./roblox_instances/types")
-const rbx_stylesheets = require("./roblox_stylesheets/types")
-const rbx_templates = require("./roblox_templates/types")
+const rbx_binds = require("./rbx_binds/types")
+const rbx_instances = require("./rbx_instances/types")
+const rbx_stylesheets = require("./rbx_stylesheets/types")
+const rbx_templates = require("./rbx_templates/types")
 
 export type Scope<T = Confusion> = memory.Scope<T>
 
@@ -65,13 +65,13 @@ type Confusion = {
 	cleanup: memory.Cleanup,
 	insert: memory.Insert,
 
-	-- Core: State
-	Computed: state.ComputedConstructor,
-	Value: state.ValueConstructor,
-
 	-- Core: Graph
 	observe: graph.Observe,
 	observe_immediate: graph.Observe,
+
+	-- Core: State
+	Computed: state.ComputedConstructor,
+	Value: state.ValueConstructor,
 
 	-- Core: Use
 	peek: state.Use,
@@ -148,10 +148,10 @@ type Confusion = {
 }
 
 const ExternalLogger = require("./core_external/ExternalLogger")
-ExternalLogger.set_logger(require("./roblox_external/RobloxLogger"))
+ExternalLogger.set_logger(require("./rbx_external/RobloxLogger"))
 
 const ExternalScheduler = require("./core_external/ExternalScheduler")
-ExternalScheduler.set_scheduler(require("./roblox_external/RobloxScheduler"))
+ExternalScheduler.set_scheduler(require("./rbx_external/RobloxScheduler"))
 
 const confusion_for_roblox = {
 	version = { major = 0, minor = 0, patch = 0 },
@@ -214,35 +214,35 @@ const confusion_for_roblox = {
 	Chain = require("./chain/Chain"),
 
 	-- Roblox: Instances
-	New = require("./roblox_instances/New"),
-	Hydrate = require("./roblox_instances/Hydrate"),
-	Describe = require("./roblox_instances/Describe"),
+	New = require("./rbx_instances/New"),
+	Hydrate = require("./rbx_instances/Hydrate"),
+	Describe = require("./rbx_instances/Describe"),
 
-	AttributeChange = require("./roblox_instances/keys/AttributeChange"),
-	AttributeOut = require("./roblox_instances/keys/AttributeOut"),
-	Attributes = require("./roblox_instances/keys/Attributes"),
-	Children = require("./roblox_instances/keys/Children"),
-	OnChange = require("./roblox_instances/keys/OnChange"),
-	OnEvent = require("./roblox_instances/keys/OnEvent"),
-	Out = require("./roblox_instances/keys/Out"),
-	Refs = require("./roblox_instances/keys/Refs"),
-	Tags = require("./roblox_instances/keys/Tags"),
+	AttributeChange = require("./rbx_instances/keys/AttributeChange"),
+	AttributeOut = require("./rbx_instances/keys/AttributeOut"),
+	Attributes = require("./rbx_instances/keys/Attributes"),
+	Children = require("./rbx_instances/keys/Children"),
+	OnChange = require("./rbx_instances/keys/OnChange"),
+	OnEvent = require("./rbx_instances/keys/OnEvent"),
+	Out = require("./rbx_instances/keys/Out"),
+	Refs = require("./rbx_instances/keys/Refs"),
+	Tags = require("./rbx_instances/keys/Tags"),
 
 	-- Roblox: Templates
-	FromTemplate = require("./roblox_templates/FromTemplate"),
-	QueryDescendants = require("./roblox_templates/QueryDescendants"),
+	FromTemplate = require("./rbx_templates/FromTemplate"),
+	QueryDescendants = require("./rbx_templates/QueryDescendants"),
 
 	-- Roblox: Binds
-	PropertyOf = require("./roblox_binds/PropertyOf"),
-	AttributeOf = require("./roblox_binds/AttributeOf"),
+	PropertyOf = require("./rbx_binds/PropertyOf"),
+	AttributeOf = require("./rbx_binds/AttributeOf"),
 
 	-- Roblox: Stylesheets
-	StyleSheet = require("./roblox_stylesheets/StyleSheet"),
+	StyleSheet = require("./rbx_stylesheets/StyleSheet"),
 
-	StyleSheetDerives = require("./roblox_stylesheets/keys/StyleSheetDerives"),
-	StyleRuleProperties = require("./roblox_stylesheets/keys/StyleRuleProperties"),
-	StyleLink = require("./roblox_stylesheets/keys/StyleLink"),
-	StyleRules = require("./roblox_stylesheets/keys/StyleRules"),
+	StyleSheetDerives = require("./rbx_stylesheets/keys/StyleSheetDerives"),
+	StyleRuleProperties = require("./rbx_stylesheets/keys/StyleRuleProperties"),
+	StyleLink = require("./rbx_stylesheets/keys/StyleLink"),
+	StyleRules = require("./rbx_stylesheets/keys/StyleRules"),
 }
 
 return confusion_for_roblox :: Confusion
