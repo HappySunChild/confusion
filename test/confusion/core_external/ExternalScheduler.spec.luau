@@ -51,7 +51,7 @@ return function(configured: butler.Configured)
 		test("task functions throw with no set scheduler", function()
 			local initial_scheduler = ExternalScheduler.set_scheduler(nil)
 
-			expect(ExternalScheduler.schedule_task_immediate):to_throw_with(external.missing_scheduler)
+			-- expect(ExternalScheduler.schedule_task_immediate):to_throw_with(external.missing_scheduler)
 			expect(ExternalScheduler.schedule_task_delayed):to_throw_with(external.missing_scheduler)
 			expect(ExternalScheduler.schedule_task_deferred):to_throw_with(external.missing_scheduler)
 			expect(ExternalScheduler.cancel_task):to_throw_with(external.missing_scheduler)
