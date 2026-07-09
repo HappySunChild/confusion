@@ -57,6 +57,7 @@ A task scheduler interface is required if you intend on using `observe`, animati
 
 Here's a relatively simple example of what an external task scheduler interface for Lute could look like:
 ```luau
+-- confusion/lute_external/LuteScheduler.luau
 const task = require("@lute/task")
 
 const external = require("@fusion/core_external/types")
@@ -87,7 +88,8 @@ return {
 ```
 You can then tell `confusion` to use your task scheduler interface like so:
 ```luau
-const LuteScheduler = require("./LuteScheduler")
+-- confusion/confusion_for_lute.luau
+const LuteScheduler = require("@fusion/lute_external/LuteScheduler")
 
 const ExternalScheduler = require("@fusion/core_external/ExternalScheduler")
 ExternalScheduler.set_scheduler(LuteScheduler)
