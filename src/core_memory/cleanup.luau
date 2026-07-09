@@ -3,7 +3,8 @@ const memory = require("./types")
 const ExternalDebug = require("../core_external/ExternalDebug")
 const untrack_scope = ExternalDebug.untrack_scope
 
-const log_error = require("../core_logging/log_error")
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_error = ExternalLogger.log_error
 
 const ALREADY_DESTROYING: { [any]: true } = {}
 

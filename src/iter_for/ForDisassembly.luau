@@ -3,12 +3,14 @@ const iter_for = require("./types")
 const memory = require("../core_memory/types")
 const state = require("../core_state/types")
 
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_error_nonfatal = ExternalLogger.log_error_nonfatal
+
 const cleanup = require("../core_memory/cleanup")
 const depend = require("../core_graph/depend")
 const destructor = require("../core_memory/destructor")
 const inner_scope = require("../core_memory/inner_scope")
 const is_similar = require("../core_state/is_similar")
-const log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 const peek = require("../core_use/peek")
 
 type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {

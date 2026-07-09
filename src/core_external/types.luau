@@ -29,4 +29,5 @@ export type ExternalLogger = {
 
 return {
 	missing_scheduler = "confusion is not connected to an external scheduler.",
+	yielded_with_no_scheduler = "A spawned thread yielded while not being connected to an external scheduler; the spawned thread will be frozen indefinitely.",
 }

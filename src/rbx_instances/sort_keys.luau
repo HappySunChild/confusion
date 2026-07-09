@@ -1,6 +1,7 @@
 const rbx_instances = require("./types")
 
-const log_warn = require("../core_logging/log_warn")
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_warn = ExternalLogger.log_warn
 
 const STAGE_ORDER = table.freeze({
 	self = 1,

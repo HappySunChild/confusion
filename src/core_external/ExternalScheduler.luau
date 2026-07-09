@@ -1,19 +1,25 @@
 const external = require("./types")
 
-const log_error = require("../core_logging/log_error")
+const ExternalLogger = require("./ExternalLogger")
+const log_error = ExternalLogger.log_error
+const log_warn = ExternalLogger.log_warn
 
 const bound_callbacks = {}
 
 const function default_do_task_immediate<A...>(resume: (A...) -> () | thread, ...: A...): thread
-	if type(resume) == "thread" then
-		coroutine.resume(resume)
+	local thread: thread = nil
 
-		return resume
+	if type(resume) == "function" then
+		thread = coroutine.create(resume)
+	elseif type(resume) == "thread" then
+		thread = resume
 	end
 
-	const thread = coroutine.create(resume)
-
 	coroutine.resume(thread, ...)
+
+	if coroutine.status(thread) == "suspended" then
+		log_warn(external.yielded_with_no_scheduler)
+	end
 
 	return thread
 end

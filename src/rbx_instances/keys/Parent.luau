@@ -2,7 +2,9 @@ const memory = require("../../core_memory/types")
 const rbx_instances = require("../types")
 const state = require("../../core_state/types")
 
-const log_warn = require("../../core_logging/log_warn")
+const ExternalLogger = require("../../core_external/ExternalLogger")
+const log_warn = ExternalLogger.log_warn
+
 const observe_immediate = require("../../core_graph/observe_immediate")
 const peek = require("../../core_use/peek")
 

@@ -1,9 +1,11 @@
 const graph = require("./types")
 
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_error = ExternalLogger.log_error
+
 const cast_to_graph = require("./cast_to_graph")
 const check_lifetime = require("../core_memory/check_lifetime")
 const evaluate = require("./evaluate")
-const log_error = require("../core_logging/log_error")
 const name_of = require("../core_logging/name_of")
 
 const function depend_lifetime_formatter(a: unknown, b: unknown): (string, string)

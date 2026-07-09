@@ -2,9 +2,11 @@ const instances = require("../rbx_instances/types")
 const memory = require("../core_memory/types")
 const rbx_binds = require("./types")
 
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_error = ExternalLogger.log_error
+
 const change = require("../core_graph/change")
 const destructor = require("../core_memory/destructor")
-const log_error = require("../core_logging/log_error")
 
 const CLASS_MT = table.freeze({
 	__index = table.freeze({

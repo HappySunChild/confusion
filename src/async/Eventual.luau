@@ -8,6 +8,9 @@ const ExternalScheduler = require("../core_external/ExternalScheduler")
 const cancel_task = ExternalScheduler.cancel_task
 const schedule_task_immediate = ExternalScheduler.schedule_task_immediate
 
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_error_nonfatal = ExternalLogger.log_error_nonfatal
+
 const cast_to_state = require("../core_state/cast_to_state")
 const change = require("../core_graph/change")
 const cleanup = require("../core_memory/cleanup")
@@ -16,7 +19,6 @@ const derive_scope = require("../core_memory/derive_scope")
 const destructor = require("../core_memory/destructor")
 const evaluate = require("../core_graph/evaluate")
 const is_similar = require("../core_state/is_similar")
-const log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 const parse_error = require("../core_logging/parse_error")
 const peek = require("../core_use/peek")
 

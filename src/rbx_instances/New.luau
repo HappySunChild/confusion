@@ -1,10 +1,12 @@
 const memory = require("../core_memory/types")
 const rbx_instances = require("./types")
 
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_error = ExternalLogger.log_error
+
 const Children = require("./keys/Children")
 const apply_instance_properties = require("./apply_instance_properties")
 const implicit_numerical_merge = require("./implicit_numerical_merge")
-const log_error = require("../core_logging/log_error")
 
 const function New(scope: memory.Scope, class_name: string, properties: rbx_instances.Properties): Instance
 	const ok, new_instance = pcall(Instance.new, class_name)

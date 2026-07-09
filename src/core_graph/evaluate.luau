@@ -1,7 +1,9 @@
-const log_error = require("../core_logging/log_error")
-const next_version = require("./next_version")
-
 const graph = require("./types")
+
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_error = ExternalLogger.log_error
+
+const next_version = require("./next_version")
 
 --[[
 	Evaluates the graph object if necessary, so that it is up to date.

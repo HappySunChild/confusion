@@ -2,8 +2,10 @@ const async = require("./types")
 const graph = require("../core_graph/types")
 const memory = require("../core_memory/types")
 
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_error = ExternalLogger.log_error
+
 const cast_to_graph = require("../core_graph/cast_to_graph")
-const log_error = require("../core_logging/log_error")
 const observe = require("../core_graph/observe")
 
 -- Pauses the current thread until the subject receives an eager update

@@ -3,8 +3,10 @@ const graph = require("./types")
 const ExternalScheduler = require("../core_external/ExternalScheduler")
 const schedule_task_immediate = ExternalScheduler.schedule_task_immediate
 
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_error = ExternalLogger.log_error
+
 const evaluate = require("./evaluate")
-const log_error = require("../core_logging/log_error")
 
 const function fire_node_observers(node: graph.GraphNode)
 	if node._observers == nil then

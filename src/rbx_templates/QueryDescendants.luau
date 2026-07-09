@@ -2,8 +2,10 @@ const memory = require("../core_memory/types")
 const rbx_instances = require("../rbx_instances/types")
 const templates = require("../roblox_templates/types")
 
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_error_nonfatal = ExternalLogger.log_error_nonfatal
+
 const apply_instance_properties = require("../rbx_instances/apply_instance_properties")
-const log_error_nonfatal = require("../core_logging/log_error_nonfatal")
 
 const function QueryDescendants(scope: memory.Scope, selector: string, properties: rbx_instances.Properties)
 	return function(parent: Instance): Instance?

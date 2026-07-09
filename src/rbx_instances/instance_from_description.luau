@@ -1,9 +1,11 @@
 const memory = require("../core_memory/types")
 const rbx_instances = require("./types")
 
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_error = ExternalLogger.log_error
+
 const apply_instance_properties = require("./apply_instance_properties")
 const implicit_numerical_merge = require("./implicit_numerical_merge")
-const log_error = require("../core_logging/log_error")
 
 const function from_description(
 	scope: memory.Scope,

@@ -1,7 +1,9 @@
 const context = require("./types")
 const state = require("../core_state/types")
 
-const log_error = require("../core_logging/log_error")
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_error = ExternalLogger.log_error
+
 const parse_error = require("../core_logging/parse_error")
 
 type Self<T> = {

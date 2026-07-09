@@ -1,10 +1,12 @@
 const memory = require("../../core_memory/types")
 const rbx_instances = require("../types")
 
+const ExternalLogger = require("../../core_external/ExternalLogger")
+const log_error_nonfatal = ExternalLogger.log_error_nonfatal
+
 const cast_to_state = require("../../core_state/cast_to_state")
 const cleanup = require("../../core_memory/cleanup")
 const instance_from_description = require("../instance_from_description")
-const log_error_nonfatal = require("../../core_logging/log_error_nonfatal")
 const observe_immediate = require("../../core_graph/observe_immediate")
 const peek = require("../../core_use/peek")
 

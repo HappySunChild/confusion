@@ -2,7 +2,9 @@ const memory = require("../../core_memory/types")
 const rbx_instances = require("../types")
 const state = require("../../core_state/types")
 
-const log_error = require("../../core_logging/log_error")
+const ExternalLogger = require("../../core_external/ExternalLogger")
+const log_error = ExternalLogger.log_error
+
 const xtypeof = require("../../core_graph/xtypeof")
 
 const KEY_CACHE = {}

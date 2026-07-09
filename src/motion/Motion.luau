@@ -6,13 +6,15 @@ const state = require("../core_state/types")
 const ExternalScheduler = require("../core_external/ExternalScheduler")
 const get_delta_time = ExternalScheduler.get_delta_time
 
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_warn = ExternalLogger.log_warn
+
 const Timer = require("../chrono/Timer")
 const change = require("../core_graph/change")
 const depend = require("../core_graph/depend")
 const destructor = require("../core_memory/destructor")
 const evaluate = require("../core_graph/evaluate")
 const is_similar = require("../core_state/is_similar")
-const log_warn = require("../core_logging/log_warn")
 const peek = require("../core_use/peek")
 
 type Self<T> = {
