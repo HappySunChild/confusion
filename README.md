@@ -43,7 +43,8 @@ print(peek(full_name)) --> John Doe
 ## Platform Support
 `confusion` is designed to be as platform-agnostic as possible. It avoids depending on runtime-specific features (such as Roblox's `Instance`, tweens and task scheduler), allowing its reactive primitives to be used in a wider range of environments.
 
-This doesn't mean that platform-specific utilities won't be provided though, it just means that they aren't included by default. If you find that `confusion` doesn't have support for your specific runtime, you are welcome to open an issue or PR for it!
+This doesn't mean that 'batteries-included' packages won't be provided though, instead you will have to specifically choose what submodules you want to use.
+If you find that `confusion` doesn't provide a batteries-included package for your specific runtime feel free to open an issue request for it!
 
 
 ### Platform-specific Integration
