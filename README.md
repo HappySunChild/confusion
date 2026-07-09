@@ -105,13 +105,13 @@ TODO
 ## Why this fork?
 Recently to me it feels like development of Fusion has slowed over time, so rather than waiting for some of the ideas I wanted to explore, I decided to experiment with them in a fork.
 
-`confusion` focuses on a few different goals:
-- Making the core library runtime-agnostic
-- Experimenting with new reactive primitives and APIs
-- Improving parts of the dependency graph implementation where possible
-- Keeping platform-specific functionality in separate submodules
+My goals for `confusion` can essentialy be boiled down to:
+- Experimenting with new reactive primitives and APIs (like `Eventual` and `ForRange`)
+- Improving parts of the reactive graph implementation where possible
+- Migrate towards fully runtime agnostic reactive code
+- Provide new utilities for building UIs in Roblox (such as the Stylesheets API and `Describe`)
 
-The project also serves as a place to prototype ideas that may not be appropriate for Fusion itself. Some of those ideas may eventually prove worthwhile, while others simply exist as experiments.
+The project also serves as a place to prototype ideas that may not be appropriate for Fusion itself. Some of those ideas may eventually prove worthwhile, while others simply exist as experiments (such as the replacement of `Observers` with `observe` and `observe_immediate`).
 
 ## Alternatives
 If you're looking for some other lightweight and platform-agnostic reactive programming modules for Luau you can check out some of these projects:
