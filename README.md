@@ -53,7 +53,7 @@ To integrate with a specific runtime, you'll need to provide implementations for
 * an external logger
 * an external debugger
 
-A task scheduler interface is required if you intend on using `observe`, animations (such as `motion`, `motion_springs`, `motion_tweens` or `chrono`) or anything within the `confusion/async` module.
+A task scheduler interface is required if you intend on using `observe`, animations (packages such as `confusion/motion`, `confusion/motion_springs`, `confusion/motion_tweens` or `confusion/chrono` are dependant on an external task scheduler) or anything within the `confusion/async` module.
 
 Here's a relatively simple example of what an external task scheduler interface for Lute could look like:
 ```luau
