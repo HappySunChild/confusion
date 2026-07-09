@@ -16,7 +16,7 @@ type Self<T, S> = {
 	_use: state.Use,
 } & state.Computed<T>
 
-const CLASS_MT = table.freeze({
+const CLASS_META = table.freeze({
 	__index = table.freeze({
 		type = "state",
 		kind = "Computed",
@@ -52,7 +52,7 @@ const CLASS_MT = table.freeze({
 	}),
 })
 
-const function destroy_computed<T, S>(computed: Self<T, S>)
+const function computed_destructor<T, S>(computed: Self<T, S>)
 	cleanup(computed._inner_scope)
 	computed._inner_scope = nil
 end
@@ -69,9 +69,9 @@ const function Computed<T, S>(scope: memory.Scope<S>, processor: state.ComputedP
 
 		_inner_scope = nil,
 		_processor = processor,
-	}, CLASS_MT) :: any
+	}, CLASS_META) :: any
 
-	const oldest_task = destructor(new_computed, destroy_computed)
+	const oldest_task = destructor(new_computed, computed_destructor)
 
 	new_computed._oldest_task = oldest_task
 	new_computed._use = generic_use(new_computed)

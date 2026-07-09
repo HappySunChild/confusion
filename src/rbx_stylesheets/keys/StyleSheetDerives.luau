@@ -1,4 +1,4 @@
-const rbx_instances = require("../../roblox_instances/types")
+const rbx_instances = require("../../rbx_instances/types")
 
 return {
 	type = "SpecialKey",

@@ -1,10 +1,10 @@
 const memory = require("../core_memory/types")
 const rbx_stylesheets = require("./types")
 
-const Attributes = require("../roblox_instances/keys/Attributes")
+const Attributes = require("../rbx_instances/keys/Attributes")
 const StyleRules = require("./keys/StyleRules")
 const StyleSheetDerives = require("./keys/StyleSheetDerives")
-const apply_instance_properties = require("../roblox_instances/apply_instance_properties")
+const apply_instance_properties = require("../rbx_instances/apply_instance_properties")
 
 const function StyleSheet(scope: memory.Scope, properties: rbx_stylesheets.StyleSheetProperties): StyleSheet
 	const new_sheet = Instance.new("StyleSheet")

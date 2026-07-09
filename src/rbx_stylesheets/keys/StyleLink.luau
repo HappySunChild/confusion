@@ -1,8 +1,8 @@
 const memory = require("../../core_memory/types")
-const rbx_instances = require("../../roblox_instances/types")
+const rbx_instances = require("../../rbx_instances/types")
 const state = require("../../core_state/types")
 
-const apply_instance_properties = require("../../roblox_instances/apply_instance_properties")
+const apply_instance_properties = require("../../rbx_instances/apply_instance_properties")
 
 return {
 	type = "SpecialKey",

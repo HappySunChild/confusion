@@ -1,4 +1,4 @@
-const instances = require("../roblox_instances/types")
+const instances = require("../rbx_instances/types")
 const memory = require("../core_memory/types")
 const rbx_binds = require("./types")
 

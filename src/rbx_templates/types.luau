@@ -1,16 +1,16 @@
-local instances = require("../roblox_instances/types")
 local memory = require("../core_memory/types")
+local rbx_instances = require("../rbx_instances/types")
 
 export type FromTemplateConstructor = <InstanceT>(
 	scope: memory.Scope,
 	template: InstanceT,
-	properties: instances.Properties
+	properties: rbx_instances.Properties
 ) -> InstanceT
 
 export type QueryDescendants = (
 	scope: memory.Scope,
 	selector: string,
-	properties: instances.Properties
+	properties: rbx_instances.Properties
 ) -> (parent: Instance) -> Instance?
 
 return {

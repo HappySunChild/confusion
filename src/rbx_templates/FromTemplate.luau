@@ -1,8 +1,8 @@
 const memory = require("../core_memory/types")
-const rbx_instances = require("../roblox_instances/types")
+const rbx_instances = require("../rbx_instances/types")
 const templates = require("./types")
 
-const Hydrate = require("../roblox_instances/Hydrate")
+const Hydrate = require("../rbx_instances/Hydrate")
 const log_error = require("../core_logging/log_error")
 
 const function FromTemplate<InstanceT>(scope: memory.Scope, template: InstanceT, properties: rbx_instances.Properties): InstanceT

@@ -42,7 +42,7 @@ const function from_oklab_to_linear(lab: vector): vector
 	)
 end
 
-return table.freeze({
+return {
 	from_linear = from_linear_to_oklab,
 	to_linear = from_oklab_to_linear,
 
@@ -52,4 +52,4 @@ return table.freeze({
 	to_srgb = @native function(lab: vector): vector
 		return linear_to_srgb(from_oklab_to_linear(lab))
 	end,
-})
+}

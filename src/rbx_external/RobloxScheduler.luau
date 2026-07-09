@@ -1,13 +1,15 @@
 const HttpService = game:GetService("HttpService")
 const RunService = game:GetService("RunService")
 
+const IS_SERVER = RunService:IsClient()
+
 const external = require("../core_external/types")
 
 const ExternalScheduler = require("../core_external/ExternalScheduler")
 
 local scheduler_disconnect: () -> ()? = nil
 
-const RobloxScheduler: external.ExternalScheduler = {
+return {
 	schedule_task_immediate = task.spawn,
 	schedule_task_deferred = task.defer,
 	schedule_task_delayed = task.delay,
@@ -18,20 +20,22 @@ const RobloxScheduler: external.ExternalScheduler = {
 	end,
 
 	start_scheduler = function()
-		if RunService:IsClient() then
-			const id = "FusionUpdateStep_" .. HttpService:GenerateGUID(false)
-
-			RunService:BindToRenderStep(id, Enum.RenderPriority.First.Value, ExternalScheduler.perform_update_step)
-
-			scheduler_disconnect = function()
-				RunService:UnbindFromRenderStep(id)
-			end
-		else
+		if IS_SERVER then
 			const connection = RunService.Heartbeat:Connect(ExternalScheduler.perform_update_step)
 
 			scheduler_disconnect = function()
 				connection:Disconnect()
 			end
+
+			return
+		end
+
+		const id = "confusion_update_step_" .. HttpService:GenerateGUID(false)
+
+		RunService:BindToRenderStep(id, Enum.RenderPriority.First.Value, ExternalScheduler.perform_update_step)
+
+		scheduler_disconnect = function()
+			RunService:UnbindFromRenderStep(id)
 		end
 	end,
 	stop_scheduler = function()
@@ -40,6 +44,4 @@ const RobloxScheduler: external.ExternalScheduler = {
 			scheduler_disconnect = nil
 		end
 	end,
-}
-
-return table.freeze(RobloxScheduler)
+} :: external.ExternalScheduler

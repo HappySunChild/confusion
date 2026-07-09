@@ -16,11 +16,11 @@ const function to_srgb(channel: number): number
 	return (1.055 * channel ^ (1 / 2.4)) - 0.055
 end
 
-return table.freeze({
+return {
 	to_srgb = @native function(rgb: vector): vector
 		return vector.create(to_srgb(rgb.x), to_srgb(rgb.y), to_srgb(rgb.z))
 	end,
 	from_srgb = @native function(srgb: vector): vector
 		return vector.create(to_linear(srgb.x), to_linear(srgb.y), to_linear(srgb.z))
 	end,
-})
+}

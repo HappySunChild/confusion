@@ -1,5 +1,5 @@
 const memory = require("../../core_memory/types")
-const rbx_instances = require("../../roblox_instances/types")
+const rbx_instances = require("../../rbx_instances/types")
 const state = require("../../core_state/types")
 
 const cast_to_state = require("../../core_state/cast_to_state")
