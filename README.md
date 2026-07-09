@@ -21,7 +21,7 @@ return {
 ```
 ```luau
 -- example.luau
-const confusion = require("../src")
+const confusion = require("./confusion")
 const peek = confusion.peek
 
 const scope = confusion:scoped()
