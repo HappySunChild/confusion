@@ -55,7 +55,7 @@ export type Chain<T, S = unknown> = chain.Chain<S, T>
 export type SpecialKey<T = string> = rbx_instances.SpecialKey
 export type Child = rbx_instances.Child
 
-type Confusion = {
+export type Confusion = {
 	version: { major: number, minor: number, patch: number },
 
 	-- Core: Memory
@@ -153,7 +153,7 @@ ExternalLogger.set_logger(require("./rbx_external/RobloxLogger"))
 const ExternalScheduler = require("./core_external/ExternalScheduler")
 ExternalScheduler.set_scheduler(require("./rbx_external/RobloxScheduler"))
 
-const confusion_for_roblox = {
+return {
 	version = { major = 0, minor = 0, patch = 0 },
 
 	-- Core: Memory
@@ -243,6 +243,4 @@ const confusion_for_roblox = {
 	StyleRuleProperties = require("./rbx_stylesheets/keys/StyleRuleProperties"),
 	StyleLink = require("./rbx_stylesheets/keys/StyleLink"),
 	StyleRules = require("./rbx_stylesheets/keys/StyleRules"),
-}
-
-return confusion_for_roblox :: Confusion
+} :: Confusion

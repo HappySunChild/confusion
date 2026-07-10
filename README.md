@@ -43,7 +43,7 @@ print(peek(full_name)) --> John Doe
 ## Platform Support
 `confusion` is designed to be as platform-agnostic as possible. It avoids depending on runtime-specific features (such as Roblox's `Instance`, tweens and task scheduler), allowing its reactive primitives to be used in a wider range of environments.
 
-This doesn't mean that 'batteries-included' packages won't be provided though, instead you will have to specifically choose what submodules you want to use.
+This doesn't mean that 'batteries-included' packages won't be provided though, instead you will have to specifically choose what submodules you want to use if you're not using a preexisting package.
 If you find that `confusion` doesn't provide a batteries-included package for your specific runtime feel free to open an issue for it!
 
 
@@ -100,7 +100,10 @@ ExternalScheduler.set_scheduler(LuteScheduler)
 ### Roblox
 For Roblox users `confusion` provides a suite of utilities for building reactive `Instance` trees and user interfaces under the `confusion_for_roblox` package.
 
-TODO
+#### Rojo
+For Rojo users you can simply copy and paste the `src` directory into your project wherever necessary.
+It is recommended that you rename the `confusion_for_roblox.luau` file to `init.luau` so that you don't have to write `require(".../confusion/confusion_for_roblox")` every time.
+You will also have to manually replace all of the `"./"` requires with the `@self/` alias so that the imports resolve correctly too.
 
 ## Why this fork?
 Recently to me it feels like development of Fusion has slowed over time, so rather than waiting for some of the ideas I wanted to explore, I decided to experiment with them in a fork.
@@ -108,7 +111,7 @@ Recently to me it feels like development of Fusion has slowed over time, so rath
 My goals for `confusion` can essentialy be boiled down to:
 - Experimenting with new reactive primitives and APIs (like `Eventual` and `ForRange`)
 - Improving parts of the reactive graph implementation where possible
-- Migrate towards fully runtime agnostic reactive code
+- Migrate towards fully runtime agnostic reactive code (mostly for running tests more easily)
 - Provide new utilities for building UIs in Roblox (such as the Stylesheets API and `Describe`)
 
 The project also serves as a place to prototype ideas that may not be appropriate for Fusion itself. Some of those ideas may eventually prove worthwhile, while others simply exist as experiments (such as the replacement of `Observers` with `observe` and `observe_immediate`).
