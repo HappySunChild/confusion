@@ -1,6 +1,6 @@
 const memory = require("../core_memory/types")
 const rbx_instances = require("../rbx_instances/types")
-const templates = require("../roblox_templates/types")
+const templates = require("./types")
 
 const ExternalLogger = require("../core_external/ExternalLogger")
 const log_error_nonfatal = ExternalLogger.log_error_nonfatal
