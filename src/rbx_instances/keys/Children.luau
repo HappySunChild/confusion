@@ -6,7 +6,6 @@ const log_error_nonfatal = ExternalLogger.log_error_nonfatal
 
 const cast_to_state = require("../../core_state/cast_to_state")
 const cleanup = require("../../core_memory/cleanup")
-const instance_from_description = require("../instance_from_description")
 const observe_immediate = require("../../core_graph/observe_immediate")
 const peek = require("../../core_use/peek")
 
@@ -91,22 +90,6 @@ const function process_child(
 		if actual_child ~= nil then
 			process_child(actual_child, parent, new_children, new_scopes, old_children, old_scopes)
 		end
-	elseif child_type == "table" and type(child[1]) == "string" then -- DESCRIPTION CASE
-		child = child :: rbx_instances.ChildDescription
-
-		local child_scope = old_scopes[child]
-
-		if child_scope == nil then
-			child_scope = {}
-
-			const new_instance = instance_from_description(child_scope, child, Children)
-
-			process_child(new_instance, parent, new_children, new_scopes, old_children, old_scopes)
-		else
-			old_scopes[child] = nil
-		end
-
-		new_scopes[child] = child_scope
 	elseif cast_to_state(child) ~= nil then -- STATE CASE
 		child = child :: rbx_instances.ChildState
 

@@ -118,7 +118,6 @@ export type Confusion = {
 	-- Roblox: Instances
 	New: rbx_instances.NewConstructor,
 	Hydrate: rbx_instances.HydrateConstructor,
-	Describe: rbx_instances.DescribeConstructor,
 
 	AttributeChange: (attribute: string) -> rbx_instances.SpecialKey<"AttributeChange">,
 	AttributeOut: (attribute: string) -> rbx_instances.SpecialKey<"AttributeOut">,

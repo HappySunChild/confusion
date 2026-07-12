@@ -12,9 +12,8 @@ export type SpecialKey<T = string> = {
 
 export type ChildState = state.StateNode<Child>
 export type ChildUnresolved = (parent: Instance) -> Child?
-export type ChildDescription = { [number | string]: any }
 export type ChildMany = { Child }
-export type Child = Instance | ChildState | ChildUnresolved | ChildDescription | ChildMany
+export type Child = Instance | ChildState | ChildUnresolved | ChildMany
 
 export type Properties = { [string | number | SpecialKey]: any }
 export type Tag = string | { Tag } | state.StateNode<Tag>
@@ -25,7 +24,6 @@ export type HydrateConstructor = <InstanceT>(
 	instance: InstanceT,
 	properties: Properties
 ) -> InstanceT
-export type DescribeConstructor = (scope: memory.Scope, description: ChildDescription) -> Instance
 
 return {
 	cannot_create_class = "Unable to create instance of type '%s'.",
