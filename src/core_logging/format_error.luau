@@ -12,7 +12,7 @@ const function format_error(message: string, error_or_trace: logging.Error | str
 		message = string.gsub(message, "ERROR_MESSAGE", "unknown error")
 	end
 
-	local error_text = `[Confusion] {message}`
+	local error_text = `[confusion] {message}`
 
 	if trace ~= nil then
 		error_text ..= `\n---- Stack trace ----\n{trace}`
