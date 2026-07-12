@@ -139,9 +139,11 @@ export type Confusion = {
 
 	-- Roblox: Stylesheets
 	StyleSheet: rbx_stylesheets.StyleSheetConstructor,
+	StyleRule: rbx_stylesheets.StyleRuleConstructor,
 
 	StyleSheetDerives: rbx_instances.SpecialKey<"StyleSheetDerives">,
 	StyleRuleProperties: rbx_instances.SpecialKey<"StyleRuleProperties">,
+	StyleRuleTransitions: rbx_instances.SpecialKey<"StyleRuleTransitions">,
 	StyleLink: rbx_instances.SpecialKey<"StyleLink">,
 	StyleRules: rbx_instances.SpecialKey<"StyleRules">,
 }
@@ -215,7 +217,6 @@ return {
 	-- Roblox: Instances
 	New = require("./rbx_instances/New"),
 	Hydrate = require("./rbx_instances/Hydrate"),
-	Describe = require("./rbx_instances/Describe"),
 
 	AttributeChange = require("./rbx_instances/keys/AttributeChange"),
 	AttributeOut = require("./rbx_instances/keys/AttributeOut"),
@@ -237,9 +238,11 @@ return {
 
 	-- Roblox: Stylesheets
 	StyleSheet = require("./rbx_stylesheets/StyleSheet"),
+	StyleRule = require("./rbx_stylesheets/StyleRule"),
 
 	StyleSheetDerives = require("./rbx_stylesheets/keys/StyleSheetDerives"),
 	StyleRuleProperties = require("./rbx_stylesheets/keys/StyleRuleProperties"),
+	StyleRuleTransitions = require("./rbx_stylesheets/keys/StyleRuleTransitions"),
 	StyleLink = require("./rbx_stylesheets/keys/StyleLink"),
 	StyleRules = require("./rbx_stylesheets/keys/StyleRules"),
 } :: Confusion

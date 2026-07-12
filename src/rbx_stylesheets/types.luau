@@ -1,19 +1,22 @@
 local memory = require("../core_memory/types")
 local state = require("../core_state/types")
 
-export type StyleRuleDescription = {
-	[string | number]: any,
-}
-
 export type StyleSheetProperties = {
 	derives: { StyleSheet }?,
-	rules: { [number]: StyleRule | StyleRuleDescription }?,
+	rules: { [number]: StyleRule }?,
 	tokens: { [string]: state.UsedAs<any> }?,
 
 	parent: state.UsedAs<Instance>?,
 	name: state.UsedAs<string>?,
 }
 
+export type StyleRuleProperties = {
+	transitions: { [string]: TweenInfo | string }?,
+
+	[string]: any,
+}
+
 export type StyleSheetConstructor = (scope: memory.Scope, properties: StyleSheetProperties) -> StyleSheet
+export type StyleRuleConstructor = (scope: memory.Scope, selector: string, properties: StyleRuleProperties) -> StyleRule
 
 return nil
