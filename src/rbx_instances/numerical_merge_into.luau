@@ -1,4 +1,4 @@
-const function implicit_numerical_merge(tbl: { [any]: any }, target_key: any)
+const function numerical_merge_into(tbl: { [any]: any }, target_key: any)
 	const merged = { tbl[target_key] }
 
 	for key, value in tbl do
@@ -13,4 +13,4 @@ const function implicit_numerical_merge(tbl: { [any]: any }, target_key: any)
 	end
 end
 
-return implicit_numerical_merge
+return numerical_merge_into
