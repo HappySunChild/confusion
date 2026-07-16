@@ -19,7 +19,7 @@ const function fire_node_observers(node: graph.GraphNode)
 end
 
 -- locally redefining this as i'd like to reap the benefits of -O2 compilation inlining
--- which we isn't currently possible because of a lack of cross script compilation
+-- which isn't currently possible because of a lack of cross script compilation
 const function is_eager(node: graph.GraphNode): boolean
 	if node.timeliness == "eager" then
 		return true
