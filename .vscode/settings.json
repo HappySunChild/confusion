@@ -18,7 +18,6 @@
 		"chain": "pipe",
 		"chrono": "temp",
 		"safe": "functions",
-		"rbx_binds": "roblox",
 		"rbx_instances": "roblox",
 		"rbx_external": "roblox",
 		"rbx_templates": "roblox",

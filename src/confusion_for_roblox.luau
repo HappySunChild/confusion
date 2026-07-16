@@ -24,7 +24,6 @@ const motion = require("./motion/types")
 const motion_springs = require("./motion_springs/types")
 const motion_tweens = require("./motion_tweens/types")
 
-const rbx_binds = require("./rbx_binds/types")
 const rbx_instances = require("./rbx_instances/types")
 const rbx_stylesheets = require("./rbx_stylesheets/types")
 const rbx_templates = require("./rbx_templates/types")
@@ -133,10 +132,6 @@ export type Confusion = {
 	FromTemplate: rbx_templates.FromTemplateConstructor,
 	QueryDescendants: rbx_templates.QueryDescendants,
 
-	-- Roblox: Binds
-	PropertyOf: rbx_binds.PropertyOfConstructor,
-	AttributeOf: rbx_binds.AttributeOfConstructor,
-
 	-- Roblox: Stylesheets
 	StyleSheet: rbx_stylesheets.StyleSheetConstructor,
 	StyleRule: rbx_stylesheets.StyleRuleConstructor,
@@ -231,10 +226,6 @@ return {
 	-- Roblox: Templates
 	FromTemplate = require("./rbx_templates/FromTemplate"),
 	QueryDescendants = require("./rbx_templates/QueryDescendants"),
-
-	-- Roblox: Binds
-	PropertyOf = require("./rbx_binds/PropertyOf"),
-	AttributeOf = require("./rbx_binds/AttributeOf"),
 
 	-- Roblox: Stylesheets
 	StyleSheet = require("./rbx_stylesheets/StyleSheet"),
