@@ -8,7 +8,7 @@ const Children = require("./keys/Children")
 const apply_instance_properties = require("./apply_instance_properties")
 const numerical_merge_into = require("./numerical_merge_into")
 
-const function New(scope: memory.Scope, class_name: string, properties: rbx_instances.Properties): Instance
+const function New(scope: memory.Scope, class_name: string, properties: rbx_instances.Properties?): Instance
 	const ok, new_instance = pcall(Instance.new, class_name)
 
 	if not ok then
@@ -17,10 +17,12 @@ const function New(scope: memory.Scope, class_name: string, properties: rbx_inst
 
 	table.insert(scope, new_instance)
 
-	-- this directly modifies the properties table, which I think is ok.
-	-- if the side effects of this are unacceptable then we switch to a non mutating variant.
-	numerical_merge_into(properties, Children)
-	apply_instance_properties(scope, new_instance, properties)
+	if properties ~= nil then
+		-- this directly modifies the properties table, which I think is ok.
+		-- if the side effects of this are unacceptable then we switch to a non mutating variant.
+		numerical_merge_into(properties, Children)
+		apply_instance_properties(scope, new_instance, properties)
+	end
 
 	return new_instance
 end
