@@ -141,6 +141,9 @@ export type Confusion = {
 	StyleRuleTransitions: rbx_instances.SpecialKey<"StyleRuleTransitions">,
 	StyleLink: rbx_instances.SpecialKey<"StyleLink">,
 	StyleRules: rbx_instances.SpecialKey<"StyleRules">,
+
+	-- Roblox: Audio
+	Connections: rbx_instances.SpecialKey<"Connections">,
 }
 
 const ExternalLogger = require("./core_external/ExternalLogger")
@@ -236,4 +239,7 @@ return {
 	StyleRuleTransitions = require("./rbx_stylesheets/keys/StyleRuleTransitions"),
 	StyleLink = require("./rbx_stylesheets/keys/StyleLink"),
 	StyleRules = require("./rbx_stylesheets/keys/StyleRules"),
+
+	-- Roblox: Audio
+	Connections = require("./rbx_audio/Connections"),
 } :: Confusion
