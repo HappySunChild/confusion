@@ -9,7 +9,7 @@ const function unpack_type(value: any): { number }
 	elseif data_type == "vector" then
 		return { value.x, value.y, value.z }
 	elseif data_type == "Color3" then
-		const lab = oklab_from_srgb(value)
+		const lab = oklab_from_srgb(vector.create(value.R, value.G, value.B))
 
 		return { lab.x, lab.y, lab.z }
 	elseif data_type == "Vector3" then
