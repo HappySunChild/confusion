@@ -4,12 +4,8 @@
 		"$className": "DataModel",
 		"ReplicatedStorage": {
 			"$ignoreUnknownInstances": true,
-			"Libraries": {
-				"$className": "Folder",
-				"$ignoreUnknownInstances": true,
-				"confusion": {
-					"$path": "src"
-				}
+			"confusion": {
+				"$path": "src"
 			}
 		},
 		"ServerScriptService": {
