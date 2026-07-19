@@ -1,3 +1,8 @@
+const springs = require("./types")
+
+const ExternalLogger = require("../core_external/ExternalLogger")
+const log_warn = ExternalLogger.log_warn
+
 const Oklab = require("../colour/Oklab")
 const oklab_to_srgb = Oklab.to_srgb
 
@@ -23,6 +28,8 @@ const function pack_type(data_type: string, array: { number }): unknown
 		return CFrame.new(array[1], array[2], array[3])
 			* CFrame.fromAxisAngle(Vector3.new(array[4], array[5], array[6]), array[7])
 	end
+
+	log_warn(springs.unknown_packing_datatype, data_type)
 
 	return nil
 end
