@@ -121,3 +121,4 @@ If you're looking for some other lightweight and platform-agnostic reactive prog
 - [Vide](https://github.com/centau/vide) by centau
 - [Val](https://github.com/TumbleWede/Val) by TumbleWede
 - [signals](https://github.com/roblox/signals) by Roblox
+- [fluid](https://github.com/ffrostfall/fluid) by ffrostfall
