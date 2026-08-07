@@ -3,7 +3,13 @@ const graph = require("./types")
 const ExternalLogger = require("../core_external/ExternalLogger")
 const log_error = ExternalLogger.log_error
 
-const next_version = require("./next_version")
+local global_version = 0
+
+const function next_version(): number
+	global_version += 1
+
+	return global_version
+end
 
 --[[
 	Evaluates the graph object if necessary, so that it is up to date.
@@ -52,10 +58,12 @@ const function evaluate(node: graph.GraphNode, force_computation: boolean?): boo
 
 		meaningfully_changed = node:evaluate() or first_evaluation
 
-		node.absolute_version = next_version()
+		const new_version = next_version()
+
+		node.absolute_version = new_version
 
 		if meaningfully_changed then
-			node.cached_version = node.absolute_version
+			node.cached_version = new_version
 		end
 	end
 
