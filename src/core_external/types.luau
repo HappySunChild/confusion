@@ -1,4 +1,5 @@
-local memory = require("../core_memory/types")
+const memory = require("../core_memory/types")
+const logging = require("../core_logging/types")
 
 export type ExternalScheduler = {
 	start_scheduler: () -> (),
@@ -22,12 +23,14 @@ export type ExternalDebugger = {
 }
 
 export type ExternalLogger = {
-	log_error: (message: string, level: number?) -> never,
-	log_error_nonfatal: (message: string) -> (),
-	log_warn: (message: string) -> (),
+	log_info: (message: string, context: logging.LogContext?) -> (),
+	log_warn: (message: string, context: logging.LogContext?) -> (),
+	log_error: (message: string, err: logging.Error | string?, context: logging.LogContext?) -> never,
+	log_error_nonfatal: (message: string, err: logging.Error | string?, context: logging.LogContext?) -> (),
 }
 
 return {
+	fallback_error = "External log_error callback should have thrown, but it didn't.",
 	missing_scheduler = "confusion is not connected to an external scheduler.",
 	yielded_with_no_scheduler = "A spawned thread yielded while not being connected to an external scheduler; the spawned thread will be frozen indefinitely.",
 }
