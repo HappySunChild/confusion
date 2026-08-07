@@ -19,6 +19,6 @@ export type MotionConstructor = <T>(
 ) -> Motion<T>
 
 return {
-	motion_invalid_goal = "A Motion was given a NaN goal. Ensure NaN isn't being passed anywhere!\nGoal: '%*'",
-	motion_invalid_motion = "A Motion encountered NaN during motion. Ensure NaN/inf isn't being passed anywhere!\nCurrent: '%*'\nGoal: '%*'",
+	motion_nan_goal = "A Motion was given a NaN goal. Ensure NaN isn't being passed anywhere!\nGoal: '{goal}'",
+	motion_nan_motion = "A Motion encountered NaN during motion. Ensure NaN/inf isn't being passed anywhere!\nCurrent: '{current}'\nGoal: '{goal}'",
 }

@@ -9,7 +9,10 @@ const cast_to_graph = require("./cast_to_graph")
 const evaluate = require("./evaluate")
 
 const function observe_lifetime_formatter(_, b: unknown)
-	return `The subject '{name_of(b, "unknown")}'`, "it could be observed"
+	return {
+		a = `The subject '{name_of(b, "unknown")}'`,
+		b = "it could be observed",
+	}
 end
 
 --[[

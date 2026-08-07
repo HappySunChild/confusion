@@ -114,7 +114,7 @@ const function process_child(
 			process_child(descendant, parent, new_children, new_scopes, old_children, old_scopes)
 		end
 	else
-		log_error_nonfatal(rbx_instances.invalid_child_type, debug.traceback(nil, 2), child_type)
+		log_error_nonfatal(rbx_instances.invalid_child_type, debug.traceback(nil, 2), { given_type = child_type })
 	end
 end
 

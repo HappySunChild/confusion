@@ -40,7 +40,7 @@ const function sync_dynamics<T>(motion_obj: Self<T>, should_sleep: boolean, outp
 	if output_value ~= output_value then
 		const goal = motion_obj.active_goal
 
-		log_warn(motion.animated_invalid_motion, output_value, goal)
+		log_warn(motion.motion_nan_motion, { current = output_value, goal = goal })
 
 		output_value = goal
 	end
@@ -93,7 +93,7 @@ const CLASS_MT = table.freeze({
 
 			-- protect against NaN goals
 			if new_goal ~= new_goal then
-				log_warn(motion.animated_invalid_goal, new_goal)
+				log_warn(motion.animated_invalid_goal, { goal = new_goal })
 
 				return false
 			end

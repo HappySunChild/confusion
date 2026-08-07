@@ -7,7 +7,7 @@ const is_similar = require("./is_similar")
 
 type Self<T> = state.Value<T>
 
-const CLASS_META = table.freeze({
+const CLASS_MT = table.freeze({
 	__index = table.freeze({
 		type = "state",
 		kind = "Value",
@@ -38,7 +38,7 @@ const function Value<T>(scope: memory.Scope, initial_value: T): state.Value<T>
 		users = {},
 
 		cached_value = initial_value,
-	}, CLASS_META) :: any
+	}, CLASS_MT) :: any
 
 	const oldest_task = destructor(new_value)
 	new_value._oldest_task = oldest_task

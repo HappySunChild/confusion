@@ -29,7 +29,7 @@ const function pack_type(data_type: string, array: { number }): unknown
 			* CFrame.fromAxisAngle(Vector3.new(array[4], array[5], array[6]), array[7])
 	end
 
-	log_warn(springs.unknown_packing_datatype, data_type)
+	log_warn(springs.unknown_packing_datatype, { type = data_type })
 
 	return nil
 end

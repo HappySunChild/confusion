@@ -11,7 +11,10 @@ const peek = require("./peek")
 
 const function generic_use(user: graph.GraphNode): state.Use
 	if cast_to_graph(user) == nil then
-		log_error(use.invalid_user, nil, typeof(user), user)
+		log_error(use.invalid_user, nil, {
+			type = typeof(user),
+			value = user,
+		})
 	end
 
 	const function use<T>(target: state.UsedAs<T>): T

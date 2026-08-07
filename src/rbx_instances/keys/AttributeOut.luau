@@ -19,7 +19,7 @@ const function AttributeOut(attribute: string): rbx_instances.SpecialKey<"Attrib
 			stage = "observer",
 			apply = function(scope: memory.Scope, apply_to: Instance, value: state.Value<any>)
 				if xtypeof(value) ~= "state" or value.Kind ~= "Value" then
-					log_error(rbx_instances.invalid_out_type, nil, typeof(value))
+					log_error(rbx_instances.invalid_out_type, nil, { given_type = typeof(value) })
 				end
 
 				const event = apply_to:GetAttributeChangedSignal(attribute)

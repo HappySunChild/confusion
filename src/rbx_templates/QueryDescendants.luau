@@ -13,7 +13,7 @@ const function QueryDescendants(scope: memory.Scope, selector: string, propertie
 		const child = descendants[1]
 
 		if child == nil then
-			log_error_nonfatal(templates.missing_query_descendant, nil, selector)
+			log_error_nonfatal(templates.missing_query_descendant, nil, { selector = selector })
 
 			return nil
 		end

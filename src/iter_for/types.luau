@@ -37,5 +37,5 @@ export type ForValuesConstructor = <S, IK, IV, OV>(
 ) -> iter.Iter<IK, OV>
 
 return {
-	for_key_collision = "The key '%*' was returned multiple times simultaneously, which is not allowed in `For` objects.\nInput:\n\tKey: %*\n\tValue: %*\n\nOutput:\n\tKey: %*\n\tValue: %*",
+	for_key_collision = "The key '{output_key}' was returned multiple times simultaneously, which is not allowed in `For` objects.\nInput:\n\tKey: {input_key}\n\tValue: {input_value}\n\nOutput:\n\tKey: {output_key}\n\tValue: {output_value}",
 }

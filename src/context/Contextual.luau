@@ -31,15 +31,15 @@ const CLASS_MT = table.freeze({
 
 			self._values[thread] = { new }
 
-			const ok, value = xpcall(callback, parse_error, ...)
+			const ok, value_or_err = xpcall(callback, parse_error, ...)
 
 			self._values[thread] = original
 
 			if not ok then
-				log_error(state.callback_error, value)
+				log_error(state.callback_error, value_or_err)
 			end
 
-			return value
+			return value_or_err
 		end,
 	}),
 })

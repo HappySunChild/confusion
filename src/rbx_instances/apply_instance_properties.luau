@@ -29,7 +29,10 @@ const function set_property(instance: Instance, property: string, value: any)
 	end
 
 	if pcall(test_property_assignable, instance, property) == false then
-		log_error_nonfatal(rbx_instances.property_cannot_assign, nil, instance.ClassName, property)
+		log_error_nonfatal(rbx_instances.property_cannot_assign, nil, {
+			class = instance.ClassName,
+			property = property,
+		})
 
 		return
 	end
@@ -40,14 +43,12 @@ const function set_property(instance: Instance, property: string, value: any)
 	if given_type == expected_type then
 		log_error_nonfatal(rbx_instances.property_assign_error, err)
 	else
-		log_error_nonfatal(
-			rbx_instances.invalid_property_type,
-			nil,
-			instance.ClassName,
-			property,
-			expected_type,
-			given_type
-		)
+		log_error_nonfatal(rbx_instances.invalid_property_type, nil, {
+			class = instance.ClassName,
+			property = property,
+			expected_type = expected_type,
+			given_type = given_type,
+		})
 	end
 end
 
@@ -75,7 +76,7 @@ const function apply_instance_properties(scope: memory.Scope, instance: Instance
 		elseif key_type == "SpecialKey" then
 			special_key_values[key] = value
 		else
-			log_error_nonfatal(rbx_instances.invalid_key_type, debug.traceback(), key_type)
+			log_error_nonfatal(rbx_instances.invalid_key_type, debug.traceback(), { given_type = key_type })
 		end
 	end
 
@@ -95,15 +96,13 @@ const function apply_instance_properties(scope: memory.Scope, instance: Instance
 			continue
 		end
 
-		log_error_nonfatal(
-			rbx_instances.specialkey_apply_error,
-			err,
-			key.kind,
-			instance.ClassName,
-			instance.Name,
-			value,
-			key.stage
-		)
+		log_error_nonfatal(rbx_instances.specialkey_apply_error, err, {
+			kind = key.kind,
+			stage = key.stage,
+			value = value,
+			instance_class = instance.ClassName,
+			instance_name = instance.Name,
+		})
 	end
 end
 

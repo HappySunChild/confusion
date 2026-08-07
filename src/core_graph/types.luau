@@ -34,6 +34,6 @@ export type Observe = (scope: memory.Scope, subject: any, callback: () -> ()) ->
 return {
 	infinite_loop = "Detected an infinite loop. Consider adding an explicit breakpoint to your code to prevent a cyclic dependency.",
 
-	cannot_depend_dependency_frozen = "The user '%s' cannot depend on '%s', because the latter is frozen.",
-	cannot_depend_user_frozen = "The user '%s' cannot depend on '%s', because the former is frozen.",
+	cannot_depend_dependency_frozen = "The user '{dependant}' cannot depend on '{dependency}', because the latter is frozen.",
+	cannot_depend_user_frozen = "The user '{dependant}' cannot depend on '{dependency}', because the former is frozen.",
 }

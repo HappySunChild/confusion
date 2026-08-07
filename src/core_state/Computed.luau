@@ -18,7 +18,7 @@ type Self<T, S> = {
 	_use: state.Use,
 } & state.Computed<T>
 
-const CLASS_META = table.freeze({
+const CLASS_MT = table.freeze({
 	__index = table.freeze({
 		type = "state",
 		kind = "Computed",
@@ -32,22 +32,22 @@ const CLASS_META = table.freeze({
 			const outer_scope = self.scope
 			const inner_scope = derive_scope(outer_scope)
 
-			const ok, new_value = xpcall(self._processor, parse_error, self._use, inner_scope)
+			const ok, new_value_or_err = xpcall(self._processor, parse_error, self._use, inner_scope)
 
 			if ok then
-				const similar = is_similar(self.cached_value, new_value)
+				const similar = is_similar(self.cached_value, new_value_or_err)
 
 				cleanup(self._inner_scope)
 
 				self._inner_scope = inner_scope
-				self.cached_value = new_value
+				self.cached_value = new_value_or_err
 
 				return not similar
 			end
 
 			cleanup(inner_scope)
 
-			log_error_nonfatal(state.callback_error, new_value :: logging.Error)
+			log_error_nonfatal(state.callback_error, new_value_or_err :: logging.Error)
 
 			return false
 		end,
@@ -71,7 +71,7 @@ const function Computed<T, S>(scope: memory.Scope<S>, processor: state.ComputedP
 
 		_inner_scope = nil,
 		_processor = processor,
-	}, CLASS_META) :: any
+	}, CLASS_MT) :: any
 
 	const oldest_task = destructor(new_computed, computed_destructor)
 

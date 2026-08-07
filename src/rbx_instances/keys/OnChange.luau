@@ -18,7 +18,10 @@ const function OnChange(property: string): rbx_instances.SpecialKey<"OnChange">
 				const ok, event = pcall(apply_to.GetPropertyChangedSignal, apply_to, property)
 
 				if not ok then
-					log_error(rbx_instances.cannot_connect_change, nil, apply_to.ClassName, property)
+					log_error(rbx_instances.cannot_connect_change, nil, {
+						class = apply_to.ClassName,
+						property = property,
+					})
 				end
 
 				table.insert(

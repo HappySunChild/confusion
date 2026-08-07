@@ -7,7 +7,7 @@ const function check_lifetime<A, B, C...>(
 	a: A,
 	b: B,
 	scope_b: memory.Scope?,
-	formatter: (A, B, C...) -> (string, string),
+	formatter: (A, B, C...) -> { a: string, b: string },
 	...: C...
 )
 	if scope_b == nil then

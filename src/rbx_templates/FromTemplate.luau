@@ -18,8 +18,10 @@ const function FromTemplate<InstanceT>(scope: memory.Scope, template: InstanceT,
 				then templates.cannot_clone_template
 				else templates.cannot_clone_template_unarchivable,
 			nil,
-			template.ClassName,
-			template:GetFullName()
+			{
+				class = template.ClassName,
+				name = template:GetFullName(),
+			}
 		)
 	end
 

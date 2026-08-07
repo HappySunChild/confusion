@@ -14,7 +14,7 @@ export type QueryDescendants = (
 ) -> (parent: Instance) -> Instance?
 
 return {
-	cannot_clone_template = "Unable to clone %s '%s'.",
-	cannot_clone_template_unarchivable = "Unable to clone %s '%s.', because it's Archivable property is false.",
-	missing_query_descendant = "Could not find descendants with query '%s'",
+	cannot_clone_template = "Unable to clone {class} '{name}'.",
+	cannot_clone_template_unarchivable = "Unable to clone {class} '{name}', because it's Archivable property is false.",
+	missing_query_descendant = "Could not find descendants with query '{selector}'",
 }

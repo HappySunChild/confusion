@@ -22,7 +22,10 @@ const function OnEvent(event_name: string): rbx_instances.SpecialKey<"OnEvent">
 				const ok, event = pcall(get_property, apply_to, event_name)
 
 				if not ok or typeof(event) ~= "RBXScriptSignal" then
-					log_error(rbx_instances.cannot_connect_event, nil, apply_to.ClassName, event_name)
+					log_error(rbx_instances.cannot_connect_event, nil, {
+						class = apply_to.ClassName,
+						event = event_name,
+					})
 				end
 
 				table.insert(scope, event:Connect(callback))

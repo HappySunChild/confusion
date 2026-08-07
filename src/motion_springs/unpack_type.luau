@@ -31,7 +31,7 @@ const function unpack_type(value: any): { number }
 		return { value.X, value.Y, value.Z, axis.X, axis.Y, axis.Z, angle }
 	end
 
-	log_warn(springs.unknown_unpacking_datatype, data_type)
+	log_warn(springs.unknown_unpacking_datatype, { type = data_type })
 
 	return {}
 end

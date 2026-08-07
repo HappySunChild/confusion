@@ -64,11 +64,12 @@ const CLASS_MT = table.freeze({
 					log_error_nonfatal(
 						iter_for.for_key_collision,
 						nil,
-						output_key,
-						pair.input_key,
-						pair.input_value,
-						output_key,
-						output_value
+						{
+							output_key = output_key,
+							output_value = output_value,
+							input_key = pair.input_key,
+							input_value = pair.input_value,
+						}
 					)
 
 					continue

@@ -24,7 +24,7 @@ const function process_ref(instance: Instance, ref: OneOrMore<state.Value<Instan
 		return
 	end
 
-	log_error(rbx_instances.invalid_ref_type, nil, ref_type)
+	log_error(rbx_instances.invalid_ref_type, nil, { given_type = ref_type })
 end
 
 return {

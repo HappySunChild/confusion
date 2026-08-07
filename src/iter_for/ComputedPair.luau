@@ -42,7 +42,7 @@ const CLASS_MT = table.freeze({
 			const output = self.cached_value
 
 			const active_scope = derive_scope(self.scope)
-			const ok, new_key, new_value =
+			const ok, new_key_or_err, new_value =
 				xpcall(self._processor, parse_error, self._use, active_scope, self.input_key, self.input_value)
 
 			cleanup(self._active_scope) -- for some reason the spec also calls for clearing the current scope as well? I guess it makes it consistent with omitting the pair. this is all weird
@@ -52,7 +52,7 @@ const CLASS_MT = table.freeze({
 
 				cleanup(active_scope)
 
-				log_error_nonfatal(state.callback_error, new_key :: logging.Error)
+				log_error_nonfatal(state.callback_error, new_key_or_err :: logging.Error)
 
 				return false
 			end
@@ -61,9 +61,9 @@ const CLASS_MT = table.freeze({
 
 			const old_key, old_value = output.key, output.value
 
-			output.key, output.value = new_key, new_value
+			output.key, output.value = new_key_or_err, new_value
 
-			return not (is_similar(old_key, new_key) and is_similar(old_value, new_value))
+			return not (is_similar(old_key, new_key_or_err) and is_similar(old_value, new_value))
 		end,
 	}),
 })

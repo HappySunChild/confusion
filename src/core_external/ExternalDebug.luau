@@ -3,7 +3,7 @@ const memory = require("../core_memory/types")
 
 local active_debugger: external.ExternalDebugger? = nil
 
-return table.freeze({
+return {
 	set_debugger = function(new_debugger: external.ExternalDebugger?)
 		const old_debugger = active_debugger
 
@@ -47,4 +47,4 @@ return table.freeze({
 
 		active_debugger.end_profile()
 	end,
-})
+}

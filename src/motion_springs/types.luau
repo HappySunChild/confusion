@@ -10,6 +10,6 @@ export type SpringConstructor = <T>(
 ) -> motion.Motion<T>
 
 return {
-	unknown_packing_datatype = "Unable to pack value of unknown type '%s'; returning nil.",
-	unknown_unpacking_datatype = "Unable to unpack value of unknown type '%s'; returning empty array.",
+	unknown_packing_datatype = "Unable to pack value of unknown type '{type}'; returning nil.",
+	unknown_unpacking_datatype = "Unable to unpack value of unknown type '{type}'; returning empty array.",
 }

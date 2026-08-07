@@ -25,9 +25,15 @@ const function depend(user: graph.GraphNode, dependency: any?)
 	evaluate(dependency :: graph.GraphNode)
 
 	if table.isfrozen(user.using) then
-		log_error(graph.cannot_depend_user_frozen, nil, name_of(user, "unknown"), name_of(dependency, "unknown"))
+		log_error(graph.cannot_depend_user_frozen, nil, {
+			dependant = name_of(user, "unknown"),
+			dependency = name_of(dependency, "unknown"),
+		})
 	elseif table.isfrozen(dependency.users) then
-		log_error(graph.cannot_depend_dependency_frozen, nil, name_of(user, "unknown"), name_of(dependency, "unknown"))
+		log_error(graph.cannot_depend_dependency_frozen, nil, {
+			dependant = name_of(user, "unknown"),
+			dependency = name_of(dependency, "unknown"),
+		})
 	end
 
 	user.using[dependency] = true

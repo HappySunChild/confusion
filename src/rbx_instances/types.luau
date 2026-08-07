@@ -26,21 +26,21 @@ export type HydrateConstructor = <InstanceT>(
 ) -> InstanceT
 
 return {
-	cannot_create_class = "Unable to create instance of type '%s'.",
-	cannot_connect_change = "The %s class doesn't have a property called '%s'.",
-	cannot_connect_event = "The %s class doesn't have a event called '%s'.",
+	cannot_create_class = "Unable to create instance of type '{class}'.",
+	cannot_connect_change = "The {class} class doesn't have a property called '{property}'.",
+	cannot_connect_event = "The {class} class doesn't have a event called '{event}'.",
 
-	property_cannot_assign = "The %s class has no assignable property '%s'.",
+	property_cannot_assign = "The {class} class has no assignable property '{property}'.",
 	property_assign_error = "Error while setting property:\nERROR_MESSAGE",
 
-	invalid_key_type = "Invalid key type: expected a 'string | SpecialKey' type, but got a '%s' type.",
-	invalid_child_type = "Invalid child type: expected a 'Instance | (Instance) -> [RECURSE] | { [RECURSE] } | StateNode<[RECURSE]>' type, but got a '%s' type.",
-	invalid_tag_type = "Invalid tag type: expected a 'string | { [RECURSE] } | StateNode<[RECURSE]>' type, but got a '%s' type.",
-	invalid_ref_type = "Invalid ref type: expected a 'Value' type, but got a '%s' type.",
-	invalid_out_type = "Invalid out type: expected a 'Value' type, but got a '%s' type.",
-	invalid_property_type = "'%s.%s' expected a '%s' type, but got a '%s' type.",
+	invalid_key_type = "Invalid key type: expected a 'string | SpecialKey' type, but got a '{given_type}' type.",
+	invalid_child_type = "Invalid child type: expected a 'Instance | (Instance) -> [RECURSE] | { [RECURSE] } | StateNode<[RECURSE]>' type, but got a '{given_type}' type.",
+	invalid_tag_type = "Invalid tag type: expected a 'string | { [RECURSE] } | StateNode<[RECURSE]>' type, but got a '{given_type}' type.",
+	invalid_ref_type = "Invalid ref type: expected a 'Value' type, but got a '{given_type}' type.",
+	invalid_out_type = "Invalid out type: expected a 'Value' type, but got a '{given_type}' type.",
+	invalid_property_type = "'{class}.{property}' expected a '{expected_type}' type, but got a '{given_type}' type.",
 
-	missing_specialkey_stage = "The SpecialKey '%s' is missing a stage property.",
-	invalid_specialkey_stage = "The SpecialKey '%s' has an invalid stage '%s'.",
-	specialkey_apply_error = "The SpecialKey '%s' errored while being applied to %s '%s' with value %* at stage '%s':\nERROR_MESSAGE",
+	missing_specialkey_stage = "The SpecialKey '{kind}' is missing a stage property.",
+	invalid_specialkey_stage = "The SpecialKey '{kind}' has an invalid stage '{stage}'.",
+	specialkey_apply_error = "The SpecialKey '{kind}' errored while being applied to {instance_class} '{instance_name}' with value {value} at stage '{stage}':\nERROR_MESSAGE",
 }

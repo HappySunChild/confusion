@@ -4,7 +4,7 @@ const ExternalLogger = require("./ExternalLogger")
 const log_error = ExternalLogger.log_error
 const log_warn = ExternalLogger.log_warn
 
-const bound_callbacks = {}
+const BOUND_CALLBACKS = {}
 
 const function default_do_task_immediate<A...>(resume: (A...) -> () | thread, ...: A...): thread
 	local thread: thread = nil
@@ -33,7 +33,7 @@ local active_cancel_task: ((task: thread) -> boolean)? = nil
 local last_update_time = os.clock()
 local delta_time = 0
 
-return table.freeze({
+return {
 	set_scheduler = function(new_scheduler: external.ExternalScheduler?)
 		const old_scheduler = active_scheduler
 
@@ -87,10 +87,10 @@ return table.freeze({
 
 	bind_to_update_step = function(callback: (now: number, dt: number) -> ()): () -> ()
 		const unique_identifier = {}
-		bound_callbacks[unique_identifier] = callback
+		BOUND_CALLBACKS[unique_identifier] = callback
 
 		return function()
-			bound_callbacks[unique_identifier] = nil
+			BOUND_CALLBACKS[unique_identifier] = nil
 		end
 	end,
 	perform_update_step = function(): ()
@@ -99,7 +99,7 @@ return table.freeze({
 		delta_time = now - last_update_time
 		last_update_time = now
 
-		for _, callback in bound_callbacks do
+		for _, callback in BOUND_CALLBACKS do
 			callback(now, delta_time)
 		end
 	end,
@@ -110,4 +110,4 @@ return table.freeze({
 	get_last_update = function(): number
 		return last_update_time
 	end,
-})
+}
