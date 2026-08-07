@@ -23,7 +23,6 @@ export type ExternalDebugger = {
 }
 
 export type ExternalLogger = {
-	log_info: (message: string, context: logging.LogContext?) -> (),
 	log_warn: (message: string, context: logging.LogContext?) -> (),
 	log_error: (message: string, err: logging.Error | string?, context: logging.LogContext?) -> never,
 	log_error_nonfatal: (message: string, err: logging.Error | string?, context: logging.LogContext?) -> (),
