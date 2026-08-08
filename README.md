@@ -50,9 +50,9 @@ If you find that `confusion` doesn't provide a batteries-included package for yo
 
 ### Platform-specific Integration
 To integrate with a specific runtime, you'll need to provide implementations for a few runtime interfaces:
-* a task scheduler
-* an external logger
-* an external debugger
+* a task scheduler (not required, but recommended)
+* an external logger (not required)
+* an external debugger (not required)
 
 A task scheduler interface is required if you intend on using animations (modules such as `confusion/motion`, `confusion/motion_springs`, `confusion/motion_tweens` or `confusion/chrono` are dependant on an external task scheduler) or anything within the `confusion/async` module.
 
