@@ -109,8 +109,8 @@ You will also have to manually replace all of the `"./"` requires with the `@sel
 This fork was initially a way for me to learn how Fusion works *(as a Roact asylum seeker, Fusion caught my attention for how much less work is needed to get simple things done like WOW)*
 so that I could use it more effectively in some projects.
 
-Another reason why I decided to create a fork is that recently to me it feels like development of Fusion has significantly slowed over time. So rather than waiting for some
-of the features I wanted to try out to get implemented into base Fusion, I decided to try implementing them myself.
+Another reason why I decided to create a fork is that recently to me it felt like development of Fusion had significantly slowed over time. So rather than waiting for some
+of the features I wanted to try out to get implemented into base Fusion, I decided to try implementing them myself here.
 
 My goals for `confusion` can essentialy be boiled down to:
 - Experimenting with new reactive primitives and utilities (like `Eventual` and `flatten`)
