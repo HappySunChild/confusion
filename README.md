@@ -1,7 +1,8 @@
+<!-- I SPENT SO LONG LEARNING INKSCAPE TO MAKE THESE ICONS OK -->
 <img src="./.github/assets/logo-full-dark-theme.svg#gh-dark-mode-only" alt="confusion">
 <img src="./.github/assets/logo-full-light-theme.svg#gh-light-mode-only" alt="confusion">
 
-`confusion` is an experimental, platform-agnostic fork of dphfox's [Fusion](https://github.com/dphfox/Fusion). Rather than focusing on a single runtime, such as Roblox in Fusion's case, it acts as a collection of reusable reactive primitives and utilities that can be integrated into environments like [Lute](https://lute.luau.org/), [Lune](https://github.com/lune-org/lune), or other custom runtimes.
+`confusion` is an experimental, platform-agnostic fork of dphfox's [Fusion](https://github.com/dphfox/Fusion).
 
 ## Compatibility with Fusion
 If you're looking to switch to `confusion` from Fusion, and are wondering how much work is required to switch, you can find a full list of API changes at [`FUSION_COMPATIBILITY.md`](FUSION_COMPATIBILITY.md).
@@ -100,6 +101,8 @@ ExternalScheduler.set_scheduler(LuteScheduler)
 ### Roblox
 For Roblox users `confusion` provides a suite of utilities for building reactive `Instance` trees and user interfaces under the `confusion_for_roblox` package.
 
+TODO installation and releases maybe
+
 #### Rojo
 For Rojo users you can simply copy and paste the `src` directory into your project wherever necessary.
 It is recommended that you rename the `confusion_for_roblox.luau` file to `init.luau` so that you don't have to write `require(".../confusion/confusion_for_roblox")` every time.
@@ -112,13 +115,13 @@ so that I could use it more effectively in some projects.
 Another reason why I decided to create a fork is that recently to me it felt like development of Fusion had significantly slowed over time. So rather than waiting for some
 of the features I wanted to try out to get implemented into base Fusion, I decided to try implementing them myself here.
 
-My goals for `confusion` can essentialy be boiled down to:
-- Experimenting with new reactive primitives and utilities (like `Eventual` and `flatten`)
-- Improving parts of the reactive graph implementation where possible
-- Migrate towards fully runtime agnostic reactive code (mostly for running tests more easily outside of Roblox)
-- Provide new utilities for building UIs in Roblox (such as the Stylesheets API and `Describe`)
+My goals for `confusion` can essentialy be boiled down to this (in order of how important they are):
+1. experimenting with new reactive primitives and utilities (like `Eventual` and `flatten`)
+2. migrate towards fully runtime agnostic reactive code (mostly for running tests more easily outside of Roblox)
+3. improving parts of the reactive graph implementation where possible
+4. new utilities for building UIs in Roblox (such as the Stylesheets API and `Describe`)
 
-The project also serves as a place to prototype ideas that may not be appropriate for Fusion itself.
+`confusion` also serves as a place to prototype ideas that may not be appropriate for Fusion itself.
 Some of those ideas may eventually prove worthwhile, while others simply exist as experiments (such as the replacement of `Observers` with `observe` and `observe_immediate`).
 
 ## Alternatives
