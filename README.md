@@ -117,7 +117,8 @@ My goals for `confusion` can essentialy be boiled down to:
 The project also serves as a place to prototype ideas that may not be appropriate for Fusion itself. Some of those ideas may eventually prove worthwhile, while others simply exist as experiments (such as the replacement of `Observers` with `observe` and `observe_immediate`).
 
 ## Alternatives
-If you're looking for some other lightweight and platform-agnostic reactive programming modules for Luau you can check out some of these projects:
+If you're looking for some other lightweight and *somewhat* platform-agnostic reactive programming modules for Luau you can check out some of these projects:
+- [Fusion](https://github.com/dphfox/Fusion) by dphfox (the base version is well enough on it's own :))
 - [Vide](https://github.com/centau/vide) by centau
 - [Val](https://github.com/TumbleWede/Val) by TumbleWede
 - [signals](https://github.com/roblox/signals) by Roblox
