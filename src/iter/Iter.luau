@@ -51,7 +51,7 @@ const function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, 
 	new_iter.use = generic_use(new_iter)
 
 	const oldest_task = destructor(new_iter)
-	new_iter._oldest_task = oldest_task
+	new_iter.oldest_task = oldest_task
 	table.insert(scope, oldest_task)
 
 	return new_iter

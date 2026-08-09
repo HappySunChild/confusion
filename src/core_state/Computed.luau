@@ -55,8 +55,8 @@ const CLASS_MT = table.freeze({
 })
 
 const function computed_destructor<T, S>(computed: Self<T, S>)
-	cleanup(computed._inner_scope)
-	computed._inner_scope = nil
+	cleanup(computed.inner_scope)
+	computed.inner_scope = nil
 end
 
 const function Computed<T, S>(scope: memory.Scope<S>, processor: state.ComputedProcessor<S, T>): state.Computed<T>
@@ -74,7 +74,7 @@ const function Computed<T, S>(scope: memory.Scope<S>, processor: state.ComputedP
 
 	const oldest_task = destructor(new_computed, computed_destructor)
 
-	new_computed._oldest_task = oldest_task
+	new_computed.oldest_task = oldest_task
 	new_computed.use = generic_use(new_computed)
 
 	table.insert(scope, oldest_task)

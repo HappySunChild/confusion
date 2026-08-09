@@ -38,7 +38,7 @@ const CLASS_MT = table.freeze({
 		timeliness = "lazy",
 
 		populate = function<S, T>(self: Self<S, T>, use: state.Use, output: { [number]: T })
-			for index, pair in self._ordered_pairs do
+			for index, pair in self.ordered_pairs do
 				output[index] = use(pair)
 			end
 		end,

@@ -85,7 +85,7 @@ const function Timer(scope: memory.Scope): chrono.Timer
 	}, CLASS_MT) :: Self
 
 	const oldest_task = destructor(new_timer)
-	new_timer._oldest_task = oldest_task
+	new_timer.oldest_task = oldest_task
 
 	table.insert(scope, oldest_task)
 

@@ -39,7 +39,7 @@ const function Value<T>(scope: memory.Scope, initial_value: T): state.Value<T>
 	}, CLASS_MT) :: any
 
 	const oldest_task = destructor(new_value)
-	new_value._oldest_task = oldest_task
+	new_value.oldest_task = oldest_task
 
 	table.insert(scope, oldest_task)
 
