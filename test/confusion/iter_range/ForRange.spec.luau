@@ -13,7 +13,7 @@ return function(configured: butler.Configured)
 			local scope = {}
 			local forrange = ForRange(scope, 0, 1, function() end)
 			expect(forrange):to_have_pairs({ type = "state", kind = "Iter" })
-			expect(scope):to_have_value(forrange._oldest_task)
+			expect(scope):to_have_value(forrange.oldest_task)
 			cleanup(forrange)
 		end)
 		test("iterates, constants", function()

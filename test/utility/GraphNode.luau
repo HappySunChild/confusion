@@ -43,7 +43,7 @@ local function GraphNode(scope: memory.Scope, options: Options?): graph.GraphNod
 	end
 
 	local oldest_task = destructor(new_graphnode)
-	new_graphnode._oldest_task = oldest_task
+	new_graphnode.oldest_task = oldest_task
 
 	table.insert(scope, oldest_task)
 

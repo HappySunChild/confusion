@@ -27,7 +27,7 @@ return function(configured: butler.Configured)
 			expect(computed):to_be_a("table")
 			expect(computed.type):to_equal("state")
 			expect(computed.kind):to_equal("Computed")
-			expect(scope):to_have_value(computed._oldest_task)
+			expect(scope):to_have_value(computed.oldest_task)
 
 			cleanup(scope)
 		end)

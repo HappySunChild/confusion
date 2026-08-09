@@ -26,7 +26,7 @@ return function(configured: butler.Configured)
 			local scope = {}
 			local node = GraphNode(scope)
 
-			expect(node._observers):to_never_exist()
+			expect(node.observers):to_never_exist()
 
 			local ran = false
 			local function dummy()
@@ -35,13 +35,13 @@ return function(configured: butler.Configured)
 			local disconnect = observe_immediate(scope, node, dummy)
 
 			expect(ran):to_equal(true)
-			expect(node._observers):to_be_a("table")
-			expect(node._observers[1]):to_equal(dummy)
+			expect(node.observers):to_be_a("table")
+			expect(node.observers[1]):to_equal(dummy)
 			expect(scope[2]):to_equal(disconnect)
 
 			disconnect()
 
-			expect(node._observers[1]):to_never_exist()
+			expect(node.observers[1]):to_never_exist()
 			-- expect(scope[2]):to_never_exist()
 
 			cleanup(scope)
@@ -50,7 +50,7 @@ return function(configured: butler.Configured)
 			local scope = {}
 			local node = GraphNode(scope)
 
-			expect(node._observers):to_never_exist()
+			expect(node.observers):to_never_exist()
 
 			local count = 0
 			local function increment()

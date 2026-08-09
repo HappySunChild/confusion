@@ -13,7 +13,7 @@ return function(configured: butler.Configured)
 			local scope = {}
 			local forkeys = ForKeys(scope, {}, function() end)
 			expect(forkeys):to_have_pairs({ type = "state", kind = "Iter" })
-			expect(scope):to_have_value(forkeys._oldest_task)
+			expect(scope):to_have_value(forkeys.oldest_task)
 			cleanup(scope)
 		end)
 		test("iterates, constants", function()

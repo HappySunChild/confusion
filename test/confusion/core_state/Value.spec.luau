@@ -15,7 +15,7 @@ return function(configured: butler.Configured)
 			expect(value):to_be_a("table")
 			expect(value.type):to_equal("state")
 			expect(value.kind):to_equal("Value")
-			expect(scope):to_have_value(value._oldest_task)
+			expect(scope):to_have_value(value.oldest_task)
 
 			cleanup(scope)
 		end)

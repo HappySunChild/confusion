@@ -29,7 +29,7 @@ local function assemble_graph(shape: standard_graph_shapes.GraphShape): Graph
 			evaluate = function()
 				return true
 			end,
-			_oldest_task = function() end,
+			oldest_task = function() end,
 		}
 
 		nodes[id] = new_node
