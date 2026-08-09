@@ -13,9 +13,9 @@ const is_similar = require("./is_similar")
 const parse_error = require("../core_logging/parse_error")
 
 type Self<T, S> = {
-	_inner_scope: memory.Scope<S>?,
-	_processor: state.ComputedProcessor<S, T>,
-	_use: state.Use,
+	inner_scope: memory.Scope<S>?,
+	processor: state.ComputedProcessor<S, T>,
+	use: state.Use,
 } & state.Computed<T>
 
 const CLASS_MT = table.freeze({
@@ -32,14 +32,14 @@ const CLASS_MT = table.freeze({
 			const outer_scope = self.scope
 			const inner_scope = derive_scope(outer_scope)
 
-			const ok, new_value_or_err = xpcall(self._processor, parse_error, self._use, inner_scope)
+			const ok, new_value_or_err = xpcall(self.processor, parse_error, self.use, inner_scope)
 
 			if ok then
 				const similar = is_similar(self.cached_value, new_value_or_err)
 
-				cleanup(self._inner_scope)
+				cleanup(self.inner_scope)
 
-				self._inner_scope = inner_scope
+				self.inner_scope = inner_scope
 				self.cached_value = new_value_or_err
 
 				return not similar
@@ -66,17 +66,16 @@ const function Computed<T, S>(scope: memory.Scope<S>, processor: state.ComputedP
 		validity = "valid",
 		using = {},
 		users = {},
-
 		cached_value = nil,
 
-		_inner_scope = nil,
-		_processor = processor,
+		inner_scope = nil,
+		processor = processor,
 	}, CLASS_MT) :: any
 
 	const oldest_task = destructor(new_computed, computed_destructor)
 
 	new_computed._oldest_task = oldest_task
-	new_computed._use = generic_use(new_computed)
+	new_computed.use = generic_use(new_computed)
 
 	table.insert(scope, oldest_task)
 

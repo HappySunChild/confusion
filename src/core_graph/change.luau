@@ -9,11 +9,11 @@ const log_error = ExternalLogger.log_error
 const evaluate = require("./evaluate")
 
 const function fire_node_observers(node: graph.GraphNode)
-	if node._observers == nil then
+	if node.observers == nil then
 		return
 	end
 
-	for _, callback in node._observers do
+	for _, callback in node.observers do
 		schedule_task_immediate(callback)
 	end
 end
@@ -25,8 +25,8 @@ const function is_eager(node: graph.GraphNode): boolean
 		return true
 	end
 
-	if node._observers ~= nil then
-		return next(node._observers) ~= nil
+	if node.observers ~= nil then
+		return next(node.observers) ~= nil
 	end
 
 	return false

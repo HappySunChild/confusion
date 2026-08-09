@@ -29,7 +29,7 @@ type Self<T> = {
 	active_generator: motion.CurveGenerator<T>,
 	active_curve: motion.AnimationCurve<T>,
 
-	_timer: chrono.Timer,
+	timer: chrono.Timer,
 } & motion.Motion<T>
 
 const function sync_dynamics<T>(motion_obj: Self<T>, should_sleep: boolean, output_value: T, ...: any): (T, boolean)
@@ -83,7 +83,7 @@ const CLASS_MT = table.freeze({
 		end,
 
 		evaluate = function<T>(self: Self<T>)
-			const timer = self._timer
+			const timer = self.timer
 			const goal = self.goal
 			const generator = self.generator
 
@@ -147,25 +147,21 @@ const function Motion<T>(
 		validity = "valid",
 		using = {},
 		users = {},
-
 		cached_value = nil, -- this is handled by the evaluate call below, so we can just leave this nil :3
 
 		goal = goal,
 		generator = curve_generator,
-
 		dynamics = { peek(goal) },
-
 		regenerate = false,
 		active_goal = nil,
 		active_generator = nil,
 		active_move = nil,
-
-		_timer = Timer(scope),
+		timer = Timer(scope),
 	}, CLASS_MT) :: any
 
 	const oldest_task = destructor(new_motion)
 
-	new_motion._oldest_task = oldest_task
+	new_motion.oldest_task = oldest_task
 
 	table.insert(scope, oldest_task)
 

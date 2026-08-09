@@ -28,18 +28,26 @@ const function observe(scope: memory.Scope, subject: any, callback: () -> ()): (
 
 	check_lifetime(nil, subject, subject.scope, observe_lifetime_formatter)
 
-	local observers = subject._observers :: { () -> () }
+	local observers = subject.observers :: { () -> () }
 
 	if observers == nil then
 		observers = {}
-		subject._observers = observers
+		subject.observers = observers
 	end
 
 	table.insert(observers, callback)
 
 	evaluate(subject)
 
+	local is_disconnected = false
+
 	const function disconnect()
+		if is_disconnected then
+			return
+		end
+
+		is_disconnected = true
+
 		const index = table.find(observers, callback)
 
 		if index ~= nil then

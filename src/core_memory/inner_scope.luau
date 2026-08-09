@@ -7,10 +7,10 @@ const function inner_scope<S, M>(existing: memory.Scope<S>, methods: M?): memory
 
 	table.insert(existing, inner)
 	table.insert(inner, function()
-		const index = table.find(existing, inner)
+		const inner_index = table.find(existing, inner)
 
-		if index ~= nil then
-			table.remove(existing, index)
+		if inner_index ~= nil then
+			table.remove(existing, inner_index)
 		end
 	end)
 

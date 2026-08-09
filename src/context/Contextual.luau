@@ -1,5 +1,4 @@
 const context = require("./types")
-const state = require("../core_state/types")
 
 const ExternalLogger = require("../core_external/ExternalLogger")
 const log_error = ExternalLogger.log_error
@@ -7,8 +6,8 @@ const log_error = ExternalLogger.log_error
 const parse_error = require("../core_logging/parse_error")
 
 type Self<T> = {
-	_default: T,
-	_values: { [thread]: { T } },
+	default: T,
+	values: { [thread]: { T } },
 } & context.Contextual<T>
 
 const CLASS_MT = table.freeze({
@@ -16,27 +15,27 @@ const CLASS_MT = table.freeze({
 		type = "Contextual",
 
 		now = function<T>(self: Self<T>): T
-			const thread = coroutine.running()
-			const value = self._values[thread]
+			const current_thread = coroutine.running()
+			const value = self.values[current_thread]
 
 			if value == nil then
-				return self._default
+				return self.default
 			end
 
 			return value[1]
 		end,
 		execute_with = function<T, R, A...>(self: Self<T>, new: T, callback: (A...) -> R, ...: A...): R
 			const thread = coroutine.running()
-			const original = self._values[thread]
+			const original = self.values[thread]
 
-			self._values[thread] = { new }
+			self.values[thread] = { new }
 
 			const ok, value_or_err = xpcall(callback, parse_error, ...)
 
-			self._values[thread] = original
+			self.values[thread] = original
 
 			if not ok then
-				log_error(state.callback_error, value_or_err)
+				log_error(context.callback_error, value_or_err, { value = new })
 			end
 
 			return value_or_err
@@ -47,8 +46,8 @@ const WEAK_KEYS_MT = table.freeze({ __mode = "k" })
 
 const function Contextual<T>(default: T): context.Contextual<T>
 	const new_contextual: Self<T> = setmetatable({
-		_default = default,
-		_values = setmetatable({}, WEAK_KEYS_MT),
+		default = default,
+		values = setmetatable({}, WEAK_KEYS_MT),
 	}, CLASS_MT) :: any
 
 	return new_contextual

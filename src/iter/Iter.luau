@@ -7,8 +7,8 @@ const destructor = require("../core_memory/destructor")
 const generic_use = require("../core_use/generic_use")
 
 type Self<K, V> = {
-	_use: state.Use,
-	_disassembly: iter.Disassembly<K, V>,
+	use: state.Use,
+	disassembly: iter.Disassembly<K, V>,
 } & iter.Iter<K, V>
 
 const CLASS_MT = table.freeze({
@@ -23,13 +23,13 @@ const CLASS_MT = table.freeze({
 			end
 
 			const output = self.cached_value
-			const disassembly = self._disassembly
+			const disassembly = self.disassembly
 
 			depend(self, disassembly)
 
 			table.clear(output)
 
-			disassembly:populate(self._use, output)
+			disassembly:populate(self.use, output)
 
 			return true
 		end,
@@ -43,13 +43,12 @@ const function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, 
 		validity = "valid",
 		using = {},
 		users = {},
-
 		cached_value = {},
 
-		_disassembly = disassembly,
+		disassembly = disassembly,
 	}, CLASS_MT) :: any
 
-	new_iter._use = generic_use(new_iter)
+	new_iter.use = generic_use(new_iter)
 
 	const oldest_task = destructor(new_iter)
 	new_iter._oldest_task = oldest_task

@@ -8,10 +8,9 @@ const generic_use = require("../core_use/generic_use")
 const is_similar = require("../core_state/is_similar")
 
 type Self<T> = {
-	_alpha: state.UsedAs<number>,
-	_keyframes: { T },
-
-	_use: state.Use,
+	alpha: state.UsedAs<number>,
+	keyframes: { T },
+	use: state.Use,
 } & keyframes.Keyframes<T>
 
 const CLASS_MT = table.freeze({
@@ -25,10 +24,10 @@ const CLASS_MT = table.freeze({
 				return false
 			end
 
-			const use = self._use
+			const use = self.use
 
 			const old_value = self.cached_value
-			const new_value = evaluate_keyframes(use(self._alpha), self._keyframes, use)
+			const new_value = evaluate_keyframes(use(self.alpha), self.keyframes, use)
 
 			self.cached_value = new_value
 
@@ -44,16 +43,17 @@ const function Keyframes<T>(scope: memory.Scope, alpha: state.UsedAs<number>, ke
 		validity = "valid",
 		users = {},
 		using = {},
+		cached_value = nil,
 
-		_alpha = alpha,
-		_keyframes = keyframes,
+		alpha = alpha,
+		keyframes = keyframes,
 	}, CLASS_MT) :: any
 
-	new_keyframes._use = generic_use(new_keyframes)
+	new_keyframes.use = generic_use(new_keyframes)
 
 	const oldest_task = destructor(new_keyframes)
-	new_keyframes._oldest_task = oldest_task
-	table.insert(scope, oldest_task())
+	new_keyframes.oldest_task = oldest_task
+	table.insert(scope, oldest_task)
 
 	return new_keyframes
 end

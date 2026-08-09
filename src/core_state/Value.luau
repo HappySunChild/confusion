@@ -12,7 +12,6 @@ const CLASS_MT = table.freeze({
 		type = "state",
 		kind = "Value",
 		timeliness = "lazy",
-
 		using = table.freeze({}),
 
 		set = function<T>(self: Self<T>, new_value: T): T
@@ -36,7 +35,6 @@ const function Value<T>(scope: memory.Scope, initial_value: T): state.Value<T>
 		created_at = os.clock(),
 		validity = "valid",
 		users = {},
-
 		cached_value = initial_value,
 	}, CLASS_MT) :: any
 

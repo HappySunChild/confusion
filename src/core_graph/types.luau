@@ -23,10 +23,10 @@ export type GraphNode = {
 	users: { [GraphNode]: true }, -- aka dependentSet
 	using: { [GraphNode]: true }, -- aka dependencySet
 
-	_observers: { () -> () }?,
+	observers: { () -> () }?,
 
 	evaluate: (GraphNode) -> boolean,
-	_oldest_task: () -> (),
+	oldest_task: () -> (),
 }
 
 export type Observe = (scope: memory.Scope, subject: any, callback: () -> ()) -> (() -> ())?

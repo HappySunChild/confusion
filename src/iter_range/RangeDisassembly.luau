@@ -16,10 +16,10 @@ type Self<S, T> = {
 	finish: state.UsedAs<number>,
 	increment: state.UsedAs<number>,
 
-	_pairs_scope: memory.Scope<S>,
-	_current_pairs: { iter_range.RangePair<T> },
-	_ordered_pairs: { iter_range.RangePair<T> },
-	_processor: iter_range.RangeDisassemblyProcessor<S, T>,
+	processor: iter_range.RangeDisassemblyProcessor<S, T>,
+	pairs_scope: memory.Scope<S>,
+	current_pairs: { iter_range.RangePair<T> },
+	ordered_pairs: { iter_range.RangePair<T> },
 } & iter.Disassembly<number, T>
 
 const function invalidate_index<T>(rangepair: iter_range.RangePair<T>, new_index: number)
@@ -47,10 +47,10 @@ const CLASS_MT = table.freeze({
 			depend(self, self.finish)
 			depend(self, self.increment)
 
-			const old_rangepairs = self._current_pairs
+			const old_rangepairs = self.current_pairs
 			const new_rangepairs = {}
 
-			const ordered_rangepairs = self._ordered_pairs
+			const ordered_rangepairs = self.ordered_pairs
 			table.clear(ordered_rangepairs)
 
 			for new_index = peek<<number>>(self.start), peek<<number>>(self.finish), peek<<number>>(self.increment) do
@@ -81,7 +81,7 @@ const CLASS_MT = table.freeze({
 				end
 
 				-- create a new object if none are available
-				const new_pair = RangePair(inner_scope(self._pairs_scope), new_index, self._processor)
+				const new_pair = RangePair(inner_scope(self.pairs_scope), new_index, self.processor)
 				new_rangepairs[new_index] = new_pair
 
 				table.insert(ordered_rangepairs, new_pair)
@@ -92,7 +92,7 @@ const CLASS_MT = table.freeze({
 				cleanup(rangepair.scope)
 			end
 
-			self._current_pairs = new_rangepairs
+			self.current_pairs = new_rangepairs
 
 			return true
 		end,
@@ -100,8 +100,8 @@ const CLASS_MT = table.freeze({
 })
 
 const function destroy_rangedisassembly<S, T>(rangediassembly: Self<S, T>)
-	rangediassembly._pairs_scope = nil
-	rangediassembly._active_pairs = nil
+	rangediassembly.pairs_scope = nil
+	rangediassembly.active_pairs = nil
 end
 
 const function RangeDisassembly<S, T>(
@@ -124,15 +124,15 @@ const function RangeDisassembly<S, T>(
 		finish = finish,
 		increment = step,
 
-		_ordered_pairs = {},
-		_current_pairs = {},
-		_pairs_scope = inner_scope(scope),
-		_processor = processor,
+		processor = processor,
+		ordered_pairs = {},
+		current_pairs = {},
+		pairs_scope = inner_scope(scope),
 	}, CLASS_MT) :: any
 
 	const oldest_task = destructor(new_disassembly, destroy_rangedisassembly)
 
-	new_disassembly._oldest_task = oldest_task
+	new_disassembly.oldest_task = oldest_task
 
 	table.insert(scope, oldest_task)
 

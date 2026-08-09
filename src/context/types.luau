@@ -6,4 +6,6 @@ export type Contextual<T> = {
 }
 export type ContextConstructor = <T>(default: T) -> Contextual<T>
 
-return nil
+return {
+	callback_error = "Error in contextual callback with value {value}:\nERROR_MESSAGE",
+}

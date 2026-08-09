@@ -9,7 +9,7 @@ const destructor = require("../core_memory/destructor")
 const peek = require("../core_use/peek")
 
 type Self = {
-	_timer: chrono.ExternalTime,
+	external_time: chrono.ExternalTime,
 } & chrono.Timer
 
 const CLASS_MT = table.freeze({
@@ -23,8 +23,10 @@ const CLASS_MT = table.freeze({
 				return
 			end
 
-			self._timer:enable()
-			self.reference_point = peek(self._timer) - self.cached_value
+			const external_time = self.external_time
+
+			external_time:enable()
+			self.reference_point = peek(external_time) - self.cached_value
 			self.is_paused = false
 
 			change(self)
@@ -34,13 +36,13 @@ const CLASS_MT = table.freeze({
 				return
 			end
 
-			self._timer:disable()
+			self.external_time:disable()
 			self.is_paused = true
 
 			change(self)
 		end,
 		zero = function(self: Self)
-			self.reference_point = peek(self._timer) :: number
+			self.reference_point = peek(self.external_time) :: number
 			self.cached_value = 0
 
 			change(self)
@@ -51,9 +53,11 @@ const CLASS_MT = table.freeze({
 				return false
 			end
 
-			depend(self, self._timer)
+			const external_time = self.external_time
 
-			const now = peek(self._timer) :: number
+			depend(self, external_time)
+
+			const now = peek(external_time) :: number
 
 			const old_value = self.cached_value
 			const new_value = now - self.reference_point
@@ -77,8 +81,7 @@ const function Timer(scope: memory.Scope): chrono.Timer
 
 		is_paused = false,
 		reference_point = peek(externaltime),
-
-		_timer = externaltime,
+		external_time = externaltime,
 	}, CLASS_MT) :: Self
 
 	const oldest_task = destructor(new_timer)

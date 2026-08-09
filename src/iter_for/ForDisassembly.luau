@@ -14,12 +14,10 @@ const is_similar = require("../core_state/is_similar")
 const peek = require("../core_use/peek")
 
 type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {
-	_input_table: state.UsedAs<{ [IK]: IV }>,
-
-	_active_pairs: { [IK]: iter_for.ComputedPair<IK, IV, OK, OV> },
-	_pair_scope: memory.Scope<S>,
-
-	_constructor: (memory.Scope<S>, initial_key: IK, initial_value: IV) -> iter_for.ComputedPair<IK, IV, OK, OV>,
+	constructor: (memory.Scope<S>, initial_key: IK, initial_value: IV) -> iter_for.ComputedPair<IK, IV, OK, OV>,
+	input_table: state.UsedAs<{ [IK]: IV }>,
+	active_pairs: { [IK]: iter_for.ComputedPair<IK, IV, OK, OV> },
+	pair_scope: memory.Scope<S>,
 }
 
 const function invalidate_pair<IK, IV, OK, OV>(computedpair: iter_for.ComputedPair<IK, IV, OK, OV>, new_key: IK, new_value: IV)
@@ -53,7 +51,7 @@ const CLASS_MT = table.freeze({
 			local max_array_index = -math.huge
 			local has_holes = false
 
-			for _, pair in self._active_pairs do
+			for _, pair in self.active_pairs do
 				const pair_output = use(pair)
 				const output_key, output_value = pair_output.key, pair_output.value
 
@@ -61,16 +59,12 @@ const CLASS_MT = table.freeze({
 					has_holes = true
 					continue
 				elseif output[output_key] ~= nil then
-					log_error_nonfatal(
-						iter_for.for_key_collision,
-						nil,
-						{
-							output_key = output_key,
-							output_value = output_value,
-							input_key = pair.input_key,
-							input_value = pair.input_value,
-						}
-					)
+					log_error_nonfatal(iter_for.for_key_collision, nil, {
+						output_key = output_key,
+						output_value = output_value,
+						input_key = pair.input_key,
+						input_value = pair.input_value,
+					})
 
 					continue
 				end
@@ -99,12 +93,12 @@ const CLASS_MT = table.freeze({
 				end
 			end
 		end,
-		evaluate = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>)
-			depend(self, self._input_table)
+		evaluate = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>): boolean
+			depend(self, self.input_table)
 
-			const pending_pairs = table.clone(peek(self._input_table)) :: { [IK]: IV }
+			const pending_pairs = table.clone(peek(self.input_table)) :: { [IK]: IV }
 
-			const old_computedpairs = self._active_pairs
+			const old_computedpairs = self.active_pairs
 			const new_computedpairs = {}
 
 			const unmatched_computedpairs: { iter_for.ComputedPair<IK, IV, OK, OV> } = {}
@@ -162,15 +156,15 @@ const CLASS_MT = table.freeze({
 				invalidate_pair(computedpair, new_input_key, new_input_value)
 			end
 
-			const pair_scope = self._pair_scope
-			const pair_constructor = self._constructor
+			const pair_scope = self.pair_scope
+			const pair_constructor = self.constructor
 
 			-- create new pair objects for any remaining pairs that couldn't be reused.
 			for pending_key, pending_value in pending_pairs do
 				new_computedpairs[pending_key] = pair_constructor(inner_scope(pair_scope), pending_key, pending_value)
 			end
 
-			self._active_pairs = new_computedpairs
+			self.active_pairs = new_computedpairs
 
 			return true
 		end,
@@ -178,8 +172,8 @@ const CLASS_MT = table.freeze({
 })
 
 const function destroy_fordiassembly<S, IK, IV, OK, OV>(fordisassembly: Self<S, IK, IV, OK, OV>)
-	fordisassembly._pair_scope = nil
-	fordisassembly._active_pairs = nil
+	fordisassembly.pair_scope = nil
+	fordisassembly.active_pairs = nil
 end
 
 const function ForDisassembly<S, IK, IV, OK, OV>(
@@ -198,17 +192,15 @@ const function ForDisassembly<S, IK, IV, OK, OV>(
 		users = {},
 		using = {},
 
-		_input_table = input,
-
-		_active_pairs = {},
-		_pair_scope = inner_scope(scope),
-
-		_constructor = constructor,
+		constructor = constructor,
+		input_table = input,
+		active_pairs = {},
+		pair_scope = inner_scope(scope),
 	}, CLASS_MT) :: any
 
 	const oldest_task = destructor(new_disassembly, destroy_fordiassembly)
 
-	new_disassembly._oldest_task = oldest_task
+	new_disassembly.oldest_task = oldest_task
 
 	table.insert(scope, oldest_task)
 

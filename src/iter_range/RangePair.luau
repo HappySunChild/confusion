@@ -14,9 +14,9 @@ const is_similar = require("../core_state/is_similar")
 const parse_error = require("../core_logging/parse_error")
 
 type Self<T, S> = {
-	_active_scope: memory.Scope<S>,
-	_processor: iter_range.RangeDisassemblyProcessor<T, S>,
-	_use: state.Use,
+	inner_scope: memory.Scope<S>,
+	processor: iter_range.RangeDisassemblyProcessor<T, S>,
+	use: state.Use,
 } & iter_range.RangePair<T>
 
 const CLASS_MT = table.freeze({
@@ -31,9 +31,9 @@ const CLASS_MT = table.freeze({
 			end
 
 			const inner_scope = derive_scope(self.scope)
-			const ok, output_value = xpcall(self._processor, parse_error, self._use, inner_scope, self.input_index)
+			const ok, output_value = xpcall(self.processor, parse_error, self.use, inner_scope, self.input_index)
 
-			cleanup(self._active_scope)
+			cleanup(self.inner_scope)
 
 			if not ok then
 				self.cached_value = nil
@@ -45,7 +45,7 @@ const CLASS_MT = table.freeze({
 				return false
 			end
 
-			self._active_scope = inner_scope
+			self.inner_scope = inner_scope
 
 			const old_value = self.cached_value
 
@@ -57,8 +57,8 @@ const CLASS_MT = table.freeze({
 })
 
 const function destroy_rangepair<T, S>(rangepair: Self<T, S>)
-	cleanup(rangepair._active_scope)
-	rangepair._active_scope = nil
+	cleanup(rangepair.inner_scope)
+	rangepair.inner_scope = nil
 end
 
 const function RangePair<S, T>(
@@ -72,19 +72,17 @@ const function RangePair<S, T>(
 		validity = "valid",
 		using = {},
 		users = {},
-
 		cached_value = nil,
 
 		input_index = initial_index,
-
-		_active_scope = nil,
-		_processor = processor,
+		inner_scope = nil,
+		processor = processor,
 	}, CLASS_MT) :: any
 
 	const oldest_task = destructor(new_rangepair, destroy_rangepair)
 
-	new_rangepair._oldest_task = oldest_task
-	new_rangepair._use = generic_use(new_rangepair)
+	new_rangepair.oldest_task = oldest_task
+	new_rangepair.use = generic_use(new_rangepair)
 
 	table.insert(scope, oldest_task)
 
