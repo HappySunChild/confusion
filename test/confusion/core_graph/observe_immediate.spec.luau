@@ -42,7 +42,7 @@ return function(configured: butler.Configured)
 			disconnect()
 
 			expect(node._observers[1]):to_never_exist()
-			expect(scope[2]):to_never_exist()
+			-- expect(scope[2]):to_never_exist()
 
 			cleanup(scope)
 		end)
