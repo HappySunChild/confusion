@@ -40,17 +40,19 @@ const function observe(scope: memory.Scope, subject: any, callback: () -> ()): (
 	evaluate(subject)
 
 	const function disconnect()
-		const observe_index = table.find(observers, callback)
+		const index = table.find(observers, callback)
 
-		if observe_index ~= nil then
-			table.remove(observers, observe_index)
+		if index ~= nil then
+			const n = #observers
+			observers[index] = observers[n]
+			observers[n] = nil
 		end
 
-		const disconnect_index = table.find(scope, disconnect)
+		-- const disconnect_index = table.find(scope, disconnect)
 
-		if disconnect_index ~= nil then
-			table.remove(scope, disconnect_index)
-		end
+		-- if disconnect_index ~= nil then
+		-- 	table.remove(scope, disconnect_index)
+		-- end
 	end
 
 	nicknames[disconnect] = `Observer ({name_of(subject, "unknown")})`
