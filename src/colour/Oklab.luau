@@ -1,13 +1,17 @@
+--!native
+--!optimize 2
+
 const Linear = require("./Linear")
-const linear_to_srgb = Linear.to_srgb
-const linear_from_srgb = Linear.from_srgb
+const linear_to_srgb, srgb_to_linear = Linear.linear_to_srgb, Linear.srgb_to_linear
 
 const L_COLUMN = vector.create(0.4122214708, 0.5363325363, 0.0514459929)
 const M_COLUMN = vector.create(0.2119034982, 0.6806995451, 0.1073969566)
 const S_COLUMN = vector.create(0.0883024619, 0.2817188376, 0.6299787005)
 
-@native
-const function from_linear_to_oklab(lrgb: vector): vector
+-- linear rgb operations
+
+--- Maps a colour defined in the `Linear RGB` space into the `Oklab` space.
+const function linear_to_oklab(lrgb: vector): vector
 	const l_root = vector.dot(lrgb, L_COLUMN) ^ (1 / 3)
 	const m_root = vector.dot(lrgb, M_COLUMN) ^ (1 / 3)
 	const s_root = vector.dot(lrgb, S_COLUMN) ^ (1 / 3)
@@ -19,8 +23,8 @@ const function from_linear_to_oklab(lrgb: vector): vector
 	)
 end
 
-@native
-const function from_oklab_to_linear(lab: vector): vector
+--- Maps a colour defined in the `Oklab` space into the `Linear RGB` space.
+const function oklab_to_linear(lab: vector): vector
 	const L, a, b = lab.x, lab.y, lab.z
 
 	const root = vector.create(
@@ -42,14 +46,50 @@ const function from_oklab_to_linear(lab: vector): vector
 	)
 end
 
-return {
-	from_linear = from_linear_to_oklab,
-	to_linear = from_oklab_to_linear,
+--- Interpolates between two `Linear RGB` colours using the `Oklab` space.
+const function lerp_linear(lrgb_from: vector, lrgb_to: vector, alpha: number, clamped: boolean): vector
+	const oklab_from = linear_to_oklab(lrgb_from)
+	const oklab_to = linear_to_oklab(lrgb_to)
+	const oklab_result = vector.lerp(oklab_from, oklab_to, alpha)
 
-	from_srgb = @native function(srgb: vector): vector
-		return from_linear_to_oklab(linear_from_srgb(srgb))
-	end,
-	to_srgb = @native function(lab: vector): vector
-		return linear_to_srgb(from_oklab_to_linear(lab))
-	end,
+	if not clamped then
+		return oklab_to_linear(oklab_result)
+	end
+
+	return oklab_to_linear(vector.clamp(oklab_result, vector.zero, vector.one))
+end
+
+-- srgb operations
+
+--- Maps a colour defined in the `sRGB` space into the `Oklab` space.
+const function srgb_to_oklab(srgb: vector): vector
+	return linear_to_oklab(srgb_to_linear(srgb))
+end
+
+--- Maps a colour defined in the `Oklab` space into the `sRGB` space.
+const function oklab_to_srgb(lab: vector): vector
+	return linear_to_srgb(oklab_to_linear(lab))
+end
+
+--- Interpolates between two `sRGB` colours using the `Oklab` space.
+const function lerp_srgb(srgb_from: vector, srgb_to: vector, alpha: number, clamped: boolean): vector
+	const oklab_from = srgb_to_oklab(srgb_from)
+	const oklab_to = srgb_to_oklab(srgb_to)
+	const oklab_result = vector.lerp(oklab_from, oklab_to, alpha)
+
+	if not clamped then
+		return oklab_to_srgb(oklab_result)
+	end
+
+	return oklab_to_srgb(vector.clamp(oklab_result, vector.zero, vector.one))
+end
+
+return {
+	linear_to_oklab = linear_to_oklab,
+	oklab_to_linear = oklab_to_linear,
+	lerp_linear = lerp_linear,
+
+	srgb_to_oklab = srgb_to_oklab,
+	oklab_to_srgb = oklab_to_srgb,
+	lerp_srgb = lerp_srgb,
 }
