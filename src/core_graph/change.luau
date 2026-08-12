@@ -24,15 +24,7 @@ end
 -- locally redefining this as i'd like to reap the benefits of -O2 compilation inlining
 -- which isn't currently possible because of a lack of cross script compilation
 const function is_eager(node: graph.GraphNode): boolean
-	if node.timeliness == "eager" then
-		return true
-	end
-
-	if node.observers ~= nil then
-		return next(node.observers) ~= nil
-	end
-
-	return false
+	return node.timeliness == "eager" or (node.observers ~= nil and next(node.observers) ~= nil)
 end
 
 --[[
