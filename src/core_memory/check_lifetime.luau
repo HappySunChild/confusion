@@ -14,7 +14,7 @@ const function check_lifetime<A, B, C...>(
 	...: C...
 )
 	if scope_b == nil then
-		log_error(memory.use_after_destroy, nil, formatter(a, b, ...))
+		log_error(memory.use_after_destroy, debug.traceback(nil, 2), formatter(a, b, ...) :: { [string]: any })
 	end
 end
 
