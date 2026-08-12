@@ -6,7 +6,7 @@ const untrack_scope = ExternalDebug.untrack_scope
 const ExternalLogger = require("../core_external/ExternalLogger")
 const log_error = ExternalLogger.log_error
 
-const ALREADY_DESTROYING: { [any]: true } = {}
+const ALREADY_DESTROYING: { [unknown]: true } = {}
 
 --[[
 	Cleans up the chores passed in as the arguments.
@@ -20,7 +20,7 @@ const ALREADY_DESTROYING: { [any]: true } = {}
 	
 	Anything else passed in will be ignored.
 ]]
-const function cleanup(chore: any?): ()
+const function cleanup(chore: unknown?): ()
 	if chore == nil then
 		return
 	end
