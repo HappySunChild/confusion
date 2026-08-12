@@ -1,3 +1,6 @@
+--!strict
+--!native
+--!optimize 2
 const memory = require("../core_memory/types")
 
 const name_of = require("../core_logging/name_of")
