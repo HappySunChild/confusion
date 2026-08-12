@@ -1,6 +1,10 @@
+--!strict
+--!native
+--!optimize 2
+
 const motion_tweens = require("./types")
 
-const function get_tween_alpha(info: motion_tweens.TweenInfo, current_time: number)
+const function get_tween_alpha(info: motion_tweens.TweenInfo, current_time: number): number
 	const tween_time, delay_time, repeat_count, reverses = info.time, info.delay_time, info.repeat_count, info.reverses
 	const cycle_count = repeat_count + 1
 	local cycle_duration = delay_time + tween_time

@@ -1,5 +1,7 @@
+--!strict
 --!native
 --!optimize 2
+
 const tweens = require("./types")
 
 const HALF_PI = math.pi / 2

@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const function spring_coefficients(time: number, damping: number, speed: number): (number, number, number, number)
 	-- if time or speed is 0, then the spring won't move
 	if time == 0 or speed == 0 then
