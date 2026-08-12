@@ -28,9 +28,9 @@ const function is_eager(node: graph.GraphNode): boolean
 end
 
 --[[
-	Prompts (forces) a graph node to be re-evaluated. If it meaningfully
+	Prompts a graph node to be reevaluated. If it meaningfully
 	changes, then dependents will be marked invalid and will have to be
-	re-evaluated at a later point (or immediately if it is eager).
+	reevaluated at a later point (or immediately if it is eager).
 
 	https://fluff.blog/2024/04/16/monotonic-painting.html
 ]]
@@ -49,9 +49,11 @@ const function change(node: graph.GraphNode)
 
 		for _, searching: graph.GraphNode in search_now do
 			for user in searching.users do
-				if user.validity == "busy" then
+				const user_validity = user.validity
+
+				if user_validity == "busy" then
 					log_error(graph.infinite_loop)
-				elseif user.validity == "valid" then
+				elseif user_validity == "valid" then
 					is_finished = false
 
 					user.validity = "invalid"

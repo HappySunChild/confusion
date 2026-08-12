@@ -7,9 +7,9 @@ export type StateNode<T> = {
 } & graph.GraphNode
 
 export type UsedAs<T> = StateNode<T> | T
-export type Use = <T>(x: UsedAs<T>) -> T
+export type Use = <T>(UsedAs<T>) -> T
 
--- A state object whose value can be set by the user at any time.
+--- A state object whose value can be set by the user at any time.
 export type Value<T> = {
 	kind: "Value",
 	timeliness: "lazy",
@@ -19,7 +19,7 @@ export type Value<T> = {
 } & StateNode<T>
 export type ValueConstructor = <T>(scope: memory.Scope, initial_value: T) -> Value<T>
 
--- A state object whose value is derived from other objects using a callback.
+--- A state object whose value is derived from other objects using a callback.
 export type Computed<T> = {
 	kind: "Computed",
 	timeliness: "eager",

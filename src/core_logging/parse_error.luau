@@ -2,7 +2,7 @@ const function parse_error(message: string)
 	return {
 		type = "Error",
 		raw = message,
-		message = message:gsub("^.+:%d+:%s*", ""),
+		message = string.gsub(message, "^.+:%d+:%s*", ""),
 		trace = debug.traceback(nil, 2),
 	}
 end
