@@ -18,6 +18,142 @@ export type Child = Instance | ChildState | ChildUnresolved | ChildMany
 export type Properties = { [string | number | SpecialKey]: any }
 export type Tag = string | { Tag } | state.StateNode<Tag>
 
+-- straight outa fluid because i can't be bothered to type this out manually
+type _Instances = {
+	PyramidHandleAdornment: PyramidHandleAdornment,
+	AudioChannelSplitter: AudioChannelSplitter,
+	AudioPitchShifter: AudioPitchShifter,
+	AudioDeviceOutput: AudioDeviceOutput,
+	AudioChannelMixer: AudioChannelMixer,
+	AudioTextToSpeech: AudioTextToSpeech,
+	AudioDeviceInput: AudioDeviceInput,
+	AudioDistortion: AudioDistortion,
+	AudioCompressor: AudioCompressor,
+	AudioEqualizer: AudioEqualizer,
+	AudioAnalyzer: AudioAnalyzer,
+	AudioListener: AudioListener,
+	AudioRecorder: AudioRecorder,
+	AudioLimiter: AudioLimiter,
+	AudioFlanger: AudioFlanger,
+	AudioEmitter: AudioEmitter,
+	AudioPlayer: AudioPlayer,
+	AudioReverb: AudioReverb,
+	AudioFilter: AudioFilter,
+	ArcHandles: ArcHandles,
+	AudioFader: AudioFader,
+	AudioEcho: AudioEcho,
+	AdGui: AdGui,
+	BoxHandleAdornment: BoxHandleAdornment,
+	BillboardGui: BillboardGui,
+	BlurEffect: BlurEffect,
+	CylinderHandleAdornment: CylinderHandleAdornment,
+	ConeHandleAdornment: ConeHandleAdornment,
+	CanvasGroup: CanvasGroup,
+	Camera: Camera,
+	DialogChoice: DialogChoice,
+	DragDetector: DragDetector,
+	Dialog: Dialog,
+	Folder: Folder,
+	Frame: Frame,
+	Highlight: Highlight,
+	Handles: Handles,
+	ImageHandLeAdornment: ImageHandleAdornment,
+	ImageButton: ImageButton,
+	ImageLabel: ImageLabel,
+	LineHandleAdornment: LineHandleAdornment,
+	ProximityPrompt: ProximityPrompt,
+	Path2D: Path2D,
+	Part: Part,
+	SphereHandLeAdornment: SphereHandleAdornment,
+	SelectionSphere: SelectionSphere,
+	ScrollingFrame: ScrollingFrame,
+	SelectionBox: SelectionBox,
+	StyleDerive: StyleDerive,
+	StyleQuery: StyleQuery,
+	SurfaceGui: SurfaceGui,
+	StyleSheet: StyleSheet,
+	SoundGroup: SoundGroup,
+	StyleLink: StyleLink,
+	ScreenGui: ScreenGui,
+	StyleBase: StyleBase,
+	StyleRule: StyleRule,
+	Sound: Sound,
+	TextButton: TextButton,
+	TextLabel: TextLabel,
+	TextBox: TextBox,
+	UIAspectRatioConstraint: UIAspectRatioConstraint,
+	UITextSizeConstraint: UITextSizeConstraint,
+	UISizeConstraint: UISizeConstraint,
+	UIDragDetector: UIDragDetector,
+	UITableLayout: UITableLayout,
+	UIPageLayout: UIPageLayout,
+	UIGridLayout: UIGridLayout,
+	UIListLayout: UIListLayout,
+	UIGradient: UIGradient,
+	UIFlexItem: UIFlexItem,
+	UIPadding: UIPadding,
+	UIStroke: UIStroke,
+	UICorner: UICorner,
+	UIShadow: UIShadow,
+	UIScale: UIScale,
+	ViewportFrame: ViewportFrame,
+	VideoDisplay: VideoDisplay,
+	VideoFrame: VideoFrame,
+	WireframeHandleAdornment: WireframeHandleAdornment,
+	WorldModel: WorldModel,
+	Wire: Wire,
+}
+type _Instance = Instance
+
+type function get_instance(class_name: type): type
+	if not class_name:is("singleton") then
+		return _Instance
+	end
+
+	return _Instances:readproperty(class_name) or _Instance
+end
+
+type function get_properties_for(class_name: type): type
+	const object = get_instance(class_name) :: type
+	local current = object
+
+	const properties = types.newtable()
+
+	while current ~= nil do
+		for property, value in current:properties() do
+			const value_read, value_write = value.read, value.write
+
+			if value_read then
+				if
+					value_read.tag == "function"
+					or value_read.tag == "intersection"
+					or (value_read.tag == "table" and value_read:readproperty(types.singleton("Connect")))
+				then
+					continue
+				end
+			end
+
+			if value_write then
+				properties:setproperty(property, types.optional(value_write))
+			end
+		end
+
+		current = current:readparent()
+	end
+
+	return properties
+end
+
+type New = <ClassName>(
+	class_name: ClassName | keyof<_Instances>,
+	properties: get_properties_for<ClassName>
+) -> get_instance<ClassName>
+
+-- local fn: New = nil
+-- const frame = fn("TextButton", {
+-- 	Text = "hello",
+-- })
+
 export type NewConstructor = (scope: memory.Scope, class_name: string, properties: Properties?) -> Instance
 export type HydrateConstructor = <InstanceT>(
 	scope: memory.Scope,
