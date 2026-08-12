@@ -14,7 +14,7 @@ const function OnChange(property: string): rbx_instances.SpecialKey<"OnChange">
 			type = "SpecialKey",
 			kind = "OnChange",
 			stage = "observer",
-			apply = function(scope: memory.Scope, apply_to: Instance, callback: (any) -> ())
+			apply = function(scope: memory.Scope, apply_to: Instance, callback: (unknown) -> ())
 				const ok, event = pcall(apply_to.GetPropertyChangedSignal, apply_to, property)
 
 				if not ok then

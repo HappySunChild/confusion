@@ -21,7 +21,7 @@ const CLASS_MT = table.freeze({
 	__index = table.freeze({
 		type = "Chain",
 
-		modify = function<S, T>(self: Self<S, T>, processor: (scope: memory.Scope<S>, latent: T) -> any): Self<S, T>
+		modify = function<S, T>(self: Self<S, T>, processor: (scope: memory.Scope<S>, latent: T) -> unknown): Self<S, T>
 			self.latent = processor(self.scope, self.latent)
 			return self
 		end,
