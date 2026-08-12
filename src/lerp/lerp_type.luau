@@ -1,3 +1,4 @@
+--!strict
 --!native
 --!optimize 2
 
@@ -5,9 +6,9 @@ const Oklab = require("../colour/Oklab")
 const oklab_lerp_srgb = Oklab.lerp_srgb
 
 const Roblox = require("../colour/Roblox")
-const to_vector, from_vector = Roblox.to_vector, Roblox.from_vector
+const Color3_to_vector, vector_to_Color3 = Roblox.Color3_to_vector, Roblox.vector_to_Color3
 
-const function lerp_type<T>(a: T, b: T, alpha: number): T
+const function lerp_type(a: unknown, b: unknown, alpha: number): unknown
 	const data_type = typeof(a)
 
 	if typeof(b) == data_type then
@@ -18,50 +19,66 @@ const function lerp_type<T>(a: T, b: T, alpha: number): T
 		elseif data_type == "CFrame" then
 			return (a :: CFrame):Lerp(b :: CFrame, alpha)
 		elseif data_type == "Color3" then
-			return from_vector(oklab_lerp_srgb(to_vector(a), to_vector(b), alpha, true))
+			return vector_to_Color3(
+				oklab_lerp_srgb(Color3_to_vector(a :: Color3), Color3_to_vector(b :: Color3), alpha, true)
+			)
 		elseif data_type == "ColorSequence" then
-			const from: ColorSequence, to: ColorSequence = a, b
+			const from, to = a :: ColorSequence, b :: ColorSequence
 			const from_keypoints, to_keypoints = from.Keypoints, to.Keypoints
 
-			if #from_keypoints == #to_keypoints then
-				const interpolated_keypoints = table.create(#from_keypoints)
+			if #from_keypoints == #to_keypoints then -- could lead to some confusing behavior
+				const interpolated_keypoints = table.create(#from_keypoints) :: { ColorSequenceKeypoint }
 
 				for index = 1, #from_keypoints do
 					const from_keypoint, to_keypoint = from_keypoints[index], to_keypoints[index]
 
-					interpolated_keypoints[index] = lerp_type(from_keypoint, to_keypoint, alpha)
+					interpolated_keypoints[index] = ColorSequenceKeypoint.new(
+						math.lerp(from_keypoint.Time, to_keypoint.Time, alpha),
+						vector_to_Color3(
+							oklab_lerp_srgb(
+								Color3_to_vector(from_keypoint.Value),
+								Color3_to_vector(to_keypoint.Value),
+								alpha,
+								true
+							)
+						)
+					)
 				end
 
 				return ColorSequence.new(interpolated_keypoints)
 			end
 		elseif data_type == "ColorSequenceKeypoint" then
-			const from: ColorSequenceKeypoint, to: ColorSequenceKeypoint = a, b
+			const from, to = a :: ColorSequenceKeypoint, b :: ColorSequenceKeypoint
 
 			return ColorSequenceKeypoint.new(
 				math.lerp(from.Time, to.Time, alpha),
-				from_vector(oklab_lerp_srgb(to_vector(from), to_vector(to), alpha, true))
+				vector_to_Color3(oklab_lerp_srgb(Color3_to_vector(from.Value), Color3_to_vector(to.Value), alpha, true))
 			)
 		elseif data_type == "NumberRange" then
-			const from: NumberRange, to: NumberRange = a, b
+			const from, to = a :: NumberRange, b :: NumberRange
 
 			return NumberRange.new(math.lerp(from.Min, to.Min, alpha), math.lerp(from.Max, to.Max, alpha))
 		elseif data_type == "NumberSequence" then
-			const from: NumberSequence, to: NumberSequence = a, b
+			const from, to = a :: NumberSequence, b :: NumberSequence
 			const from_keypoints, to_keypoints = from.Keypoints, to.Keypoints
 
 			if #from_keypoints == #to_keypoints then
-				const interpolated_keypoints = table.create(#from_keypoints)
+				const interpolated_keypoints = table.create(#from_keypoints) :: { NumberSequenceKeypoint }
 
 				for index = 1, #from_keypoints do
 					const from_keypoint, to_keypoint = from_keypoints[index], to_keypoints[index]
 
-					interpolated_keypoints[index] = lerp_type(from_keypoint, to_keypoint, alpha)
+					interpolated_keypoints[index] = NumberSequenceKeypoint.new(
+						math.lerp(from_keypoint.Time, to_keypoint.Time, alpha),
+						math.lerp(from_keypoint.Value, to_keypoint.Value, alpha),
+						math.lerp(from_keypoint.Envelope, to_keypoint.Envelope, alpha)
+					)
 				end
 
 				return NumberSequence.new(interpolated_keypoints)
 			end
 		elseif data_type == "NumberSequenceKeypoint" then
-			const from: NumberSequenceKeypoint, to: NumberSequenceKeypoint = a, b
+			const from, to = a :: NumberSequenceKeypoint, b :: NumberSequenceKeypoint
 
 			return NumberSequenceKeypoint.new(
 				math.lerp(from.Time, to.Time, alpha),
@@ -69,7 +86,7 @@ const function lerp_type<T>(a: T, b: T, alpha: number): T
 				math.lerp(from.Envelope, to.Envelope, alpha)
 			)
 		elseif data_type == "Rect" then
-			const from: Rect, to: Rect = a, b
+			const from, to = a :: Rect, b :: Rect
 
 			return Rect.new(from.Min:Lerp(to.Min, alpha), from.Max:Lerp(to.Max, alpha))
 		elseif data_type == "UDim" then
