@@ -105,7 +105,7 @@ type _Instances = {
 }
 type _Instance = Instance
 
-type function get_instance(class_name: type): type
+type function get_instance_type(class_name: type): type
 	if not class_name:is("singleton") then
 		return _Instance
 	end
@@ -114,7 +114,7 @@ type function get_instance(class_name: type): type
 end
 
 type function get_properties_for(class_name: type): type
-	const object = get_instance(class_name) :: type
+	const object = get_instance_type(class_name) :: type
 	local current = object
 
 	const properties = types.newtable()
@@ -144,17 +144,11 @@ type function get_properties_for(class_name: type): type
 	return properties
 end
 
-type New = <ClassName>(
+export type NewConstructor = <ClassName>(
+	scope: memory.Scope,
 	class_name: ClassName | keyof<_Instances>,
 	properties: get_properties_for<ClassName>
-) -> get_instance<ClassName>
-
--- local fn: New = nil
--- const frame = fn("TextButton", {
--- 	Text = "hello",
--- })
-
-export type NewConstructor = (scope: memory.Scope, class_name: string, properties: Properties?) -> Instance
+) -> get_instance_type<ClassName>
 export type HydrateConstructor = <InstanceT>(
 	scope: memory.Scope,
 	instance: InstanceT,
