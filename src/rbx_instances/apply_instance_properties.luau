@@ -29,7 +29,7 @@ const function set_property(instance: Instance, property: string, value: any)
 	end
 
 	if pcall(test_property_assignable, instance, property) == false then
-		log_error_nonfatal(rbx_instances.property_cannot_assign, nil, {
+		log_error_nonfatal(rbx_instances.property_cannot_assign, debug.traceback(nil, 3), {
 			class = instance.ClassName,
 			property = property,
 		})
@@ -41,9 +41,13 @@ const function set_property(instance: Instance, property: string, value: any)
 	const expected_type = typeof(instance[property])
 
 	if given_type == expected_type then
-		log_error_nonfatal(rbx_instances.property_assign_error, err)
+		log_error_nonfatal(rbx_instances.property_assign_error, err, {
+			class = instance.ClassName,
+			property = property,
+			value = value,
+		})
 	else
-		log_error_nonfatal(rbx_instances.invalid_property_type, nil, {
+		log_error_nonfatal(rbx_instances.invalid_property_type, debug.traceback(nil, 3), {
 			class = instance.ClassName,
 			property = property,
 			expected_type = expected_type,
@@ -76,7 +80,7 @@ const function apply_instance_properties(scope: memory.Scope, instance: Instance
 		elseif key_type == "SpecialKey" then
 			special_key_values[key] = value
 		else
-			log_error_nonfatal(rbx_instances.invalid_key_type, debug.traceback(), { given_type = key_type })
+			log_error_nonfatal(rbx_instances.invalid_key_type, debug.traceback(nil, 2), { given_type = key_type })
 		end
 	end
 

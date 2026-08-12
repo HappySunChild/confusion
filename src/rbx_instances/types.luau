@@ -31,7 +31,7 @@ return {
 	cannot_connect_event = "The {class} class doesn't have a event called '{event}'.",
 
 	property_cannot_assign = "The {class} class has no assignable property '{property}'.",
-	property_assign_error = "Error while setting property:\nERROR_MESSAGE",
+	property_assign_error = "An error occured while setting property '{class}.{property}' to {value}:\nERROR_MESSAGE",
 
 	invalid_key_type = "Invalid key type: expected a 'string | SpecialKey' type, but got a '{given_type}' type.",
 	invalid_child_type = "Invalid child type: expected a 'Instance | (Instance) -> [RECURSE] | { [RECURSE] } | StateNode<[RECURSE]>' type, but got a '{given_type}' type.",
