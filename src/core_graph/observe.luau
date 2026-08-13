@@ -11,10 +11,10 @@ const check_lifetime = require("../core_memory/check_lifetime")
 const cast_to_graph = require("./cast_to_graph")
 const evaluate = require("./evaluate")
 
-const function observe_lifetime_formatter(_, b: unknown): { a: string, b: string }
+const function observe_lifetime_formatter(_, b: unknown): { case_description: string, subject_description: string }
 	return {
-		a = `The subject '{name_of(b, "unknown")}'`,
-		b = "it could be observed",
+		subject_description = `The subject '{name_of(b, "unknown")}'`,
+		case_description = "it could be observed",
 	}
 end
 

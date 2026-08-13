@@ -11,11 +11,13 @@ const check_lifetime = require("../core_memory/check_lifetime")
 const evaluate = require("./evaluate")
 const name_of = require("../core_logging/name_of")
 
-const function depend_lifetime_formatter(a: unknown, b: unknown): { a: string, b: string }
-	-- return `The dependency '{name_of(b, "object")}'`, `being used by the user '{name_of(a, "object")}'`
+const function depend_lifetime_formatter(
+	a: unknown,
+	b: unknown
+): { subject_description: string, case_description: string }
 	return {
-		a = `The dependency '{name_of(b, "object")}'`,
-		b = `being used by the user '{name_of(a, "object")}'`,
+		subject_description = `The dependency '{name_of(b, "object")}'`,
+		case_description = `being used by the user '{name_of(a, "object")}'`,
 	}
 end
 

@@ -5,7 +5,7 @@ export type Scoped = <T, M>(base: T, methods: M?) -> Scope<T & M>
 export type Insert = <Tasks...>(scope: Scope, Tasks...) -> Tasks...
 
 return {
-	use_after_destroy = "{a} is no longer valid - it was destroyed before {b}.",
+	use_after_destroy = "{subject_description} is no longer valid - it was destroyed before {case_description}.",
 
 	destroyed_twice = "`cleanup()` was given something that it is already cleaning up. Unclear how to proceed.",
 	unknown_cleanup_task = "`cleanup()` was given something it can't cleanup. Unclear how to proceed. ({value})",
