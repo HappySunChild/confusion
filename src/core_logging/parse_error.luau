@@ -1,8 +1,8 @@
-const function parse_error(message: string)
+const logging = require("./types")
+
+const function parse_error(err: unknown): logging.Error
 	return {
-		type = "Error",
-		raw = message,
-		message = string.gsub(message, "^.+:%d+:%s*", ""),
+		message = tostring(err),
 		trace = debug.traceback(nil, 2),
 	}
 end

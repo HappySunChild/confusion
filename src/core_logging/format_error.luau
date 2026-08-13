@@ -10,7 +10,11 @@ const function format_context(message: string, context: logging.LogContext): str
 	return formatted
 end
 
-const function format_error(message: string, error_or_trace: logging.Error | string?, context: logging.LogContext?)
+const function format_error(
+	message: string,
+	error_or_trace: logging.Error | string?,
+	context: logging.LogContext?
+): string
 	const err = if typeof(error_or_trace) == "table" then error_or_trace else nil
 	const trace = if typeof(error_or_trace) == "table" then error_or_trace.trace else error_or_trace
 
@@ -21,15 +25,14 @@ const function format_error(message: string, error_or_trace: logging.Error | str
 	end
 
 	formatted_message =
-		string.gsub(formatted_message, "ERROR_MESSAGE", if err ~= nil then err.message else "unknown error")
-
-	formatted_message = `[confusion] {formatted_message}`
+		string.gsub(formatted_message, "ERROR_MESSAGE", if err ~= nil then err.message else "unknown or missing error")
 
 	if trace ~= nil then
 		formatted_message ..= `\n---- Stack trace ----\n{trace}`
 	end
 
-	return formatted_message:gsub("\n", "\n\t")
+	-- return formatted_message:gsub("\n", "\n\t")
+	return "[confusion] " .. string.gsub(formatted_message, "\n", "\n\t")
 end
 
 return format_error
