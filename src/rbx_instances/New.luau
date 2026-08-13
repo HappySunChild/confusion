@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("../core_memory/types")
 const rbx_instances = require("./types")
 
@@ -9,10 +13,10 @@ const apply_instance_properties = require("./apply_instance_properties")
 const numerical_merge_into = require("./numerical_merge_into")
 
 const function New(scope: memory.Scope, class_name: string, properties: rbx_instances.Properties?): Instance
-	const ok, new_instance = pcall(Instance.new, class_name)
+	const ok, new_instance = pcall(Instance.new, class_name, nil)
 
 	if not ok then
-		log_error(rbx_instances.cannot_create_class, nil, class_name)
+		log_error(rbx_instances.cannot_create_class, nil, { class = class_name })
 	end
 
 	table.insert(scope, new_instance)
