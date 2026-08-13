@@ -19,7 +19,7 @@ const function Out(property: string): rbx_instances.SpecialKey<"Out">
 			stage = "observer",
 			apply = function(scope: memory.Scope, apply_to: Instance, value: state.Value<any>)
 				if xtypeof(value) ~= "state" or value.kind ~= "Value" then
-					log_error(rbx_instances.invalid_out_type, nil, { given_type = typeof(value) })
+					log_error(rbx_instances.invalid_out_type, nil, { given_type = typeof(value), given_value = value })
 				end
 
 				const event = apply_to:GetPropertyChangedSignal(property)

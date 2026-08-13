@@ -52,6 +52,7 @@ const function set_property(instance: Instance, property: string, value: any)
 			property = property,
 			expected_type = expected_type,
 			given_type = given_type,
+			given_value = value,
 		})
 	end
 end
@@ -80,7 +81,10 @@ const function apply_instance_properties(scope: memory.Scope, instance: Instance
 		elseif key_type == "SpecialKey" then
 			special_key_values[key] = value
 		else
-			log_error_nonfatal(rbx_instances.invalid_key_type, debug.traceback(nil, 2), { given_type = key_type })
+			log_error_nonfatal(rbx_instances.invalid_key_type, debug.traceback(nil, 2), {
+				given_type = key_type,
+				given_key = key,
+			})
 		end
 	end
 

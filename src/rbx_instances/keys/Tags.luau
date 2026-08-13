@@ -99,7 +99,10 @@ const function process_tag(
 			process_tag(sub_tag, apply_to, new_tags, new_scopes, old_tags, old_scopes)
 		end
 	else
-		log_error_nonfatal(rbx_instances.invalid_tag_type, debug.traceback(nil, 2), { given_type = tag_type })
+		log_error_nonfatal(rbx_instances.invalid_tag_type, debug.traceback(nil, 2), {
+			given_type = tag_type,
+			given_value = tag,
+		})
 	end
 end
 
