@@ -42,5 +42,5 @@ return {
 
 	missing_specialkey_stage = "The SpecialKey '{kind}' is missing a stage property.",
 	invalid_specialkey_stage = "The SpecialKey '{kind}' has an invalid stage '{stage}'.",
-	specialkey_apply_error = "The SpecialKey '{kind}' errored while being applied to {instance_class} '{instance_name}' with value {value} at stage '{stage}':\nERROR_MESSAGE",
+	specialkey_apply_error = "The SpecialKey '{kind}' (@{stage}) errored while being applied to {instance_class} '{instance_name}':\nERROR_MESSAGE",
 }
