@@ -4,7 +4,7 @@ const logging = require("../core_logging/types")
 const format_error = require("../core_logging/format_error")
 
 const function default_log_warn(message: string, context: logging.LogContext?)
-	print(format_error(message, debug.traceback("WARN TRACEBACK", 3), context))
+	print(format_error(message, debug.traceback(nil, 3), context))
 end
 const function default_log_error(message: string, err: logging.Error | string?, context: logging.LogContext?)
 	error(format_error(message, err, context))
