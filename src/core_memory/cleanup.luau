@@ -1,3 +1,7 @@
+--!nonstrict
+--!native
+--!optimize 2
+
 const memory = require("./types")
 
 const ExternalDebug = require("../core_external/ExternalDebug")
