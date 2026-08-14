@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("../../core_memory/types")
 const rbx_instances = require("../types")
 const state = require("../../core_state/types")
@@ -10,7 +14,7 @@ const function apply_attribute(scope: memory.Scope, apply_to: Instance, attribut
 	apply_to:SetAttribute(attribute, peek(value))
 
 	if cast_to_state(value) ~= nil then
-		observe(function()
+		observe(scope, value, function()
 			apply_to:SetAttribute(attribute, peek(value))
 		end)
 	end

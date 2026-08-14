@@ -1,11 +1,15 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("../../core_memory/types")
 const rbx_instances = require("../types")
 
 const ExternalLogger = require("../../core_external/ExternalLogger")
 const log_error = ExternalLogger.log_error
 
-const function get_property(instance: Instance, key: string)
-	return instance[key]
+const function get_property(instance: Instance, key: string): RBXScriptSignal
+	return (instance :: any)[key] :: any -- we have to do a bunch of gross things here, because there's no way to tell the linter that we're indexing in a safe way
 end
 
 const KEY_CACHE = {}

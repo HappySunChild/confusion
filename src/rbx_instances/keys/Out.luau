@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("../../core_memory/types")
 const rbx_instances = require("../types")
 const state = require("../../core_state/types")
@@ -27,7 +31,7 @@ const function Out(property: string): rbx_instances.SpecialKey<"Out">
 				table.insert(
 					scope,
 					event:Connect(function()
-						value:set(apply_to[property])
+						value:set((apply_to :: any)[property])
 					end)
 				)
 			end,

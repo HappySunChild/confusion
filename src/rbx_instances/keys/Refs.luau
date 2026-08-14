@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const rbx_instances = require("../types")
 const state = require("../../core_state/types")
 
@@ -11,20 +15,16 @@ type OneOrMore<T> = T | { T }
 const function process_ref(instance: Instance, ref: OneOrMore<state.Value<Instance>>)
 	const ref_type = xtypeof(ref)
 
-	if ref_type == "state" and ref.kind == "Value" then
-		ref = ref :: state.Value<Instance>
+	if ref_type == "state" and ((ref :: any) :: state.Value<Instance>).kind == "Value" then
+		ref = (ref :: any) :: state.Value<Instance>
 		ref:set(instance)
-
-		return
 	elseif ref_type == "table" then
 		for _, sub_ref in ref do
-			process_ref(sub_ref, instance)
+			process_ref(instance, sub_ref)
 		end
-
-		return
+	else
+		log_error(rbx_instances.invalid_ref_type, nil, { given_type = ref_type })
 	end
-
-	log_error(rbx_instances.invalid_ref_type, nil, { given_type = ref_type })
 end
 
 return {

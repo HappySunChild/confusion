@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("../../core_memory/types")
 const rbx_instances = require("../types")
 const state = require("../../core_state/types")
@@ -76,7 +80,7 @@ const function process_tag(
 		new_tags[tag] = true
 		old_tags[tag] = nil
 	elseif cast_to_state(tag) ~= nil then -- STATE CASE
-		tag = tag :: state.StateNode<rbx_instances.Tag>
+		tag = (tag :: any) :: state.StateNode<rbx_instances.Tag>
 
 		local tag_scope = old_scopes[tag]
 
@@ -86,7 +90,7 @@ const function process_tag(
 			const reconcile = create_reconciler(tag_scope, apply_to, process_tag)
 
 			observe_immediate(tag_scope, tag, function()
-				reconcile(peek(tag))
+				reconcile(peek(tag :: any))
 			end)
 		else
 			old_scopes[tag] = nil

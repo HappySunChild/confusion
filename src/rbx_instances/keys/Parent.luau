@@ -1,9 +1,13 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("../../core_memory/types")
 const rbx_instances = require("../types")
 const state = require("../../core_state/types")
 
 const ExternalLogger = require("../../core_external/ExternalLogger")
-const log_warn = ExternalLogger.log_warn
+const log_error_nonfatal = ExternalLogger.log_error_nonfatal
 
 const observe_immediate = require("../../core_graph/observe_immediate")
 const peek = require("../../core_use/peek")
@@ -13,8 +17,12 @@ const function set_parent(instance: Instance, parent: Instance?)
 		instance.Parent = parent
 	end)
 
-	if not success then
-		log_warn(err)
+	if not success and type(err) == "string" then
+		log_error_nonfatal(rbx_instances.property_assign_error, err, {
+			class = instance.ClassName,
+			property = "Parent",
+			value = parent,
+		})
 	end
 end
 

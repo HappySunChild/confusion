@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const rbx_instances = require("./types")
 
 const ExternalLogger = require("../core_external/ExternalLogger")
@@ -10,9 +14,9 @@ const STAGE_ORDER = table.freeze({
 	ancestor = 8,
 	observer = 16,
 	last = math.huge,
-})
+}) :: { read [string]: number }
 
-const function sort_keys(a: rbx_instances.SpecialKey, b: rbx_instances.SpecialKey)
+const function sort_keys(a: rbx_instances.SpecialKey, b: rbx_instances.SpecialKey): boolean
 	const a_order = STAGE_ORDER[a.stage]
 	const b_order = STAGE_ORDER[b.stage]
 

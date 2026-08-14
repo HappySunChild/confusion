@@ -1,5 +1,7 @@
-local memory = require("../core_memory/types")
-local state = require("../core_state/types")
+--!strict
+
+const memory = require("../core_memory/types")
+const state = require("../core_state/types")
 
 export type SpecialKeyStage = | "self" | "descendants" | "properties" | "ancestor" | "observer" | "last"
 

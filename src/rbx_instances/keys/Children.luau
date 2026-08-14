@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("../../core_memory/types")
 const rbx_instances = require("../types")
 
@@ -11,13 +15,6 @@ const peek = require("../../core_use/peek")
 
 type ChildrenSet = { [Instance]: true }
 type ChildrenScopes = { [rbx_instances.Child]: memory.Scope }
-
-const Children = {
-	type = "SpecialKey",
-	kind = "Children",
-	stage = "descendants",
-	apply = nil,
-} :: rbx_instances.SpecialKey<"Children">
 
 const function create_reconciler(
 	scope: memory.Scope,
@@ -101,7 +98,7 @@ const function process_child(
 			const reconcile = create_reconciler(child_scope, parent, process_child)
 
 			observe_immediate(child_scope, child, function()
-				reconcile(peek(child))
+				reconcile(peek(child :: any))
 			end)
 		else
 			old_scopes[child] = nil
@@ -121,9 +118,12 @@ const function process_child(
 	end
 end
 
-function Children.apply(scope: memory.Scope, apply_to: Instance, root_child: rbx_instances.Child)
-	const reconcile = create_reconciler(scope, apply_to, process_child)
-	reconcile(root_child)
-end
-
-return Children
+return {
+	type = "SpecialKey",
+	kind = "Children",
+	stage = "descendants",
+	apply = function(scope: memory.Scope, apply_to: Instance, root_child: rbx_instances.Child)
+		const reconcile = create_reconciler(scope, apply_to, process_child)
+		reconcile(root_child)
+	end,
+} :: rbx_instances.SpecialKey<"Children">

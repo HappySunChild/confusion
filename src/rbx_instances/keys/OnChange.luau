@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("../../core_memory/types")
 const rbx_instances = require("../types")
 
@@ -27,7 +31,7 @@ const function OnChange(property: string): rbx_instances.SpecialKey<"OnChange">
 				table.insert(
 					scope,
 					event:Connect(function()
-						callback(apply_to[property])
+						callback((apply_to :: any)[property])
 					end)
 				)
 			end,

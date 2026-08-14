@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const function numerical_merge_into(tbl: { [any]: any }, target_key: any)
 	const merged = { tbl[target_key] }
 
