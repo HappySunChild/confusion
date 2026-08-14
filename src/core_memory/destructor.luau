@@ -1,6 +1,10 @@
+--!strict
+--!native
+--!optimize 2
+
 const graph = require("../core_graph/types")
 
-const function destructor(node: graph.GraphNode, auxiliary: (node: graph.GraphNode) -> ()?): () -> ()
+const function destructor(node: graph.GraphNode, auxiliary: (any) -> ()?): () -> ()
 	const function destroy()
 		node.scope = nil
 

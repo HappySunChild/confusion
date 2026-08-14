@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("./types")
 
 const derive_scope = require("./derive_scope")

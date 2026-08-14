@@ -1,4 +1,8 @@
-const function merge(into: { [unknown]: unknown }, ...: { [unknown]: unknown })
+--!strict
+--!native
+--!optimize 2
+
+const function merge(into: { [unknown]: unknown }, ...: { [unknown]: unknown }): { [unknown]: unknown }
 	for _, set in { ... } do
 		for key, value in set do
 			into[key] = value

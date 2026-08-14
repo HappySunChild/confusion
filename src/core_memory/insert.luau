@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("./types")
 
 const function insert<Tasks...>(scope: memory.Scope, ...: Tasks...): Tasks...

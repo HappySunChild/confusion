@@ -1,6 +1,7 @@
 --!strict
 --!native
 --!optimize 2
+
 const memory = require("./types")
 
 const ExternalLogger = require("../core_external/ExternalLogger")
