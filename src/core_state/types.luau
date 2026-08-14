@@ -1,5 +1,7 @@
-local graph = require("../core_graph/types")
-local memory = require("../core_memory/types")
+--!strict
+
+const graph = require("../core_graph/types")
+const memory = require("../core_memory/types")
 
 export type StateNode<T> = {
 	type: "state",

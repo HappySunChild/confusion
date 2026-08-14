@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 --- Returns whether `a` and `b` are meaningfully similar.
 const function is_similar(a: unknown, b: unknown): boolean
 	const type_a = typeof(a)

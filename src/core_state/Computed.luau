@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const logging = require("../core_logging/types")
 const memory = require("../core_memory/types")
 const state = require("./types")
