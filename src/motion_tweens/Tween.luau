@@ -13,9 +13,9 @@ const get_tween_duration = require("./get_tween_duration")
 const lerp_type = require("../lerp/lerp_type")
 const peek = require("../core_use/peek")
 
-const function tween_mover<T>(info: state.UsedAs<motion_tweens.TweenInfo>)
+const function tween_mover<T>(info: state.UsedAs<motion_tweens.TweenInfo>): motion.CurveGenerator<T>
 	const curve_generator = function(target: T, start: T): motion.AnimationCurve<T>
-		const active_info = peek(info) :: motion_tweens.TweenInfo
+		const active_info = peek<<motion_tweens.TweenInfo>>(info)
 		const duration = get_tween_duration(active_info)
 
 		const new_curve = function(elapsed: number): (boolean, T)
