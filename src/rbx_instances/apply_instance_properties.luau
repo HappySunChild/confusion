@@ -17,12 +17,15 @@ const peek = require("../core_use/peek")
 const sort_keys = require("./sort_keys")
 const xtypeof = require("../core_graph/xtypeof")
 
-const function raw_set_property(instance: Instance, property: string, value: any)
-	instance[property] = value
+--- UNSAFE
+const function raw_set_property(instance: Instance, property: string, value: any): any
+	(instance :: any)[property] = value
+	return nil -- redundant, but necessary for the STUPID type system
 end
 
+--- UNSAFE
 const function test_property_assignable(instance: Instance, property: string)
-	instance[property] = instance[property]
+	(instance :: any)[property] = (instance :: any)[property]
 end
 
 const function set_property(instance: Instance, property: string, value: any)
@@ -42,7 +45,7 @@ const function set_property(instance: Instance, property: string, value: any)
 	end
 
 	const given_type = typeof(value)
-	const expected_type = typeof(instance[property])
+	const expected_type = typeof((instance :: any)[property])
 
 	if given_type == expected_type then
 		log_error_nonfatal(rbx_instances.property_assign_error, err, {
@@ -72,7 +75,7 @@ const function apply_property(scope: memory.Scope, instance: Instance, property:
 end
 
 const function apply_instance_properties(scope: memory.Scope, instance: Instance, properties: rbx_instances.Properties)
-	const special_key_values: { [rbx_instances.SpecialKey]: any } = {}
+	const special_key_values: { [rbx_instances.SpecialKey<any>]: any } = {}
 
 	special_key_values[Parent] = properties.Parent
 	properties.Parent = nil
@@ -81,7 +84,7 @@ const function apply_instance_properties(scope: memory.Scope, instance: Instance
 		const key_type = xtypeof(key)
 
 		if key_type == "string" then
-			apply_property(scope, instance, key, value)
+			apply_property(scope, instance, key :: string, value)
 		elseif key_type == "SpecialKey" then
 			special_key_values[key] = value
 		else
@@ -102,7 +105,7 @@ const function apply_instance_properties(scope: memory.Scope, instance: Instance
 
 	for _, key: rbx_instances.SpecialKey in special_keys do
 		const value = special_key_values[key]
-		const ok, err = xpcall(key.apply, parse_error, scope, instance, value)
+		const ok, err = xpcall(key.apply :: () -> any, parse_error, scope, instance, value)
 
 		if ok then
 			continue
