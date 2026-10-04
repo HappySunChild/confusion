@@ -3,7 +3,7 @@
 export type Scope<T = unknown> = { any } & T
 
 export type Cleanup = (any?) -> ()
-export type Scoped = <T, M>(base: {} & T, methods: ({} & M)?) -> Scope<T & M>
+export type Scoped = <T, M>(base: T, methods: M?) -> Scope<T & M>
 export type Insert = <Tasks...>(scope: Scope, Tasks...) -> Tasks...
 
 return {
