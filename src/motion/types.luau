@@ -1,5 +1,7 @@
-local memory = require("../core_memory/types")
-local state = require("../core_state/types")
+--!strict
+
+const memory = require("../core_memory/types")
+const state = require("../core_state/types")
 
 export type AnimationCurve<T> = (elapsed: number) -> (boolean, T, ...any)
 export type CurveGenerator<T> = (goal: T, start: T, ...any) -> AnimationCurve<T>

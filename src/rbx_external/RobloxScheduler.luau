@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const HttpService = game:GetService("HttpService")
 const RunService = game:GetService("RunService")
 

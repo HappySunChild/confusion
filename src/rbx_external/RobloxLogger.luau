@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const LogService = game:GetService("LogService")
 
 const external = require("../core_external/types")

@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("../core_memory/types")
 const motion = require("../motion/types")
 const motion_tweens = require("./types")

@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const function safe<Ok, Err>(callbacks: { try: () -> Ok, fallback: (err: unknown) -> Err }): Ok | Err
 	const _, value = xpcall(callbacks.try, callbacks.fallback)
 
