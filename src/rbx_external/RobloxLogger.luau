@@ -17,6 +17,7 @@ return {
 		LogService:Error(format_error(message, err), context)
 	end,
 	log_error_nonfatal = function(message: string, err: logging.Error | string?, context: logging.LogContext?)
-		LogService:Info(format_error(message, err), context)
+		task.spawn(LogService.Error, LogService, format_error(message, err), context)
+		-- LogService:Info(format_error(message, err), context)
 	end,
 } :: external.ExternalLogger
