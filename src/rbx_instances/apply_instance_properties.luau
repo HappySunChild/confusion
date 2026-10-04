@@ -17,25 +17,23 @@ const peek = require("../core_use/peek")
 const sort_keys = require("./sort_keys")
 const xtypeof = require("../core_graph/xtypeof")
 
---- UNSAFE
-const function raw_set_property(instance: Instance, property: string, value: any): any
+const function unsafe_set_property(instance: Instance, property: string, value: any): any
 	(instance :: any)[property] = value
 	return nil -- redundant, but necessary for the STUPID type system
 end
 
---- UNSAFE
-const function test_property_assignable(instance: Instance, property: string)
+const function unsafe_test_property_assignable(instance: Instance, property: string)
 	(instance :: any)[property] = (instance :: any)[property]
 end
 
 const function set_property(instance: Instance, property: string, value: any)
-	const ok, err = xpcall(raw_set_property, parse_error, instance, property, value)
+	const ok, err = xpcall(unsafe_set_property, parse_error, instance, property, value)
 
 	if ok then
 		return
 	end
 
-	if pcall(test_property_assignable, instance, property) == false then
+	if pcall(unsafe_test_property_assignable, instance, property) == false then
 		log_error_nonfatal(rbx_instances.property_cannot_assign, debug.traceback(nil, 3), {
 			class = instance.ClassName,
 			property = property,
