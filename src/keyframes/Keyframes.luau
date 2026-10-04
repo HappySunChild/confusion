@@ -1,3 +1,6 @@
+--!native
+--!optimize 2
+
 const keyframes = require("./types")
 const memory = require("../core_memory/types")
 const state = require("../core_state/types")
@@ -19,7 +22,11 @@ const CLASS_MT = table.freeze({
 		kind = "Keyframes",
 		timeliness = "lazy",
 
-		evaluate = function<T>(self: Self<T>): boolean
+		-- WARNING: DO NOT APPROACH
+		-- TYPE CHECKING CRYPTID AHEAD
+		-- EXERCIZE CAUTION IN !strict MODE
+
+		evaluate = function(self: Self<unknown>): boolean
 			if self.scope == nil then
 				return false
 			end
@@ -36,7 +43,7 @@ const CLASS_MT = table.freeze({
 	}),
 })
 
-const function Keyframes<T>(scope: memory.Scope, alpha: state.UsedAs<number>, keyframes: { T }): keyframes.Keyframes<T> | T
+const function Keyframes<T>(scope: memory.Scope, alpha: state.UsedAs<number>, keyframes: { T }): keyframes.Keyframes<T>
 	const new_keyframes: Self<T> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),

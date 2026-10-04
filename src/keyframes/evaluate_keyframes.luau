@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const state = require("../core_state/types")
 
 const lerp_type = require("../lerp/lerp_type")
@@ -18,7 +22,7 @@ const function get_bounding_keys(eval_time: number, keyframes: { any }): (number
 	return prev_time, next_time
 end
 
-const function evaluate_keyframes<T>(eval_time: number, keyframes: { state.UsedAs<T> }, use: state.Use): T?
+const function evaluate_keyframes<T>(eval_time: number, keyframes: { [number?]: state.UsedAs<T> }, use: state.Use): T?
 	const prev_time, next_time = get_bounding_keys(eval_time, keyframes)
 
 	if prev_time == nil and next_time == nil then -- neither keys were present, which means no keyframes were defined
