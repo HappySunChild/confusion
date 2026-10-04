@@ -30,20 +30,15 @@ const function spring_mover<T>(speed: state.UsedAs<number>, damping: state.UsedA
 		const discontinuous = typeof(target_position) ~= active_type
 
 		const target_pos = unpack_type(target_position)
-
 		const spring_count = #target_pos
 
-		if discontinuous then
-			-- start_pos = table.clone(target_pos)
-			-- active_pos = table.clone(target_pos)
+		if discontinuous or initial_velocity == nil then
 			table.move(target_pos, 1, spring_count, 1, start_pos)
 			table.move(target_pos, 1, spring_count, 1, active_pos)
 
 			start_vel = table.create(spring_count, 0)
 			active_vel = table.create(spring_count, 0)
 		else
-			-- start_pos = table.clone(active_pos)
-			-- start_vel = table.clone(initial_velocity)
 			table.move(active_pos, 1, spring_count, 1, start_pos)
 			table.move(initial_velocity, 1, spring_count, 1, start_vel)
 		end
@@ -59,7 +54,8 @@ const function spring_mover<T>(speed: state.UsedAs<number>, damping: state.UsedA
 			elseif elapsed <= 0 then
 				new_value = initial_position
 			else
-				const pos_pos, pos_vel, vel_pos, vel_vel = spring_coefficients(elapsed, peek(damping), peek(speed))
+				const pos_pos, pos_vel, vel_pos, vel_vel =
+					spring_coefficients(elapsed, peek<<number>>(damping), peek<<number>>(speed))
 
 				local is_moving = false
 
@@ -92,7 +88,7 @@ const function spring_mover<T>(speed: state.UsedAs<number>, damping: state.UsedA
 				end
 
 				should_sleep = not is_moving
-				new_value = pack_type(active_type, active_pos)
+				new_value = pack_type(active_type, active_pos) :: T
 			end
 
 			return should_sleep, new_value, active_vel
