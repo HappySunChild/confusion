@@ -1,3 +1,4 @@
 sourcemap.json
 dev/
 temp/
+__pycache__/

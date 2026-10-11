@@ -1,0 +1,167 @@
+{
+    "core_external": {
+        "is_core": true,
+        "label": "Core: External",
+        "requires": [
+            "core_logging",
+            "core_memory"
+        ],
+        "exports": {
+            "types": [],
+            "members": []
+        }
+    },
+    "core_graph": {
+        "is_core": true,
+        "label": "Core: Graph",
+        "requires": [
+            "core_memory",
+            "core_logging",
+            "core_external"
+        ],
+        "exports": {
+            "types": [
+                {
+                    "name": "GraphNode",
+                    "alias": "GraphNode"
+                }
+            ],
+            "members": [
+                {
+                    "alias": "observe",
+                    "module": "observe.luau",
+                    "associated_type": "Observe"
+                },
+                {
+                    "alias": "observe_immediate",
+                    "module": "observe_immediate.luau",
+                    "associated_type": "Observe"
+                }
+            ]
+        }
+    },
+    "core_logging": {
+        "is_core": true,
+        "label": "Core: Logging",
+        "requires": [
+            "core_external"
+        ],
+        "exports": {
+            "types": [],
+            "members": []
+        }
+    },
+    "core_memory": {
+        "is_core": true,
+        "label": "Core: Memory",
+        "requires": [
+            "core_external"
+        ],
+        "exports": {
+            "types": [
+                {
+                    "name": "Scope<T>",
+                    "alias": "Scope<T = Confusion>"
+                }
+            ],
+            "members": [
+                {
+                    "alias": "scoped",
+                    "module": "scoped.luau",
+                    "associated_type": "Scoped"
+                },
+                {
+                    "alias": "derive_scope",
+                    "module": "derive_scope.luau",
+                    "associated_type": "Scoped"
+                },
+                {
+                    "alias": "inner_scope",
+                    "module": "inner_scope.luau",
+                    "associated_type": "Scoped"
+                },
+                {
+                    "alias": "cleanup",
+                    "module": "cleanup.luau",
+                    "associated_type": "Cleanup"
+                },
+                {
+                    "alias": "insert",
+                    "module": "insert.luau",
+                    "associated_type": "Insert"
+                }
+            ]
+        }
+    },
+    "core_state": {
+        "is_core": true,
+        "label": "Core: State",
+        "requires": [
+            "core_external",
+            "core_graph",
+            "core_logging",
+            "core_memory",
+            "core_use"
+        ],
+        "exports": {
+            "types": [
+                {
+                    "name": "StateNode<T>",
+                    "alias": "StateNode<T>"
+                },
+                {
+                    "name": "UsedAs<T>",
+                    "alias": "UsedAs<T>"
+                },
+                {
+                    "name": "Value<T>",
+                    "alias": "Value<T>"
+                },
+                {
+                    "name": "Computed<T>",
+                    "alias": "Computed<T>"
+                },
+                {
+                    "name": "Use",
+                    "alias": "Use"
+                }
+            ],
+            "members": [
+                {
+                    "alias": "Computed",
+                    "module": "Computed.luau",
+                    "associated_type": "ComputedConstructor"
+                },
+                {
+                    "alias": "Value",
+                    "module": "Value.luau",
+                    "associated_type": "ValueConstructor"
+                }
+            ]
+        }
+    },
+    "core_use": {
+        "is_core": true,
+        "label": "Core: Use",
+        "requires": [
+            "core_external",
+            "core_graph",
+            "core_state"
+        ],
+        "exports": {
+            "types": [],
+            "members": [
+                {
+                    "alias": "flatten",
+                    "module": "flatten.luau",
+                    "associated_type": "Flatten"
+                },
+                {
+                    "alias": "peek",
+                    "module": "peek.luau",
+                    "associated_type": "Peek"
+                }
+            ]
+        }
+    }
+}
