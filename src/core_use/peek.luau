@@ -6,9 +6,9 @@ const evaluate = require("../core_graph/evaluate")
 const function peek<T>(x: state.UsedAs<T>): T
 	-- should peek error with use_after_destroy on invalid objects?
 	if cast_to_state(x) ~= nil then
-		evaluate(x)
+		evaluate(x :: state.StateNode<T>)
 
-		return x.cached_value :: T
+		return (x :: state.StateNode<T>).cached_value
 	end
 
 	return x :: T

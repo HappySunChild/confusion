@@ -1,5 +1,5 @@
-local memory = require("../core_memory/types")
-local state = require("../core_state/types")
+const memory = require("../core_memory/types")
+const state = require("../core_state/types")
 
 export type ExternalTime = state.StateNode<number> & {
 	kind: "ExternalTime",

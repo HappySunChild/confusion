@@ -7,7 +7,7 @@ const function flatten<T>(use: state.Use, x: state.UsedAs<T>): T
 		x = use(x)
 	end
 
-	return x
+	return x :: T
 end
 
 return flatten
