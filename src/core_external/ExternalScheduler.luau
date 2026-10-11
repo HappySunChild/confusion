@@ -18,17 +18,23 @@ const function default_do_task_immediate<A...>(resume: (A...) -> () | thread, ..
 	coroutine.resume(thread, ...)
 
 	if coroutine.status(thread) == "suspended" then
-		log_warn(external.yielded_with_no_scheduler)
+		log_warn(external.scheduler_missing_spawn)
 	end
 
 	return thread
 end
 
+const function default_cancel_task(task: thread): boolean
+	const success = coroutine.close(task)
+
+	return success
+end
+
 local active_scheduler: external.ExternalScheduler? = nil
-local active_do_task_immediate: (<A...>(resume: (A...) -> () | thread, A...) -> thread?)? = default_do_task_immediate
+local active_do_task_immediate: <A...>(resume: (A...) -> () | thread, A...) -> thread? = default_do_task_immediate
 local active_do_task_deferred: (<A...>(resume: (A...) -> () | thread, A...) -> thread?)? = nil
 local active_do_task_delayed: (<A...>(sec: number, resume: (A...) -> () | thread, A...) -> thread?)? = nil
-local active_cancel_task: ((task: thread) -> boolean)? = nil
+local active_cancel_task: (task: thread) -> boolean = nil
 
 local last_update_time = os.clock()
 local delta_time = 0
@@ -44,15 +50,15 @@ return {
 		if new_scheduler ~= nil then
 			new_scheduler.start_scheduler()
 
-			active_do_task_immediate = new_scheduler.schedule_task_immediate
+			active_do_task_immediate = new_scheduler.schedule_task_immediate or default_do_task_immediate
 			active_do_task_deferred = new_scheduler.schedule_task_deferred
 			active_do_task_delayed = new_scheduler.schedule_task_delayed
-			active_cancel_task = new_scheduler.cancel_task
+			active_cancel_task = new_scheduler.cancel_task or default_cancel_task
 		else
 			active_do_task_immediate = default_do_task_immediate
 			active_do_task_deferred = nil
 			active_do_task_delayed = nil
-			active_cancel_task = nil
+			active_cancel_task = default_cancel_task
 		end
 
 		active_scheduler = new_scheduler
@@ -68,6 +74,10 @@ return {
 			return log_error(external.missing_scheduler)
 		end
 
+		if active_do_task_deferred == nil then
+			return log_error(external.scheduler_missing_defer)
+		end
+
 		return active_do_task_deferred(resume, ...)
 	end,
 	schedule_task_delayed = function<A...>(sec: number, resume: (A...) -> () | thread, ...: A...): thread?
@@ -75,13 +85,13 @@ return {
 			return log_error(external.missing_scheduler)
 		end
 
+		if active_do_task_delayed == nil then
+			return log_error(external.scheduler_missing_delay)
+		end
+
 		return active_do_task_delayed(sec, resume, ...)
 	end,
 	cancel_task = function(task: thread): boolean
-		if active_scheduler == nil then
-			return log_error(external.missing_scheduler)
-		end
-
 		return active_cancel_task(task)
 	end,
 
