@@ -8,14 +8,12 @@ const function name_of(x: unknown, default: string)
 	end
 
 	if type(x) == "table" then
-		x = x :: { [any]: any }
-
-		if type(x.name) == "string" then
-			return x.name
-		elseif type(x.kind) == "string" then
-			return x.kind
-		elseif type(x.type) == "string" then
-			return x.type
+		if type((x :: { [any]: any }).name) == "string" then
+			return (x :: { [any]: any }).name
+		elseif type((x :: { [any]: any }).kind) == "string" then
+			return (x :: { [any]: any }).kind
+		elseif type((x :: { [any]: any }).type) == "string" then
+			return (x :: { [any]: any }).type
 		end
 	end
 

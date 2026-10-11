@@ -82,7 +82,7 @@ const function Timer(scope: memory.Scope): chrono.Timer
 		is_paused = false,
 		reference_point = peek(externaltime),
 		external_time = externaltime,
-	}, CLASS_MT) :: Self
+	}, CLASS_MT)
 
 	const oldest_task = destructor(new_timer)
 	new_timer.oldest_task = oldest_task

@@ -22,6 +22,6 @@ export type Chain<S, T> = {
 	for_keys: <IK, IV, OK>(Chain<S, T>, processor: iter_for.ForKeysProcessor<S, IK, OK>) -> Chain<S, T>,
 }
 
-export type ChainConstructor = <S, T>(scope: memory.Scope<S>, initial_value: T) -> Chain<S, T>
+export type ChainConstructor = <S, T>(scope: memory.Scope<S>, initial_value: state.UsedAs<T>) -> Chain<S, T>
 
 return nil

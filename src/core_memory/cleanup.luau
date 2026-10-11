@@ -42,24 +42,24 @@ const function cleanup(chore: unknown?): ()
 	elseif typeof(chore) == "function" then -- callback functions
 		(chore :: () -> ())()
 	elseif typeof(chore) == "table" then
-		if chore[1] ~= nil then -- scope/array of chores
-			chore = chore :: { any }
+		local chor = chore :: { [any]: any }
 
-			for i = #chore, 1, -1 do
-				cleanup(chore[i])
+		if chor[1] ~= nil then -- scope/array of chores
+			for i = #chor, 1, -1 do
+				cleanup(chor[i])
 
-				chore[i] = nil
+				chor[i] = nil
 			end
 
-			untrack_scope(chore)
-		elseif typeof(chore.destroy) == "function" then -- :destroy method
-			chore:destroy()
-		elseif typeof(chore.Destroy) == "function" then -- :Destroy method
-			chore:Destroy()
-		elseif typeof(chore.disconnect) == "function" then -- :disconnect method
-			chore:disconnect()
-		elseif typeof(chore.Disconnect) == "function" then -- :Disconnect method
-			chore:Disconnect()
+			untrack_scope(chor)
+		elseif typeof(chor.destroy) == "function" then -- :destroy method
+			chor:destroy()
+		elseif typeof(chor.Destroy) == "function" then -- :Destroy method
+			chor:Destroy()
+		elseif typeof(chor.disconnect) == "function" then -- :disconnect method
+			chor:disconnect()
+		elseif typeof(chor.Disconnect) == "function" then -- :Disconnect method
+			chor:Disconnect()
 		end
 	end
 

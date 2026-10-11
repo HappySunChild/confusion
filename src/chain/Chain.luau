@@ -21,15 +21,15 @@ const CLASS_MT = table.freeze({
 	__index = table.freeze({
 		type = "Chain",
 
-		modify = function<S, T>(self: Self<S, T>, processor: (scope: memory.Scope<S>, latent: T) -> unknown): Self<S, T>
-			self.latent = processor(self.scope, self.latent)
+		modify = function<S, T, O>(self: Self<S, T>, transform: (scope: memory.Scope<S>, latent: T) -> T): Self<S, T>
+			self.latent = transform(self.scope, self.latent)
 			return self
 		end,
 
 		map = function<S, T, O>(
-			self: Self<S, T>,
+			self: Self<S, any>,
 			processor: (value: T, use: state.Use, scope: memory.Scope<S>) -> O
-		): Self<S, O>
+		): Self<S, T>
 			const latent = self.latent
 			self.latent = Computed(self.scope, function(use, scope)
 				return processor(use(latent), use, scope)
@@ -37,33 +37,27 @@ const CLASS_MT = table.freeze({
 			return self
 		end,
 
-		spring = function<S, T>(self: Self<S, T>, speed: state.UsedAs<number>?, damping: state.UsedAs<number>?): Self<S, T>
+		spring = function<S, T>(self: Self<S, any>, speed: state.UsedAs<number>?, damping: state.UsedAs<number>?): Self<S, T>
 			self.latent = Spring(self.scope, self.latent, speed, damping)
 			return self
 		end,
-		tween = function<S, T>(self: Self<S, T>, info: state.UsedAs<tweens.TweenInfo>): Self<S, T>
+		tween = function<S, T>(self: Self<S, any>, info: state.UsedAs<tweens.TweenInfo>): Self<S, T>
 			self.latent = Tween(self.scope, self.latent, info)
 			return self
 		end,
 
 		for_pairs = function<S, IK, IV, OK, OV>(
-			self: Self<S, { [IK]: IV }>,
+			self: Self<S, any>,
 			processor: iter_for.ForPairsProcessor<unknown, IK, IV, OK, OV>
 		): Self<S, { [OK]: OV }>
 			self.latent = ForPairs(self.scope, self.latent, processor)
 			return self
 		end,
-		for_values = function<S, IK, IV, OV>(
-			self: Self<S, { [IK]: IV }>,
-			processor: iter_for.ForValuesProcessor<S, IV, OV>
-		): Self<S, { [IK]: OV }>
+		for_values = function<S, IK, IV, OV>(self: Self<S, any>, processor: iter_for.ForValuesProcessor<S, IV, OV>): Self<S, any>
 			self.latent = ForValues(self.scope, self.latent, processor)
 			return self
 		end,
-		for_keys = function<S, IK, IV, OK>(
-			self: Self<S, { [IK]: IV }>,
-			processor: iter_for.ForKeysProcessor<S, IK, OK>
-		): Self<S, { [OK]: IV }>
+		for_keys = function<S, IK, IV, OK>(self: Self<S, any>, processor: iter_for.ForKeysProcessor<S, IK, OK>): Self<S, { [OK]: IV }>
 			self.latent = ForKeys(self.scope, self.latent, processor)
 			return self
 		end,

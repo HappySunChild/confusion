@@ -45,7 +45,7 @@ const function depend(user: graph.GraphNode, dependency: any?)
 		})
 	end
 
-	user.using[dependency] = true
+	user.using[dependency :: graph.GraphNode] = true
 	dependency.users[user] = true
 end
 

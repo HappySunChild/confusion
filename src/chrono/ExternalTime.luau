@@ -49,7 +49,7 @@ const function ExternalTime(scope: memory.Scope): chrono.ExternalTime
 		created_at = os.clock(),
 		validity = "valid",
 		users = {},
-	}, CLASS_MT) :: Self
+	}, CLASS_MT)
 
 	ALL_TIMERS[new_externaltime] = true
 

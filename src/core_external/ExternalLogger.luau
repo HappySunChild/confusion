@@ -6,17 +6,19 @@ const format_error = require("../core_logging/format_error")
 const function default_log_warn(message: string, context: logging.LogContext?)
 	print(format_error(message, debug.traceback(nil, 3), context))
 end
-const function default_log_error(message: string, err: logging.Error | string?, context: logging.LogContext?)
+const function default_log_error(message: string, err: (logging.Error | string)?, context: logging.LogContext?)
 	error(format_error(message, err, context))
 end
-const function default_log_error_nonfatal(message: string, err: logging.Error | string?, context: logging.LogContext?)
+const function default_log_error_nonfatal(message: string, err: (logging.Error | string)?, context: logging.LogContext?)
 	print(format_error(message, err, context))
 end
 
 local active_logger: external.ExternalLogger? = nil
 local active_log_warn: (message: string, context: logging.LogContext?) -> () = default_log_warn
-local active_log_error: (message: string, context: logging.LogContext?) -> never = default_log_error
-local active_log_error_nonfatal: (message: string, context: logging.LogContext?) -> () = default_log_error_nonfatal
+local active_log_error: (message: string, err: (logging.Error | string)?, context: logging.LogContext?) -> never =
+	default_log_error
+local active_log_error_nonfatal: (message: string, err: (logging.Error | string)?, context: logging.LogContext?) -> () =
+	default_log_error_nonfatal
 
 return {
 	set_logger = function(new_logger: external.ExternalLogger?)

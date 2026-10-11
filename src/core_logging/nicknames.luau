@@ -1,3 +1,3 @@
-const nicknames = setmetatable({}, { __mode = "k" }) :: { [any]: string }
+const nicknames = setmetatable({}, { __mode = "k" })
 
 return nicknames

@@ -10,7 +10,7 @@ const track_scope = ExternalDebug.track_scope
 const merge = require("./merge")
 
 const function derive_scope<S, M>(existing: memory.Scope<S>, methods: M?): memory.Scope<S & M>
-	const old_metatable = getmetatable(existing) :: { __index: S } -- until __index metatable types respect intersections
+	const old_metatable = getmetatable(existing) -- until __index metatable types respect intersections
 	const new_metatable = if methods == nil
 		then old_metatable -- reuse old metatable because nothing is being changed.
 		else {
