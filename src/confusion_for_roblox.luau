@@ -55,8 +55,6 @@ export type SpecialKey<T = string> = rbx_instances.SpecialKey
 export type Child = rbx_instances.Child
 
 export type Confusion = {
-	version: { major: number, minor: number, patch: number },
-
 	-- Core: Memory
 	scoped: memory.Scoped,
 	derive_scope: memory.Scoped,
@@ -150,8 +148,6 @@ const ExternalScheduler = require("./core_external/ExternalScheduler")
 ExternalScheduler.set_scheduler(require("./rbx_external/RobloxScheduler"))
 
 return {
-	version = { major = 0, minor = 0, patch = 0 },
-
 	-- Core: Memory
 	scoped = require("./core_memory/scoped"),
 	derive_scope = require("./core_memory/derive_scope"),
