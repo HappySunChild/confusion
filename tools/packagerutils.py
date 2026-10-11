@@ -1,3 +1,4 @@
+import enum
 import pathlib
 import shutil
 from collections.abc import Iterable
@@ -6,8 +7,24 @@ from json import load
 from typing import Any
 
 
-# TODO: this
+class AssociatedRuntime(enum.Enum):
+    Luau = "luau"
+    Roblox = "rbx"
+
+
 class ModulesValidationException(Exception):
+    pass
+
+
+class MissingSrcDirectoryException(ModulesValidationException):
+    pass
+
+
+class MissingModuleDirectoryException(ModulesValidationException):
+    pass
+
+
+class MissingRequiredModulesException(ModulesValidationException):
     pass
 
 
@@ -25,13 +42,30 @@ class ModuleMemberExport:
 
 
 @dataclass
+class ModuleExternalCapabilities:
+    logger_module: str | None
+    scheduler_module: str | None
+    debugger_module: str | None
+
+    @classmethod
+    def from_dict(cls, info: dict[str, Any]) -> "ModuleExternalCapabilities":
+        return ModuleExternalCapabilities(
+            logger_module=info.get("logger_module"),
+            scheduler_module=info.get("scheduler_module"),
+            debugger_module=info.get("debugger_module"),
+        )
+
+
+@dataclass
 class Module:
     is_core: bool
-    name: str
+    id: str
     label: str
     required_modules: list[str]
     export_types: list[ModuleTypeExport]
     export_members: list[ModuleMemberExport]
+    associated_runtime: AssociatedRuntime | None
+    external_capabilities: ModuleExternalCapabilities | None
 
     def __post_init__(self) -> None:
         self.required_modules = self.required_modules or []
@@ -39,18 +73,24 @@ class Module:
         self.export_members = self.export_members or []
 
     @classmethod
-    def from_dict(cls, name: str, info: dict[str, Any]) -> "Module":
-        exports = info["exports"]
-
-        return cls(
-            name=name,
-            label=info.get("label", name),
+    def from_dict(cls, id: str, info: dict[str, Any]) -> "Module":
+        return Module(
+            id=id,
+            label=info.get("label", id),
             is_core=info.get("is_core", False),
             required_modules=info["requires"],
-            export_types=[ModuleTypeExport(**export) for export in exports["types"]],
-            export_members=[
-                ModuleMemberExport(**export) for export in exports["members"]
+            export_types=[
+                ModuleTypeExport(**export) for export in info["export_types"]
             ],
+            export_members=[
+                ModuleMemberExport(**export) for export in info["export_members"]
+            ],
+            associated_runtime=AssociatedRuntime(
+                info.get("associated_runtime", "luau")
+            ),
+            external_capabilities=ModuleExternalCapabilities.from_dict(
+                info.get("external_capabilities", {})
+            ),
         )
 
 
@@ -72,11 +112,9 @@ def load_modules(module_json_path: str) -> dict[str, Module]:
 
 def validate_module_selection(selection: ModuleSelection) -> None:
     if not selection.src_path.exists():
-        raise ModulesValidationException()
+        raise MissingSrcDirectoryException(selection.src_path)
 
-    available_modules: tuple[str, ...] = tuple[str, ...](
-        mod.name for mod in selection.modules
-    )
+    available_modules = tuple[str, ...](mod.id for mod in selection.modules)
     missing_modules: list[str] = []
 
     for mod in selection.modules:
@@ -84,11 +122,11 @@ def validate_module_selection(selection: ModuleSelection) -> None:
             if required_mod not in available_modules:
                 missing_modules.append(required_mod)
 
-        if not (selection.src_path / mod.name).exists():
-            raise ModulesValidationException()
+        if not (selection.src_path / mod.id).exists():
+            raise MissingModuleDirectoryException(selection.src_path / mod.id)
 
     if len(missing_modules) > 0:
-        raise ModulesValidationException()
+        raise MissingRequiredModulesException(missing_modules)
 
 
 def generate_package_init_source(
@@ -121,15 +159,17 @@ def generate_package_init_source(
             type_export_segment.extend(
                 (
                     f"-- {mod.label}",
-                    f"const {mod.name} = require('@self/{mod.name}/types')",
+                    f"const {mod.id} = require('@self/{mod.id}/types')",
                 )
             )
 
         if has_types:
             type_export_segment.extend(
-                f"export type {type_export.alias} = {mod.name}.{type_export.name}"
+                f"export type {type_export.alias} = {mod.id}.{type_export.name}"
                 for type_export in mod_types
             )
+
+        if has_types or has_members:
             type_export_segment.append("")
 
         if has_members:
@@ -138,7 +178,7 @@ def generate_package_init_source(
                 for s in (
                     f"-- {mod.label}",
                     *(
-                        f"{member.alias}: {mod.name}.{member.associated_type},"
+                        f"{member.alias}: {member.associated_type},"
                         for member in mod_members
                     ),
                     "",
@@ -149,7 +189,7 @@ def generate_package_init_source(
                 for s in (
                     f"-- {mod.label}",
                     *(
-                        f'{member.alias} = require("@self/{mod.name}/{member.module.removesuffix(".luau")}"),'
+                        f'{member.alias} = require("@self/{mod.id}/{member.module.removesuffix(".luau")}"),'
                         for member in mod_members
                     ),
                     "",
@@ -191,5 +231,5 @@ def generate_package(
 
     for mod in selection.modules:
         shutil.copytree(
-            selection.src_path / mod.name, dst_path / mod.name, dirs_exist_ok=True
+            selection.src_path / mod.id, dst_path / mod.id, dirs_exist_ok=True
         )
