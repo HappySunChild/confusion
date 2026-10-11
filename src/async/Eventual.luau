@@ -23,40 +23,45 @@ const parse_error = require("../core_logging/parse_error")
 const peek = require("../core_use/peek")
 
 type Self<T, S> = async.Eventual<T> & {
-	inner_scope: memory.Scope<S>,
 	processor: async.EventualProcessor<S, T>,
 	become: (T) -> T,
 	use: state.Use,
 
 	prev_value: T?,
 	is_becoming: boolean,
-	active_thread: thread?,
 
+	session_thread: thread?,
+	session_scope: memory.Scope<S>?,
 	session_used: { [graph.GraphNode]: true },
 }
 
 const function handle_eventual_computation<T, S>(eventual: Self<T, S>)
-	eventual.active_thread = coroutine.running()
+	if eventual.scope == nil then
+		return
+	end
 
-	const inner_scope = derive_scope(eventual.scope)
+	eventual.session_thread = coroutine.running()
 
-	const ok, err: logging.Error = xpcall(eventual.processor, parse_error, eventual.use, inner_scope, eventual.become)
+	const session_scope = derive_scope(eventual.scope)
+
+	const ok, err: logging.Error =
+		xpcall(eventual.processor :: any, parse_error, eventual.use, session_scope, eventual.become)
 
 	if ok then -- adopt computation scope, clean up old one
-		cleanup(eventual.inner_scope)
-		eventual.inner_scope = inner_scope
+		cleanup(eventual.session_scope)
+		eventual.session_scope = session_scope
 	else -- throw away computation scope, invalidated because computation errored
-		cleanup(inner_scope)
+		cleanup(session_scope)
 		log_error_nonfatal(state.callback_error, err)
 	end
 
-	eventual.active_thread = nil
+	eventual.session_thread = nil
 end
 
-const function generate_eventual_callbacks<T, S>(eventual: Self<T, S>): (state.Use, (any) -> ())
+const function generate_eventual_callbacks<T, S>(eventual: Self<T, S>): (state.Use, (T) -> T)
 	const session_used = eventual.session_used
 
-	const function use(target: state.UsedAs<T>): T
+	const function use<U>(target: state.UsedAs<U>): U
 		if cast_to_state(target) ~= nil then
 			depend(eventual, target)
 
@@ -73,7 +78,7 @@ const function generate_eventual_callbacks<T, S>(eventual: Self<T, S>): (state.U
 		eventual.cached_value = new_value
 
 		if eventual.validity == "busy" then
-			return
+			return new_value
 		end
 
 		eventual.is_becoming = true -- gross flag but it works
@@ -91,14 +96,14 @@ const function generate_eventual_callbacks<T, S>(eventual: Self<T, S>): (state.U
 end
 
 const function destroy_eventual<T, S>(eventual: Self<T, S>)
-	if eventual.active_thread ~= nil then
-		cancel_task(eventual._active_thread)
+	if eventual.session_thread ~= nil then
+		cancel_task(eventual.session_thread)
 	end
 
-	eventual.session_used = nil
+	cleanup(eventual.session_scope)
+	eventual.session_scope = nil
 
-	cleanup(eventual.inner_scope)
-	eventual.inner_scope = nil
+	table.clear(eventual.session_used)
 end
 
 const CLASS_MT = table.freeze({
@@ -108,7 +113,7 @@ const CLASS_MT = table.freeze({
 		timeliness = "eager",
 
 		is_pending = function<T, S>(self: Self<T, S>): boolean
-			return self.active_thread ~= nil
+			return self.session_thread ~= nil
 		end,
 		evaluate = function<T, S>(self: Self<T, S>): boolean
 			if self.scope == nil then
@@ -123,15 +128,15 @@ const CLASS_MT = table.freeze({
 			end
 
 			-- cancel any currently active computations
-			if self.active_thread ~= nil then
-				cancel_task(self.active_thread)
-				self.active_thread = nil
+			if self.session_thread ~= nil then
+				cancel_task(self.session_thread)
+				self.session_thread = nil
 			end
 
 			-- clear our dependencies, because we're starting a new computation that may not rely on our old dependencies
 			table.clear(self.session_used)
 
-			self.cached_value = nil
+			-- self.cached_value = nil
 			self.prev_value = nil
 
 			-- start computation
@@ -151,11 +156,11 @@ const function Eventual<T, S>(scope: memory.Scope<S>, processor: async.EventualP
 		users = {},
 		cached_value = nil,
 
-		inner_scope = nil,
 		processor = processor,
 		prev_value = nil,
 		is_becoming = false,
-		active_thread = nil,
+		session_scope = nil,
+		session_thread = nil,
 		session_used = {},
 	}, CLASS_MT) :: any
 
