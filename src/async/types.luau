@@ -1,6 +1,6 @@
-local graph = require("../core_graph/types")
-local memory = require("../core_memory/types")
-local state = require("../core_state/types")
+const graph = require("../core_graph/types")
+const memory = require("../core_memory/types")
+const state = require("../core_state/types")
 
 export type Eventual<T> = {
 	kind: "Eventual",

@@ -1,5 +1,5 @@
-local memory = require("../core_memory/types")
-local rbx_instances = require("../rbx_instances/types")
+const memory = require("../core_memory/types")
+const rbx_instances = require("../rbx_instances/types")
 
 export type FromTemplateConstructor = <InstanceT>(
 	scope: memory.Scope,

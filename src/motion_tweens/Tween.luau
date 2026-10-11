@@ -21,7 +21,7 @@ const function tween_mover<T>(info: state.UsedAs<motion_tweens.TweenInfo>): moti
 		const new_curve = function(elapsed: number): (boolean, T)
 			const alpha = get_tween_alpha(active_info, elapsed)
 
-			return elapsed >= duration, lerp_type(start, target, alpha)
+			return elapsed >= duration, lerp_type(start, target, alpha) :: T
 		end
 
 		return new_curve

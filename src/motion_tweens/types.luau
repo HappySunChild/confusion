@@ -1,6 +1,6 @@
-local memory = require("../core_memory/types")
-local motion = require("../motion/types")
-local state = require("../core_state/types")
+const memory = require("../core_memory/types")
+const motion = require("../motion/types")
+const state = require("../core_state/types")
 
 export type TweenConstructor = <T>(
 	scope: memory.Scope,
