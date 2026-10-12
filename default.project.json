@@ -4,6 +4,6 @@
 		"$path": "src"
 	},
 	"globIgnorePaths": [
-		"mod.json"
+		"**/mod.json"
 	]
 }

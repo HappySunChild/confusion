@@ -36,6 +36,6 @@
 		}
 	},
 	"globIgnorePaths": [
-		"mod.json"
+		"**/mod.json"
 	]
 }
