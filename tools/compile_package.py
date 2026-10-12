@@ -1,11 +1,13 @@
 import pathlib
 
-from packagerutils import ModuleSelection, generate_package, load_modules
+from packagerutils import discover_modules, generate_package
 
-all_modules = load_modules("./modules.json")
-selected_modules = list(all_modules.values())
+discovered = discover_modules(pathlib.Path("../src"))
+discovered.selected_modules.update(discovered.all_modules.keys())
+
+print(discovered.selected_modules)
 
 generate_package(
-    ModuleSelection(selected_modules, pathlib.Path("../src")),
+    discovered,
     pathlib.Path("./test_package"),
 )

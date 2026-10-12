@@ -1,7 +1,6 @@
 import enum
 import pathlib
 import shutil
-from collections.abc import Iterable
 from dataclasses import dataclass
 from json import load
 from typing import Any
@@ -30,15 +29,15 @@ class MissingRequiredModulesException(ModulesValidationException):
 
 @dataclass
 class ModuleTypeExport:
+    export_name: str
     name: str
-    alias: str
 
 
 @dataclass
 class ModuleMemberExport:
-    alias: str
-    module: str
-    associated_type: str
+    export_name: str
+    source: str
+    type: str
 
 
 @dataclass
@@ -96,30 +95,45 @@ class Module:
 
 @dataclass
 class ModuleSelection:
-    modules: list[Module]
+    all_modules: dict[str, Module]
+    selected_modules: set[str]
     src_path: pathlib.Path
 
+    def iter_modules(self):
+        for mod_id in self.selected_modules:
+            yield self.all_modules[mod_id]
 
-def load_modules(module_json_path: str) -> dict[str, Module]:
-    modules = {}
 
-    with open(module_json_path, "r") as mf:
-        for name, module_info in load(mf).items():
-            modules[name] = Module.from_dict(name, module_info)
+def discover_modules(search_dir: pathlib.Path) -> ModuleSelection:
+    collected_modules = {}
 
-    return modules
+    for package_dir in search_dir.iterdir():
+        if not package_dir.is_dir():
+            continue
+
+        mod_json_path = package_dir / "mod.json"
+        if not mod_json_path.is_file():
+            continue
+
+        module_id = package_dir.name
+
+        with open(mod_json_path, "r") as f:
+            collected_modules[module_id] = Module.from_dict(module_id, load(f))
+
+    return ModuleSelection(
+        all_modules=collected_modules, selected_modules=set[str](), src_path=search_dir
+    )
 
 
 def validate_module_selection(selection: ModuleSelection) -> None:
     if not selection.src_path.exists():
         raise MissingSrcDirectoryException(selection.src_path)
 
-    available_modules = tuple[str, ...](mod.id for mod in selection.modules)
     missing_modules: list[str] = []
 
-    for mod in selection.modules:
+    for mod in selection.iter_modules():
         for required_mod in mod.required_modules:
-            if required_mod not in available_modules:
+            if required_mod not in selection.selected_modules:
                 missing_modules.append(required_mod)
 
         if not (selection.src_path / mod.id).exists():
@@ -130,15 +144,15 @@ def validate_module_selection(selection: ModuleSelection) -> None:
 
 
 def generate_package_init_source(
-    modules: Iterable[Module],
-    package_name: str,
+    selection: ModuleSelection,
+    name: str,
     author: str,
     repository: str,
 ) -> str:
     header_segment: list[str] = [
         "--[=[",
         "This package was generated using Confusion's automated packager!",
-        f"package: {package_name}",
+        f"package: {name}",
         f"author: {author}",
         f"repository: {repository}",
         "--]=]",
@@ -148,7 +162,7 @@ def generate_package_init_source(
     confusion_type_segment: list[str] = ["export type Confusion = {"]
     member_export_segment: list[str] = ["return {"]
 
-    for mod in modules:
+    for mod in selection.iter_modules():
         mod_types = mod.export_types
         mod_members = mod.export_members
 
@@ -165,7 +179,7 @@ def generate_package_init_source(
 
         if has_types:
             type_export_segment.extend(
-                f"export type {type_export.alias} = {mod.id}.{type_export.name}"
+                f"export type {type_export.export_name} = {mod.id}.{type_export.name}"
                 for type_export in mod_types
             )
 
@@ -178,7 +192,7 @@ def generate_package_init_source(
                 for s in (
                     f"-- {mod.label}",
                     *(
-                        f"{member.alias}: {member.associated_type},"
+                        f"{member.export_name}: {member.type},"
                         for member in mod_members
                     ),
                     "",
@@ -189,7 +203,7 @@ def generate_package_init_source(
                 for s in (
                     f"-- {mod.label}",
                     *(
-                        f'{member.alias} = require("@self/{mod.id}/{member.module.removesuffix(".luau")}"),'
+                        f'{member.export_name} = require("@self/{mod.id}/{member.source.removesuffix(".luau")}"),'
                         for member in mod_members
                     ),
                     "",
@@ -224,12 +238,10 @@ def generate_package(
 
     with open(dst_path / "init.luau", "w") as f:
         f.write(
-            generate_package_init_source(
-                selection.modules, package_name, author, repository
-            )
+            generate_package_init_source(selection, package_name, author, repository)
         )
 
-    for mod in selection.modules:
+    for mod_id in selection.selected_modules:
         shutil.copytree(
-            selection.src_path / mod.id, dst_path / mod.id, dirs_exist_ok=True
+            selection.src_path / mod_id, dst_path / mod_id, dirs_exist_ok=True
         )

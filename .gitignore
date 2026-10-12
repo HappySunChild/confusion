@@ -2,3 +2,6 @@ sourcemap.json
 dev/
 temp/
 __pycache__/
+
+tools/graph.html
+tools/lib/
