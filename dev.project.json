@@ -34,5 +34,8 @@
 				}
 			}
 		}
-	}
+	},
+	"globIgnorePaths": [
+		"mod.json"
+	]
 }
