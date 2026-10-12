@@ -1,0 +1,63 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "ConfusionModule",
+    "type": "object",
+    "properties": {
+        "label": {
+            "description": "The label to use in auto-packager comments. Defaults to the id of the module if left null.",
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "requires": {
+            "description": "The ids of other modules that this module is dependant on.",
+            "type": [
+                "array"
+            ],
+            "items": {
+                "type": "string"
+            }
+        },
+        "export_types": {
+            "description": "The types that this module publically exports.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "title": "ModuleTypeExport",
+                "properties": {
+                    "name": {
+                        "description": "The type to export.",
+                        "type": "string"
+                    },
+                    "export_name": {
+                        "description": "The alias to publically export the type as.",
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "export_members": {
+            "description": "The runtime values that this module publically exports.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "title": "ModuleMemberExport",
+                "properties": {
+                    "export_name": {
+                        "description": "The alias to publically export the value as.",
+                        "type": "string"
+                    },
+                    "source": {
+                        "description": "The Luau module that returns the value.",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "The type associated with the export table's concrete type.",
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
