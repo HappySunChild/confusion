@@ -1,0 +1,22 @@
+{
+    "is_core": true,
+    "label": "Core: Use",
+    "requires": [
+        "core_external",
+        "core_graph",
+        "core_state"
+    ],
+    "export_types": [],
+    "export_members": [
+        {
+            "alias": "flatten",
+            "module": "flatten.luau",
+            "associated_type": "core_use.Flatten"
+        },
+        {
+            "alias": "peek",
+            "module": "peek.luau",
+            "associated_type": "core_use.Peek"
+        }
+    ]
+}

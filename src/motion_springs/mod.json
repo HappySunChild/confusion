@@ -1,0 +1,20 @@
+{
+    "label": "Motion: Springs",
+    "requires": [
+        "core_external",
+        "core_logging",
+        "core_memory",
+        "core_state",
+        "core_use",
+        "colour",
+        "motion"
+    ],
+    "export_types": [],
+    "export_members": [
+        {
+            "alias": "Spring",
+            "module": "Spring.luau",
+            "associated_type": "motion_springs.SpringConstructor"
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "label": "Lerp",
+    "requires": [
+        "colour"
+    ],
+    "export_types": [],
+    "export_members": []
+}

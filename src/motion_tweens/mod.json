@@ -1,0 +1,33 @@
+{
+    "label": "Motion: Tweens",
+    "requires": [
+        "core_memory",
+        "core_state",
+        "core_use",
+        "lerp",
+        "motion"
+    ],
+    "export_types": [
+        {
+            "alias": "TweenInfo",
+            "name": "TweenInfo"
+        }
+    ],
+    "export_members": [
+        {
+            "alias": "Tween",
+            "module": "Tween.luau",
+            "associated_type": "motion_tweens.TweenConstructor"
+        },
+        {
+            "alias": "TweenInfo",
+            "module": "TweenInfo.luau",
+            "associated_type": "motion_tweens.TweenInfoConstructor"
+        },
+        {
+            "alias": "easing_styles",
+            "module": "easing_styles.luau",
+            "associated_type": "motion_tweens.EasingStyles"
+        }
+    ]
+}

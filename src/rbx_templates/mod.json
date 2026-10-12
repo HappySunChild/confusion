@@ -1,0 +1,22 @@
+{
+    "label": "Roblox: Templates",
+    "requires": [
+        "core_external",
+        "core_logging",
+        "core_memory",
+        "rbx_instances"
+    ],
+    "export_types": [],
+    "export_members": [
+        {
+            "alias": "FromTemplate",
+            "module": "FromTemplate.luau",
+            "associated_type": "rbx_templates.FromTemplateConstructor"
+        },
+        {
+            "alias": "QueryDescendants",
+            "module": "QueryDescendants.luau",
+            "associated_type": "rbx_templates.QueryDescendants"
+        }
+    ]
+}

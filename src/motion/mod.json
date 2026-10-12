@@ -1,0 +1,25 @@
+{
+    "label": "Motion",
+    "requires": [
+        "core_external",
+        "core_graph",
+        "core_logging",
+        "core_memory",
+        "core_state",
+        "core_use",
+        "chrono"
+    ],
+    "export_types": [
+        {
+            "name": "Motion<T>",
+            "alias": "Motion<T>"
+        }
+    ],
+    "export_members": [
+        {
+            "alias": "Motion",
+            "module": "Motion.luau",
+            "associated_type": "motion.MotionConstructor"
+        }
+    ]
+}

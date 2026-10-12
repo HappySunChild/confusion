@@ -1,0 +1,23 @@
+{
+    "label": "Chain",
+    "requires": [
+        "core_memory",
+        "core_state",
+        "iter_for",
+        "motion_tweens",
+        "motion_springs"
+    ],
+    "export_types": [
+        {
+            "name": "Chain<S, T>",
+            "alias": "Chain<T, S = unknown>"
+        }
+    ],
+    "export_members": [
+        {
+            "alias": "Chain",
+            "module": "Chain.luau",
+            "associated_type": "chain.ChainConstructor"
+        }
+    ]
+}

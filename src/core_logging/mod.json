@@ -1,0 +1,9 @@
+{
+    "is_core": true,
+    "label": "Core: Logging",
+    "requires": [
+        "core_external"
+    ],
+    "export_types": [],
+    "export_members": []
+}

@@ -1,0 +1,78 @@
+{
+    "label": "Roblox: Instances",
+    "requires": [
+        "core_external",
+        "core_graph",
+        "core_logging",
+        "core_memory",
+        "core_state",
+        "core_use"
+    ],
+    "export_types": [
+        {
+            "name": "SpecialKey",
+            "alias": "SpecialKey<T = string>"
+        },
+        {
+            "name": "Child",
+            "alias": "Child"
+        }
+    ],
+    "export_members": [
+        {
+            "alias": "New",
+            "module": "New.luau",
+            "associated_type": "rbx_instances.NewConstructor"
+        },
+        {
+            "alias": "Hydrate",
+            "module": "Hydrate.luau",
+            "associated_type": "rbx_instances.HydrateConstructor"
+        },
+        {
+            "alias": "AttributeChange",
+            "module": "keys/AttributeChange.luau",
+            "associated_type": "(attribute: string) -> rbx_instances.SpecialKey<\"AttributeChange\">"
+        },
+        {
+            "alias": "AttributeOut",
+            "module": "keys/AttributeOut.luau",
+            "associated_type": "(attribute: string) -> rbx_instances.SpecialKey<\"AttributeOut\">"
+        },
+        {
+            "alias": "Attributes",
+            "module": "keys/Attributes.luau",
+            "associated_type": "rbx_instances.SpecialKey<\"Attributes\">"
+        },
+        {
+            "alias": "Children",
+            "module": "keys/Children.luau",
+            "associated_type": "rbx_instances.SpecialKey<\"Children\">"
+        },
+        {
+            "alias": "OnChange",
+            "module": "keys/OnChange.luau",
+            "associated_type": "(property: string) -> rbx_instances.SpecialKey<\"OnChange\">"
+        },
+        {
+            "alias": "OnEvent",
+            "module": "keys/OnEvent.luau",
+            "associated_type": "(event: string) -> rbx_instances.SpecialKey<\"OnEvent\">"
+        },
+        {
+            "alias": "Out",
+            "module": "keys/Out.luau",
+            "associated_type": "(property: string) -> rbx_instances.SpecialKey<\"Out\">"
+        },
+        {
+            "alias": "Refs",
+            "module": "keys/Refs.luau",
+            "associated_type": "rbx_instances.SpecialKey<\"Refs\">"
+        },
+        {
+            "alias": "Tags",
+            "module": "keys/Tags.luau",
+            "associated_type": "rbx_instances.SpecialKey<\"Tags\">"
+        }
+    ]
+}

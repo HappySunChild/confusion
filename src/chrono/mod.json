@@ -1,0 +1,21 @@
+{
+    "label": "Chrono",
+    "requires": [
+        "core_external",
+        "core_memory",
+        "core_state"
+    ],
+    "export_types": [
+        {
+            "name": "Timer",
+            "alias": "Timer"
+        }
+    ],
+    "export_members": [
+        {
+            "alias": "Timer",
+            "module": "Timer.luau",
+            "associated_type": "chrono.TimerConstructor"
+        }
+    ]
+}

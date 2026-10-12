@@ -1,0 +1,45 @@
+{
+    "is_core": true,
+    "label": "Core: State",
+    "requires": [
+        "core_external",
+        "core_graph",
+        "core_logging",
+        "core_memory",
+        "core_use"
+    ],
+    "export_types": [
+        {
+            "name": "StateNode<T>",
+            "alias": "StateNode<T>"
+        },
+        {
+            "name": "UsedAs<T>",
+            "alias": "UsedAs<T>"
+        },
+        {
+            "name": "Value<T>",
+            "alias": "Value<T>"
+        },
+        {
+            "name": "Computed<T>",
+            "alias": "Computed<T>"
+        },
+        {
+            "name": "Use",
+            "alias": "Use"
+        }
+    ],
+    "export_members": [
+        {
+            "alias": "Computed",
+            "module": "Computed.luau",
+            "associated_type": "core_state.ComputedConstructor"
+        },
+        {
+            "alias": "Value",
+            "module": "Value.luau",
+            "associated_type": "core_state.ValueConstructor"
+        }
+    ]
+}

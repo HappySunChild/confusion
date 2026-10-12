@@ -1,0 +1,28 @@
+{
+    "label": "Async",
+    "requires": [
+        "core_graph",
+        "core_memory",
+        "core_state",
+        "core_logging",
+        "core_external"
+    ],
+    "export_types": [
+        {
+            "name": "Eventual<T>",
+            "alias": "Eventual<T>"
+        }
+    ],
+    "export_members": [
+        {
+            "alias": "Eventual",
+            "module": "Eventual.luau",
+            "associated_type": "async.EventualConstructor"
+        },
+        {
+            "alias": "await",
+            "module": "await.luau",
+            "associated_type": "async.Await"
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "label": "Iter: For",
+    "requires": [
+        "core_external",
+        "core_graph",
+        "core_logging",
+        "core_memory",
+        "core_state",
+        "core_use",
+        "iter"
+    ],
+    "export_types": [],
+    "export_members": [
+        {
+            "alias": "ForPairs",
+            "module": "ForPairs.luau",
+            "associated_type": "iter_for.ForPairsConstructor"
+        },
+        {
+            "alias": "ForKeys",
+            "module": "ForKeys.luau",
+            "associated_type": "iter_for.ForKeysConstructor"
+        },
+        {
+            "alias": "ForValues",
+            "module": "ForValues.luau",
+            "associated_type": "iter_for.ForValuesConstructor"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "label": "Context",
+    "requires": [
+        "core_external",
+        "core_logging"
+    ],
+    "export_types": [
+        {
+            "alias": "Contextual<T>",
+            "name": "Contextual<T>"
+        }
+    ],
+    "export_members": [
+        {
+            "alias": "Contextual",
+            "module": "Contextual.luau",
+            "associated_type": "context.ContextConstructor"
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "is_core": true,
+    "label": "Core: External",
+    "requires": [
+        "core_logging",
+        "core_memory"
+    ],
+    "export_types": [],
+    "export_members": []
+}

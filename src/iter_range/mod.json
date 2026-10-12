@@ -1,0 +1,20 @@
+{
+    "label": "Iter: Range",
+    "requires": [
+        "core_external",
+        "core_graph",
+        "core_logging",
+        "core_memory",
+        "core_state",
+        "core_use",
+        "iter"
+    ],
+    "export_types": [],
+    "export_members": [
+        {
+            "alias": "ForRange",
+            "module": "ForRange",
+            "associated_type": "iter_range.ForRangeConstructor"
+        }
+    ]
+}

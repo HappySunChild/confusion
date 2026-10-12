@@ -1,0 +1,22 @@
+{
+    "label": "Keyframes",
+    "requires": [
+        "core_memory",
+        "core_state",
+        "core_use",
+        "lerp"
+    ],
+    "export_types": [
+        {
+            "alias": "Keyframes<T>",
+            "name": "Keyframes<T>"
+        }
+    ],
+    "export_members": [
+        {
+            "alias": "Keyframes",
+            "module": "Keyframes.luau",
+            "associated_type": "keyframes.KeyframesConstructor"
+        }
+    ]
+}

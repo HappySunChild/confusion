@@ -1,0 +1,48 @@
+{
+    "label": "Roblox: Stylesheets",
+    "requires": [
+        "core_graph",
+        "core_memory",
+        "core_state",
+        "core_use",
+        "rbx_instances"
+    ],
+    "export_types": [],
+    "export_members": [
+        {
+            "alias": "StyleSheet",
+            "module": "StyleSheet.luau",
+            "associated_type": "rbx_stylesheets.StyleSheetConstructor"
+        },
+        {
+            "alias": "StyleRule",
+            "module": "StyleRule.luau",
+            "associated_type": "rbx_stylesheets.StyleRuleConstructor"
+        },
+        {
+            "alias": "StyleSheetDerives",
+            "module": "keys/StyleSheetDerives.luau",
+            "associated_type": "rbx_instances.SpecialKey<\"StyleSheetDerives\">"
+        },
+        {
+            "alias": "StyleRuleProperties",
+            "module": "keys/StyleRuleProperties.luau",
+            "associated_type": "rbx_instances.SpecialKey<\"StyleRuleProperties\">"
+        },
+        {
+            "alias": "StyleRuleTransitions",
+            "module": "keys/StyleRuleTransitions.luau",
+            "associated_type": "rbx_instances.SpecialKey<\"StyleRuleTransitions\">"
+        },
+        {
+            "alias": "StyleLink",
+            "module": "keys/StyleLink.luau",
+            "associated_type": "rbx_instances.SpecialKey<\"StyleLink\">"
+        },
+        {
+            "alias": "StyleRules",
+            "module": "keys/StyleRules.luau",
+            "associated_type": "rbx_instances.SpecialKey<\"StyleRules\">"
+        }
+    ]
+}
