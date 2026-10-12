@@ -10,14 +10,14 @@
     "export_types": [
         {
             "name": "Chain<S, T>",
-            "alias": "Chain<T, S = unknown>"
+            "export_name": "Chain<T, S = unknown>"
         }
     ],
     "export_members": [
         {
-            "alias": "Chain",
-            "module": "Chain.luau",
-            "associated_type": "chain.ChainConstructor"
+            "export_name": "Chain",
+            "source": "Chain.luau",
+            "type": "chain.ChainConstructor"
         }
     ]
 }

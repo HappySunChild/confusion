@@ -8,14 +8,14 @@
     "export_types": [
         {
             "name": "Timer",
-            "alias": "Timer"
+            "export_name": "Timer"
         }
     ],
     "export_members": [
         {
-            "alias": "Timer",
-            "module": "Timer.luau",
-            "associated_type": "chrono.TimerConstructor"
+            "export_name": "Timer",
+            "source": "Timer.luau",
+            "type": "chrono.TimerConstructor"
         }
     ]
 }

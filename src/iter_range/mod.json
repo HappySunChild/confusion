@@ -12,9 +12,9 @@
     "export_types": [],
     "export_members": [
         {
-            "alias": "ForRange",
-            "module": "ForRange",
-            "associated_type": "iter_range.ForRangeConstructor"
+            "export_name": "ForRange",
+            "source": "ForRange",
+            "type": "iter_range.ForRangeConstructor"
         }
     ]
 }

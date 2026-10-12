@@ -12,14 +12,14 @@
     "export_types": [
         {
             "name": "Motion<T>",
-            "alias": "Motion<T>"
+            "export_name": "Motion<T>"
         }
     ],
     "export_members": [
         {
-            "alias": "Motion",
-            "module": "Motion.luau",
-            "associated_type": "motion.MotionConstructor"
+            "export_name": "Motion",
+            "source": "Motion.luau",
+            "type": "motion.MotionConstructor"
         }
     ]
 }

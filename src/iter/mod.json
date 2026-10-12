@@ -8,7 +8,7 @@
     ],
     "export_types": [
         {
-            "alias": "Iter<K, V>",
+            "export_name": "Iter<K, V>",
             "name": "Iter<K, V>"
         }
     ],

@@ -11,35 +11,35 @@
     "export_types": [
         {
             "name": "StateNode<T>",
-            "alias": "StateNode<T>"
+            "export_name": "StateNode<T>"
         },
         {
             "name": "UsedAs<T>",
-            "alias": "UsedAs<T>"
+            "export_name": "UsedAs<T>"
         },
         {
             "name": "Value<T>",
-            "alias": "Value<T>"
+            "export_name": "Value<T>"
         },
         {
             "name": "Computed<T>",
-            "alias": "Computed<T>"
+            "export_name": "Computed<T>"
         },
         {
             "name": "Use",
-            "alias": "Use"
+            "export_name": "Use"
         }
     ],
     "export_members": [
         {
-            "alias": "Computed",
-            "module": "Computed.luau",
-            "associated_type": "core_state.ComputedConstructor"
+            "export_name": "Computed",
+            "source": "Computed.luau",
+            "type": "core_state.ComputedConstructor"
         },
         {
-            "alias": "Value",
-            "module": "Value.luau",
-            "associated_type": "core_state.ValueConstructor"
+            "export_name": "Value",
+            "source": "Value.luau",
+            "type": "core_state.ValueConstructor"
         }
     ]
 }

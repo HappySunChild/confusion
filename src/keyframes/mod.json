@@ -8,15 +8,15 @@
     ],
     "export_types": [
         {
-            "alias": "Keyframes<T>",
+            "export_name": "Keyframes<T>",
             "name": "Keyframes<T>"
         }
     ],
     "export_members": [
         {
-            "alias": "Keyframes",
-            "module": "Keyframes.luau",
-            "associated_type": "keyframes.KeyframesConstructor"
+            "export_name": "Keyframes",
+            "source": "Keyframes.luau",
+            "type": "keyframes.KeyframesConstructor"
         }
     ]
 }

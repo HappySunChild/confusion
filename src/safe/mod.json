@@ -4,9 +4,9 @@
     "export_types": [],
     "export_members": [
         {
-            "alias": "safe",
-            "module": "safe.luau",
-            "associated_type": "safe.Safe"
+            "export_name": "safe",
+            "source": "safe.luau",
+            "type": "safe.Safe"
         }
     ]
 }

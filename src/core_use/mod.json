@@ -9,14 +9,14 @@
     "export_types": [],
     "export_members": [
         {
-            "alias": "flatten",
-            "module": "flatten.luau",
-            "associated_type": "core_use.Flatten"
+            "export_name": "flatten",
+            "source": "flatten.luau",
+            "type": "core_use.Flatten"
         },
         {
-            "alias": "peek",
-            "module": "peek.luau",
-            "associated_type": "core_use.Peek"
+            "export_name": "peek",
+            "source": "peek.luau",
+            "type": "core_use.Peek"
         }
     ]
 }

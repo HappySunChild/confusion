@@ -9,25 +9,25 @@
     ],
     "export_types": [
         {
-            "alias": "TweenInfo",
+            "export_name": "TweenInfo",
             "name": "TweenInfo"
         }
     ],
     "export_members": [
         {
-            "alias": "Tween",
-            "module": "Tween.luau",
-            "associated_type": "motion_tweens.TweenConstructor"
+            "export_name": "Tween",
+            "source": "Tween.luau",
+            "type": "motion_tweens.TweenConstructor"
         },
         {
-            "alias": "TweenInfo",
-            "module": "TweenInfo.luau",
-            "associated_type": "motion_tweens.TweenInfoConstructor"
+            "export_name": "TweenInfo",
+            "source": "TweenInfo.luau",
+            "type": "motion_tweens.TweenInfoConstructor"
         },
         {
-            "alias": "easing_styles",
-            "module": "easing_styles.luau",
-            "associated_type": "motion_tweens.EasingStyles"
+            "export_name": "easing_styles",
+            "source": "easing_styles.luau",
+            "type": "motion_tweens.EasingStyles"
         }
     ]
 }

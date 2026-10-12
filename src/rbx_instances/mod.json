@@ -11,68 +11,68 @@
     "export_types": [
         {
             "name": "SpecialKey",
-            "alias": "SpecialKey<T = string>"
+            "export_name": "SpecialKey<T = string>"
         },
         {
             "name": "Child",
-            "alias": "Child"
+            "export_name": "Child"
         }
     ],
     "export_members": [
         {
-            "alias": "New",
-            "module": "New.luau",
-            "associated_type": "rbx_instances.NewConstructor"
+            "export_name": "New",
+            "source": "New.luau",
+            "type": "rbx_instances.NewConstructor"
         },
         {
-            "alias": "Hydrate",
-            "module": "Hydrate.luau",
-            "associated_type": "rbx_instances.HydrateConstructor"
+            "export_name": "Hydrate",
+            "source": "Hydrate.luau",
+            "type": "rbx_instances.HydrateConstructor"
         },
         {
-            "alias": "AttributeChange",
-            "module": "keys/AttributeChange.luau",
-            "associated_type": "(attribute: string) -> rbx_instances.SpecialKey<\"AttributeChange\">"
+            "export_name": "AttributeChange",
+            "source": "keys/AttributeChange.luau",
+            "type": "(attribute: string) -> rbx_instances.SpecialKey<\"AttributeChange\">"
         },
         {
-            "alias": "AttributeOut",
-            "module": "keys/AttributeOut.luau",
-            "associated_type": "(attribute: string) -> rbx_instances.SpecialKey<\"AttributeOut\">"
+            "export_name": "AttributeOut",
+            "source": "keys/AttributeOut.luau",
+            "type": "(attribute: string) -> rbx_instances.SpecialKey<\"AttributeOut\">"
         },
         {
-            "alias": "Attributes",
-            "module": "keys/Attributes.luau",
-            "associated_type": "rbx_instances.SpecialKey<\"Attributes\">"
+            "export_name": "Attributes",
+            "source": "keys/Attributes.luau",
+            "type": "rbx_instances.SpecialKey<\"Attributes\">"
         },
         {
-            "alias": "Children",
-            "module": "keys/Children.luau",
-            "associated_type": "rbx_instances.SpecialKey<\"Children\">"
+            "export_name": "Children",
+            "source": "keys/Children.luau",
+            "type": "rbx_instances.SpecialKey<\"Children\">"
         },
         {
-            "alias": "OnChange",
-            "module": "keys/OnChange.luau",
-            "associated_type": "(property: string) -> rbx_instances.SpecialKey<\"OnChange\">"
+            "export_name": "OnChange",
+            "source": "keys/OnChange.luau",
+            "type": "(property: string) -> rbx_instances.SpecialKey<\"OnChange\">"
         },
         {
-            "alias": "OnEvent",
-            "module": "keys/OnEvent.luau",
-            "associated_type": "(event: string) -> rbx_instances.SpecialKey<\"OnEvent\">"
+            "export_name": "OnEvent",
+            "source": "keys/OnEvent.luau",
+            "type": "(event: string) -> rbx_instances.SpecialKey<\"OnEvent\">"
         },
         {
-            "alias": "Out",
-            "module": "keys/Out.luau",
-            "associated_type": "(property: string) -> rbx_instances.SpecialKey<\"Out\">"
+            "export_name": "Out",
+            "source": "keys/Out.luau",
+            "type": "(property: string) -> rbx_instances.SpecialKey<\"Out\">"
         },
         {
-            "alias": "Refs",
-            "module": "keys/Refs.luau",
-            "associated_type": "rbx_instances.SpecialKey<\"Refs\">"
+            "export_name": "Refs",
+            "source": "keys/Refs.luau",
+            "type": "rbx_instances.SpecialKey<\"Refs\">"
         },
         {
-            "alias": "Tags",
-            "module": "keys/Tags.luau",
-            "associated_type": "rbx_instances.SpecialKey<\"Tags\">"
+            "export_name": "Tags",
+            "source": "keys/Tags.luau",
+            "type": "rbx_instances.SpecialKey<\"Tags\">"
         }
     ]
 }

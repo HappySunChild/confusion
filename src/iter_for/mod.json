@@ -12,19 +12,19 @@
     "export_types": [],
     "export_members": [
         {
-            "alias": "ForPairs",
-            "module": "ForPairs.luau",
-            "associated_type": "iter_for.ForPairsConstructor"
+            "export_name": "ForPairs",
+            "source": "ForPairs.luau",
+            "type": "iter_for.ForPairsConstructor"
         },
         {
-            "alias": "ForKeys",
-            "module": "ForKeys.luau",
-            "associated_type": "iter_for.ForKeysConstructor"
+            "export_name": "ForKeys",
+            "source": "ForKeys.luau",
+            "type": "iter_for.ForKeysConstructor"
         },
         {
-            "alias": "ForValues",
-            "module": "ForValues.luau",
-            "associated_type": "iter_for.ForValuesConstructor"
+            "export_name": "ForValues",
+            "source": "ForValues.luau",
+            "type": "iter_for.ForValuesConstructor"
         }
     ]
 }

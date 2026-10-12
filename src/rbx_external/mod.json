@@ -1,8 +1,8 @@
 {
     "label": "Roblox: External",
     "external_capabilities": {
-        "logger_module": "RobloxLogger.luau",
-        "scheduler_module": "RobloxScheduler.luau"
+        "logger_source": "RobloxLogger.luau",
+        "scheduler_source": "RobloxScheduler.luau"
     },
     "requires": [
         "core_external",

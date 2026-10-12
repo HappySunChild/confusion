@@ -7,34 +7,34 @@
     "export_types": [
         {
             "name": "Scope<T>",
-            "alias": "Scope<T = Confusion>"
+            "export_name": "Scope<T = Confusion>"
         }
     ],
     "export_members": [
         {
-            "alias": "scoped",
-            "module": "scoped.luau",
-            "associated_type": "core_memory.Scoped"
+            "export_name": "scoped",
+            "source": "scoped.luau",
+            "type": "core_memory.Scoped"
         },
         {
-            "alias": "derive_scope",
-            "module": "derive_scope.luau",
-            "associated_type": "core_memory.Scoped"
+            "export_name": "derive_scope",
+            "source": "derive_scope.luau",
+            "type": "core_memory.Scoped"
         },
         {
-            "alias": "inner_scope",
-            "module": "inner_scope.luau",
-            "associated_type": "core_memory.Scoped"
+            "export_name": "inner_scope",
+            "source": "inner_scope.luau",
+            "type": "core_memory.Scoped"
         },
         {
-            "alias": "cleanup",
-            "module": "cleanup.luau",
-            "associated_type": "core_memory.Cleanup"
+            "export_name": "cleanup",
+            "source": "cleanup.luau",
+            "type": "core_memory.Cleanup"
         },
         {
-            "alias": "insert",
-            "module": "insert.luau",
-            "associated_type": "core_memory.Insert"
+            "export_name": "insert",
+            "source": "insert.luau",
+            "type": "core_memory.Insert"
         }
     ]
 }

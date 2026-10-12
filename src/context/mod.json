@@ -6,15 +6,15 @@
     ],
     "export_types": [
         {
-            "alias": "Contextual<T>",
+            "export_name": "Contextual<T>",
             "name": "Contextual<T>"
         }
     ],
     "export_members": [
         {
-            "alias": "Contextual",
-            "module": "Contextual.luau",
-            "associated_type": "context.ContextConstructor"
+            "export_name": "Contextual",
+            "source": "Contextual.luau",
+            "type": "context.ContextConstructor"
         }
     ]
 }

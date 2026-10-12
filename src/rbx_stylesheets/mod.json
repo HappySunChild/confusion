@@ -10,39 +10,39 @@
     "export_types": [],
     "export_members": [
         {
-            "alias": "StyleSheet",
-            "module": "StyleSheet.luau",
-            "associated_type": "rbx_stylesheets.StyleSheetConstructor"
+            "export_name": "StyleSheet",
+            "source": "StyleSheet.luau",
+            "type": "rbx_stylesheets.StyleSheetConstructor"
         },
         {
-            "alias": "StyleRule",
-            "module": "StyleRule.luau",
-            "associated_type": "rbx_stylesheets.StyleRuleConstructor"
+            "export_name": "StyleRule",
+            "source": "StyleRule.luau",
+            "type": "rbx_stylesheets.StyleRuleConstructor"
         },
         {
-            "alias": "StyleSheetDerives",
-            "module": "keys/StyleSheetDerives.luau",
-            "associated_type": "rbx_instances.SpecialKey<\"StyleSheetDerives\">"
+            "export_name": "StyleSheetDerives",
+            "source": "keys/StyleSheetDerives.luau",
+            "type": "rbx_instances.SpecialKey<\"StyleSheetDerives\">"
         },
         {
-            "alias": "StyleRuleProperties",
-            "module": "keys/StyleRuleProperties.luau",
-            "associated_type": "rbx_instances.SpecialKey<\"StyleRuleProperties\">"
+            "export_name": "StyleRuleProperties",
+            "source": "keys/StyleRuleProperties.luau",
+            "type": "rbx_instances.SpecialKey<\"StyleRuleProperties\">"
         },
         {
-            "alias": "StyleRuleTransitions",
-            "module": "keys/StyleRuleTransitions.luau",
-            "associated_type": "rbx_instances.SpecialKey<\"StyleRuleTransitions\">"
+            "export_name": "StyleRuleTransitions",
+            "source": "keys/StyleRuleTransitions.luau",
+            "type": "rbx_instances.SpecialKey<\"StyleRuleTransitions\">"
         },
         {
-            "alias": "StyleLink",
-            "module": "keys/StyleLink.luau",
-            "associated_type": "rbx_instances.SpecialKey<\"StyleLink\">"
+            "export_name": "StyleLink",
+            "source": "keys/StyleLink.luau",
+            "type": "rbx_instances.SpecialKey<\"StyleLink\">"
         },
         {
-            "alias": "StyleRules",
-            "module": "keys/StyleRules.luau",
-            "associated_type": "rbx_instances.SpecialKey<\"StyleRules\">"
+            "export_name": "StyleRules",
+            "source": "keys/StyleRules.luau",
+            "type": "rbx_instances.SpecialKey<\"StyleRules\">"
         }
     ]
 }

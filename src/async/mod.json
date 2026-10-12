@@ -1,4 +1,5 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "label": "Async",
     "requires": [
         "core_graph",
@@ -10,19 +11,19 @@
     "export_types": [
         {
             "name": "Eventual<T>",
-            "alias": "Eventual<T>"
+            "export_name": "Eventual<T>"
         }
     ],
     "export_members": [
         {
-            "alias": "Eventual",
-            "module": "Eventual.luau",
-            "associated_type": "async.EventualConstructor"
+            "export_name": "Eventual",
+            "source": "Eventual.luau",
+            "type": "async.EventualConstructor"
         },
         {
-            "alias": "await",
-            "module": "await.luau",
-            "associated_type": "async.Await"
+            "export_name": "await",
+            "source": "await.luau",
+            "type": "async.Await"
         }
     ]
 }

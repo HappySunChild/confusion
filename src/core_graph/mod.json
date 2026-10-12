@@ -9,19 +9,19 @@
     "export_types": [
         {
             "name": "GraphNode",
-            "alias": "GraphNode"
+            "export_name": "GraphNode"
         }
     ],
     "export_members": [
         {
-            "alias": "observe",
-            "module": "observe.luau",
-            "associated_type": "core_graph.Observe"
+            "export_name": "observe",
+            "source": "observe.luau",
+            "type": "core_graph.Observe"
         },
         {
-            "alias": "observe_immediate",
-            "module": "observe_immediate.luau",
-            "associated_type": "core_graph.Observe"
+            "export_name": "observe_immediate",
+            "source": "observe_immediate.luau",
+            "type": "core_graph.Observe"
         }
     ]
 }

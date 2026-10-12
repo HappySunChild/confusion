@@ -9,14 +9,14 @@
     "export_types": [],
     "export_members": [
         {
-            "alias": "FromTemplate",
-            "module": "FromTemplate.luau",
-            "associated_type": "rbx_templates.FromTemplateConstructor"
+            "export_name": "FromTemplate",
+            "source": "FromTemplate.luau",
+            "type": "rbx_templates.FromTemplateConstructor"
         },
         {
-            "alias": "QueryDescendants",
-            "module": "QueryDescendants.luau",
-            "associated_type": "rbx_templates.QueryDescendants"
+            "export_name": "QueryDescendants",
+            "source": "QueryDescendants.luau",
+            "type": "rbx_templates.QueryDescendants"
         }
     ]
 }

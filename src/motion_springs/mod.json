@@ -12,9 +12,9 @@
     "export_types": [],
     "export_members": [
         {
-            "alias": "Spring",
-            "module": "Spring.luau",
-            "associated_type": "motion_springs.SpringConstructor"
+            "export_name": "Spring",
+            "source": "Spring.luau",
+            "type": "motion_springs.SpringConstructor"
         }
     ]
 }
