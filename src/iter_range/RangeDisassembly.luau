@@ -9,7 +9,7 @@ const depend = require("../core_graph/depend")
 const destructor = require("../core_memory/destructor")
 const inner_scope = require("../core_memory/inner_scope")
 const is_similar = require("../core_state/is_similar")
-const peek = require("../core_use/peek")
+const peek = require("../core_state/peek")
 
 type Self<S, T> = {
 	start: state.UsedAs<number>,

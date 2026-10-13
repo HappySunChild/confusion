@@ -1,7 +1,7 @@
 local ForValues = require("@fusion/iter_for/ForValues")
 local Value = require("@fusion/core_state/Value")
 local cleanup = require("@fusion/core_memory/cleanup")
-local peek = require("@fusion/core_use/peek")
+local peek = require("@fusion/core_state/peek")
 
 local butler = require("@butler/butler")
 

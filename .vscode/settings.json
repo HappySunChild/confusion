@@ -13,7 +13,6 @@
 		"core_graph": "core",
 		"core_logging": "core",
 		"core_memory": "core",
-		"core_use": "core",
 		"async": "temp",
 		"chain": "pipe",
 		"chrono": "temp",

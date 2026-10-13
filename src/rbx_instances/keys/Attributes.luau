@@ -8,7 +8,7 @@ const state = require("../../core_state/types")
 
 const cast_to_state = require("../../core_state/cast_to_state")
 const observe = require("../../core_graph/observe")
-const peek = require("../../core_use/peek")
+const peek = require("../../core_state/peek")
 
 const function apply_attribute(scope: memory.Scope, apply_to: Instance, attribute: string, value: state.UsedAs<any>)
 	apply_to:SetAttribute(attribute, peek(value))

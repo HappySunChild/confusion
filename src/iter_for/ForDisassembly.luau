@@ -11,7 +11,7 @@ const depend = require("../core_graph/depend")
 const destructor = require("../core_memory/destructor")
 const inner_scope = require("../core_memory/inner_scope")
 const is_similar = require("../core_state/is_similar")
-const peek = require("../core_use/peek")
+const peek = require("../core_state/peek")
 
 type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {
 	constructor: (memory.Scope<S>, initial_key: IK, initial_value: IV) -> iter_for.ComputedPair<IK, IV, OK, OV>,

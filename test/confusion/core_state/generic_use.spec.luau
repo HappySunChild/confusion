@@ -1,7 +1,7 @@
 local Computed = require("@fusion/core_state/Computed")
 local Value = require("@fusion/core_state/Value")
 local cleanup = require("@fusion/core_memory/cleanup")
-local generic_use = require("@fusion/core_use/generic_use")
+local generic_use = require("@fusion/core_state/generic_use")
 
 local butler = require("@butler/butler")
 

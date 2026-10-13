@@ -15,7 +15,7 @@ const depend = require("../core_graph/depend")
 const destructor = require("../core_memory/destructor")
 const evaluate = require("../core_graph/evaluate")
 const is_similar = require("../core_state/is_similar")
-const peek = require("../core_use/peek")
+const peek = require("../core_state/peek")
 
 type Self<T> = {
 	goal: state.UsedAs<T>,

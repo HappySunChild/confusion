@@ -20,7 +20,7 @@ const destructor = require("../core_memory/destructor")
 const evaluate = require("../core_graph/evaluate")
 const is_similar = require("../core_state/is_similar")
 const parse_error = require("../core_logging/parse_error")
-const peek = require("../core_use/peek")
+const peek = require("../core_state/peek")
 
 type Self<T, S> = async.Eventual<T> & {
 	processor: async.EventualProcessor<S, T>,

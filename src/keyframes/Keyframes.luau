@@ -7,7 +7,7 @@ const state = require("../core_state/types")
 
 const destructor = require("../core_memory/destructor")
 const evaluate_keyframes = require("./evaluate_keyframes")
-const generic_use = require("../core_use/generic_use")
+const generic_use = require("../core_state/generic_use")
 const is_similar = require("../core_state/is_similar")
 
 type Self<T> = {

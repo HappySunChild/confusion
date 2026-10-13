@@ -12,7 +12,7 @@ const log_error_nonfatal = ExternalLogger.log_error_nonfatal
 const cast_to_state = require("../../core_state/cast_to_state")
 const cleanup = require("../../core_memory/cleanup")
 const observe_immediate = require("../../core_graph/observe_immediate")
-const peek = require("../../core_use/peek")
+const peek = require("../../core_state/peek")
 
 type TagsSet = { [string]: true }
 type TagsScopes = { [rbx_instances.Tag]: memory.Scope }

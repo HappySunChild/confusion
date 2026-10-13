@@ -10,6 +10,7 @@ export type StateNode<T> = {
 
 export type UsedAs<T> = StateNode<T> | T
 export type Use = <T>(UsedAs<T>) -> T
+export type Flatten = <T>(use: Use, x: UsedAs<T>) -> T
 
 --- A state object whose value can be set by the user at any time.
 export type Value<T> = {
@@ -32,4 +33,5 @@ export type ComputedConstructor = <S, T>(scope: memory.Scope<S>, processor: Comp
 
 return {
 	callback_error = "Error in callback:\nERROR_MESSAGE",
+	invalid_user = "Unnable to create `use` callback for non-state user; got a value of type '{type}' ({value})",
 }

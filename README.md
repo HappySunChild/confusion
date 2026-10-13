@@ -14,8 +14,7 @@ This example demonstrates the reactive primitives provided by `confusion`.
 return {
 	Value = require("@fusion/core_state/Value"),
 	Computed = require("@fusion/core_state/Computed"),
-	
-	peek = require("@fusion/core_use/peek"),
+	peek = require("@fusion/core_state/peek"),
 	
 	scoped = require("@fusion/core_memory/scoped"),
 }

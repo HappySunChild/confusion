@@ -8,7 +8,7 @@ const state = require("../core_state/types")
 
 const Motion = require("../motion/Motion")
 const pack_type = require("./pack_type")
-const peek = require("../core_use/peek")
+const peek = require("../core_state/peek")
 const spring_coefficients = require("./spring_coefficients")
 const unpack_type = require("./unpack_type")
 

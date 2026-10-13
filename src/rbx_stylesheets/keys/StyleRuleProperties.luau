@@ -4,7 +4,7 @@ const state = require("../../core_state/types")
 
 const cast_to_state = require("../../core_state/cast_to_state")
 const observe = require("../../core_graph/observe")
-const peek = require("../../core_use/peek")
+const peek = require("../../core_state/peek")
 
 return {
 	type = "SpecialKey",

@@ -1,6 +1,6 @@
-const state = require("../core_state/types")
+const state = require("./types")
 
-const cast_to_state = require("../core_state/cast_to_state")
+const cast_to_state = require("./cast_to_state")
 const evaluate = require("../core_graph/evaluate")
 
 const function peek<T>(x: state.UsedAs<T>): T

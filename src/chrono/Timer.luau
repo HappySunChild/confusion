@@ -6,7 +6,7 @@ const ExternalTime = require("./ExternalTime")
 const change = require("../core_graph/change")
 const depend = require("../core_graph/depend")
 const destructor = require("../core_memory/destructor")
-const peek = require("../core_use/peek")
+const peek = require("../core_state/peek")
 
 type Self = {
 	external_time: chrono.ExternalTime,

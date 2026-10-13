@@ -1,6 +1,5 @@
 const graph = require("../core_graph/types")
-const state = require("../core_state/types")
-const use = require("./types")
+const state = require("./types")
 
 const ExternalLogger = require("../core_external/ExternalLogger")
 const log_error = ExternalLogger.log_error
@@ -11,7 +10,7 @@ const peek = require("./peek")
 
 const function generic_use(user: graph.GraphNode): state.Use
 	if cast_to_graph(user) == nil then
-		log_error(use.invalid_user, nil, {
+		log_error(state.invalid_user, nil, {
 			type = typeof(user),
 			value = user,
 		})

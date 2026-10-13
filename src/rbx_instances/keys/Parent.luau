@@ -10,7 +10,7 @@ const ExternalLogger = require("../../core_external/ExternalLogger")
 const log_error_nonfatal = ExternalLogger.log_error_nonfatal
 
 const observe_immediate = require("../../core_graph/observe_immediate")
-const peek = require("../../core_use/peek")
+const peek = require("../../core_state/peek")
 
 const function set_parent(instance: Instance, parent: Instance?)
 	const success, err = pcall(function()

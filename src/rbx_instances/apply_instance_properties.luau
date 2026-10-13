@@ -13,7 +13,7 @@ const Parent = require("./keys/Parent")
 const cast_to_state = require("../core_state/cast_to_state")
 const observe = require("../core_graph/observe")
 const parse_error = require("../core_logging/parse_error")
-const peek = require("../core_use/peek")
+const peek = require("../core_state/peek")
 const sort_keys = require("./sort_keys")
 const xtypeof = require("../core_graph/xtypeof")
 

@@ -2,7 +2,7 @@ local SpecScheduler = require("../../SpecScheduler")
 local Timer = require("@fusion/chrono/Timer")
 local cleanup = require("@fusion/core_memory/cleanup")
 local observe = require("@fusion/core_graph/observe")
-local peek = require("@fusion/core_use/peek")
+local peek = require("@fusion/core_state/peek")
 
 local butler = require("@butler/butler")
 
