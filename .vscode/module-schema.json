@@ -2,12 +2,40 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title": "ConfusionModule",
     "type": "object",
+    "required": [
+        "description",
+        "requires",
+        "export_types",
+        "export_members"
+    ],
     "properties": {
+        "is_core": {
+            "description": "A boolean describing whether this module is considered 'core'. Defaults to false.",
+            "type": [
+                "boolean",
+                "null"
+            ]
+        },
         "label": {
-            "description": "The label to use in auto-packager comments. Defaults to the id of the module if left null.",
+            "description": "The label to use in auto-packager comments. Defaults to the id.",
             "type": [
                 "string",
                 "null"
+            ]
+        },
+        "description": {
+            "description": "A brief description of what this module does and provides.",
+            "type": "string"
+        },
+        "runtime": {
+            "description": "A string indicating what runtime/platform this module is meant to be used with. Defaults to 'Luau'.",
+            "type": [
+                "string",
+                "null"
+            ],
+            "enum": [
+                "rbx",
+                "luau"
             ]
         },
         "requires": {
@@ -49,7 +77,7 @@
                         "type": "string"
                     },
                     "source": {
-                        "description": "The Luau module that returns the value.",
+                        "description": "The relative path to the Luau module that returns the value.",
                         "type": "string"
                     },
                     "type": {
@@ -58,6 +86,39 @@
                     }
                 }
             }
+        },
+        "external_providers": {
+            "description": "The external providers this module has. External providers are interfaces for certain aspects of a runtime, such as: a task scheduler, logging and debugging",
+            "type": [
+                "object",
+                "null"
+            ],
+            "properties": {
+                "logger_source": {
+                    "description": "The relative path to the Luau module that returns the logger interface.",
+                    "type": "string"
+                },
+                "scheduler_source": {
+                    "description": "The relative path to the Luau module that returns the scheduler interface.",
+                    "type": "string"
+                },
+                "debug_source": {
+                    "description": "The relative path to the Luau module that returns the debugger interface.",
+                    "type": "string"
+                }
+            }
+        },
+        "external_consumers": {
+            "description": "The set of external providers that this module requires to function.",
+            "type": "array",
+            "items": {
+                "enum": [
+                    "debugger",
+                    "scheduler",
+                    "logger"
+                ]
+            },
+            "uniqueItems": true
         }
     }
 }
