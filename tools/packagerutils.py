@@ -1,6 +1,8 @@
 import enum
+import os
 import pathlib
 import shutil
+from collections.abc import Iterable
 from dataclasses import dataclass
 from json import load
 from typing import Any
@@ -12,10 +14,6 @@ class AssociatedRuntime(enum.Enum):
 
 
 class ModulesValidationException(Exception):
-    pass
-
-
-class MissingSrcDirectoryException(ModulesValidationException):
     pass
 
 
@@ -55,11 +53,13 @@ class ModuleExternalProviders:
         )
 
 
-@dataclass
+@dataclass(frozen=True)
 class Module:
+    src_path: pathlib.Path
     is_core: bool
     id: str
     label: str
+    description: str
     category: str
     required_modules: list[str]
     export_types: list[ModuleTypeExport]
@@ -67,17 +67,16 @@ class Module:
     runtime: AssociatedRuntime
     external_providers: ModuleExternalProviders
 
-    def __post_init__(self) -> None:
-        self.required_modules = self.required_modules or []
-        self.export_types = self.export_types or []
-        self.export_members = self.export_members or []
-
     @classmethod
-    def from_dict(cls, id: str, info: dict[str, Any]) -> "Module":
+    def from_dict(cls, src_path: pathlib.Path, info: dict[str, Any]) -> "Module":
+        id = src_path.name
+
         return Module(
+            src_path=src_path,
             id=id,
             label=info.get("label", id),
-            category=info.get("category", ""),
+            description=info.get("description", "no description"),
+            category=info.get("category", "unspecified"),
             is_core=info.get("is_core", False),
             required_modules=info["requires"],
             export_types=[
@@ -93,21 +92,29 @@ class Module:
         )
 
 
-@dataclass
 class ModuleSelection:
-    all_modules: dict[str, Module]
-    selected_modules: set[str]
-    src_path: pathlib.Path
+    selected_ids: set[str]
+    module_reference: dict[str, Module]
+
+    def __init__(self, modules: Iterable[Module]) -> None:
+        self.selected_ids = {mod.id for mod in modules}
+        self.module_reference = {mod.id: mod for mod in modules}
+
+    def add_module(self, module: Module):
+        self.selected_ids.add(module.id)
+        self.module_reference[module.id] = module
 
     def iter_modules(self):
-        for mod_id in self.selected_modules:
-            yield self.all_modules[mod_id]
+        yield from self.module_reference.values()
+
+    def iter_ids(self):
+        yield from self.selected_ids
 
 
-def discover_modules(search_dir: pathlib.Path) -> ModuleSelection:
+def discover_modules(src_path: pathlib.Path) -> dict[str, Module]:
     collected_modules = {}
 
-    for package_dir in search_dir.iterdir():
+    for package_dir in src_path.iterdir():
         if not package_dir.is_dir():
             continue
 
@@ -118,130 +125,137 @@ def discover_modules(search_dir: pathlib.Path) -> ModuleSelection:
         module_id = package_dir.name
 
         with open(mod_json_path, "r") as f:
-            collected_modules[module_id] = Module.from_dict(module_id, load(f))
+            collected_modules[module_id] = Module.from_dict(package_dir, load(f))
 
-    return ModuleSelection(
-        all_modules=collected_modules, selected_modules=set[str](), src_path=search_dir
-    )
+    return collected_modules
 
 
 def validate_module_selection(selection: ModuleSelection) -> None:
-    if not selection.src_path.exists():
-        raise MissingSrcDirectoryException(selection.src_path)
-
     missing_modules: list[str] = []
 
     for mod in selection.iter_modules():
         for required_mod in mod.required_modules:
-            if required_mod not in selection.selected_modules:
+            if required_mod not in selection.selected_ids:
                 missing_modules.append(required_mod)
 
-        if not (selection.src_path / mod.id).exists():
-            raise MissingModuleDirectoryException(selection.src_path / mod.id)
+        module_src_path = mod.src_path
+
+        if not module_src_path.exists():
+            raise MissingModuleDirectoryException(module_src_path)
 
     if len(missing_modules) > 0:
         raise MissingRequiredModulesException(missing_modules)
 
 
-def generate_package_init_source(
+def _join_sections(*sections: list[str]) -> str:
+    return f"\n\n{'-' * 60}\n\n".join(
+        "\n".join(section).strip() for section in sections if section
+    )
+
+
+def _generate_package_init_source(
     selection: ModuleSelection,
     name: str,
     author: str,
     repository: str,
 ) -> str:
-    header_segment: list[str] = [
+    header = [
         "--[=[",
         "This package was generated using Confusion's automated packager!",
         f"package: {name}",
         f"author: {author}",
         f"repository: {repository}",
+        "",
+        "included modules:",
+        *(
+            f"\t{mod.label:20} {f'({mod.id})':20} - {mod.description}"
+            for mod in selection.iter_modules()
+        ),
         "--]=]",
     ]
 
-    type_export_segment: list[str] = []
-    confusion_type_segment: list[str] = ["export type Confusion = {"]
-    member_export_segment: list[str] = ["return {"]
+    type_exports: list[str] = []
+    confusion_members: list[str] = []
+    member_exports: list[str] = []
+
+    def append_module_section(
+        target: list[str],
+        label: str,
+        lines: Iterable[str],
+    ) -> None:
+        target.extend((f"-- {label}", *lines))
 
     for mod in selection.iter_modules():
-        mod_types = mod.export_types
-        mod_members = mod.export_members
+        types = mod.export_types
+        members = mod.export_members
 
-        has_types = len(mod_types) > 0
-        has_members = len(mod_members) > 0
+        if not types and not members:
+            continue
 
-        if has_types or has_members:
-            type_export_segment.extend(
-                (
-                    f"-- {mod.label}",
-                    f"const {mod.id} = require('@self/{mod.id}/types')",
-                )
-            )
-
-        if has_types:
-            type_export_segment.extend(
-                f"export type {type_export.export_name} = {mod.id}.{type_export.name}"
-                for type_export in mod_types
-            )
-
-        if has_types or has_members:
-            type_export_segment.append("")
-
-        if has_members:
-            confusion_type_segment.extend(
-                "\t" + s
-                for s in (
-                    f"-- {mod.label}",
-                    *(
-                        f"{member.export_name}: {member.type},"
-                        for member in mod_members
-                    ),
-                    "",
-                )
-            )
-            member_export_segment.extend(
-                "\t" + s
-                for s in (
-                    f"-- {mod.label}",
-                    *(
-                        f'{member.export_name} = require("@self/{mod.id}/{member.source.removesuffix(".luau")}"),'
-                        for member in mod_members
-                    ),
-                    "",
-                )
-            )
-
-    confusion_type_segment.append("}")
-    member_export_segment.append("} :: Confusion")
-
-    return f"\n\n{'-' * 60}\n\n".join(
-        "\n".join(segment)
-        for segment in (
-            header_segment,
-            type_export_segment,
-            confusion_type_segment,
-            member_export_segment,
+        append_module_section(
+            type_exports,
+            mod.label,
+            (
+                f'const {mod.id} = require("@self/{mod.id}/types")',
+                *(
+                    f"export type {item.export_name} = {mod.id}.{item.name}"
+                    for item in types
+                ),
+            ),
         )
-    )
+
+        append_module_section(
+            confusion_members,
+            mod.label,
+            (f"{item.export_name}: {item.type}," for item in members),
+        )
+
+        append_module_section(
+            member_exports,
+            mod.label,
+            (
+                (
+                    f"{item.export_name} = "
+                    f'require("@self/{mod.id}/'
+                    f'{item.source.removesuffix(".luau")}"),'
+                )
+                for item in members
+            ),
+        )
+
+    confusion_type = [
+        "export type Confusion = {",
+        *(f"\t{line}" for line in confusion_members),
+        "}",
+    ]
+
+    runtime_exports = [
+        "return {",
+        *(f"\t{line}" for line in member_exports),
+        "} :: Confusion",
+    ]
+
+    return _join_sections(header, type_exports, confusion_type, runtime_exports)
 
 
-def generate_package(
+def build_package(
     selection: ModuleSelection,
-    dst_path: pathlib.Path,
+    path_dst_path: pathlib.Path,
     package_name: str = "confusion",
     author: str = "HappySunChild (Eli)",
     repository: str = "https://github.com/HappySunChild/confusion",
 ) -> None:
     validate_module_selection(selection)
 
-    dst_path /= package_name
-    dst_path.mkdir(parents=True, exist_ok=True)
+    path_dst_path /= package_name
+    path_dst_path.mkdir(parents=True, exist_ok=True)
 
-    with open(dst_path / "init.luau", "w") as f:
+    with open(path_dst_path / "init.luau", "w") as f:
         f.write(
-            generate_package_init_source(selection, package_name, author, repository)
+            _generate_package_init_source(selection, package_name, author, repository)
         )
 
-    for mod_id in selection.selected_modules:
-        shutil.copytree(
-            selection.src_path / mod_id, dst_path / mod_id, dirs_exist_ok=True
-        )
+    for mod in selection.iter_modules():
+        module_dst_path = path_dst_path / mod.id
+        shutil.copytree(mod.src_path, module_dst_path, dirs_exist_ok=True)
+        os.remove(module_dst_path / "mod.json")

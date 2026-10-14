@@ -6,9 +6,7 @@ from pyvis.network import Network
 
 net = Network(directed=True, notebook=False)
 
-mods = [
-    mod for mod in discover_modules(pathlib.Path("../src")).all_modules.values() if True
-]
+mods = [mod for mod in discover_modules(pathlib.Path("../src")).values()]
 mod_weights: Counter[str] = Counter(
     module_id for mod in mods for module_id in (mod.id, *mod.required_modules)
 )
@@ -34,4 +32,4 @@ for mod in mods:
         net.add_edge(other_mod, mod.id, color=color)
 
 
-net.save_graph("graph.html")
+net.save_graph("out/graph.html")
