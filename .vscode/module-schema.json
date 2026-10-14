@@ -23,6 +23,10 @@
                 "null"
             ]
         },
+        "category": {
+            "description": "The type of module this module is (i.e. 'core', 'sugar', etc.).",
+            "type": "string"
+        },
         "description": {
             "description": "A brief description of what this module does and provides.",
             "type": "string"
@@ -88,7 +92,7 @@
             }
         },
         "external_providers": {
-            "description": "The external providers this module has. External providers are interfaces for certain aspects of a runtime, such as: a task scheduler, logging and debugging",
+            "description": "The external providers this module provides. External providers are interfaces for certain aspects of a runtime, such as: a task scheduler, logging and debugging",
             "type": [
                 "object",
                 "null"

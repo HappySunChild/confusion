@@ -1,6 +1,7 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "label": "Motion",
+    "category": "animation",
     "description": "Provides a generic Motion state object for reactive animations.",
     "requires": [
         "core_external",

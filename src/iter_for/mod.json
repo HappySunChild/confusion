@@ -1,6 +1,7 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "label": "Iter: For",
+    "category": "tables",
     "description": "Fusion's ForPairs, ForKeys and ForValues.",
     "requires": [
         "core_external",

@@ -41,14 +41,14 @@ class ModuleMemberExport:
 
 
 @dataclass
-class ModuleExternalCapabilities:
+class ModuleExternalProviders:
     logger_module: str | None
     scheduler_module: str | None
     debugger_module: str | None
 
     @classmethod
-    def from_dict(cls, info: dict[str, Any]) -> "ModuleExternalCapabilities":
-        return ModuleExternalCapabilities(
+    def from_dict(cls, info: dict[str, Any]) -> "ModuleExternalProviders":
+        return ModuleExternalProviders(
             logger_module=info.get("logger_module"),
             scheduler_module=info.get("scheduler_module"),
             debugger_module=info.get("debugger_module"),
@@ -60,11 +60,12 @@ class Module:
     is_core: bool
     id: str
     label: str
+    category: str
     required_modules: list[str]
     export_types: list[ModuleTypeExport]
     export_members: list[ModuleMemberExport]
-    associated_runtime: AssociatedRuntime | None
-    external_capabilities: ModuleExternalCapabilities | None
+    runtime: AssociatedRuntime
+    external_providers: ModuleExternalProviders
 
     def __post_init__(self) -> None:
         self.required_modules = self.required_modules or []
@@ -76,6 +77,7 @@ class Module:
         return Module(
             id=id,
             label=info.get("label", id),
+            category=info.get("category", ""),
             is_core=info.get("is_core", False),
             required_modules=info["requires"],
             export_types=[
@@ -84,10 +86,8 @@ class Module:
             export_members=[
                 ModuleMemberExport(**export) for export in info["export_members"]
             ],
-            associated_runtime=AssociatedRuntime(
-                info.get("associated_runtime", "luau")
-            ),
-            external_capabilities=ModuleExternalCapabilities.from_dict(
+            runtime=AssociatedRuntime(info.get("runtime", "luau")),
+            external_providers=ModuleExternalProviders.from_dict(
                 info.get("external_capabilities", {})
             ),
         )

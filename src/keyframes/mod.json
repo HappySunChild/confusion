@@ -1,6 +1,7 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "label": "Keyframes",
+    "category": "sugar",
     "description": "Provides a state object for reactively interpolating a value between keyframes.",
     "requires": [
         "core_memory",

@@ -1,6 +1,7 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "label": "Context",
+    "category": "sugar",
     "description": "Provides a Contextual utility for sharing data at variable nesting levels.",
     "requires": [
         "core_external",

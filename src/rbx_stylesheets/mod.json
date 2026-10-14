@@ -1,6 +1,7 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "label": "Roblox: Stylesheets",
+    "category": "instances",
     "description": "Provides utilities for creating StyleSheets and binding properties to state.",
     "runtime": "rbx",
     "requires": [

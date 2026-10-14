@@ -2,6 +2,7 @@
     "$schema": "../../.vscode/module-schema.json",
     "is_core": true,
     "label": "Core: Memory",
+    "category": "core",
     "description": "Core module that provides utilities for easily managing GC-ed resources in Luau.",
     "requires": [
         "core_external"

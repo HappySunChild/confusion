@@ -1,6 +1,7 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "label": "Iter",
+    "category": "tables",
     "description": "Provides a generic Iter state object for efficient reactive table state.",
     "requires": [
         "core_memory",

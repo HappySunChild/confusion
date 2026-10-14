@@ -1,6 +1,7 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "label": "Async",
+    "category": "async",
     "description": "Provides a variety of utilities for working with asynchronous reactive state.",
     "requires": [
         "core_graph",

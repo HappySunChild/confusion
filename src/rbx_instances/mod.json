@@ -1,6 +1,7 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "label": "Roblox: Instances",
+    "category": "instances",
     "runtime": "rbx",
     "description": "Provides utilities for creating Instances and binding properties to state.",
     "requires": [
