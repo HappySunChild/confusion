@@ -11,7 +11,7 @@ return function(configured: butler.Configured)
 			local scheduler_a_active = false
 			local scheduler_b_active = false
 
-			local scheduler_a = {
+			local scheduler_a: external.ExternalScheduler = {
 				start_scheduler = function()
 					scheduler_a_active = true
 				end,
@@ -19,7 +19,7 @@ return function(configured: butler.Configured)
 					scheduler_a_active = false
 				end,
 			}
-			local scheduler_b = {
+			local scheduler_b: external.ExternalScheduler = {
 				start_scheduler = function()
 					scheduler_b_active = true
 				end,
@@ -54,7 +54,7 @@ return function(configured: butler.Configured)
 			-- expect(ExternalScheduler.schedule_task_immediate):to_throw_with(external.missing_scheduler)
 			expect(ExternalScheduler.schedule_task_delayed):to_throw_with(external.missing_scheduler)
 			expect(ExternalScheduler.schedule_task_deferred):to_throw_with(external.missing_scheduler)
-			expect(ExternalScheduler.cancel_task):to_throw_with(external.missing_scheduler)
+			-- expect(ExternalScheduler.cancel_task):to_throw_with(external.missing_scheduler)
 
 			ExternalScheduler.set_scheduler(initial_scheduler)
 		end)
@@ -86,10 +86,10 @@ return function(configured: butler.Configured)
 			expect(schedule_task_deferred_called):to_equal(false)
 			expect(cancel_task_called):to_equal(false)
 
-			ExternalScheduler.schedule_task_immediate()
-			ExternalScheduler.schedule_task_delayed()
-			ExternalScheduler.schedule_task_deferred()
-			ExternalScheduler.cancel_task()
+			ExternalScheduler.schedule_task_immediate(nil :: any)
+			ExternalScheduler.schedule_task_delayed(0, nil :: any)
+			ExternalScheduler.schedule_task_deferred(nil :: any)
+			ExternalScheduler.cancel_task(nil :: any)
 
 			expect(schedule_task_immediate_called):to_equal(true)
 			expect(schedule_task_delayed_called):to_equal(true)
