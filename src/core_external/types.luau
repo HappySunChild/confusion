@@ -5,10 +5,10 @@ export type ExternalScheduler = {
 	start_scheduler: () -> (),
 	stop_scheduler: () -> (),
 
-	schedule_task_immediate: <A...>(resume: (A...) -> () | thread, A...) -> thread?,
-	schedule_task_deferred: <A...>(resume: (A...) -> () | thread, A...) -> thread?,
-	schedule_task_delayed: <A...>(sec: number, resume: (A...) -> () | thread, A...) -> thread?,
-	cancel_task: (task: thread) -> boolean,
+	schedule_task_immediate: nil | <A...>(resume: (A...) -> () | thread, A...) -> thread,
+	schedule_task_deferred: nil | <A...>(resume: (A...) -> () | thread, A...) -> thread,
+	schedule_task_delayed: nil | <A...>(sec: number, resume: (A...) -> () | thread, A...) -> thread,
+	cancel_task: nil | (task: thread) -> boolean,
 }
 
 export type ExternalDebugger = {
