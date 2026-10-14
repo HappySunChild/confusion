@@ -1,12 +1,13 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "label": "Iter: For",
+    "description": "Fusion's ForPairs, ForKeys and ForValues.",
     "requires": [
         "core_external",
         "core_graph",
         "core_logging",
         "core_memory",
         "core_state",
-        "core_use",
         "iter"
     ],
     "export_types": [],

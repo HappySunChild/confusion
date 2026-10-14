@@ -1,5 +1,7 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "is_core": true,
+    "description": "Core module responsible for handling interactions between the runtime and Confusion's internals.",
     "label": "Core: External",
     "requires": [
         "core_logging",

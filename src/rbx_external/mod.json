@@ -1,13 +1,16 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "label": "Roblox: External",
-    "external_capabilities": {
-        "logger_source": "RobloxLogger.luau",
-        "scheduler_source": "RobloxScheduler.luau"
-    },
+    "description": "Provides external providers for Roblox's task scheduler and logger.",
+    "runtime": "rbx",
     "requires": [
         "core_external",
         "core_logging"
     ],
     "export_types": [],
-    "export_members": []
+    "export_members": [],
+    "external_providers": {
+        "logger_source": "RobloxLogger.luau",
+        "scheduler_source": "RobloxScheduler.luau"
+    }
 }

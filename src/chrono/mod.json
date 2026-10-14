@@ -1,5 +1,7 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "label": "Chrono",
+    "description": "Provides time keeping state objects.",
     "requires": [
         "core_external",
         "core_memory",
@@ -17,5 +19,8 @@
             "source": "Timer.luau",
             "type": "chrono.TimerConstructor"
         }
+    ],
+    "external_consumers": [
+        "scheduler"
     ]
 }

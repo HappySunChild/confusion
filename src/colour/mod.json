@@ -1,5 +1,7 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "label": "Colour",
+    "description": "Provides various utilities for converting between different colour spaces.",
     "requires": [],
     "export_types": [],
     "export_members": []

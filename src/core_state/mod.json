@@ -1,12 +1,13 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "is_core": true,
     "label": "Core: State",
+    "description": "Core module that provides some reactive primitives and some utilities.",
     "requires": [
         "core_external",
         "core_graph",
         "core_logging",
-        "core_memory",
-        "core_use"
+        "core_memory"
     ],
     "export_types": [
         {
@@ -40,6 +41,16 @@
             "export_name": "Value",
             "source": "Value.luau",
             "type": "core_state.ValueConstructor"
+        },
+        {
+            "export_name": "peek",
+            "source": "peek.luau",
+            "type": "core_state.Use"
+        },
+        {
+            "export_name": "flatten",
+            "source": "flatten.luau",
+            "type": "core_state.Flatten"
         }
     ]
 }

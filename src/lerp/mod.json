@@ -1,5 +1,7 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "label": "Lerp",
+    "description": "Provides an internal lerp utility for linearly interpolating between 2 values.",
     "requires": [
         "colour"
     ],

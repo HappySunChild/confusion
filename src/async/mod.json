@@ -1,6 +1,7 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "label": "Async",
+    "description": "Provides a variety of utilities for working with asynchronous reactive state.",
     "requires": [
         "core_graph",
         "core_memory",
@@ -25,5 +26,8 @@
             "source": "await.luau",
             "type": "async.Await"
         }
+    ],
+    "external_consumers": [
+        "scheduler"
     ]
 }

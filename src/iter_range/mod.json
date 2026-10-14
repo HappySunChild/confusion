@@ -1,12 +1,13 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "label": "Iter: Range",
+    "description": "Provides a reactive state primitive similar to the ones from `iter_for`, but in the style of a regular numeric for loop. (ex: for i = a, b, c do end)",
     "requires": [
         "core_external",
         "core_graph",
         "core_logging",
         "core_memory",
         "core_state",
-        "core_use",
         "iter"
     ],
     "export_types": [],

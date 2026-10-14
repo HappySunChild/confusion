@@ -1,6 +1,8 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "is_core": true,
     "label": "Core: Graph",
+    "description": "Core module that provides utilities for using Confusion's graph model internally.",
     "requires": [
         "core_memory",
         "core_logging",

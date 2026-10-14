@@ -1,5 +1,7 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "label": "Context",
+    "description": "Provides a Contextual utility for sharing data at variable nesting levels.",
     "requires": [
         "core_external",
         "core_logging"

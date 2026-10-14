@@ -1,12 +1,14 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "label": "Roblox: Instances",
+    "runtime": "rbx",
+    "description": "Provides utilities for creating Instances and binding properties to state.",
     "requires": [
         "core_external",
         "core_graph",
         "core_logging",
         "core_memory",
-        "core_state",
-        "core_use"
+        "core_state"
     ],
     "export_types": [
         {

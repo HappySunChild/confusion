@@ -1,12 +1,13 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "label": "Motion",
+    "description": "Provides a generic Motion state object for reactive animations.",
     "requires": [
         "core_external",
         "core_graph",
         "core_logging",
         "core_memory",
         "core_state",
-        "core_use",
         "chrono"
     ],
     "export_types": [
@@ -21,5 +22,8 @@
             "source": "Motion.luau",
             "type": "motion.MotionConstructor"
         }
+    ],
+    "external_consumers": [
+        "scheduler"
     ]
 }

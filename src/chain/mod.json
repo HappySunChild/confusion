@@ -1,5 +1,7 @@
 {
+    "$schema": "../../.vscode/module-schema.json",
     "label": "Chain",
+    "description": "Provides a Chain utility for easily linking state objects together.",
     "requires": [
         "core_memory",
         "core_state",
