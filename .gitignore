@@ -5,3 +5,4 @@ __pycache__/
 
 tools/graph.html
 tools/lib/
+tools/out/
