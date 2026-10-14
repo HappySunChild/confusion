@@ -3,7 +3,7 @@
     "is_core": true,
     "label": "Core: Memory",
     "category": "core",
-    "description": "Core module that provides utilities for easily managing GC-ed resources in Luau.",
+    "description": "Provides utilities for managing the lifecycle of garbage-collected resources.",
     "requires": [
         "core_external"
     ],

@@ -3,7 +3,7 @@
     "is_core": true,
     "label": "Core: Logging",
     "category": "core",
-    "description": "Core module that provides internal logging utilities.",
+    "description": "Provides internal logging utilities for debugging.",
     "requires": [
         "core_external"
     ],

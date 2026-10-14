@@ -2,7 +2,7 @@
     "$schema": "../../.vscode/module-schema.json",
     "label": "Safe",
     "category": "sugar",
-    "description": "prettier pcall",
+    "description": "Provides a convenience wrapper around pcall for safely executing functions.",
     "requires": [],
     "export_types": [],
     "export_members": [

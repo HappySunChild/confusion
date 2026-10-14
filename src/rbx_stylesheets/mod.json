@@ -2,7 +2,7 @@
     "$schema": "../../.vscode/module-schema.json",
     "label": "Roblox: Stylesheets",
     "category": "instances",
-    "description": "Provides utilities for creating StyleSheets and binding properties to state.",
+    "description": "Provides utilities for creating and managing Roblox StyleSheets with reactive property bindings.",
     "runtime": "rbx",
     "requires": [
         "core_graph",

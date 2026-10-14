@@ -3,7 +3,7 @@
     "is_core": true,
     "label": "Core: State",
     "category": "core",
-    "description": "Core module that provides some reactive primitives and some utilities.",
+    "description": "Provides core reactive primitives and internal state management utilities.",
     "requires": [
         "core_external",
         "core_graph",

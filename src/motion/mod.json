@@ -2,7 +2,7 @@
     "$schema": "../../.vscode/module-schema.json",
     "label": "Motion",
     "category": "animation",
-    "description": "Provides a generic Motion state object for reactive animations.",
+    "description": "Provides a reactive motion primitive for animating values over time.",
     "requires": [
         "core_external",
         "core_graph",

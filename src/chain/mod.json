@@ -2,7 +2,7 @@
     "$schema": "../../.vscode/module-schema.json",
     "label": "Chain",
     "category": "sugar",
-    "description": "Provides a Chain utility for easily linking state objects together.",
+    "description": "Provides utilities for chaining state objects together to create reactive sequences of dependencies.",
     "requires": [
         "core_memory",
         "core_state",

@@ -2,7 +2,7 @@
     "$schema": "../../.vscode/module-schema.json",
     "label": "Roblox: External",
     "category": "external",
-    "description": "Provides external providers for Roblox's task scheduler and logger.",
+    "description": "Provides Roblox-specific adapters for the task scheduler and logging.",
     "runtime": "rbx",
     "requires": [
         "core_external",

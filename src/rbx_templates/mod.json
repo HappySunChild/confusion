@@ -2,7 +2,7 @@
     "$schema": "../../.vscode/module-schema.json",
     "label": "Roblox: Templates",
     "category": "instances",
-    "description": "Provides utilities for hydrating and reusing in-studio designed UI templates.",
+    "description": "Provides utilities for hydrating and reusing UI templates designed in Roblox Studio.",
     "runtime": "rbx",
     "requires": [
         "core_external",

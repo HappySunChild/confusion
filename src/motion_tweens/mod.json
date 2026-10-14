@@ -2,7 +2,7 @@
     "$schema": "../../.vscode/module-schema.json",
     "label": "Motion: Tweens",
     "category": "animation",
-    "description": "Provides a wrapper constructor for Motion that automatically configures a tween for animation. Similar to Fusion's Tween.",
+    "description": "Provides a convenience constructor for creating tween-driven motion with configurable timing and easing.",
     "requires": [
         "core_memory",
         "core_state",

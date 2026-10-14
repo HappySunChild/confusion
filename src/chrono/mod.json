@@ -2,7 +2,7 @@
     "$schema": "../../.vscode/module-schema.json",
     "label": "Chrono",
     "category": "animation",
-    "description": "Provides time keeping state objects.",
+    "description": "Provides reactive timekeeping primitives for tracking and representing time.",
     "requires": [
         "core_external",
         "core_memory",

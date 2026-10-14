@@ -2,7 +2,7 @@
     "$schema": "../../.vscode/module-schema.json",
     "label": "Colour",
     "category": "internal",
-    "description": "Provides various utilities for converting between different colour spaces.",
+    "description": "Provides utilities for converting between colour spaces and representations.",
     "requires": [],
     "export_types": [],
     "export_members": []

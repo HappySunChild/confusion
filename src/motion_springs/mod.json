@@ -2,7 +2,7 @@
     "$schema": "../../.vscode/module-schema.json",
     "label": "Motion: Springs",
     "category": "animation",
-    "description": "Provides a wrapper constructor for Motion that automatically configures a spring for animation. Similar to Fusion's `Spring`.",
+    "description": "Provides a convenience constructor for creating spring-driven motion with configurable spring parameters.",
     "requires": [
         "core_external",
         "core_logging",
