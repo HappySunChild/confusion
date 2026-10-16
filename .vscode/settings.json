@@ -22,6 +22,9 @@
 		"rbx_templates": "console",
 		"rbx_stylesheets": "console",
 	},
+	"material-icon-theme.files.associations": {
+		"mod.json": "label"
+	},
 	"luau-lsp.sourcemap.rojoProjectFile": "dev.project.json",
 	"luau-lsp.platform.type": "roblox",
 	"stylua.targetReleaseVersion": "latest"
