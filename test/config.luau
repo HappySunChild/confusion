@@ -30,8 +30,11 @@ return {
 		require("./confusion/chrono/Timer.spec"),
 
 		require("./confusion/lerp/lerp_type.spec"),
+
 		require("./confusion/safe/safe.spec"),
+
 		require("./confusion/context/Contextual.spec"),
+
 		require("./confusion/chain/Chain.spec"),
 	},
 }

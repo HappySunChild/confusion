@@ -1,3 +1,7 @@
+--!nonstrict
+--!native
+--!optimize 2
+
 const chrono = require("./types")
 const memory = require("../core_memory/types")
 
@@ -7,7 +11,7 @@ const destructor = require("../core_memory/destructor")
 
 type Self = chrono.ExternalTime
 
-const ALL_TIMERS = {}
+const ALL_TIMERS: { [Self]: true } = {}
 
 const CLASS = {
 	type = "state",
@@ -44,12 +48,12 @@ const function destroy_externaltime(externaltime: Self)
 end
 
 const function ExternalTime(scope: memory.Scope): chrono.ExternalTime
-	const new_externaltime = setmetatable({
+	const new_externaltime: Self = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
 		users = {},
-	}, CLASS_MT)
+	}, CLASS_MT) :: any
 
 	ALL_TIMERS[new_externaltime] = true
 

@@ -11,7 +11,11 @@ const function check_lifetime<A, B, C...>(
 	a: A,
 	b: B,
 	scope_b: memory.Scope?,
-	describer: (A, B, C...) -> { subject_description: string, case_description: string },
+	describer: (
+		A,
+		B,
+		C...
+	) -> { subject_description: string, case_description: string },
 	...: C...
 )
 	if scope_b == nil then

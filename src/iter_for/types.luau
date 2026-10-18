@@ -1,6 +1,8 @@
-local iter = require("../iter/types")
-local memory = require("../core_memory/types")
-local state = require("../core_state/types")
+--!strict
+
+const iter = require("../iter/types")
+const memory = require("../core_memory/types")
+const state = require("../core_state/types")
 
 export type ComputedPair<IK, IV, OK, OV> = {
 	input_key: IK,

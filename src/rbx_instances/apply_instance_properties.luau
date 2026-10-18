@@ -84,7 +84,7 @@ const function apply_instance_properties(scope: memory.Scope, instance: Instance
 		if key_type == "string" then
 			apply_property(scope, instance, key :: string, value)
 		elseif key_type == "SpecialKey" then
-			special_key_values[key] = value
+			special_key_values[key :: rbx_instances.SpecialKey] = value
 		else
 			log_error_nonfatal(rbx_instances.invalid_key_type, debug.traceback(nil, 2), {
 				given_type = key_type,

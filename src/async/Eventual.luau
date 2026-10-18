@@ -1,3 +1,7 @@
+--!nonstrict
+--!native
+--!optimize 2
+
 const async = require("./types")
 const graph = require("../core_graph/types")
 const logging = require("../core_logging/types")

@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const iter_for = require("../iter_for/types")
 const memory = require("../core_memory/types")
 const pipeline = require("./types")

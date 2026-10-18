@@ -1,6 +1,6 @@
 --!strict
 
-export type Scope<T = unknown> = { any } & T
+export type Scope<T = unknown> = T & { any } -- setmetatable<{}, { __index: T }>
 
 export type Cleanup = (any?) -> ()
 export type Scoped = <T, M>(base: T, methods: M?) -> Scope<T & M>

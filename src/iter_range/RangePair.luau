@@ -1,3 +1,7 @@
+--!nonstrict
+--!native
+--!optimize 2
+
 const iter_range = require("./types")
 const logging = require("../core_logging/types")
 const memory = require("../core_memory/types")

@@ -1,3 +1,7 @@
+--!nonstrict
+--!native
+--!optimize 2
+
 const iter = require("./types")
 const memory = require("../core_memory/types")
 const state = require("../core_state/types")

@@ -1,3 +1,7 @@
+--!nonstrict
+--!native
+--!optimize 2
+
 const chrono = require("../chrono/types")
 const memory = require("../core_memory/types")
 const motion = require("./types")

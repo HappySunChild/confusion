@@ -1,15 +1,15 @@
-local butler = require("@butler/butler")
-local butler_chrono = require("@butler/hooks/butler_chrono")
-local butler_pretty = require("@butler/hooks/butler_pretty")
+const butler = require("@butler/butler")
+const butler_chrono = require("@butler/hooks/butler_chrono")
+const butler_pretty = require("@butler/hooks/butler_pretty")
 
-local ExternalScheduler = require("@fusion/core_external/ExternalScheduler")
+const ExternalScheduler = require("@fusion/core_external/ExternalScheduler")
 
-local SpecScheduler = require("./SpecScheduler")
-local config = require("./config")
+const SpecScheduler = require("./SpecScheduler")
+const config = require("./config")
 
 ExternalScheduler.set_scheduler(SpecScheduler)
 
-local configured = butler({
+const configured = butler({
 	hooks = {
 		butler_chrono,
 		butler_pretty({
@@ -23,7 +23,7 @@ local configured = butler({
 
 -- running stuff
 
-local configured_units = {}
+const configured_units = {}
 
 for _, unit in config.all_units do
 	table.insert(configured_units, unit(configured))

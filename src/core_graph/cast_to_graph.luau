@@ -1,6 +1,7 @@
 --!strict
 --!native
 --!optimize 2
+
 const graph = require("./types")
 
 const function cast_to_graph(x: any): graph.GraphNode?

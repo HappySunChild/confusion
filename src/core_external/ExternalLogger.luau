@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const external = require("./types")
 const logging = require("../core_logging/types")
 
@@ -6,7 +10,7 @@ const format_error = require("../core_logging/format_error")
 const function default_log_warn(message: string, context: logging.LogContext?)
 	print(format_error(message, debug.traceback(nil, 3), context))
 end
-const function default_log_error(message: string, err: (logging.Error | string)?, context: logging.LogContext?)
+const function default_log_error(message: string, err: (logging.Error | string)?, context: logging.LogContext?): never
 	error(format_error(message, err, context))
 end
 const function default_log_error_nonfatal(message: string, err: (logging.Error | string)?, context: logging.LogContext?)

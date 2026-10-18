@@ -1,8 +1,11 @@
+--!nonstrict
+--!native
+--!optimize 2
+
 const chrono = require("./types")
 const memory = require("../core_memory/types")
 
 const ExternalTime = require("./ExternalTime")
-
 const change = require("../core_graph/change")
 const depend = require("../core_graph/depend")
 const destructor = require("../core_memory/destructor")

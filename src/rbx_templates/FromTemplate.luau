@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("../core_memory/types")
 const rbx_instances = require("../rbx_instances/types")
 const templates = require("./types")
@@ -7,7 +11,11 @@ const log_error = ExternalLogger.log_error
 
 const Hydrate = require("../rbx_instances/Hydrate")
 
-const function FromTemplate<InstanceT>(scope: memory.Scope, template: InstanceT, properties: rbx_instances.Properties): InstanceT
+const function FromTemplate<InstanceT>(
+	scope: memory.Scope,
+	template: Instance & InstanceT,
+	properties: rbx_instances.Properties
+): InstanceT
 	template = template :: Instance
 
 	const new_instance = template:Clone()

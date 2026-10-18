@@ -1,7 +1,9 @@
-local iter_for = require("../iter_for/types")
-local memory = require("../core_memory/types")
-local state = require("../core_state/types")
-local tweens = require("../motion_tweens/types")
+--!strict
+
+const iter_for = require("../iter_for/types")
+const memory = require("../core_memory/types")
+const state = require("../core_state/types")
+const tweens = require("../motion_tweens/types")
 
 export type Chain<S, T> = {
 	type: "Chain",

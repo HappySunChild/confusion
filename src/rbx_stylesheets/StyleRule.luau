@@ -1,10 +1,14 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("../core_memory/types")
 const rbx_stylesheets = require("./types")
 
-const apply_instance_properties = require("../rbx_instances/apply_instance_properties")
-const StyleRules = require("./keys/StyleRules")
-const StyleRuleTransitions = require("./keys/StyleRuleTransitions")
 const StyleRuleProperties = require("./keys/StyleRuleProperties")
+const StyleRuleTransitions = require("./keys/StyleRuleTransitions")
+const StyleRules = require("./keys/StyleRules")
+const apply_instance_properties = require("../rbx_instances/apply_instance_properties")
 
 const function StyleRule(
 	scope: memory.Scope,

@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const motion_tweens = require("./types")
 
 const easing_styles = require("./easing_styles")

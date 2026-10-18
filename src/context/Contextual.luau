@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const context = require("./types")
 
 const ExternalLogger = require("../core_external/ExternalLogger")

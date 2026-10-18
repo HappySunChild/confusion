@@ -1,3 +1,5 @@
+--!strict
+
 const memory = require("../core_memory/types")
 const state = require("../core_state/types")
 

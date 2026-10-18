@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const memory = require("../core_memory/types")
 const rbx_instances = require("../rbx_instances/types")
 const templates = require("./types")

@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const async = require("./types")
 const graph = require("../core_graph/types")
 const memory = require("../core_memory/types")
@@ -22,7 +26,9 @@ const function await(scope: memory.Scope, subject: graph.GraphNode)
 	disconnect = observe(scope, subject, function()
 		coroutine.resume(current)
 
-		disconnect()
+		if disconnect then
+			disconnect()
+		end
 	end)
 
 	coroutine.yield()

@@ -1,6 +1,10 @@
-local iter = require("../iter/types")
-local memory = require("../core_memory/types")
-local state = require("../core_state/types")
+--!strict
+--!native
+--!optimize 2
+
+const iter = require("../iter/types")
+const memory = require("../core_memory/types")
+const state = require("../core_state/types")
 
 export type Range = {
 	kind: "Range",

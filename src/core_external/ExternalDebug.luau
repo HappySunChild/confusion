@@ -1,3 +1,7 @@
+--!strict
+--!native
+--!optimize 2
+
 const external = require("./types")
 const memory = require("../core_memory/types")
 

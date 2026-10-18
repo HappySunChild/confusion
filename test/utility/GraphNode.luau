@@ -1,10 +1,10 @@
 --!strict
-local graph = require("@fusion/core_graph/types")
-local memory = require("@fusion/core_memory/types")
+const graph = require("@fusion/core_graph/types")
+const memory = require("@fusion/core_memory/types")
 
-local destructor = require("@fusion/core_memory/destructor")
+const destructor = require("@fusion/core_memory/destructor")
 
-local CLASS = table.freeze({
+const CLASS = table.freeze({
 	timeliness = "lazy",
 	type = "graph",
 
@@ -12,7 +12,7 @@ local CLASS = table.freeze({
 		return true
 	end,
 })
-local METATABLE = table.freeze({ __index = CLASS })
+const METATABLE = table.freeze({ __index = CLASS })
 
 type Options = {
 	timeliness: graph.Timeliness?,
@@ -22,8 +22,8 @@ type Options = {
 	can_use: boolean?,
 }
 
-local function GraphNode(scope: memory.Scope, options: Options?): graph.GraphNode
-	local new_graphnode: graph.GraphNode = setmetatable({
+const function GraphNode(scope: memory.Scope, options: Options?): graph.GraphNode
+	const new_graphnode: graph.GraphNode = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
@@ -42,7 +42,7 @@ local function GraphNode(scope: memory.Scope, options: Options?): graph.GraphNod
 		table.freeze(new_graphnode.using)
 	end
 
-	local oldest_task = destructor(new_graphnode)
+	const oldest_task = destructor(new_graphnode)
 	new_graphnode.oldest_task = oldest_task
 
 	table.insert(scope, oldest_task)

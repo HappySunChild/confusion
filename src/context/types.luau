@@ -1,3 +1,5 @@
+--!strict
+
 export type Contextual<T> = {
 	type: "Contextual",
 

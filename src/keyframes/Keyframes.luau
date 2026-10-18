@@ -1,3 +1,4 @@
+--!nonstrict
 --!native
 --!optimize 2
 
