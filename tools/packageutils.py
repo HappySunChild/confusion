@@ -116,6 +116,29 @@ class ModuleSelection:
         yield from self.selected_ids
 
 
+@dataclass(frozen=True)
+class Package:
+    name: str
+    description: str
+    author: str
+    repository: str
+    modules: ModuleSelection
+
+    @classmethod
+    def from_dict(
+        cls, module_mapping: dict[str, Module], info: dict[str, Any]
+    ) -> "Package":
+        return Package(
+            name=info["name"],
+            description=info["description"],
+            author=info["author"],
+            repository=info["repository"],
+            modules=ModuleSelection(
+                module_mapping[mod_id] for mod_id in info["modules"]
+            ),
+        )
+
+
 def discover_modules(src_path: pathlib.Path) -> dict[str, Module]:
     collected_modules = {}
 
@@ -305,7 +328,7 @@ def build_package(
 ) -> None:
     validate_module_selection(selection)
 
-    dst_path /= package_name
+    dst_path /= "confusion"
     dst_path.mkdir(parents=True, exist_ok=True)
 
     with open(dst_path / "init.luau", "w") as f:
@@ -317,3 +340,9 @@ def build_package(
         module_dst_path = dst_path / mod.id
         shutil.copytree(mod.src_path, module_dst_path, dirs_exist_ok=True)
         os.remove(module_dst_path / "mod.json")
+
+
+def build_package_from_package(package: Package, dst_path: pathlib.Path) -> None:
+    build_package(
+        package.modules, dst_path, package.name, package.author, package.repository
+    )

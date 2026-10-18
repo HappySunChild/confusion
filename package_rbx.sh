@@ -1,0 +1,1 @@
+python3 ./tools/compile_package.py rbx_std ./rojo

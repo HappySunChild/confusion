@@ -1,11 +1,11 @@
 {
-	"name": "confusion",
+	"name": "confusion-rbx-testing",
 	"tree": {
 		"$className": "DataModel",
 		"ReplicatedStorage": {
 			"$ignoreUnknownInstances": true,
 			"confusion": {
-				"$path": "src"
+				"$path": "rojo/confusion"
 			}
 		},
 		"ServerScriptService": {
@@ -15,7 +15,7 @@
 				"$className": "Folder",
 				"$ignoreUnknownInstances": true,
 				"confusion": {
-					"$path": "dev/server"
+					"$path": "rojo/_server"
 				}
 			}
 		},
@@ -29,7 +29,7 @@
 					"$className": "Folder",
 					"$ignoreUnknownInstances": true,
 					"confusion": {
-						"$path": "dev/client"
+						"$path": "rojo/_client"
 					}
 				}
 			}

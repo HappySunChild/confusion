@@ -1,0 +1,31 @@
+{
+    "$schema": "../../.vscode/package-schema.json",
+    "name": "Roblox - Standard",
+    "description": "The standard set of modules for regular Roblox usage.",
+    "author": "HappySunChild (Eli)",
+    "repository": "https://github.com/HappySunChild/confusion",
+    "modules": [
+        "core_external",
+        "core_graph",
+        "core_logging",
+        "core_memory",
+        "core_state",
+        "rbx_external",
+        "rbx_instances",
+        "rbx_stylesheets",
+        "rbx_templates",
+        "async",
+        "chain",
+        "chrono",
+        "colour",
+        "context",
+        "iter",
+        "iter_for",
+        "iter_range",
+        "lerp",
+        "motion",
+        "motion_springs",
+        "motion_tweens",
+        "safe"
+    ]
+}

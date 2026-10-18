@@ -1,0 +1,14 @@
+{
+    "$schema": "../../.vscode/package-schema.json",
+    "name": "Core",
+    "description": "bare minimum",
+    "author": "HappySunChild (Eli)",
+    "repository": "https://github.com/HappySunChild/confusion",
+    "modules": [
+        "core_external",
+        "core_graph",
+        "core_logging",
+        "core_memory",
+        "core_state"
+    ]
+}

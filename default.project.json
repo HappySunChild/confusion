@@ -1,7 +1,7 @@
 {
-	"name": "confusion",
+	"name": "confusion-package",
 	"tree": {
-		"$path": "src"
+		"$path": "rojo/confusion"
 	},
 	"globIgnorePaths": [
 		"**/mod.json"
