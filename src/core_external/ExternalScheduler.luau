@@ -37,6 +37,17 @@ local active_cancel_task: (task: thread) -> boolean = default_cancel_task
 local last_update_time = os.clock()
 local delta_time = 0
 
+const function perform_update_step()
+	const now = os.clock()
+
+	delta_time = now - last_update_time
+	last_update_time = now
+
+	for _, callback in BOUND_CALLBACKS do
+		callback(now, delta_time)
+	end
+end
+
 return {
 	set_scheduler = function(new_scheduler: external.ExternalScheduler?)
 		const old_scheduler = active_scheduler
@@ -46,7 +57,7 @@ return {
 		end
 
 		if new_scheduler ~= nil then
-			new_scheduler.start_scheduler()
+			new_scheduler.start_scheduler(perform_update_step) -- pass this the perform_update_step function, so that the external interface can act completely independently of confusion
 
 			active_do_task_immediate = new_scheduler.schedule_task_immediate or default_do_task_immediate
 			active_do_task_deferred = new_scheduler.schedule_task_deferred
@@ -101,17 +112,6 @@ return {
 			BOUND_CALLBACKS[unique_identifier] = nil
 		end
 	end,
-	perform_update_step = function(): ()
-		const now = os.clock()
-
-		delta_time = now - last_update_time
-		last_update_time = now
-
-		for _, callback in BOUND_CALLBACKS do
-			callback(now, delta_time)
-		end
-	end,
-
 	get_delta_time = function(): number
 		return delta_time
 	end,

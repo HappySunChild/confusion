@@ -9,8 +9,6 @@ const IS_SERVER = RunService:IsClient()
 
 const external = require("../core_external/types")
 
-const ExternalScheduler = require("../core_external/ExternalScheduler")
-
 local scheduler_disconnect: () -> ()? = nil
 
 return {
@@ -23,9 +21,9 @@ return {
 		return success
 	end,
 
-	start_scheduler = function()
+	start_scheduler = function(step: (...unknown) -> ())
 		if IS_SERVER then
-			const connection = RunService.Heartbeat:Connect(ExternalScheduler.perform_update_step)
+			const connection = RunService.Heartbeat:Connect(step)
 
 			scheduler_disconnect = function()
 				connection:Disconnect()
@@ -36,7 +34,7 @@ return {
 
 		const id = "confusion_update_step_" .. HttpService:GenerateGUID(false)
 
-		RunService:BindToRenderStep(id, Enum.RenderPriority.First.Value, ExternalScheduler.perform_update_step)
+		RunService:BindToRenderStep(id, Enum.RenderPriority.First.Value, step)
 
 		scheduler_disconnect = function()
 			RunService:UnbindFromRenderStep(id)

@@ -6,7 +6,7 @@ const logging = require("../core_logging/types")
 const memory = require("../core_memory/types")
 
 export type ExternalScheduler = {
-	start_scheduler: () -> (),
+	start_scheduler: (step: () -> ()) -> (),
 	stop_scheduler: () -> (),
 
 	schedule_task_immediate: nil | <A...>(resume: (A...) -> () | thread, A...) -> thread,
