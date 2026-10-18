@@ -11,13 +11,7 @@ const log_warn = ExternalLogger.log_warn
 const BOUND_CALLBACKS = {}
 
 const function default_do_task_immediate<A...>(resume: (A...) -> () | thread, ...: A...): thread
-	local thread: thread = nil
-
-	if type(resume) == "function" then
-		thread = coroutine.create(resume)
-	elseif type(resume) == "thread" then
-		thread = resume
-	end
+	const thread: thread = if type(resume) == "thread" then resume else coroutine.create(resume)
 
 	coroutine.resume(thread, ...)
 
@@ -38,7 +32,7 @@ local active_scheduler: external.ExternalScheduler? = nil
 local active_do_task_immediate: <A...>(resume: (A...) -> () | thread, A...) -> thread? = default_do_task_immediate
 local active_do_task_deferred: (<A...>(resume: (A...) -> () | thread, A...) -> thread?)? = nil
 local active_do_task_delayed: (<A...>(sec: number, resume: (A...) -> () | thread, A...) -> thread?)? = nil
-local active_cancel_task: (task: thread) -> boolean = nil
+local active_cancel_task: (task: thread) -> boolean = default_cancel_task
 
 local last_update_time = os.clock()
 local delta_time = 0
