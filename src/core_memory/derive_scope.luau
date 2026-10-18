@@ -14,9 +14,9 @@ const function derive_scope<S, M>(existing: memory.Scope<S>, methods: M?): memor
 	const new_metatable = if methods == nil
 		then old_metatable -- reuse old metatable because nothing is being changed.
 		else {
-			__index = if old_metatable == nil or type(old_metatable.__index) ~= "table"
+			__index = if type(old_metatable) ~= "table" or type(old_metatable.__index) ~= "table"
 				then methods -- just use the methods since we don't have anything to merge with.
-				else merge(table.clone(old_metatable.__index), methods), -- merge since both __index and methods are valid.
+				else merge(table.clone(old_metatable.__index :: any), methods), -- merge since both __index and methods are valid.
 		}
 
 	const derived_scope = setmetatable({}, new_metatable)
