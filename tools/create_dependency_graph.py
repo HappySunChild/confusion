@@ -1,7 +1,7 @@
 import pathlib
 from collections import Counter
 
-from packagerutils import Module, discover_modules
+from packageutils import Module, discover_modules
 from pyvis.network import Network
 
 net = Network(directed=True, notebook=False)
