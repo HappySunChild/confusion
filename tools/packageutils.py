@@ -1,10 +1,10 @@
 import enum
+import json
 import os
 import pathlib
 import shutil
 from collections.abc import Iterable
 from dataclasses import dataclass
-from json import load
 from typing import Any
 
 
@@ -153,7 +153,7 @@ def discover_modules(src_path: pathlib.Path) -> dict[str, Module]:
         module_id = package_dir.name
 
         with open(mod_json_path, "r") as f:
-            collected_modules[module_id] = Module.from_dict(package_dir, load(f))
+            collected_modules[module_id] = Module.from_dict(package_dir, json.load(f))
 
     return collected_modules
 
@@ -236,9 +236,9 @@ def _generate_package_init_source(
                 "",
                 "external provider:",
                 f"\tmodule: {provider_mod.id}",
-                f"\t[{'X' if scheduler_src else ' '}] scheduler",
-                f"\t[{'X' if logger_src else ' '}] logger",
-                f"\t[{'X' if debugger_src else ' '}] debugger",
+                f"\thas scheduler: {'yes' if scheduler_src else 'no'}",
+                f"\thas logger: {'yes' if logger_src else 'no'}",
+                f"\thas debugger: {'yes' if debugger_src else 'no'}",
                 "",
             )
         )
@@ -340,6 +340,24 @@ def build_package(
         module_dst_path = dst_path / mod.id
         shutil.copytree(mod.src_path, module_dst_path, dirs_exist_ok=True)
         os.remove(module_dst_path / "mod.json")
+
+    luau_module_files = [file for file in dst_path.rglob("*.luau") if file.is_file()]
+
+    for file_path in luau_module_files:
+        temp_file_path = file_path.parent / f"{file_path.name}_temp"
+
+        with (
+            open(temp_file_path, "w", encoding="utf8") as temp_file,
+            open(file_path, "r", encoding="utf8") as original_file,
+        ):
+            temp_file.write(
+                "-- NOTICE: THIS FILE IS MIRRORED/TEMPORARY! DO NOT MODIFY THIS FILE IF YOU WANT YOUR CHANGES TO SAVE!\n"
+                * 16
+                + "\n"
+            )
+
+            temp_file.writelines(original_file)
+        os.replace(temp_file_path, file_path)
 
 
 def build_package_from_package(package: Package, dst_path: pathlib.Path) -> None:
