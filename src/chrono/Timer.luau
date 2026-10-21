@@ -8,7 +8,7 @@ const memory = require("../core_memory/types")
 const ExternalTime = require("./ExternalTime")
 const change = require("../core_graph/change")
 const depend = require("../core_graph/depend")
-const destructor = require("../core_memory/destructor")
+const destructor = require("../core_graph/destructor")
 const peek = require("../core_state/peek")
 
 type Self = {

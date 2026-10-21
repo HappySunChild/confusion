@@ -2,7 +2,7 @@
 const graph = require("@fusion/core_graph/types")
 const memory = require("@fusion/core_memory/types")
 
-const destructor = require("@fusion/core_memory/destructor")
+const destructor = require("@fusion/core_graph/destructor")
 
 const CLASS = table.freeze({
 	timeliness = "lazy",

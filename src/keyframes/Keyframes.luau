@@ -6,7 +6,7 @@ const keyframes = require("./types")
 const memory = require("../core_memory/types")
 const state = require("../core_state/types")
 
-const destructor = require("../core_memory/destructor")
+const destructor = require("../core_graph/destructor")
 const evaluate_keyframes = require("./evaluate_keyframes")
 const generic_use = require("../core_state/generic_use")
 const is_similar = require("../core_state/is_similar")

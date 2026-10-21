@@ -7,7 +7,7 @@ const memory = require("../core_memory/types")
 const state = require("../core_state/types")
 
 const depend = require("../core_graph/depend")
-const destructor = require("../core_memory/destructor")
+const destructor = require("../core_graph/destructor")
 const generic_use = require("../core_state/generic_use")
 
 type Self<K, V> = {

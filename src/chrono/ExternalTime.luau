@@ -7,7 +7,7 @@ const memory = require("../core_memory/types")
 
 const ExternalScheduler = require("../core_external/ExternalScheduler")
 const change = require("../core_graph/change")
-const destructor = require("../core_memory/destructor")
+const destructor = require("../core_graph/destructor")
 
 type Self = chrono.ExternalTime
 

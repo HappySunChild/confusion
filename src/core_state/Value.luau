@@ -6,7 +6,7 @@ const memory = require("../core_memory/types")
 const state = require("./types")
 
 const change = require("../core_graph/change")
-const destructor = require("../core_memory/destructor")
+const destructor = require("../core_graph/destructor")
 const is_similar = require("./is_similar")
 
 type Self<T> = state.Value<T>

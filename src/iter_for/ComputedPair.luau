@@ -12,7 +12,7 @@ const log_error_nonfatal = ExternalLogger.log_error_nonfatal
 
 const cleanup = require("../core_memory/cleanup")
 const derive_scope = require("../core_memory/derive_scope")
-const destructor = require("../core_memory/destructor")
+const destructor = require("../core_graph/destructor")
 const generic_use = require("../core_state/generic_use")
 const is_similar = require("../core_state/is_similar")
 const parse_error = require("../core_logging/parse_error")
