@@ -17,40 +17,47 @@ const function default_log_error_nonfatal(message: string, err: (logging.Error |
 	print(format_error(message, err, context))
 end
 
-local active_logger: external.ExternalLogger? = nil
-local active_log_warn: (message: string, context: logging.LogContext?) -> () = default_log_warn
-local active_log_error: (message: string, err: (logging.Error | string)?, context: logging.LogContext?) -> never =
+local current_logger: external.ExternalLogger? = nil
+local current_log_warn: (message: string, context: logging.LogContext?) -> () = default_log_warn
+local current_log_error: (message: string, err: (logging.Error | string)?, context: logging.LogContext?) -> never =
 	default_log_error
-local active_log_error_nonfatal: (message: string, err: (logging.Error | string)?, context: logging.LogContext?) -> () =
+local current_log_error_nonfatal: (message: string, err: (logging.Error | string)?, context: logging.LogContext?) -> () =
 	default_log_error_nonfatal
 
+const function set_logger(new_logger: external.ExternalLogger?)
+	const old_logger = current_logger
+
+	if new_logger ~= nil then
+		current_log_warn = new_logger.log_warn
+		current_log_error = new_logger.log_error
+		current_log_error_nonfatal = new_logger.log_error_nonfatal
+	else
+		current_log_warn = default_log_warn
+		current_log_error = default_log_error
+		current_log_error_nonfatal = default_log_error_nonfatal
+	end
+
+	current_logger = new_logger
+
+	return old_logger
+end
+
+const function log_warn(message: string, context: logging.LogContext?)
+	current_log_warn(message, context)
+end
+
+const function log_error(message: string, err: logging.Error | string?, context: logging.LogContext?): never
+	current_log_error(message, err, context)
+	error(external.fallback_error) -- fallback error incase the external log_error did not throw like it should've
+end
+
+const function log_error_nonfatal(message: string, err: logging.Error | string?, context: logging.LogContext?)
+	current_log_error_nonfatal(message, err, context)
+end
+
 return {
-	set_logger = function(new_logger: external.ExternalLogger?)
-		const old_logger = active_logger
-
-		if new_logger ~= nil then
-			active_log_warn = new_logger.log_warn
-			active_log_error = new_logger.log_error
-			active_log_error_nonfatal = new_logger.log_error_nonfatal
-		else
-			active_log_warn = default_log_warn
-			active_log_error = default_log_error
-			active_log_error_nonfatal = default_log_error_nonfatal
-		end
-
-		active_logger = new_logger
-
-		return old_logger
-	end,
-	log_warn = function(message: string, context: logging.LogContext?)
-		active_log_warn(message, context)
-	end,
-	log_error = function(message: string, err: logging.Error | string?, context: logging.LogContext?): never
-		active_log_error(message, err, context)
-
-		error(external.fallback_error) -- fallback error incase the external log_error did not throw like it should've
-	end,
-	log_error_nonfatal = function(message: string, err: logging.Error | string?, context: logging.LogContext?)
-		active_log_error_nonfatal(message, err, context)
-	end,
+	set_logger = set_logger,
+	log_warn = log_warn,
+	log_error = log_error,
+	log_error_nonfatal = log_error_nonfatal,
 }
