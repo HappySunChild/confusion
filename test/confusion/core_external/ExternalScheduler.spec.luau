@@ -99,6 +99,17 @@ return function(configured: butler.Configured)
 			ExternalScheduler.set_scheduler(initial_scheduler)
 		end)
 		test("binding to and unbinding from update steps", function()
+			local step = nil
+
+			ExternalScheduler.set_scheduler({
+				start_scheduler = function(s)
+					step = s
+				end,
+				stop_scheduler = function()
+					step = nil
+				end,
+			})
+
 			local was_invoked = false
 			local unbind = ExternalScheduler.bind_to_update_step(function(now: number)
 				was_invoked = true
@@ -108,31 +119,64 @@ return function(configured: butler.Configured)
 			expect(was_invoked):to_equal(false)
 			expect(unbind):to_be_a("function")
 
-			ExternalScheduler.perform_update_step()
+			-- ExternalScheduler.perform_update_step()
+			step()
 
 			expect(was_invoked):to_equal(true)
 
 			was_invoked = false
 			unbind()
 
-			ExternalScheduler.perform_update_step()
+			-- ExternalScheduler.perform_update_step()
+			step()
 
 			expect(was_invoked):to_equal(false)
+
+			ExternalScheduler.set_scheduler(nil)
 		end)
 		test("get_last_update", function()
-			local last_update = os.clock()
-			ExternalScheduler.perform_update_step()
+			local step = nil
 
-			expect(ExternalScheduler.get_last_update()):to_be_near(last_update, 0.001)
+			ExternalScheduler.set_scheduler({
+				start_scheduler = function(s)
+					step = s
+				end,
+				stop_scheduler = function()
+					step = nil
+				end,
+			})
+
+			local last_update = ExternalScheduler.get_last_update()
+			-- ExternalScheduler.perform_update_step()
+			step()
+
+			expect(ExternalScheduler.get_last_update()):to_be_near(last_update, 0.001):to_be_greater_than(last_update)
+
+			ExternalScheduler.set_scheduler(nil)
 		end)
 		test("get_delta_time", function()
-			local last_update = os.clock()
-			ExternalScheduler.perform_update_step()
+			local step = nil
 
-			local now = os.clock()
-			ExternalScheduler.perform_update_step()
+			ExternalScheduler.set_scheduler({
+				start_scheduler = function(s)
+					step = s
+				end,
+				stop_scheduler = function()
+					step = nil
+				end,
+			})
+
+			local last_update = ExternalScheduler.get_last_update()
+			-- ExternalScheduler.perform_update_step()
+			step()
+
+			local now = ExternalScheduler.get_last_update()
+			-- ExternalScheduler.perform_update_step()
+			step()
 
 			expect(ExternalScheduler.get_delta_time()):to_be_near(now - last_update, 0.001)
+
+			ExternalScheduler.set_scheduler(nil)
 		end)
 	end)
 end

@@ -1,10 +1,8 @@
-local ExternalScheduler = require("@fusion/core_external/ExternalScheduler")
+const SpecTask = require("./SpecTask")
 
-local SpecTask = require("./SpecTask")
+local active_stepper = nil
 
-local do_update_steps = false
-
-local SpecScheduler = {
+const SpecScheduler = {
 	schedule_task_immediate = SpecTask.spawn,
 	schedule_task_deferred = SpecTask.defer,
 	schedule_task_delayed = SpecTask.delay,
@@ -12,16 +10,16 @@ local SpecScheduler = {
 		coroutine.close(thread)
 	end,
 
-	start_scheduler = function()
-		do_update_steps = true
+	start_scheduler = function(step)
+		active_stepper = step
 	end,
 	stop_scheduler = function()
-		do_update_steps = false
+		active_stepper = nil
 	end,
 
 	step = function()
-		if do_update_steps then
-			ExternalScheduler.perform_update_step()
+		if active_stepper then
+			active_stepper()
 		end
 
 		SpecTask.process()
