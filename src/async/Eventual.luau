@@ -20,9 +20,9 @@ const change = require("../core_graph/change")
 const cleanup = require("../core_memory/cleanup")
 const depend = require("../core_graph/depend")
 const derive_scope = require("../core_memory/derive_scope")
-const destructor = require("../core_graph/destructor")
 const evaluate = require("../core_graph/evaluate")
 const is_similar = require("../core_state/is_similar")
+const node_destructor = require("../core_graph/node_destructor")
 const parse_error = require("../core_logging/parse_error")
 const peek = require("../core_state/peek")
 
@@ -170,7 +170,7 @@ const function Eventual<T, S>(scope: memory.Scope<S>, processor: async.EventualP
 
 	new_eventual.use, new_eventual.become = generate_eventual_callbacks(new_eventual)
 
-	const oldest_task = destructor(new_eventual, destroy_eventual)
+	const oldest_task = node_destructor(new_eventual, destroy_eventual)
 	new_eventual.oldest_task = oldest_task
 	table.insert(scope, oldest_task)
 

@@ -2,7 +2,7 @@
 const graph = require("@fusion/core_graph/types")
 const memory = require("@fusion/core_memory/types")
 
-const destructor = require("@fusion/core_graph/destructor")
+const node_destructor = require("@fusion/core_graph/node_destructor")
 
 const CLASS = table.freeze({
 	timeliness = "lazy",
@@ -42,7 +42,7 @@ const function GraphNode(scope: memory.Scope, options: Options?): graph.GraphNod
 		table.freeze(new_graphnode.using)
 	end
 
-	const oldest_task = destructor(new_graphnode)
+	const oldest_task = node_destructor(new_graphnode)
 	new_graphnode.oldest_task = oldest_task
 
 	table.insert(scope, oldest_task)

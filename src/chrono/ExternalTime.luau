@@ -7,7 +7,7 @@ const memory = require("../core_memory/types")
 
 const ExternalScheduler = require("../core_external/ExternalScheduler")
 const change = require("../core_graph/change")
-const destructor = require("../core_graph/destructor")
+const node_destructor = require("../core_graph/node_destructor")
 
 type Self = chrono.ExternalTime
 
@@ -57,7 +57,7 @@ const function ExternalTime(scope: memory.Scope): chrono.ExternalTime
 
 	ALL_TIMERS[new_externaltime] = true
 
-	const oldest_task = destructor(new_externaltime, destroy_externaltime)
+	const oldest_task = node_destructor(new_externaltime, destroy_externaltime)
 	new_externaltime.oldest_task = oldest_task
 	table.insert(scope, oldest_task)
 

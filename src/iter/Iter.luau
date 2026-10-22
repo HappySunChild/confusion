@@ -7,8 +7,8 @@ const memory = require("../core_memory/types")
 const state = require("../core_state/types")
 
 const depend = require("../core_graph/depend")
-const destructor = require("../core_graph/destructor")
 const generic_use = require("../core_state/generic_use")
+const node_destructor = require("../core_graph/node_destructor")
 
 type Self<K, V> = {
 	use: state.Use,
@@ -54,7 +54,7 @@ const function Iter<K, V>(scope: memory.Scope, disassembly: iter.Disassembly<K, 
 
 	new_iter.use = generic_use(new_iter)
 
-	const oldest_task = destructor(new_iter)
+	const oldest_task = node_destructor(new_iter)
 	new_iter.oldest_task = oldest_task
 	table.insert(scope, oldest_task)
 

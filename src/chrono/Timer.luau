@@ -8,7 +8,7 @@ const memory = require("../core_memory/types")
 const ExternalTime = require("./ExternalTime")
 const change = require("../core_graph/change")
 const depend = require("../core_graph/depend")
-const destructor = require("../core_graph/destructor")
+const node_destructor = require("../core_graph/node_destructor")
 const peek = require("../core_state/peek")
 
 type Self = {
@@ -87,9 +87,8 @@ const function Timer(scope: memory.Scope): chrono.Timer
 		external_time = externaltime,
 	}, CLASS_MT)
 
-	const oldest_task = destructor(new_timer)
+	const oldest_task = node_destructor(new_timer)
 	new_timer.oldest_task = oldest_task
-
 	table.insert(scope, oldest_task)
 
 	depend(new_timer, externaltime)

@@ -1,4 +1,4 @@
---!strict
+--!nonstrict
 --!native
 --!optimize 2
 
@@ -11,9 +11,9 @@ const log_error_nonfatal = ExternalLogger.log_error_nonfatal
 
 const cleanup = require("../core_memory/cleanup")
 const derive_scope = require("../core_memory/derive_scope")
-const destructor = require("../core_graph/destructor")
 const generic_use = require("../core_state/generic_use")
 const is_similar = require("./is_similar")
+const node_destructor = require("../core_graph/node_destructor")
 const parse_error = require("../core_logging/parse_error")
 
 type Self<T, S> = {
@@ -76,11 +76,10 @@ const function Computed<T, S>(scope: memory.Scope<S>, processor: state.ComputedP
 		processor = processor,
 	}, CLASS_MT) :: any
 
-	const oldest_task = destructor(new_computed, computed_destructor)
+	const oldest_task = node_destructor(new_computed, computed_destructor)
 
 	new_computed.oldest_task = oldest_task
 	new_computed.use = generic_use(new_computed)
-
 	table.insert(scope, oldest_task)
 
 	return new_computed

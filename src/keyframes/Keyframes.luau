@@ -6,10 +6,10 @@ const keyframes = require("./types")
 const memory = require("../core_memory/types")
 const state = require("../core_state/types")
 
-const destructor = require("../core_graph/destructor")
 const evaluate_keyframes = require("./evaluate_keyframes")
 const generic_use = require("../core_state/generic_use")
 const is_similar = require("../core_state/is_similar")
+const node_destructor = require("../core_graph/node_destructor")
 
 type Self<T> = {
 	alpha: state.UsedAs<number>,
@@ -59,7 +59,7 @@ const function Keyframes<T>(scope: memory.Scope, alpha: state.UsedAs<number>, ke
 
 	new_keyframes.use = generic_use(new_keyframes)
 
-	const oldest_task = destructor(new_keyframes)
+	const oldest_task = node_destructor(new_keyframes)
 	new_keyframes.oldest_task = oldest_task
 	table.insert(scope, oldest_task)
 

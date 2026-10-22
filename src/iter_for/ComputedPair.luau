@@ -12,9 +12,9 @@ const log_error_nonfatal = ExternalLogger.log_error_nonfatal
 
 const cleanup = require("../core_memory/cleanup")
 const derive_scope = require("../core_memory/derive_scope")
-const destructor = require("../core_graph/destructor")
 const generic_use = require("../core_state/generic_use")
 const is_similar = require("../core_state/is_similar")
+const node_destructor = require("../core_graph/node_destructor")
 const parse_error = require("../core_logging/parse_error")
 
 type ComputedPairProcessor<S, IK, IV, OK, OV> = (
@@ -104,11 +104,9 @@ const function ComputedPair<S, IK, IV, OK, OV>(
 		processor = processor,
 	}, CLASS_MT) :: any
 
-	const oldest_task = destructor(new_computedpair, destroy_computedpair)
-
+	const oldest_task = node_destructor(new_computedpair, destroy_computedpair)
 	new_computedpair.oldest_task = oldest_task
 	new_computedpair.use = generic_use(new_computedpair)
-
 	table.insert(scope, oldest_task)
 
 	return new_computedpair
