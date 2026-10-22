@@ -56,7 +56,6 @@ class ModuleExternalProviders:
 @dataclass(frozen=True)
 class Module:
     src_path: pathlib.Path
-    is_core: bool
     id: str
     label: str
     description: str
@@ -79,7 +78,6 @@ class Module:
             label=info.get("label", id),
             description=info.get("description", "no description"),
             category=info.get("category", "unspecified"),
-            is_core=info.get("is_core", False),
             required_modules=info["requires"],
             export_types=[
                 ModuleTypeExport(**export) for export in info["export_types"]

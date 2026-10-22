@@ -1,6 +1,5 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "is_core": true,
     "label": "Core: Memory",
     "category": "core",
     "description": "Provides utilities for managing the lifecycle of garbage-collected resources.",

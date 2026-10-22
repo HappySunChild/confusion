@@ -1,6 +1,5 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "is_core": true,
     "label": "Core: State",
     "category": "core",
     "description": "Provides core reactive primitives and internal state management utilities.",

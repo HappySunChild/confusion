@@ -9,13 +9,6 @@
         "export_members"
     ],
     "properties": {
-        "is_core": {
-            "description": "A boolean describing whether this module is considered 'core'. Defaults to false.",
-            "type": [
-                "boolean",
-                "null"
-            ]
-        },
         "label": {
             "description": "The label to use in auto-packager comments. Defaults to the id.",
             "type": [

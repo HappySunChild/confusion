@@ -1,6 +1,5 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "is_core": true,
     "category": "core",
     "description": "Manages the interface between Confusion's internals and the host runtime.",
     "label": "Core: External",
