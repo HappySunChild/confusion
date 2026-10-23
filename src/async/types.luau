@@ -5,9 +5,6 @@ const memory = require("../core_memory/types")
 const state = require("../core_state/types")
 
 export type Eventual<T> = {
-	kind: "Eventual",
-	timeliness: "lazy",
-
 	is_pending: (Eventual<T>) -> boolean,
 } & state.StateNode<T>
 

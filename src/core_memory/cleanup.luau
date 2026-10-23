@@ -39,27 +39,27 @@ const function cleanup(chore: unknown?): ()
 		(chore :: Instance):Destroy()
 	elseif typeof(chore) == "RBXScriptConnection" then -- Roblox Connections
 		(chore :: RBXScriptConnection):Disconnect()
-	elseif typeof(chore) == "function" then -- callback functions
+	elseif type(chore) == "function" then -- callback functions
 		(chore :: () -> ())()
-	elseif typeof(chore) == "table" then
-		local chor = chore :: { [any]: any }
+	elseif type(chore) == "table" then
+		const c = chore :: { [any]: any }
 
-		if chor[1] ~= nil then -- scope/array of chores
-			for i = #chor, 1, -1 do
-				cleanup(chor[i])
+		if c[1] ~= nil then -- scope/array of chores
+			for i = #c, 1, -1 do
+				cleanup(c[i])
 
-				chor[i] = nil
+				c[i] = nil
 			end
 
-			untrack_scope(chor)
-		elseif typeof(chor.destroy) == "function" then -- :destroy method
-			chor:destroy()
-		elseif typeof(chor.Destroy) == "function" then -- :Destroy method
-			chor:Destroy()
-		elseif typeof(chor.disconnect) == "function" then -- :disconnect method
-			chor:disconnect()
-		elseif typeof(chor.Disconnect) == "function" then -- :Disconnect method
-			chor:Disconnect()
+			untrack_scope(c)
+		elseif type(c.destroy) == "function" then -- :destroy method
+			c.destroy()
+		elseif type(c.Destroy) == "function" then -- :Destroy method
+			c:Destroy()
+		elseif type(c.disconnect) == "function" then -- :disconnect method
+			c:disconnect()
+		elseif type(c.Disconnect) == "function" then -- :Disconnect method
+			c:Disconnect()
 		end
 	end
 

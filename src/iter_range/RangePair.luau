@@ -1,4 +1,4 @@
---!nonstrict
+--!strict
 --!native
 --!optimize 2
 
@@ -62,7 +62,7 @@ const CLASS_MT = table.freeze({
 
 const function destroy_rangepair<T, S>(rangepair: Self<T, S>)
 	cleanup(rangepair.inner_scope)
-	rangepair.inner_scope = nil
+	table.clear(rangepair)
 end
 
 const function RangePair<S, T>(

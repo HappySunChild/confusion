@@ -1,4 +1,4 @@
---!nonstrict
+--!strict
 --!native
 --!optimize 2
 
@@ -27,7 +27,7 @@ type ComputedPairProcessor<S, IK, IV, OK, OV> = (
 type Self<S, IK, IV, OK, OV> = iter_for.ComputedPair<IK, IV, OK, OV> & {
 	roam_keys: boolean,
 	roam_values: boolean,
-	inner_scope: memory.Scope<S>,
+	inner_scope: memory.Scope<S>?,
 	processor: ComputedPairProcessor<S, IK, IV, OK, OV>,
 	use: state.Use,
 }
@@ -73,11 +73,7 @@ const CLASS_MT = table.freeze({
 
 const function destroy_computedpair<S, IK, IV, OK, OV>(computedpair: Self<S, IK, IV, OK, OV>)
 	cleanup(computedpair.inner_scope)
-	computedpair.inner_scope = nil
-
-	computedpair.input_key = nil
-	computedpair.input_value = nil
-	computedpair.cached_value = nil
+	table.clear(computedpair)
 end
 
 const function ComputedPair<S, IK, IV, OK, OV>(

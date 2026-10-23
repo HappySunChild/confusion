@@ -1,4 +1,4 @@
---!nonstrict
+--!strict
 --!native
 --!optimize 2
 
@@ -91,18 +91,18 @@ const CLASS_MT = table.freeze({
 			const goal = self.goal
 			const generator = self.generator
 
-			const new_goal = peek(goal) :: T
+			const new_goal = peek<<T>>(goal)
 
 			depend(self, goal)
 
 			-- protect against NaN goals
 			if new_goal ~= new_goal then
-				log_warn(motion.animated_invalid_goal, { goal = new_goal })
+				log_warn(motion.motion_nan_goal, { goal = new_goal })
 
 				return false
 			end
 
-			const new_generator = peek(generator) :: motion.CurveGenerator<T>
+			const new_generator = peek<<motion.CurveGenerator<T>>>(generator)
 
 			depend(self, generator)
 			depend(self, timer)
@@ -111,7 +111,7 @@ const CLASS_MT = table.freeze({
 			if new_goal ~= self.active_goal or new_generator ~= self.active_generator or self.regenerate then
 				self.active_goal = new_goal
 				self.active_generator = new_generator
-				self.active_curve = generator(new_goal, unpack(self.dynamics))
+				self.active_curve = new_generator(new_goal, unpack(self.dynamics))
 
 				self.regenerate = false
 
@@ -119,7 +119,7 @@ const CLASS_MT = table.freeze({
 				timer:unpause()
 			end
 
-			local elapsed = peek(timer)
+			local elapsed = peek<<number>>(timer)
 
 			-- fix Motions following eachother
 			if elapsed == 0 then -- usually means we got a new goal/curve generator

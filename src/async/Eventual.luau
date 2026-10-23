@@ -1,4 +1,4 @@
---!nonstrict
+--!strict
 --!native
 --!optimize 2
 
@@ -39,7 +39,7 @@ type Self<T, S> = async.Eventual<T> & {
 	session_used: { [graph.GraphNode]: true },
 }
 
-const function handle_eventual_computation<T, S>(eventual: Self<T, S>)
+const function run_eventual_computation(eventual: Self<any, any>)
 	if eventual.scope == nil then
 		return
 	end
@@ -65,7 +65,7 @@ end
 const function generate_eventual_callbacks<T, S>(eventual: Self<T, S>): (state.Use, (T) -> T)
 	const session_used = eventual.session_used
 
-	const function use<U>(target: state.UsedAs<U>): U
+	const function use(target: state.UsedAs<any>) -- using any to silence the nonsensical type error
 		if cast_to_state(target) ~= nil then
 			depend(eventual, target)
 
@@ -131,20 +131,17 @@ const CLASS_MT = table.freeze({
 				return not is_similar(self.prev_value, self.cached_value)
 			end
 
-			-- cancel any currently active computations
 			if self.session_thread ~= nil then
 				cancel_task(self.session_thread)
 				self.session_thread = nil
 			end
 
-			-- clear our dependencies, because we're starting a new computation that may not rely on our old dependencies
 			table.clear(self.session_used)
 
 			-- self.cached_value = nil
 			self.prev_value = nil
 
-			-- start computation
-			schedule_task_immediate(handle_eventual_computation, self)
+			schedule_task_immediate(run_eventual_computation, self)
 
 			return not is_similar(self.prev_value, self.cached_value)
 		end,

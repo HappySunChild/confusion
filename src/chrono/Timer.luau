@@ -1,4 +1,4 @@
---!nonstrict
+--!strict
 --!native
 --!optimize 2
 
@@ -27,9 +27,9 @@ const CLASS_MT = table.freeze({
 			end
 
 			const external_time = self.external_time
-
 			external_time:enable()
-			self.reference_point = peek(external_time) - self.cached_value
+
+			self.reference_point = peek<<number>>(external_time) - self.cached_value
 			self.is_paused = false
 
 			change(self)
@@ -45,7 +45,7 @@ const CLASS_MT = table.freeze({
 			change(self)
 		end,
 		zero = function(self: Self)
-			self.reference_point = peek(self.external_time) :: number
+			self.reference_point = peek<<number>>(self.external_time)
 			self.cached_value = 0
 
 			change(self)
@@ -60,7 +60,7 @@ const CLASS_MT = table.freeze({
 
 			depend(self, external_time)
 
-			const now = peek(external_time) :: number
+			const now = peek<<number>>(external_time) :: number
 
 			const old_value = self.cached_value
 			const new_value = now - self.reference_point
@@ -74,7 +74,7 @@ const CLASS_MT = table.freeze({
 
 const function Timer(scope: memory.Scope): chrono.Timer
 	const externaltime = ExternalTime(scope)
-	const new_timer = setmetatable({
+	const new_timer: chrono.Timer = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
@@ -83,9 +83,9 @@ const function Timer(scope: memory.Scope): chrono.Timer
 		cached_value = 0,
 
 		is_paused = false,
-		reference_point = peek(externaltime),
+		reference_point = peek<<number>>(externaltime),
 		external_time = externaltime,
-	}, CLASS_MT)
+	}, CLASS_MT) :: any
 
 	const oldest_task = node_destructor(new_timer)
 	new_timer.oldest_task = oldest_task

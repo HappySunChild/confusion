@@ -1,4 +1,4 @@
---!nonstrict
+--!strict
 --!native
 --!optimize 2
 
@@ -13,7 +13,7 @@ const node_destructor = require("../core_graph/node_destructor")
 
 type Self<T> = {
 	alpha: state.UsedAs<number>,
-	keyframes: { T },
+	keyframes: { [number?]: T },
 	use: state.Use,
 } & keyframes.Keyframes<T>
 
@@ -23,10 +23,6 @@ const CLASS_MT = table.freeze({
 		kind = "Keyframes",
 		timeliness = "lazy",
 
-		-- WARNING: DO NOT APPROACH
-		-- TYPE CHECKING CRYPTID AHEAD
-		-- EXERCIZE CAUTION IN !strict MODE
-
 		evaluate = function(self: Self<unknown>): boolean
 			if self.scope == nil then
 				return false
@@ -35,7 +31,7 @@ const CLASS_MT = table.freeze({
 			const use = self.use
 
 			const old_value = self.cached_value
-			const new_value = evaluate_keyframes(use(self.alpha), self.keyframes, use)
+			const new_value = evaluate_keyframes(use<<number>>(self.alpha), self.keyframes, use)
 
 			self.cached_value = new_value
 

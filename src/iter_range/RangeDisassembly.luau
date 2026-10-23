@@ -1,4 +1,4 @@
---!nonstrict
+--!strict
 --!native
 --!optimize 2
 
@@ -73,7 +73,7 @@ const CLASS_MT = table.freeze({
 				-- reuse any existing objects that can be repurposed
 				const old_index, reuse_rangepair = next(old_rangepairs)
 
-				if reuse_rangepair ~= nil then
+				if old_index ~= nil and reuse_rangepair ~= nil then
 					old_rangepairs[old_index] = nil
 					new_rangepairs[new_index] = reuse_rangepair
 
@@ -104,8 +104,8 @@ const CLASS_MT = table.freeze({
 })
 
 const function destroy_rangedisassembly<S, T>(rangediassembly: Self<S, T>)
-	rangediassembly.pairs_scope = nil
-	rangediassembly.active_pairs = nil
+	cleanup(rangediassembly.pairs_scope)
+	table.clear(rangediassembly)
 end
 
 const function RangeDisassembly<S, T>(

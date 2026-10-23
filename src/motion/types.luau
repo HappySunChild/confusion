@@ -7,8 +7,6 @@ export type AnimationCurve<T> = (elapsed: number) -> (boolean, T, ...any)
 export type CurveGenerator<T> = (goal: T, start: T, ...any) -> AnimationCurve<T>
 
 export type Motion<T> = {
-	kind: "Motion",
-
 	set_dynamic: (self: Motion<T>, index: number, value: any) -> (),
 	set_dynamics: (self: Motion<T>, dynamics: { any }, at_index: number?) -> (),
 	get_dynamic: (self: Motion<T>, index: number) -> any?,
