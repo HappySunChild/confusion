@@ -6,8 +6,8 @@ const memory = require("../core_memory/types")
 const state = require("./types")
 
 const change = require("../core_graph/change")
-const destructor = require("../core_graph/destructor")
 const is_similar = require("./is_similar")
+const node_destructor = require("../core_graph/node_destructor")
 
 type Self<T> = state.Value<T>
 
@@ -42,9 +42,8 @@ const function Value<T>(scope: memory.Scope, initial_value: T): state.Value<T>
 		cached_value = initial_value,
 	}, CLASS_MT) :: any
 
-	const oldest_task = destructor(new_value)
+	const oldest_task = node_destructor(new_value)
 	new_value.oldest_task = oldest_task
-
 	table.insert(scope, oldest_task)
 
 	return new_value

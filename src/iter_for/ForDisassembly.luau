@@ -1,4 +1,4 @@
---!nonstrict
+--!strict
 --!native
 --!optimize 2
 
@@ -12,9 +12,9 @@ const log_error_nonfatal = ExternalLogger.log_error_nonfatal
 
 const cleanup = require("../core_memory/cleanup")
 const depend = require("../core_graph/depend")
-const destructor = require("../core_graph/destructor")
 const inner_scope = require("../core_memory/inner_scope")
 const is_similar = require("../core_state/is_similar")
+const node_destructor = require("../core_graph/node_destructor")
 const peek = require("../core_state/peek")
 
 type Self<S, IK, IV, OK, OV> = iter.Disassembly<OK, OV> & {
@@ -56,7 +56,7 @@ const CLASS_MT = table.freeze({
 			local has_holes = false
 
 			for _, pair in self.active_pairs do
-				const pair_output = use(pair)
+				const pair_output = use<<{ key: OK, value: OV }>>(pair)
 				const output_key, output_value = pair_output.key, pair_output.value
 
 				if output_key == nil or output_value == nil then
@@ -100,7 +100,7 @@ const CLASS_MT = table.freeze({
 		evaluate = function<S, IK, IV, OK, OV>(self: Self<S, IK, IV, OK, OV>): boolean
 			depend(self, self.input_table)
 
-			const pending_pairs = table.clone(peek(self.input_table)) :: { [IK]: IV }
+			const pending_pairs = table.clone(peek<<{ [IK]: IV }>>(self.input_table))
 
 			const old_computedpairs = self.active_pairs
 			const new_computedpairs = {}
@@ -113,7 +113,7 @@ const CLASS_MT = table.freeze({
 				const old_input_key, old_input_value = computedpair.input_key, computedpair.input_value
 				const roam_keys, roam_values = computedpair.roam_keys, computedpair.roam_values
 
-				local new_input_key: IK, new_input_value: IV
+				local new_input_key: IK?, new_input_value: IV?
 
 				if not roam_keys and pending_pairs[old_input_key] ~= nil then
 					new_input_key = old_input_key
@@ -176,8 +176,8 @@ const CLASS_MT = table.freeze({
 })
 
 const function destroy_fordiassembly<S, IK, IV, OK, OV>(fordisassembly: Self<S, IK, IV, OK, OV>)
-	fordisassembly.pair_scope = nil
-	fordisassembly.active_pairs = nil
+	cleanup(fordisassembly.pair_scope)
+	table.clear(fordisassembly)
 end
 
 const function ForDisassembly<S, IK, IV, OK, OV>(
@@ -202,10 +202,8 @@ const function ForDisassembly<S, IK, IV, OK, OV>(
 		pair_scope = inner_scope(scope),
 	}, CLASS_MT) :: any
 
-	const oldest_task = destructor(new_disassembly, destroy_fordiassembly)
-
+	const oldest_task = node_destructor(new_disassembly, destroy_fordiassembly)
 	new_disassembly.oldest_task = oldest_task
-
 	table.insert(scope, oldest_task)
 
 	return new_disassembly

@@ -3,10 +3,7 @@
 const memory = require("../core_memory/types")
 const state = require("../core_state/types")
 
-export type Keyframes<T> = state.StateNode<T> & {
-	type: "State",
-	kind: "Keyframes",
-}
+export type Keyframes<T> = state.StateNode<T>
 export type KeyframesConstructor = <T>(
 	scope: memory.Scope,
 	alpha: state.UsedAs<number>,

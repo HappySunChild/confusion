@@ -5,12 +5,12 @@ const memory = require("../core_memory/types")
 const state = require("../core_state/types")
 
 export type ComputedPair<IK, IV, OK, OV> = {
-	input_key: IK,
-	input_value: IV,
+	input_key: IK?,
+	input_value: IV?,
 
 	roam_keys: boolean,
 	roam_values: boolean,
-} & state.StateNode<{ key: OK, value: OV }>
+} & state.StateNode<{ key: OK?, value: OV? }>
 
 export type ForPairsProcessor<S, IK, IV, OK, OV> = (
 	use: state.Use,

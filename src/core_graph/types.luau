@@ -10,7 +10,7 @@ export type Timeliness = "lazy" | "eager"
 export type GraphNode = {
 	scope: memory.Scope?,
 
-	type: "graph",
+	type: string,
 	kind: string?,
 
 	created_at: number,

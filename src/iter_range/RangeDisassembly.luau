@@ -1,4 +1,4 @@
---!nonstrict
+--!strict
 --!native
 --!optimize 2
 
@@ -10,9 +10,9 @@ const state = require("../core_state/types")
 const RangePair = require("./RangePair")
 const cleanup = require("../core_memory/cleanup")
 const depend = require("../core_graph/depend")
-const destructor = require("../core_graph/destructor")
 const inner_scope = require("../core_memory/inner_scope")
 const is_similar = require("../core_state/is_similar")
+const node_destructor = require("../core_graph/node_destructor")
 const peek = require("../core_state/peek")
 
 type Self<S, T> = {
@@ -73,7 +73,7 @@ const CLASS_MT = table.freeze({
 				-- reuse any existing objects that can be repurposed
 				const old_index, reuse_rangepair = next(old_rangepairs)
 
-				if reuse_rangepair ~= nil then
+				if old_index ~= nil and reuse_rangepair ~= nil then
 					old_rangepairs[old_index] = nil
 					new_rangepairs[new_index] = reuse_rangepair
 
@@ -104,8 +104,8 @@ const CLASS_MT = table.freeze({
 })
 
 const function destroy_rangedisassembly<S, T>(rangediassembly: Self<S, T>)
-	rangediassembly.pairs_scope = nil
-	rangediassembly.active_pairs = nil
+	cleanup(rangediassembly.pairs_scope)
+	table.clear(rangediassembly)
 end
 
 const function RangeDisassembly<S, T>(
@@ -134,10 +134,8 @@ const function RangeDisassembly<S, T>(
 		pairs_scope = inner_scope(scope),
 	}, CLASS_MT) :: any
 
-	const oldest_task = destructor(new_disassembly, destroy_rangedisassembly)
-
+	const oldest_task = node_destructor(new_disassembly, destroy_rangedisassembly)
 	new_disassembly.oldest_task = oldest_task
-
 	table.insert(scope, oldest_task)
 
 	return new_disassembly

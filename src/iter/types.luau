@@ -7,9 +7,6 @@ export type Disassembly<OK, OV> = {
 	populate: (Disassembly<OK, OV>, use: state.Use, output: { [OK]: OV }) -> (),
 } & graph.GraphNode
 
-export type Iter<K, V> = {
-	kind: "Iter",
-	timeliness: "lazy",
-} & state.StateNode<{ [K]: V }>
+export type Iter<K, V> = state.StateNode<{ [K]: V }>
 
 return nil

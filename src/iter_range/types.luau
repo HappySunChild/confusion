@@ -6,20 +6,9 @@ const iter = require("../iter/types")
 const memory = require("../core_memory/types")
 const state = require("../core_state/types")
 
-export type Range = {
-	kind: "Range",
-	timeliness: "lazy",
-} & state.StateNode<{ number }>
-export type RangeConstructor = (
-	scope: memory.Scope,
-	start: state.UsedAs<number>,
-	finish: state.UsedAs<number>,
-	step: state.UsedAs<number>?
-) -> Range | { number }
-
 export type RangePair<T> = {
 	input_index: number,
-} & state.StateNode<T>
+} & state.StateNode<T?>
 
 export type RangeDisassemblyProcessor<S, T> = (use: state.Use, scope: memory.Scope<S>, index: number) -> T
 export type ForRangeConstructor = <S, T>(
