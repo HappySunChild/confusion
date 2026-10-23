@@ -3,12 +3,19 @@
 const memory = require("../core_memory/types")
 const state = require("../core_state/types")
 
+--- A function that generates a `Curve` based off the initial parameters given to it.
+export type Mover = (...{ number }) -> Curve
+--- A function that calculates the displacement, velocity, acceleration, etc. of a curve at a specific time, and whether the curve has 'settled'.
+export type Curve = (time_elapsed: number) -> (boolean, { { number } })
+
+export type NewMotion<T> = {
+	kind: "Motion",
+} & state.StateNode<T>
+
 export type AnimationCurve<T> = (elapsed: number) -> (boolean, T, ...any)
 export type CurveGenerator<T> = (goal: T, start: T, ...any) -> AnimationCurve<T>
 
 export type Motion<T> = {
-	kind: "Motion",
-
 	set_dynamic: (self: Motion<T>, index: number, value: any) -> (),
 	set_dynamics: (self: Motion<T>, dynamics: { any }, at_index: number?) -> (),
 	get_dynamic: (self: Motion<T>, index: number) -> any?,
