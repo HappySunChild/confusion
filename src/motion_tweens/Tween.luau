@@ -34,7 +34,7 @@ const function Tween<T>(
 	scope: memory.Scope,
 	goal: state.UsedAs<T>,
 	info: state.UsedAs<motion_tweens.TweenInfo>
-): motion.Motion<T>
+): motion.OldMotion<T>
 	return Motion(scope, goal, tween_mover(info))
 end
 

@@ -105,7 +105,7 @@ const function Spring<T>(
 	goal: state.UsedAs<T>,
 	speed: state.UsedAs<number>?,
 	damping: state.UsedAs<number>?
-): motion.Motion<T>
+): motion.OldMotion<T>
 	return Motion(scope, goal, spring_mover(speed or 10, damping or 1))
 end
 
