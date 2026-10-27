@@ -17,6 +17,11 @@
             "export_name": "Spring",
             "source": "Spring.luau",
             "type": "motion_springs.SpringConstructor"
+        },
+        {
+            "export_name": "spring_mover",
+            "source": "spring_mover.luau",
+            "type": "(number, number) -> ({ number }) -> motion.Mover"
         }
     ],
     "external_consumers": [
