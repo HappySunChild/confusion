@@ -1,6 +1,9 @@
 import argparse
 import json
+import logging
 from pathlib import Path
+
+logging.basicConfig()
 
 from packageutils import (
     ModuleSelection,

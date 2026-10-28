@@ -1,11 +1,17 @@
 import enum
 import json
+import logging
 import os
 import pathlib
 import shutil
 from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import Any
+
+MODULE_JSON_FILE_NAME = "module.json"
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 class AssociatedRuntime(enum.Enum):
@@ -144,7 +150,7 @@ def discover_modules(src_path: pathlib.Path) -> dict[str, Module]:
         if not package_dir.is_dir():
             continue
 
-        mod_json_path = package_dir / "mod.json"
+        mod_json_path = package_dir / MODULE_JSON_FILE_NAME
         if not mod_json_path.is_file():
             continue
 
@@ -327,23 +333,41 @@ def build_package(
     validate_module_selection(selection)
 
     dst_path /= "confusion"
+
+    if dst_path.exists() and dst_path.is_dir():
+        logger.warning("directory '%s' already exists, removing...", dst_path)
+        shutil.rmtree(dst_path)
+
+    logger.debug("creating directory '%s'", dst_path)
     dst_path.mkdir(parents=True, exist_ok=True)
 
     with open(dst_path / "init.luau", "w") as f:
+        logger.debug("generating package init.luau source...")
         f.write(
             _generate_package_init_source(selection, package_name, author, repository)
         )
 
+    logger.debug("copying over modules...")
     for mod in selection.iter_modules():
         module_dst_path = dst_path / mod.id
+
+        logger.debug(
+            "copying module '%s' ('%s' -> '%s')",
+            mod.id,
+            mod.src_path,
+            module_dst_path,
+        )
         shutil.copytree(mod.src_path, module_dst_path, dirs_exist_ok=True)
-        os.remove(module_dst_path / "mod.json")
+        os.remove(module_dst_path / MODULE_JSON_FILE_NAME)
 
-    luau_module_files = [file for file in dst_path.rglob("*.luau") if file.is_file()]
+    logger.debug("adding notices to mirrored package modules...")
+    for file_path in dst_path.rglob("*.luau"):
+        if not file_path.is_file():
+            continue
 
-    for file_path in luau_module_files:
         temp_file_path = file_path.parent / f"{file_path.name}_temp"
 
+        logger.debug("adding notice to '%s'", file_path)
         with (
             open(temp_file_path, "w", encoding="utf8") as temp_file,
             open(file_path, "r", encoding="utf8") as original_file,
