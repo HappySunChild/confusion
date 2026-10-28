@@ -6,7 +6,6 @@ from pathlib import Path
 logging.basicConfig()
 
 from packageutils import (
-    ModuleSelection,
     build_package,
     discover_modules,
 )
@@ -21,7 +20,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 package_path = Path(__file__).parent / f"packages/{args.package_name}.json"
-output_dir = Path.cwd() / args.output_dir
+output_dir = Path(args.output_dir).resolve()
 
 with open(package_path, "r", encoding="utf8") as f:
     data = json.load(f)
@@ -34,6 +33,4 @@ package_modules: list[str] = data["modules"]
 
 modules = discover_modules(Path(args.confusion_src))
 
-selection = ModuleSelection(modules[mod_id] for mod_id in package_modules)
-
-build_package(selection, output_dir, package_name, package_author, package_repository)
+build_package(modules, output_dir, package_name, package_author, package_repository)

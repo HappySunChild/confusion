@@ -101,32 +101,13 @@ class Module:
         return f'require("@self/{self.id}/{source_path.removesuffix(".luau")}")'
 
 
-class ModuleSelection:
-    selected_ids: set[str]
-    module_reference: dict[str, Module]
-
-    def __init__(self, modules: Iterable[Module]) -> None:
-        self.module_reference = {mod.id: mod for mod in modules}
-        self.selected_ids = set(self.module_reference.keys())
-
-    def add_module(self, module: Module):
-        self.selected_ids.add(module.id)
-        self.module_reference[module.id] = module
-
-    def iter_modules(self):
-        yield from self.module_reference.values()
-
-    def iter_ids(self):
-        yield from self.selected_ids
-
-
 @dataclass(frozen=True)
 class Package:
     name: str
     description: str
     author: str
     repository: str
-    modules: ModuleSelection
+    modules: dict[str, Module]
 
     @classmethod
     def from_dict(
@@ -137,9 +118,7 @@ class Package:
             description=info["description"],
             author=info["author"],
             repository=info["repository"],
-            modules=ModuleSelection(
-                module_mapping[mod_id] for mod_id in info["modules"]
-            ),
+            modules={mod_id: module_mapping[mod_id] for mod_id in info["modules"]},
         )
 
 
@@ -162,12 +141,12 @@ def discover_modules(src_path: pathlib.Path) -> dict[str, Module]:
     return collected_modules
 
 
-def validate_module_selection(selection: ModuleSelection) -> None:
+def validate_module_selection(selection: dict[str, Module]) -> None:
     missing_modules: set[str] = set()
 
-    for mod in selection.iter_modules():
+    for mod in selection.values():
         for required_mod in mod.required_modules:
-            if required_mod not in selection.selected_ids:
+            if required_mod not in selection:
                 missing_modules.add(required_mod)
 
         module_src_path = mod.src_path
@@ -185,25 +164,25 @@ def _join_sections(*sections: list[str]) -> str:
     )
 
 
-def _determine_provider_module(selection: ModuleSelection) -> Module | None:
+def _determine_provider_module(selection: dict[str, Module]) -> Module | None:
     # TODO: something more sophisticated
-    for mod in selection.iter_modules():
+    for mod in selection.values():
         if mod.external_providers is not None:
             return mod
 
 
 def _generate_package_init_source(
-    selection: ModuleSelection,
+    selection: dict[str, Module],
     name: str,
     author: str,
     repository: str,
 ) -> str:
     module_header_subsection: list[str] = [
-        f"total module count: {len(selection.selected_ids)}",
+        f"total module count: {len(selection)}",
         "included modules:",
         *(
             f"\t{mod.label:20} {f'({mod.id})':20} - {mod.description}"
-            for mod in selection.iter_modules()
+            for mod in selection.values()
         ),
     ]
 
@@ -213,7 +192,7 @@ def _generate_package_init_source(
     provider_mod = _determine_provider_module(selection)
 
     if provider_mod and provider_mod.external_providers:
-        core_external_mod = selection.module_reference["core_external"]
+        core_external_mod = selection["core_external"]
 
         providers = provider_mod.external_providers
 
@@ -275,7 +254,7 @@ def _generate_package_init_source(
 
         target.extend((f"-- {label}", *ls, ""))
 
-    for mod in selection.iter_modules():
+    for mod in selection.values():
         types = mod.export_types
         members = mod.export_members
 
@@ -324,7 +303,7 @@ def _generate_package_init_source(
 
 
 def build_package(
-    selection: ModuleSelection,
+    selection: dict[str, Module],
     dst_path: pathlib.Path,
     package_name: str = "confusion",
     author: str = "HappySunChild (Eli)",
@@ -348,7 +327,7 @@ def build_package(
         )
 
     logger.debug("copying over modules...")
-    for mod in selection.iter_modules():
+    for mod in selection.values():
         module_dst_path = dst_path / mod.id
 
         logger.debug(
