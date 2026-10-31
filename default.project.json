@@ -4,6 +4,6 @@
 		"$path": "rojo/confusion"
 	},
 	"globIgnorePaths": [
-		"**/mod.json"
+		"**/module.json"
 	]
 }
