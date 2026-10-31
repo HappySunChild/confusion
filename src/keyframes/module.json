@@ -3,7 +3,7 @@
     "label": "Keyframes",
     "category": "sugar",
     "description": "Provides a reactive state primitive for interpolating values across a sequence of keyframes.",
-    "requires": [
+    "dependencies": [
         "core_memory",
         "core_state",
         "lerp"

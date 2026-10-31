@@ -3,7 +3,7 @@
     "label": "Iter: For",
     "category": "tables",
     "description": "Provides convenient constructors for reactive table iteration, handling the underlying iteration and state management automatically.",
-    "requires": [
+    "dependencies": [
         "core_external",
         "core_graph",
         "core_logging",

@@ -3,7 +3,7 @@
     "label": "Core: Memory",
     "category": "core",
     "description": "Provides utilities for managing the lifecycle of garbage-collected resources.",
-    "requires": [
+    "dependencies": [
         "core_external"
     ],
     "export_types": [

@@ -4,7 +4,7 @@
     "category": "instances",
     "description": "Provides utilities for hydrating and reusing UI templates designed in Roblox Studio.",
     "runtime": "rbx",
-    "requires": [
+    "dependencies": [
         "core_external",
         "core_logging",
         "core_memory",

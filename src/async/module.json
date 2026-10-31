@@ -3,7 +3,7 @@
     "label": "Async",
     "category": "async",
     "description": "Provides utilities for working with asynchronous operations and reactive state.",
-    "requires": [
+    "dependencies": [
         "core_graph",
         "core_memory",
         "core_state",

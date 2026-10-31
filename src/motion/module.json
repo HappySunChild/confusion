@@ -3,7 +3,7 @@
     "label": "Motion",
     "category": "animation",
     "description": "Provides a reactive motion primitive for animating values over time.",
-    "requires": [
+    "dependencies": [
         "core_external",
         "core_graph",
         "core_logging",

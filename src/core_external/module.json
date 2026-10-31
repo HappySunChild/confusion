@@ -3,7 +3,7 @@
     "category": "core",
     "description": "Manages the interface between Confusion's internals and the host runtime.",
     "label": "Core: External",
-    "requires": [
+    "dependencies": [
         "core_logging",
         "core_memory"
     ],

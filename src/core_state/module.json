@@ -3,7 +3,7 @@
     "label": "Core: State",
     "category": "core",
     "description": "Provides core reactive primitives and internal state management utilities.",
-    "requires": [
+    "dependencies": [
         "core_external",
         "core_graph",
         "core_logging",

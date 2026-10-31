@@ -3,7 +3,7 @@
     "label": "Core: Logging",
     "category": "core",
     "description": "Provides internal logging utilities for debugging.",
-    "requires": [
+    "dependencies": [
         "core_external"
     ],
     "export_types": [],

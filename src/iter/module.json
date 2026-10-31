@@ -3,7 +3,7 @@
     "label": "Iter",
     "category": "tables",
     "description": "Provides the internal reactive iteration primitive used to implement higher-level iteration utilities.",
-    "requires": [
+    "dependencies": [
         "core_memory",
         "core_state",
         "core_graph"

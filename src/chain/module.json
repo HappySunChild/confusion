@@ -3,7 +3,7 @@
     "label": "Chain",
     "category": "sugar",
     "description": "Provides utilities for chaining state objects together to create reactive sequences of dependencies.",
-    "requires": [
+    "dependencies": [
         "core_memory",
         "core_state",
         "iter_for",

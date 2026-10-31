@@ -3,7 +3,7 @@
     "label": "Context",
     "category": "sugar",
     "description": "Provides a contextual state utility for sharing data across nested scopes.",
-    "requires": [
+    "dependencies": [
         "core_external",
         "core_logging"
     ],

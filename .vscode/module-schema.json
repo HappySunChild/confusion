@@ -4,7 +4,7 @@
     "type": "object",
     "required": [
         "description",
-        "requires",
+        "dependencies",
         "export_types",
         "export_members"
     ],
@@ -35,7 +35,7 @@
                 "luau"
             ]
         },
-        "requires": {
+        "dependencies": {
             "description": "The ids of other modules that this module is dependant on.",
             "type": [
                 "array"

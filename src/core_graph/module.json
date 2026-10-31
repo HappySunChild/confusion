@@ -3,7 +3,7 @@
     "label": "Core: Graph",
     "category": "core",
     "description": "Provides internal utilities for working with Confusion's reactive dependency graph.",
-    "requires": [
+    "dependencies": [
         "core_memory",
         "core_logging",
         "core_external"

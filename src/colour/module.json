@@ -3,7 +3,7 @@
     "label": "Colour",
     "category": "internal",
     "description": "Provides utilities for converting between colour spaces and representations.",
-    "requires": [],
+    "dependencies": [],
     "export_types": [],
     "export_members": []
 }
