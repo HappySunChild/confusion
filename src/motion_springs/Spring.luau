@@ -6,7 +6,7 @@ const memory = require("../core_memory/types")
 const motion = require("../motion/types")
 const state = require("../core_state/types")
 
-const Motion = require("../motion/Motion")
+const OldMotion = require("../motion/OldMotion")
 const pack_type = require("./pack_type")
 const peek = require("../core_state/peek")
 const spring_coefficients = require("./spring_coefficients")
@@ -106,7 +106,7 @@ const function Spring<T>(
 	speed: state.UsedAs<number>?,
 	damping: state.UsedAs<number>?
 ): motion.OldMotion<T>
-	return Motion(scope, goal, spring_mover(speed or 10, damping or 1))
+	return OldMotion(scope, goal, spring_mover(speed or 10, damping or 1))
 end
 
 return Spring
