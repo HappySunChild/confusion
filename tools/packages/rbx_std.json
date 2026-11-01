@@ -26,6 +26,7 @@
         "motion",
         "motion_springs",
         "motion_tweens",
+        "motion_friction",
         "safe"
     ]
 }
