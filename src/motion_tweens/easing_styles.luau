@@ -7,7 +7,7 @@ const tweens = require("./types")
 const HALF_PI = math.pi / 2
 
 const create = {
-	Exponent = function(exponent: number): tweens.EasingStyle
+	exponent = function(exponent: number): tweens.EasingStyle
 		const b = 2 ^ (exponent - 1)
 
 		return {
@@ -22,7 +22,7 @@ const create = {
 			end,
 		}
 	end,
-	Overshoot = function(amplitude: number): tweens.EasingStyle
+	overshoot = function(amplitude: number): tweens.EasingStyle
 		const V0 = amplitude
 		const V1 = amplitude + 1
 		const V2 = amplitude * 1.525
@@ -41,7 +41,7 @@ const create = {
 			end,
 		}
 	end,
-	Elastic = function(
+	elastic = function(
 		period: number
 	): tweens.EasingStyle -- https://devforum.roblox.com/t/does-anyone-know-the-formulas-for-elastic-easing/2819110/2
 		const V0 = math.tau / period
@@ -87,7 +87,10 @@ const create = {
 }
 
 const easing_styles = {
-	Constant = {
+	linear = function(x: number)
+		return x
+	end,
+	constant = {
 		Out = function(): number
 			return 1
 		end,
@@ -98,18 +101,7 @@ const easing_styles = {
 			return if x < 0.5 then 0 else 1
 		end,
 	},
-	Linear = {
-		Out = function(x: number): number
-			return x
-		end,
-		In = function(x: number): number
-			return x
-		end,
-		InOut = function(x: number): number
-			return x
-		end,
-	},
-	Exponential = {
+	exponential = {
 		Out = function(x: number): number
 			return if x == 1 then 1 else 1 - 2 ^ (-10 * x)
 		end,
@@ -123,7 +115,7 @@ const easing_styles = {
 				else if x < 0.5 then 2 ^ (20 * x - 10) / 2 else 2 - 2 ^ (-20 * x + 10) / 2
 		end,
 	},
-	Circular = {
+	circular = {
 		Out = function(x: number): number
 			return math.sqrt(1 - (x - 1) ^ 2)
 		end,
@@ -134,7 +126,7 @@ const easing_styles = {
 			return if x < 0.5 then 1 - math.sqrt(1 - (2 * x) ^ 2) / 2 else (math.sqrt(1 - (-2 * x + 2) ^ 2) + 1) / 2
 		end,
 	},
-	Sine = {
+	sine = {
 		Out = function(x: number): number
 			return math.sin(x * HALF_PI)
 		end,
@@ -146,13 +138,13 @@ const easing_styles = {
 		end,
 	},
 
-	Back = create.Overshoot(1),
-	Elastic = create.Elastic(0.3),
+	back = create.overshoot(1),
+	elastic = create.elastic(0.3),
 
-	Quad = create.Exponent(2),
-	Cubic = create.Exponent(3),
-	Quart = create.Exponent(4),
-	Quint = create.Exponent(5),
+	quad = create.exponent(2),
+	cubic = create.exponent(3),
+	quart = create.exponent(4),
+	quint = create.exponent(5),
 
 	create = create,
 }

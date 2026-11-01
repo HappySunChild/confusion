@@ -4,17 +4,18 @@
     "type": "object",
     "required": [
         "description",
-        "requires",
+        "dependencies",
         "export_types",
         "export_members"
     ],
     "properties": {
-        "label": {
+        "author": {
+            "description": "The author of this module.",
+            "type": "string"
+        },
+        "name": {
             "description": "The label to use in auto-packager comments. Defaults to the id.",
-            "type": [
-                "string",
-                "null"
-            ]
+            "type": "string"
         },
         "category": {
             "description": "The type of module this module is (i.e. 'core', 'sugar', etc.).",
@@ -31,11 +32,11 @@
                 "null"
             ],
             "enum": [
-                "rbx",
+                "roblox",
                 "luau"
             ]
         },
-        "requires": {
+        "dependencies": {
             "description": "The ids of other modules that this module is dependant on.",
             "type": [
                 "array"

@@ -1,9 +1,10 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "label": "Motion",
+    "name": "Motion",
     "category": "animation",
     "description": "Provides a reactive motion primitive for animating values over time.",
-    "requires": [
+    "author": "HappySunChild (Eli)",
+    "dependencies": [
         "core_external",
         "core_graph",
         "core_logging",

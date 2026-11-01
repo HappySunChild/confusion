@@ -5,18 +5,19 @@ import os
 import pathlib
 import shutil
 from collections.abc import Iterable
-from dataclasses import dataclass
-from typing import Any
+
+from pydantic import BaseModel, Field
 
 MODULE_JSON_FILE_NAME = "module.json"
+TYPES_LUAU_FILE_NAME = "types.luau"
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-class AssociatedRuntime(enum.Enum):
+class Runtime(enum.Enum):
     Luau = "luau"
-    Roblox = "rbx"
+    Roblox = "roblox"
 
 
 class ModulesValidationException(Exception):
@@ -31,112 +32,74 @@ class MissingRequiredModulesException(ModulesValidationException):
     pass
 
 
-@dataclass(frozen=True)
-class ModuleTypeExport:
+class ModuleTypeExport(BaseModel):
     export_name: str
     name: str
 
 
-@dataclass(frozen=True)
-class ModuleMemberExport:
+class ModuleMemberExport(BaseModel):
     export_name: str
     source: str
     type: str
 
 
-@dataclass(frozen=True)
-class ModuleExternalProviders:
-    logger_source: str | None
-    scheduler_source: str | None
-    debugger_source: str | None
-
-    @classmethod
-    def from_dict(cls, info: dict[str, str]) -> "ModuleExternalProviders":
-        return ModuleExternalProviders(
-            logger_source=info.get("logger_source"),
-            scheduler_source=info.get("scheduler_source"),
-            debugger_source=info.get("debugger_source"),
-        )
+class ModuleExternalProviders(BaseModel):
+    logger_source: str | None = None
+    scheduler_source: str | None = None
+    debugger_source: str | None = None
 
 
-@dataclass(frozen=True)
-class Module:
-    src_path: pathlib.Path
+class Module(BaseModel):
+    module_source_dir: pathlib.Path
     id: str
-    label: str
-    description: str
-    category: str
-    required_modules: list[str]
+    name: str = Field(default_factory=lambda d: d["id"])
+    description: str = "N/A"
+    category: str = "unspecified"
+
+    dependencies: list[str]
+
+    supplies_types: bool
+
     export_types: list[ModuleTypeExport]
     export_members: list[ModuleMemberExport]
-    runtime: AssociatedRuntime
-    external_providers: ModuleExternalProviders | None
 
-    @classmethod
-    def from_dict(cls, src_path: pathlib.Path, info: dict[str, Any]) -> "Module":
-        id = src_path.name
+    runtime: Runtime = Runtime.Luau
+    external_providers: ModuleExternalProviders | None = None
 
-        external_providers = info.get("external_providers")
-
-        return Module(
-            src_path=src_path,
-            id=id,
-            label=info.get("label", id),
-            description=info.get("description", "no description"),
-            category=info.get("category", "unspecified"),
-            required_modules=info["requires"],
-            export_types=[
-                ModuleTypeExport(**export) for export in info["export_types"]
-            ],
-            export_members=[
-                ModuleMemberExport(**export) for export in info["export_members"]
-            ],
-            runtime=AssociatedRuntime(info.get("runtime", "luau")),
-            external_providers=ModuleExternalProviders.from_dict(external_providers)
-            if external_providers
-            else None,
-        )
-
-    def req_src(self, source_path: str) -> str:
+    def require(self, source_path: str) -> str:
         return f'require("@self/{self.id}/{source_path.removesuffix(".luau")}")'
 
 
-@dataclass(frozen=True)
-class Package:
+class Package(BaseModel):
     name: str
     description: str
     author: str
     repository: str
     modules: dict[str, Module]
 
-    @classmethod
-    def from_dict(
-        cls, module_mapping: dict[str, Module], info: dict[str, Any]
-    ) -> "Package":
-        return Package(
-            name=info["name"],
-            description=info["description"],
-            author=info["author"],
-            repository=info["repository"],
-            modules={mod_id: module_mapping[mod_id] for mod_id in info["modules"]},
-        )
 
-
-def discover_modules(src_path: pathlib.Path) -> dict[str, Module]:
+def discover_modules(modules_source_dir: pathlib.Path) -> dict[str, Module]:
     collected_modules = {}
 
-    for package_dir in src_path.iterdir():
-        if not package_dir.is_dir():
+    for module_dir in modules_source_dir.iterdir():
+        if not module_dir.is_dir():
             continue
 
-        mod_json_path = package_dir / MODULE_JSON_FILE_NAME
+        mod_json_path = module_dir / MODULE_JSON_FILE_NAME
         if not mod_json_path.is_file():
             continue
 
-        module_id = package_dir.name
+        has_types = (module_dir / TYPES_LUAU_FILE_NAME).exists()
+
+        module_id = module_dir.name
 
         with open(mod_json_path, "r") as f:
-            collected_modules[module_id] = Module.from_dict(package_dir, json.load(f))
+            collected_modules[module_id] = Module(
+                id=module_id,
+                module_source_dir=module_dir,
+                supplies_types=has_types,
+                **json.load(f),
+            )
 
     return collected_modules
 
@@ -145,11 +108,11 @@ def validate_module_selection(selection: dict[str, Module]) -> None:
     missing_modules: set[str] = set()
 
     for mod in selection.values():
-        for required_mod in mod.required_modules:
+        for required_mod in mod.dependencies:
             if required_mod not in selection:
                 missing_modules.add(required_mod)
 
-        module_src_path = mod.src_path
+        module_src_path = mod.module_source_dir
 
         if not module_src_path.exists():
             raise MissingModuleDirectoryException(module_src_path)
@@ -181,7 +144,7 @@ def _generate_package_init_source(
         f"total module count: {len(selection)}",
         "included modules:",
         *(
-            f"\t{mod.label:20} {f'({mod.id})':20} - {mod.description}"
+            f"\t{mod.name:20} {f'({mod.id})':20} - {mod.description}"
             for mod in selection.values()
         ),
     ]
@@ -202,13 +165,13 @@ def _generate_package_init_source(
 
         external_provisions.extend(
             (
-                f"{core_external_mod.req_src('ExternalScheduler')}.set_scheduler({provider_mod.req_src(scheduler_src)})"
+                f"{core_external_mod.require('ExternalScheduler')}.set_scheduler({provider_mod.require(scheduler_src)})"
                 if scheduler_src
                 else "-- no external scheduler",
-                f"{core_external_mod.req_src('ExternalLogger')}.set_logger({provider_mod.req_src(logger_src)})"
+                f"{core_external_mod.require('ExternalLogger')}.set_logger({provider_mod.require(logger_src)})"
                 if logger_src
                 else "-- no external logger",
-                f"{core_external_mod.req_src('ExternalDebugger')}.set_debugger({provider_mod.req_src(debugger_src)})"
+                f"{core_external_mod.require('ExternalDebugger')}.set_debugger({provider_mod.require(debugger_src)})"
                 if debugger_src
                 else "-- no external debugger",
             )
@@ -226,7 +189,7 @@ def _generate_package_init_source(
             )
         )
 
-    header = [
+    package_info_header = [
         "--[=[",
         "This package was generated using Confusion's automated packager!",
         f"package: {name}",
@@ -261,28 +224,29 @@ def _generate_package_init_source(
         if not types and not members:
             continue
 
-        append_module_section(
-            type_exports,
-            mod.label,
-            (
-                f"const {mod.id} = {mod.req_src('types')}",
-                *(
-                    f"export type {item.export_name} = {mod.id}.{item.name}"
-                    for item in types
+        if mod.supplies_types:
+            append_module_section(
+                type_exports,
+                mod.name,
+                (
+                    f"const {mod.id} = {mod.require('types')}",
+                    *(
+                        f"export type {item.export_name} = {mod.id}.{item.name}"
+                        for item in types
+                    ),
                 ),
-            ),
-        )
+            )
 
         append_module_section(
             confusion_members,
-            mod.label,
+            mod.name,
             (f"{item.export_name}: {item.type}," for item in members),
         )
 
         append_module_section(
             member_exports,
-            mod.label,
-            ((f"{item.export_name} = {mod.req_src(item.source)},") for item in members),
+            mod.name,
+            ((f"{item.export_name} = {mod.require(item.source)},") for item in members),
         )
 
     confusion_type = [
@@ -298,7 +262,11 @@ def _generate_package_init_source(
     ]
 
     return _join_sections(
-        header, type_exports, confusion_type, external_provisions, runtime_exports
+        package_info_header,
+        type_exports,
+        confusion_type,
+        external_provisions,
+        runtime_exports,
     )
 
 
@@ -333,10 +301,10 @@ def build_package(
         logger.debug(
             "copying module '%s' ('%s' -> '%s')",
             mod.id,
-            mod.src_path,
+            mod.module_source_dir,
             module_dst_path,
         )
-        shutil.copytree(mod.src_path, module_dst_path, dirs_exist_ok=True)
+        shutil.copytree(mod.module_source_dir, module_dst_path, dirs_exist_ok=True)
         os.remove(module_dst_path / MODULE_JSON_FILE_NAME)
 
     logger.debug("adding notices to mirrored package modules...")

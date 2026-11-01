@@ -33,11 +33,11 @@ export type ExternalLogger = {
 }
 
 return {
-	fallback_error = "External `log_error` callback should have thrown, but it didn't. This is a fallback message to prevent weird things from happening!",
+	fallback_error = "External `log_error` callback should have thrown, but it didn't. This is a fallback message to prevent weird things from happening! If this error shows up then something has either gone horribly wrong, or your ExternalLogger supplier doesn't implement `log_error` correctly!",
 
 	missing_scheduler = "confusion is not connected to an external scheduler.",
 
-	scheduler_missing_spawn = "A spawned thread yielded while not being connected to an external scheduler (or one that's incapable of spawning); the spawned thread will be frozen indefinitely.",
+	scheduler_missing_spawn = "A spawned thread yielded while not being connected to an external scheduler (or one that's incapable of spawning); the spawned thread will be yielded indefinitely.",
 	scheduler_missing_defer = "Attempted to defer() a task with an external scheduler incapable of defering.",
 	scheduler_missing_delay = "Attempted to delay() a task with an external scheduler incapable of delaying.",
 }

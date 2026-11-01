@@ -1,10 +1,11 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "label": "Roblox: Stylesheets",
+    "name": "Roblox: Stylesheets",
     "category": "instances",
     "description": "Provides utilities for creating and managing Roblox StyleSheets with reactive property bindings.",
-    "runtime": "rbx",
-    "requires": [
+    "runtime": "roblox",
+    "author": "HappySunChild (Eli)",
+    "dependencies": [
         "core_graph",
         "core_memory",
         "core_state",

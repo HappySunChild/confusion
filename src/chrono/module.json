@@ -1,9 +1,10 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "label": "Chrono",
+    "name": "Chrono",
     "category": "animation",
     "description": "Provides reactive timekeeping primitives for tracking and representing time.",
-    "requires": [
+    "author": "HappySunChild (Eli)",
+    "dependencies": [
         "core_external",
         "core_memory",
         "core_state"

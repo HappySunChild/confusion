@@ -1,10 +1,11 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "label": "Roblox: Instances",
+    "name": "Roblox: Instances",
     "category": "instances",
-    "runtime": "rbx",
     "description": "Provides utilities for creating Roblox Instances and binding properties to reactive state.",
-    "requires": [
+    "runtime": "roblox",
+    "author": "HappySunChild (Eli)",
+    "dependencies": [
         "core_external",
         "core_graph",
         "core_logging",

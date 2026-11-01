@@ -1,9 +1,10 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "label": "Async",
+    "name": "Async",
     "category": "async",
     "description": "Provides utilities for working with asynchronous operations and reactive state.",
-    "requires": [
+    "author": "HappySunChild (Eli)",
+    "dependencies": [
         "core_graph",
         "core_memory",
         "core_state",

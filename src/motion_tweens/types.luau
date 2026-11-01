@@ -17,24 +17,25 @@ export type EasingStyle = {
 }
 
 export type EasingStyles = {
-	Constant: EasingStyle,
-	Linear: EasingStyle,
-	Exponential: EasingStyle,
-	Circular: EasingStyle,
-	Sine: EasingStyle,
+	linear: (number) -> number,
 
-	Back: EasingStyle,
-	Elastic: EasingStyle,
+	constant: EasingStyle,
+	exponential: EasingStyle,
+	circular: EasingStyle,
+	sine: EasingStyle,
 
-	Quad: EasingStyle,
-	Cubic: EasingStyle,
-	Quart: EasingStyle,
-	Quint: EasingStyle,
+	back: EasingStyle,
+	elastic: EasingStyle,
+
+	quad: EasingStyle,
+	cubic: EasingStyle,
+	quart: EasingStyle,
+	quint: EasingStyle,
 
 	create: {
-		Exponent: (exponent: number) -> EasingStyle,
-		Overshoot: (amplitude: number) -> EasingStyle,
-		Elastic: (period: number) -> EasingStyle,
+		exponent: (exponent: number) -> EasingStyle,
+		overshoot: (amplitude: number) -> EasingStyle,
+		elastic: (period: number) -> EasingStyle,
 	},
 }
 

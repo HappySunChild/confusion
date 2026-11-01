@@ -1,9 +1,10 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "label": "Core: Memory",
+    "name": "Core: Memory",
     "category": "core",
     "description": "Provides utilities for managing the lifecycle of garbage-collected resources.",
-    "requires": [
+    "author": "HappySunChild (Eli)",
+    "dependencies": [
         "core_external"
     ],
     "export_types": [

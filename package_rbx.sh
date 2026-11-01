@@ -1,1 +1,1 @@
-python3 ./tools/compile_package.py rbx_std ./rojo
+python3 ./tools/compile_package.py ./tools/packages/rbx_std.json ./rojo

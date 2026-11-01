@@ -19,7 +19,7 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-package_path = Path(__file__).parent / f"packages/{args.package_name}.json"
+package_path = Path(args.package_name).resolve()
 output_dir = Path(args.output_dir).resolve()
 
 with open(package_path, "r", encoding="utf8") as f:
