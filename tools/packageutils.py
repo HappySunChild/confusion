@@ -6,7 +6,7 @@ import pathlib
 import shutil
 from collections.abc import Iterable
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
 
 MODULE_JSON_FILE_NAME = "module.json"
 TYPES_LUAU_FILE_NAME = "types.luau"
@@ -50,10 +50,10 @@ class ModuleExternalProviders(BaseModel):
 
 
 class Module(BaseModel):
-    src_path: pathlib.Path
+    module_source_dir: pathlib.Path
     id: str
     name: str = Field(default_factory=lambda d: d["id"])
-    description: str
+    description: str = "N/A"
     category: str = "unspecified"
 
     dependencies: list[str]
@@ -77,28 +77,26 @@ class Package(BaseModel):
     repository: str
     modules: dict[str, Module]
 
-    model_config = ConfigDict()
 
-
-def discover_modules(src_path: pathlib.Path) -> dict[str, Module]:
+def discover_modules(modules_source_dir: pathlib.Path) -> dict[str, Module]:
     collected_modules = {}
 
-    for package_dir in src_path.iterdir():
-        if not package_dir.is_dir():
+    for module_dir in modules_source_dir.iterdir():
+        if not module_dir.is_dir():
             continue
 
-        mod_json_path = package_dir / MODULE_JSON_FILE_NAME
+        mod_json_path = module_dir / MODULE_JSON_FILE_NAME
         if not mod_json_path.is_file():
             continue
 
-        has_types = (package_dir / TYPES_LUAU_FILE_NAME).exists()
+        has_types = (module_dir / TYPES_LUAU_FILE_NAME).exists()
 
-        module_id = package_dir.name
+        module_id = module_dir.name
 
         with open(mod_json_path, "r") as f:
             collected_modules[module_id] = Module(
                 id=module_id,
-                src_path=package_dir,
+                module_source_dir=module_dir,
                 supplies_types=has_types,
                 **json.load(f),
             )
@@ -114,7 +112,7 @@ def validate_module_selection(selection: dict[str, Module]) -> None:
             if required_mod not in selection:
                 missing_modules.add(required_mod)
 
-        module_src_path = mod.src_path
+        module_src_path = mod.module_source_dir
 
         if not module_src_path.exists():
             raise MissingModuleDirectoryException(module_src_path)
@@ -303,10 +301,10 @@ def build_package(
         logger.debug(
             "copying module '%s' ('%s' -> '%s')",
             mod.id,
-            mod.src_path,
+            mod.module_source_dir,
             module_dst_path,
         )
-        shutil.copytree(mod.src_path, module_dst_path, dirs_exist_ok=True)
+        shutil.copytree(mod.module_source_dir, module_dst_path, dirs_exist_ok=True)
         os.remove(module_dst_path / MODULE_JSON_FILE_NAME)
 
     logger.debug("adding notices to mirrored package modules...")
