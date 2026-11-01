@@ -1,8 +1,9 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "label": "Keyframes",
+    "name": "Keyframes",
     "category": "sugar",
     "description": "Provides a reactive state primitive for interpolating values across a sequence of keyframes.",
+    "author": "HappySunChild (Eli)",
     "dependencies": [
         "core_memory",
         "core_state",

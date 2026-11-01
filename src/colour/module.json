@@ -1,8 +1,9 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "label": "Colour",
+    "name": "Colour",
     "category": "internal",
     "description": "Provides utilities for converting between colour spaces and representations.",
+    "author": "HappySunChild (Eli)",
     "dependencies": [],
     "export_types": [],
     "export_members": []

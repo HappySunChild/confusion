@@ -1,8 +1,9 @@
 {
     "$schema": "../../.vscode/module-schema.json",
+    "name": "Core: External",
     "category": "core",
     "description": "Manages the interface between Confusion's internals and the host runtime.",
-    "label": "Core: External",
+    "author": "HappySunChild (Eli)",
     "dependencies": [
         "core_logging",
         "core_memory"

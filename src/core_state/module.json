@@ -1,8 +1,9 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "label": "Core: State",
+    "name": "Core: State",
     "category": "core",
     "description": "Provides core reactive primitives and internal state management utilities.",
+    "author": "HappySunChild (Eli)",
     "dependencies": [
         "core_external",
         "core_graph",

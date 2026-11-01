@@ -1,8 +1,9 @@
 {
     "$schema": "../../.vscode/module-schema.json",
-    "label": "Safe",
+    "name": "Safe",
     "category": "sugar",
-    "description": "Provides a convenience wrapper around pcall for safely executing functions.",
+    "description": "Provides a convenience wrapper around pcall for safely executing functions while not sacrificing ergonomics.",
+    "author": "HappySunChild (Eli)",
     "dependencies": [],
     "export_types": [],
     "export_members": [
