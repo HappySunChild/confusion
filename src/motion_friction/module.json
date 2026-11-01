@@ -1,9 +1,9 @@
 {
 	"$schema": "../../.vscode/module-schema.json",
-	"label": "Motion: Friction",
+	"name": "Motion: Friction",
 	"category": "animation",
 	"description": "WIP",
-	"requires": [
+	"dependencies": [
 		"motion"
 	],
 	"export_types": [],
