@@ -40,7 +40,15 @@ const function div(a: { number }, b: { number }): { number }
 	return result
 end
 
-const function scale(a: { number }, factor: number) end
+const function scale(a: { number }, factor: number)
+	const result = table.create(#a, 0)
+
+	for index, v_a in a do
+		result[index] = v_a * factor
+	end
+
+	return result
+end
 
 return {
 	add = add,
