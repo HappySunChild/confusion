@@ -32,7 +32,7 @@
         {
             "export_name": "compositors",
             "source": "compositors.luau",
-            "type": "motion.Composition"
+            "type": "motion.Compositors"
         },
         {
             "export_name": "spaces",

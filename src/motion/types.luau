@@ -28,7 +28,7 @@ export type Spaces = {
 	radians_signed: Space,
 }
 
-export type Composition = {
+export type Compositors = {
 	number: {
 		linear: Compositor<number>,
 	},
@@ -38,11 +38,15 @@ export type Composition = {
 }
 
 export type Motion<T> = {
-	set_displacement: (Motion<T>, { number }) -> (),
-	set_velocity: (Motion<T>, { number }) -> (),
+	set_displacement: (Motion<T>, T) -> (),
+	set_velocity: (Motion<T>, T) -> (),
+
+	impulse_velocity: (Motion<T>, T) -> (),
 
 	get_displacement: (Motion<T>) -> T,
 	get_velocity: (Motion<T>) -> T,
+
+	is_settled: (Motion<T>) -> boolean,
 } & state.StateNode<T>
 export type MotionConstructor = <T>(
 	scope: memory.Scope,
