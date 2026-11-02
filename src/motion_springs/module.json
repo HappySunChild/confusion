@@ -22,7 +22,7 @@
         {
             "export_name": "spring_mover",
             "source": "spring_mover.luau",
-            "type": "(number, number) -> ({ number }) -> motion.Mover"
+            "type": "motion_springs.SpringMover"
         }
     ],
     "external_consumers": [
