@@ -11,7 +11,7 @@
 		{
 			"export_name": "friction_mover",
 			"source": "friction_mover.luau",
-			"type": "(number) -> motion.Mover"
+			"type": "(decay_factor: number) -> motion.Mover"
 		}
 	],
 	"external_consumers": [
