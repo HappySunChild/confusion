@@ -7,8 +7,8 @@ const springs = require("./types")
 const ExternalLogger = require("../core_external/ExternalLogger")
 const log_warn = ExternalLogger.log_warn
 
-const Oklab = require("../colour/Oklab")
-const srgb_to_oklab = Oklab.srgb_to_oklab
+const colour = require("../colour/colour")
+const srgb_to_oklab = colour.srgb_to_oklab
 
 const Roblox = require("../colour/Roblox")
 const Color3_to_vector = Roblox.Color3_to_vector
