@@ -1,0 +1,10 @@
+{
+	"$schema": "../../.vscode/module-schema.json",
+	"name": "Composition",
+	"description": "",
+	"dependencies": [
+		"colour"
+	],
+	"export_members": [],
+	"export_types": []
+}
