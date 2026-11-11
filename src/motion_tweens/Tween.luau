@@ -7,7 +7,7 @@ const motion = require("../motion/types")
 const motion_tweens = require("./types")
 const state = require("../core_state/types")
 
-const Motion = require("../motion/Motion")
+const OldMotion = require("../motion/OldMotion")
 const get_tween_alpha = require("./get_tween_alpha")
 const get_tween_duration = require("./get_tween_duration")
 const lerp_type = require("../lerp/lerp_type")
@@ -34,8 +34,8 @@ const function Tween<T>(
 	scope: memory.Scope,
 	goal: state.UsedAs<T>,
 	info: state.UsedAs<motion_tweens.TweenInfo>
-): motion.Motion<T>
-	return Motion(scope, goal, tween_mover(info))
+): motion.OldMotion<T>
+	return OldMotion(scope, goal, tween_mover(info))
 end
 
 return Tween

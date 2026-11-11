@@ -9,7 +9,9 @@ export type SpringConstructor = <T>(
 	goal: state.UsedAs<T>,
 	speed: state.UsedAs<number>?,
 	damping: state.UsedAs<number>?
-) -> motion.Motion<T>
+) -> motion.OldMotion<T>
+
+export type SpringMover = (damping: number, speed: number) -> (goal: { number }) -> motion.Mover
 
 return {
 	unknown_packing_datatype = "Unable to pack value of unknown type '{type}'; returning nil.",

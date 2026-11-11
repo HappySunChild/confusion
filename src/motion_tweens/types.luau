@@ -8,7 +8,7 @@ export type TweenConstructor = <T>(
 	scope: memory.Scope,
 	goal: state.UsedAs<T>,
 	info: state.UsedAs<TweenInfo>
-) -> motion.Motion<T>
+) -> motion.OldMotion<T>
 
 export type EasingStyle = {
 	Out: (number) -> number,

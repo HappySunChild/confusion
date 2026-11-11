@@ -23,6 +23,21 @@
             "export_name": "Motion",
             "source": "Motion.luau",
             "type": "motion.MotionConstructor"
+        },
+        {
+            "export_name": "OldMotion",
+            "source": "OldMotion.luau",
+            "type": "motion.OldMotionConstructor"
+        },
+        {
+            "export_name": "compositors",
+            "source": "compositors.luau",
+            "type": "motion.Compositors"
+        },
+        {
+            "export_name": "spaces",
+            "source": "spaces.luau",
+            "type": "motion.Spaces"
         }
     ],
     "external_consumers": [

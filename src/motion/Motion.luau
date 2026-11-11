@@ -10,8 +10,8 @@ const state = require("../core_state/types")
 const ExternalScheduler = require("../core_external/ExternalScheduler")
 const get_delta_time = ExternalScheduler.get_delta_time
 
-const ExternalLogger = require("../core_external/ExternalLogger")
-const log_warn = ExternalLogger.log_warn
+const array_math = require("./array_math")
+const array_add = array_math.add
 
 const Timer = require("../chrono/Timer")
 const change = require("../core_graph/change")
@@ -21,42 +21,33 @@ const is_similar = require("../core_state/is_similar")
 const node_destructor = require("../core_graph/node_destructor")
 const peek = require("../core_state/peek")
 
-type Self<T> = {
-	goal: state.UsedAs<T>,
-	generator: state.UsedAs<motion.CurveGenerator<T>>,
+const SETTLED_EPSILON = 0.001
 
-	dynamics: { any },
+const function determine_has_settled(jet: { { number } }): boolean
+	for i = 2, #jet do
+		const differential_shape = jet[i]
 
-	regenerate: boolean,
-
-	active_goal: T,
-	active_generator: motion.CurveGenerator<T>,
-	active_curve: motion.AnimationCurve<T>,
-
-	timer: chrono.Timer,
-} & motion.Motion<T>
-
-const function sync_dynamics<T>(motion_obj: Self<T>, should_sleep: boolean, output_value: T, ...: any): (T, boolean)
-	const dynamics = motion_obj.dynamics
-
-	table.clear(dynamics)
-
-	if output_value ~= output_value then
-		const goal = motion_obj.active_goal
-
-		log_warn(motion.motion_nan_motion, { current = output_value, goal = goal })
-
-		output_value = goal
+		for _, component in differential_shape do
+			if math.abs(component) >= SETTLED_EPSILON then
+				return false
+			end
+		end
 	end
 
-	dynamics[1] = output_value
-
-	for i = 1, select("#", ...) do
-		dynamics[i + 1] = select(i, ...)
-	end
-
-	return output_value, should_sleep
+	return true
 end
+
+type Self<T> = {
+	mover: state.UsedAs<motion.Mover>,
+	timer: chrono.Timer,
+	compose: ({ number }) -> T,
+	decompose: (T) -> { number },
+
+	refresh: boolean,
+	derivatives: { { number } },
+	active_mover: motion.Mover,
+	active_curve: motion.Curve,
+} & motion.Motion<T>
 
 const CLASS_MT = table.freeze({
 	__index = table.freeze({
@@ -64,109 +55,119 @@ const CLASS_MT = table.freeze({
 		kind = "Motion",
 		timeliness = "eager",
 
-		set_dynamic = function<T>(self: Self<T>, index: number, value: any)
-			self.dynamics[index] = value
-			self.regenerate = true
-
+		set_displacement = function<T>(self: Self<T>, new_displacement: T)
+			self.derivatives[1] = self.decompose(new_displacement)
+			self.refresh = true
 			change(self)
 		end,
-		set_dynamics = function<T>(self: Self<T>, new_dynamics: { any }, at_index: number?)
-			table.move(new_dynamics, 1, #new_dynamics, at_index or 1, self.dynamics)
-			self.regenerate = true
-
+		set_velocity = function<T>(self: Self<T>, new_velocity: T)
+			self.derivatives[2] = self.decompose(new_velocity)
+			self.refresh = true
 			change(self)
 		end,
-		get_dynamic = function<T>(self: Self<T>, index: number)
-			return self.dynamics[index]
-		end,
-		get_dynamics = function<T>(self: Self<T>): { any }
-			-- considered cloning, but i don't think it's worth it
-			-- WARNING TO ANYONE USING THIS, DIRECTLY MODIFYING THE DYNAMICS TABLE
-			-- IS VERY MUCH NOT RECOMMENDED, DO NOT DO IT UNLESS YOU KNOW WHAT YOU'RE DOING!!!
-			return self.dynamics
+
+		impulse_velocity = function<T>(self: Self<T>, velocity: T)
+			self.derivatives[2] = array_add(self.derivatives[2], self.decompose(velocity))
+			self.refresh = true
+			change(self)
 		end,
 
-		evaluate = function<T>(self: Self<T>)
+		get_displacement = function<T>(self: Self<T>): T
+			return self.compose(self.derivatives[1])
+		end,
+		get_velocity = function<T>(self: Self<T>): T
+			return self.compose(self.derivatives[2])
+		end,
+
+		is_settled = function<T>(self: Self<T>): boolean
+			return self.timer.is_paused
+		end,
+
+		evaluate = function<T>(self: Self<T>): boolean
 			const timer = self.timer
-			const goal = self.goal
-			const generator = self.generator
+			const mover = self.mover
 
-			const new_goal = peek<<T>>(goal)
-
-			depend(self, goal)
-
-			-- protect against NaN goals
-			if new_goal ~= new_goal then
-				log_warn(motion.motion_nan_goal, { goal = new_goal })
-
-				return false
-			end
-
-			const new_generator = peek<<motion.CurveGenerator<T>>>(generator)
-
-			depend(self, generator)
+			depend(self, mover)
 			depend(self, timer)
 
-			-- wake
-			if new_goal ~= self.active_goal or new_generator ~= self.active_generator or self.regenerate then
-				self.active_goal = new_goal
-				self.active_generator = new_generator
-				self.active_curve = new_generator(new_goal, unpack(self.dynamics))
+			const new_mover = peek<<motion.Mover>>(mover)
 
-				self.regenerate = false
+			if self.active_mover ~= new_mover or self.refresh then
+				self.refresh = false
+				self.active_mover = new_mover
+				self.active_curve = new_mover(self.derivatives)
 
 				timer:zero()
 				timer:unpause()
 			end
 
-			local elapsed = peek<<number>>(timer)
+			local current_elapsed = peek<<number>>(timer)
 
-			-- fix Motions following eachother
-			if elapsed == 0 then -- usually means we got a new goal/curve generator
-				elapsed = get_delta_time()
+			if current_elapsed == 0 then
+				current_elapsed = get_delta_time()
 			end
 
-			const old_value = self.cached_value :: any
-			const new_value, should_sleep = sync_dynamics(self, self.active_curve(elapsed))
+			const new_derivatives = self.active_curve(current_elapsed)
 
-			self.cached_value = new_value
+			self.derivatives = new_derivatives
 
-			if should_sleep then
+			const has_settled = determine_has_settled(new_derivatives)
+
+			if has_settled then
 				timer:pause()
 			end
 
-			return not is_similar(old_value, new_value)
+			const old_value = self.cached_value
+			const new_value = self.compose(new_derivatives[1])
+
+			self.cached_value = new_value
+
+			-- not entirely sure about this has_settled being here, i'm only adding this because there's currently
+			-- no way to consistently detect when a motion has gone to sleep
+			return has_settled or not is_similar(old_value, new_value)
 		end,
 	}),
 })
 
 const function Motion<T>(
 	scope: memory.Scope,
-	goal: state.UsedAs<T>,
-	curve_generator: state.UsedAs<motion.CurveGenerator<T>>
+	mover: state.UsedAs<motion.Mover>,
+	compositor: motion.Compositor<T>,
+	initial_values: { T }?
 ): motion.Motion<T>
-	const new_motion: Self<T> = setmetatable({
+	const compose, decompose = compositor.compose, compositor.decompose
+
+	const initial_derivatives = {}
+
+	if initial_values ~= nil then
+		for index, value in initial_values do
+			initial_derivatives[index] = decompose(value)
+		end
+
+		initial_derivatives[1] = initial_derivatives[1] or {}
+	end
+
+	const new_motion: motion.Motion<T> = setmetatable({
 		scope = scope,
 		created_at = os.clock(),
 		validity = "valid",
 		using = {},
 		users = {},
-		cached_value = nil, -- this is handled by the evaluate call below, so we can just leave this nil :3
+		cached_value = nil,
 
-		goal = goal,
-		generator = curve_generator,
-		dynamics = { peek(goal) },
-		regenerate = false,
-		active_goal = nil,
-		active_generator = nil,
-		active_move = nil,
+		mover = mover,
 		timer = Timer(scope),
+		compose = compose,
+		decompose = decompose,
+
+		refresh = false,
+		derivatives = initial_derivatives,
+		active_mover = nil,
+		active_curve = nil,
 	}, CLASS_MT) :: any
 
 	const oldest_task = node_destructor(new_motion)
-
 	new_motion.oldest_task = oldest_task
-
 	table.insert(scope, oldest_task)
 
 	evaluate(new_motion, true)
