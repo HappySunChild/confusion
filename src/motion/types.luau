@@ -12,16 +12,20 @@ export type Curve = (time_elapsed: number) -> { { number } }
 export type Transition = (goal: { number }, space: composition.Space) -> Mover
 
 export type Motion<T> = {
-	set_displacement: (Motion<T>, T) -> (),
-	set_velocity: (Motion<T>, T) -> (),
+	set_derivative: (self: Motion<T>, degree: number, value: T) -> (),
+	set_position: (self: Motion<T>, position: T) -> (),
+	set_velocity: (self: Motion<T>, velocity: T) -> (),
+	set_acceleration: (self: Motion<T>, acceleration: T) -> (),
 
-	impulse_velocity: (Motion<T>, T) -> (),
+	get_derivative: (self: Motion<T>, degree: number) -> T,
+	get_velocity: (self: Motion<T>) -> T,
+	get_acceleration: (self: Motion<T>) -> T,
 
-	get_displacement: (Motion<T>) -> T,
-	get_velocity: (Motion<T>) -> T,
+	impulse_velocity: (self: Motion<T>, delta_velocity: T) -> (),
 
-	is_settled: (Motion<T>) -> boolean,
+	is_settled: (self: Motion<T>) -> boolean,
 } & state.StateNode<T>
+
 export type MotionConstructor = <T>(
 	scope: memory.Scope,
 	mover: state.UsedAs<Mover>,
