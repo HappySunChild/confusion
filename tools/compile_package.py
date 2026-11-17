@@ -3,8 +3,6 @@ import json
 import logging
 from pathlib import Path
 
-logging.basicConfig()
-
 from packageutils import (
     build_package,
     discover_modules,
@@ -16,6 +14,7 @@ parser.add_argument("output_dir", default=".")
 parser.add_argument(
     "--confusion_src", default=str(Path(__file__).parent.parent / "src"), nargs=1
 )
+parser.add_argument("-v", default=False, action=argparse.BooleanOptionalAction)
 
 args = parser.parse_args()
 
@@ -24,6 +23,10 @@ output_dir = Path(args.output_dir).resolve()
 
 with open(package_path, "r", encoding="utf8") as f:
     data = json.load(f)
+
+
+if args.v:
+    logging.basicConfig()
 
 
 package_name: str = data["name"]
