@@ -2,8 +2,8 @@
 --!native
 --!optimize 2
 
-const Oklab = require("../colour/Oklab")
-const oklab_lerp_srgb = Oklab.lerp_srgb
+const colour = require("../colour/colour")
+const oklab_lerp_srgb = colour.lerp_srgb_as_oklab
 
 const Roblox = require("../colour/Roblox")
 const Color3_to_vector, vector_to_Color3 = Roblox.Color3_to_vector, Roblox.vector_to_Color3
