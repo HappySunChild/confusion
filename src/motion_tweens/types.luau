@@ -4,6 +4,21 @@ const memory = require("../core_memory/types")
 const motion = require("../motion/types")
 const state = require("../core_state/types")
 
+export type EasingDirection = "in" | "inout" | "out"
+
+export type DifferentialEasingStyle = (number) -> ...number
+export type DifferentialEasingStyles = {
+	linear: DifferentialEasingStyle,
+	constant: DifferentialEasingStyle,
+	quad: DifferentialEasingStyle,
+	cubic: DifferentialEasingStyle,
+	quart: DifferentialEasingStyle,
+	quint: DifferentialEasingStyle,
+	sine: DifferentialEasingStyle,
+	exponential: DifferentialEasingStyle,
+	circular: DifferentialEasingStyle,
+}
+
 export type TweenConstructor = <T>(
 	scope: memory.Scope,
 	goal: state.UsedAs<T>,
