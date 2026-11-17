@@ -1,5 +1,6 @@
 --!strict
 
+const composition = require("../composition/types")
 const memory = require("../core_memory/types")
 const state = require("../core_state/types")
 
@@ -7,35 +8,8 @@ const state = require("../core_state/types")
 export type Mover = (initial_values: { { number } }) -> Curve
 --- A function that calculates the displacement, velocity, acceleration, etc. of a curve at a specific time.
 export type Curve = (time_elapsed: number) -> { { number } }
-
-export type Space = {
-	to_displacement: (position: { number }, relative_to: { number }) -> { number },
-	to_position: (displacement: { number }, relative_to: { number }) -> { number },
-}
-export type Compositor<T> = {
-	compose: ({ number }) -> T,
-	decompose: (T) -> { number },
-	space: Space,
-}
-
-export type Spaces = {
-	linear: Space,
-	linear_wrapped: (minimum: number, maximum: number) -> Space,
-
-	degrees_unsigned: Space,
-	degrees_signed: Space,
-	radians_unsigned: Space,
-	radians_signed: Space,
-}
-
-export type Compositors = {
-	number: {
-		linear: Compositor<number>,
-	},
-	vector: {
-		linear: Compositor<vector>,
-	},
-}
+--- A function that creates a `Mover` that converges to a specified goal.
+export type Transition = (goal: { number }, space: composition.Space) -> Mover
 
 export type Motion<T> = {
 	set_displacement: (Motion<T>, T) -> (),
@@ -51,7 +25,7 @@ export type Motion<T> = {
 export type MotionConstructor = <T>(
 	scope: memory.Scope,
 	mover: state.UsedAs<Mover>,
-	compositor: Compositor<T>,
+	compositor: composition.Compositor<T>,
 	initial_values: { T }?
 ) -> Motion<T>
 

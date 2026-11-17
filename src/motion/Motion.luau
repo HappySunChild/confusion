@@ -3,15 +3,13 @@
 --!optimize 2
 
 const chrono = require("../chrono/types")
+const composition = require("../composition/types")
 const memory = require("../core_memory/types")
 const motion = require("./types")
 const state = require("../core_state/types")
 
 const ExternalScheduler = require("../core_external/ExternalScheduler")
 const get_delta_time = ExternalScheduler.get_delta_time
-
-const array_math = require("./array_math")
-const array_add = array_math.add
 
 const Timer = require("../chrono/Timer")
 const change = require("../core_graph/change")
@@ -53,10 +51,15 @@ const CLASS_MT = table.freeze({
 	__index = table.freeze({
 		type = "state",
 		kind = "Motion",
-		timeliness = "eager",
+		timeliness = "lazy",
 
-		set_displacement = function<T>(self: Self<T>, new_displacement: T)
-			self.derivatives[1] = self.decompose(new_displacement)
+		set_derivative = function<T>(self: Self<T>, degree: number, value: T)
+			self.derivatives[degree] = self.decompose(value)
+			self.refresh = true
+			change(self)
+		end,
+		set_position = function<T>(self: Self<T>, new_position: T)
+			self.derivatives[1] = self.decompose(new_position)
 			self.refresh = true
 			change(self)
 		end,
@@ -65,18 +68,32 @@ const CLASS_MT = table.freeze({
 			self.refresh = true
 			change(self)
 		end,
-
-		impulse_velocity = function<T>(self: Self<T>, velocity: T)
-			self.derivatives[2] = array_add(self.derivatives[2], self.decompose(velocity))
+		set_acceleration = function<T>(self: Self<T>, new_acceleration: T)
+			self.derivatives[3] = self.decompose(new_acceleration)
 			self.refresh = true
 			change(self)
 		end,
 
-		get_displacement = function<T>(self: Self<T>): T
-			return self.compose(self.derivatives[1])
+		get_derivative = function<T>(self: Self<T>, degree: number): T
+			return self.compose(self.derivatives[degree])
 		end,
 		get_velocity = function<T>(self: Self<T>): T
 			return self.compose(self.derivatives[2])
+		end,
+		get_acceleration = function<T>(self: Self<T>): T
+			return self.compose(self.derivatives[3])
+		end,
+
+		impulse_velocity = function<T>(self: Self<T>, velocity: T)
+			const decomposed = self.decompose(velocity)
+			const target = self.derivatives[2]
+
+			for index, component in target do
+				target[index] = component + decomposed[index]
+			end
+
+			self.refresh = true
+			change(self)
 		end,
 
 		is_settled = function<T>(self: Self<T>): boolean
@@ -132,7 +149,7 @@ const CLASS_MT = table.freeze({
 const function Motion<T>(
 	scope: memory.Scope,
 	mover: state.UsedAs<motion.Mover>,
-	compositor: motion.Compositor<T>,
+	compositor: composition.Compositor<T>,
 	initial_values: { T }?
 ): motion.Motion<T>
 	const compose, decompose = compositor.compose, compositor.decompose
