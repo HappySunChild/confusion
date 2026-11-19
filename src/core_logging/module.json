@@ -1,7 +1,6 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "name": "Core: Logging",
-    "category": "core",
     "description": "Provides internal logging utilities for debugging.",
     "author": "HappySunChild (Eli)",
     "dependencies": [

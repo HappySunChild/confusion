@@ -1,7 +1,6 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "name": "Iter: For",
-    "category": "tables",
     "description": "Provides convenient constructors for reactive table iteration, handling the underlying iteration and state management automatically.",
     "author": "HappySunChild (Eli)",
     "dependencies": [

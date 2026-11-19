@@ -1,7 +1,6 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "name": "Roblox: Templates",
-    "category": "instances",
     "description": "Provides utilities for hydrating and reusing UI templates designed in Roblox Studio.",
     "runtime": "roblox",
     "author": "HappySunChild (Eli)",

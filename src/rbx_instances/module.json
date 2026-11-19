@@ -1,7 +1,6 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "name": "Roblox: Instances",
-    "category": "instances",
     "description": "Provides utilities for creating Roblox Instances and binding properties to reactive state.",
     "runtime": "roblox",
     "author": "HappySunChild (Eli)",

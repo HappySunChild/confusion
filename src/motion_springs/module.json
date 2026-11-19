@@ -1,7 +1,6 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "name": "Motion: Springs",
-    "category": "animation",
     "description": "Provides a convenience constructor for creating spring-driven motion with configurable spring parameters.",
     "author": "HappySunChild (Eli)",
     "dependencies": [

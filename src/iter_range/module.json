@@ -1,7 +1,6 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "name": "Iter: Range",
-    "category": "tables",
     "description": "Provides a convenient constructor for reactive numeric range iteration, handling the underlying iteration and state management automatically.",
     "author": "HappySunChild (Eli)",
     "dependencies": [
