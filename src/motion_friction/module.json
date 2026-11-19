@@ -6,14 +6,13 @@
 	"dependencies": [
 		"motion"
 	],
-	"export_types": [],
-	"export_members": [
-		{
-			"export_name": "friction_mover",
+	"export_types": {},
+	"export_members": {
+		"friction_mover": {
 			"source": "friction_mover.luau",
 			"type": "(decay_factor: number) -> motion.Mover"
 		}
-	],
+	},
 	"external_consumers": [
 		"scheduler"
 	]
