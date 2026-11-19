@@ -7,37 +7,31 @@
     "dependencies": [
         "core_external"
     ],
-    "export_types": [
-        {
-            "name": "Scope<T>",
-            "export_name": "Scope<T = Confusion>"
+    "export_types": {
+        "Scope<T = Confusion>": {
+            "internal_name": "Scope<T>"
         }
-    ],
-    "export_members": [
-        {
-            "export_name": "scoped",
+    },
+    "export_members": {
+        "scoped": {
             "source": "scoped.luau",
             "type": "core_memory.Scoped"
         },
-        {
-            "export_name": "derive_scope",
+        "derive_scope": {
             "source": "derive_scope.luau",
             "type": "core_memory.Scoped"
         },
-        {
-            "export_name": "inner_scope",
+        "inner_scope": {
             "source": "inner_scope.luau",
             "type": "core_memory.Scoped"
         },
-        {
-            "export_name": "cleanup",
+        "cleanup": {
             "source": "cleanup.luau",
             "type": "core_memory.Cleanup"
         },
-        {
-            "export_name": "insert",
+        "insert": {
             "source": "insert.luau",
             "type": "core_memory.Insert"
         }
-    ]
+    }
 }

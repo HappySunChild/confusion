@@ -11,24 +11,21 @@
         "core_logging",
         "core_external"
     ],
-    "export_types": [
-        {
-            "name": "Eventual<T>",
-            "export_name": "Eventual<T>"
+    "export_types": {
+        "Eventual<T>": {
+            "internal_name": "Eventual<T>"
         }
-    ],
-    "export_members": [
-        {
-            "export_name": "Eventual",
+    },
+    "export_members": {
+        "Eventual": {
             "source": "Eventual.luau",
             "type": "async.EventualConstructor"
         },
-        {
-            "export_name": "await",
+        "await": {
             "source": "await.luau",
             "type": "async.Await"
         }
-    ],
+    },
     "external_consumers": [
         "scheduler"
     ]

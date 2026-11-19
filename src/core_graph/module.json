@@ -9,22 +9,19 @@
         "core_logging",
         "core_external"
     ],
-    "export_types": [
-        {
-            "name": "GraphNode",
-            "export_name": "GraphNode"
+    "export_types": {
+        "GraphNode": {
+            "internal_name": "GraphNode"
         }
-    ],
-    "export_members": [
-        {
-            "export_name": "observe",
+    },
+    "export_members": {
+        "observe": {
             "source": "observe.luau",
             "type": "core_graph.Observe"
         },
-        {
-            "export_name": "observe_immediate",
+        "observe_immediate": {
             "source": "observe_immediate.luau",
             "type": "core_graph.Observe"
         }
-    ]
+    }
 }

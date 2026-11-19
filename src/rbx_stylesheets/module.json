@@ -11,42 +11,35 @@
         "core_state",
         "rbx_instances"
     ],
-    "export_types": [],
-    "export_members": [
-        {
-            "export_name": "StyleSheet",
+    "export_types": {},
+    "export_members": {
+        "StyleSheet": {
             "source": "StyleSheet.luau",
             "type": "rbx_stylesheets.StyleSheetConstructor"
         },
-        {
-            "export_name": "StyleRule",
+        "StyleRule": {
             "source": "StyleRule.luau",
             "type": "rbx_stylesheets.StyleRuleConstructor"
         },
-        {
-            "export_name": "StyleSheetDerives",
+        "StyleSheetDerives": {
             "source": "keys/StyleSheetDerives.luau",
             "type": "rbx_instances.SpecialKey<\"StyleSheetDerives\">"
         },
-        {
-            "export_name": "StyleRuleProperties",
+        "StyleRuleProperties": {
             "source": "keys/StyleRuleProperties.luau",
             "type": "rbx_instances.SpecialKey<\"StyleRuleProperties\">"
         },
-        {
-            "export_name": "StyleRuleTransitions",
+        "StyleRuleTransitions": {
             "source": "keys/StyleRuleTransitions.luau",
             "type": "rbx_instances.SpecialKey<\"StyleRuleTransitions\">"
         },
-        {
-            "export_name": "StyleLink",
+        "StyleLink": {
             "source": "keys/StyleLink.luau",
             "type": "rbx_instances.SpecialKey<\"StyleLink\">"
         },
-        {
-            "export_name": "StyleRules",
+        "StyleRules": {
             "source": "keys/StyleRules.luau",
             "type": "rbx_instances.SpecialKey<\"StyleRules\">"
         }
-    ]
+    }
 }

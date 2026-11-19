@@ -8,6 +8,6 @@
         "core_logging",
         "core_memory"
     ],
-    "export_types": [],
-    "export_members": []
+    "export_types": {},
+    "export_members": {}
 }

@@ -9,11 +9,10 @@
         "core_state",
         "core_graph"
     ],
-    "export_types": [
-        {
-            "export_name": "Iter<K, V>",
-            "name": "Iter<K, V>"
+    "export_types": {
+        "Iter<K, V>": {
+            "internal_name": "Iter<K, V>"
         }
-    ],
-    "export_members": []
+    },
+    "export_members": {}
 }

@@ -10,38 +10,32 @@
         "lerp",
         "motion"
     ],
-    "export_types": [
-        {
-            "export_name": "TweenInfo",
-            "name": "TweenInfo"
+    "export_types": {
+        "TweenInfo": {
+            "internal_name": "TweenInfo"
         },
-        {
-            "export_name": "EasingDirection",
-            "name": "EasingDirection"
+        "EasingDirection": {
+            "internal_name": "EasingDirection"
         }
-    ],
-    "export_members": [
-        {
-            "export_name": "Tween",
+    },
+    "export_members": {
+        "Tween": {
             "source": "Tween.luau",
             "type": "motion_tweens.TweenConstructor"
         },
-        {
-            "export_name": "TweenInfo",
+        "TweenInfo": {
             "source": "TweenInfo.luau",
             "type": "motion_tweens.TweenInfoConstructor"
         },
-        {
-            "export_name": "easing_styles",
+        "easing_styles": {
             "source": "easing_styles.luau",
             "type": "motion_tweens.EasingStyles"
         },
-        {
-            "export_name": "differential_easing_styles",
+        "differential_easing_styles": {
             "source": "differential_easing_styles.luau",
             "type": "motion_tweens.DifferentialEasingStyles"
         }
-    ],
+    },
     "external_consumers": [
         "scheduler"
     ]

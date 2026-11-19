@@ -2,9 +2,9 @@ import enum
 import json
 import logging
 import os
-import pathlib
 import shutil
 from collections.abc import Iterable
+from pathlib import Path
 
 from pydantic import BaseModel, Field
 
@@ -33,12 +33,10 @@ class MissingRequiredModulesException(ModulesValidationException):
 
 
 class ModuleTypeExport(BaseModel):
-    export_name: str
-    name: str
+    internal_name: str
 
 
 class ModuleMemberExport(BaseModel):
-    export_name: str
     source: str
     type: str
 
@@ -50,18 +48,22 @@ class ModuleExternalProviders(BaseModel):
 
 
 class Module(BaseModel):
-    module_source_dir: pathlib.Path
+    module_source_dir: Path
     id: str
     name: str = Field(default_factory=lambda d: d["id"])
     description: str = "N/A"
     category: str = "unspecified"
 
-    dependencies: list[str]
+    dependencies: set[str]
 
-    supplies_types: bool
+    supplies_types: bool = Field(
+        default_factory=lambda d: (
+            d["module_source_dir"] / TYPES_LUAU_FILE_NAME
+        ).exists()
+    )
 
-    export_types: list[ModuleTypeExport]
-    export_members: list[ModuleMemberExport]
+    export_types: dict[str, ModuleTypeExport]
+    export_members: dict[str, ModuleMemberExport]
 
     runtime: Runtime = Runtime.Luau
     external_providers: ModuleExternalProviders | None = None
@@ -78,7 +80,7 @@ class Package(BaseModel):
     modules: dict[str, Module]
 
 
-def discover_modules(modules_source_dir: pathlib.Path) -> dict[str, Module]:
+def discover_modules(modules_source_dir: Path) -> dict[str, Module]:
     collected_modules = {}
 
     for module_dir in modules_source_dir.iterdir():
@@ -89,15 +91,12 @@ def discover_modules(modules_source_dir: pathlib.Path) -> dict[str, Module]:
         if not mod_json_path.is_file():
             continue
 
-        has_types = (module_dir / TYPES_LUAU_FILE_NAME).exists()
-
         module_id = module_dir.name
 
         with open(mod_json_path, "r") as f:
             collected_modules[module_id] = Module(
                 id=module_id,
                 module_source_dir=module_dir,
-                supplies_types=has_types,
                 **json.load(f),
             )
 
@@ -231,8 +230,8 @@ def _generate_package_init_source(
                 (
                     f"const {mod.id} = {mod.require('types')}",
                     *(
-                        f"export type {item.export_name} = {mod.id}.{item.name}"
-                        for item in types
+                        f"export type {export_name} = {mod.id}.{item.internal_name}"
+                        for export_name, item in types.items()
                     ),
                 ),
             )
@@ -240,13 +239,16 @@ def _generate_package_init_source(
         append_module_section(
             confusion_members,
             mod.name,
-            (f"{item.export_name}: {item.type}," for item in members),
+            (f"{export_name}: {item.type}," for export_name, item in members.items()),
         )
 
         append_module_section(
             member_exports,
             mod.name,
-            ((f"{item.export_name} = {mod.require(item.source)},") for item in members),
+            (
+                (f"{export_name} = {mod.require(item.source)},")
+                for export_name, item in members.items()
+            ),
         )
 
     confusion_type = [
@@ -272,7 +274,7 @@ def _generate_package_init_source(
 
 def build_package(
     selection: dict[str, Module],
-    dst_path: pathlib.Path,
+    dst_path: Path,
     package_name: str = "confusion",
     author: str = "HappySunChild (Eli)",
     repository: str = "https://github.com/HappySunChild/confusion",
@@ -329,7 +331,7 @@ def build_package(
         os.replace(temp_file_path, file_path)
 
 
-def build_package_from_package(package: Package, dst_path: pathlib.Path) -> None:
+def build_package_from_package(package: Package, dst_path: Path) -> None:
     build_package(
         package.modules, dst_path, package.name, package.author, package.repository
     )

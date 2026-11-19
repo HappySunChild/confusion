@@ -46,34 +46,24 @@
             }
         },
         "export_types": {
-            "description": "The types that this module publically exports.",
-            "type": "array",
-            "items": {
+            "description": "The types that this module publically exports. This is structured as a mapping of export names to internal types.",
+            "type": "object",
+            "additionalProperties": {
                 "type": "object",
-                "title": "ModuleTypeExport",
                 "properties": {
-                    "name": {
-                        "description": "The type to export.",
-                        "type": "string"
-                    },
-                    "export_name": {
-                        "description": "The alias to publically export the type as.",
+                    "internal_name": {
+                        "description": "The non-qualified name of the type from the module to export. Ex: `SomeType` instead of `module.SomeType`",
                         "type": "string"
                     }
                 }
             }
         },
         "export_members": {
-            "description": "The runtime values that this module publically exports.",
-            "type": "array",
-            "items": {
+            "description": "The runtime values that this module publically exports. This is structured as a mapping of export names to internal members.",
+            "type": "object",
+            "additionalProperties": {
                 "type": "object",
-                "title": "ModuleMemberExport",
                 "properties": {
-                    "export_name": {
-                        "description": "The alias to publically export the value as.",
-                        "type": "string"
-                    },
                     "source": {
                         "description": "The relative path to the Luau module that returns the value.",
                         "type": "string"

@@ -12,12 +12,11 @@
         "core_state",
         "iter"
     ],
-    "export_types": [],
-    "export_members": [
-        {
-            "export_name": "ForRange",
+    "export_types": {},
+    "export_members": {
+        "ForRange": {
             "source": "ForRange",
             "type": "iter_range.ForRangeConstructor"
         }
-    ]
+    }
 }

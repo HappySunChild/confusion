@@ -9,8 +9,8 @@
         "core_external",
         "core_logging"
     ],
-    "export_types": [],
-    "export_members": [],
+    "export_types": {},
+    "export_members": {},
     "external_providers": {
         "logger_source": "RobloxLogger.luau",
         "scheduler_source": "RobloxScheduler.luau"

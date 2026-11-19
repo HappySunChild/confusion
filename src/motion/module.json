@@ -13,28 +13,24 @@
         "chrono",
         "composition"
     ],
-    "export_types": [
-        {
-            "name": "Motion<T>",
-            "export_name": "Motion<T>"
+    "export_types": {
+        "Motion<T>": {
+            "internal_name": "Motion<T>"
         },
-        {
-            "name": "Mover",
-            "export_name": "Mover"
+        "Mover": {
+            "internal_name": "Mover"
         }
-    ],
-    "export_members": [
-        {
-            "export_name": "Motion",
+    },
+    "export_members": {
+        "Motion": {
             "source": "Motion.luau",
             "type": "motion.MotionConstructor"
         },
-        {
-            "export_name": "OldMotion",
+        "OldMotion": {
             "source": "OldMotion.luau",
             "type": "motion.OldMotionConstructor"
         }
-    ],
+    },
     "external_consumers": [
         "scheduler"
     ]

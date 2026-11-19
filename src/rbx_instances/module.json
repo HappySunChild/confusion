@@ -12,71 +12,58 @@
         "core_memory",
         "core_state"
     ],
-    "export_types": [
-        {
-            "name": "SpecialKey",
-            "export_name": "SpecialKey<T = string>"
+    "export_types": {
+        "SpecialKey<T = string>": {
+            "internal_name": "SpecialKey<T>"
         },
-        {
-            "name": "Child",
-            "export_name": "Child"
+        "Child": {
+            "internal_name": "Child"
         }
-    ],
-    "export_members": [
-        {
-            "export_name": "New",
+    },
+    "export_members": {
+        "New": {
             "source": "New.luau",
             "type": "rbx_instances.NewConstructor"
         },
-        {
-            "export_name": "Hydrate",
+        "Hydrate": {
             "source": "Hydrate.luau",
             "type": "rbx_instances.HydrateConstructor"
         },
-        {
-            "export_name": "AttributeChange",
+        "AttributeChange": {
             "source": "keys/AttributeChange.luau",
             "type": "(attribute: string) -> rbx_instances.SpecialKey<\"AttributeChange\">"
         },
-        {
-            "export_name": "AttributeOut",
+        "AttributeOut": {
             "source": "keys/AttributeOut.luau",
             "type": "(attribute: string) -> rbx_instances.SpecialKey<\"AttributeOut\">"
         },
-        {
-            "export_name": "Attributes",
+        "Attributes": {
             "source": "keys/Attributes.luau",
             "type": "rbx_instances.SpecialKey<\"Attributes\">"
         },
-        {
-            "export_name": "Children",
+        "Children": {
             "source": "keys/Children.luau",
             "type": "rbx_instances.SpecialKey<\"Children\">"
         },
-        {
-            "export_name": "OnChange",
+        "OnChange": {
             "source": "keys/OnChange.luau",
             "type": "(property: string) -> rbx_instances.SpecialKey<\"OnChange\">"
         },
-        {
-            "export_name": "OnEvent",
+        "OnEvent": {
             "source": "keys/OnEvent.luau",
             "type": "(event: string) -> rbx_instances.SpecialKey<\"OnEvent\">"
         },
-        {
-            "export_name": "Out",
+        "Out": {
             "source": "keys/Out.luau",
             "type": "(property: string) -> rbx_instances.SpecialKey<\"Out\">"
         },
-        {
-            "export_name": "Refs",
+        "Refs": {
             "source": "keys/Refs.luau",
             "type": "rbx_instances.SpecialKey<\"Refs\">"
         },
-        {
-            "export_name": "Tags",
+        "Tags": {
             "source": "keys/Tags.luau",
             "type": "rbx_instances.SpecialKey<\"Tags\">"
         }
-    ]
+    }
 }

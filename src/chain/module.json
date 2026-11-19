@@ -11,17 +11,15 @@
         "motion_tweens",
         "motion_springs"
     ],
-    "export_types": [
-        {
-            "name": "Chain<S, T>",
-            "export_name": "Chain<T, S = unknown>"
+    "export_types": {
+        "Chain<S, T = unknown>": {
+            "internal_name": "Chain<T, S>"
         }
-    ],
-    "export_members": [
-        {
-            "export_name": "Chain",
+    },
+    "export_members": {
+        "Chain": {
             "source": "Chain.luau",
             "type": "chain.ChainConstructor"
         }
-    ]
+    }
 }

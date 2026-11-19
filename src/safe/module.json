@@ -5,12 +5,11 @@
     "description": "Provides a convenience wrapper around pcall for safely executing functions while not sacrificing ergonomics.",
     "author": "HappySunChild (Eli)",
     "dependencies": [],
-    "export_types": [],
-    "export_members": [
-        {
-            "export_name": "safe",
+    "export_types": {},
+    "export_members": {
+        "safe": {
             "source": "safe.luau",
             "type": "safe.Safe"
         }
-    ]
+    }
 }

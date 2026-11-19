@@ -11,17 +11,15 @@
         "core_memory",
         "rbx_instances"
     ],
-    "export_types": [],
-    "export_members": [
-        {
-            "export_name": "FromTemplate",
+    "export_types": {},
+    "export_members": {
+        "FromTemplate": {
             "source": "FromTemplate.luau",
             "type": "rbx_templates.FromTemplateConstructor"
         },
-        {
-            "export_name": "QueryDescendants",
+        "QueryDescendants": {
             "source": "QueryDescendants.luau",
             "type": "rbx_templates.QueryDescendants"
         }
-    ]
+    }
 }

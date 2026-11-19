@@ -13,14 +13,13 @@
         "motion",
         "springs"
     ],
-    "export_types": [],
-    "export_members": [
-        {
-            "export_name": "spring_mover",
+    "export_types": {},
+    "export_members": {
+        "spring_mover": {
             "source": "spring_mover.luau",
             "type": "motion_springs.SpringMover"
         }
-    ],
+    },
     "external_consumers": [
         "scheduler"
     ]

@@ -12,22 +12,19 @@
         "core_state",
         "iter"
     ],
-    "export_types": [],
-    "export_members": [
-        {
-            "export_name": "ForPairs",
+    "export_types": {},
+    "export_members": {
+        "ForPairs": {
             "source": "ForPairs.luau",
             "type": "iter_for.ForPairsConstructor"
         },
-        {
-            "export_name": "ForKeys",
+        "ForKeys": {
             "source": "ForKeys.luau",
             "type": "iter_for.ForKeysConstructor"
         },
-        {
-            "export_name": "ForValues",
+        "ForValues": {
             "source": "ForValues.luau",
             "type": "iter_for.ForValuesConstructor"
         }
-    ]
+    }
 }
