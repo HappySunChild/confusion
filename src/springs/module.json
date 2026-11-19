@@ -4,18 +4,16 @@
 	"author": "HappySunChild (Eli)",
 	"category": "animation",
 	"description": "WIP",
-	"export_members": [
-		{
-			"export_name": "Spring",
+	"export_types": {
+		"Spring": {
+			"internal_name": "Spring"
+		}
+	},
+	"export_members": {
+		"Spring": {
 			"source": "Spring.luau",
 			"type": "springs.SpringConstructor"
 		}
-	],
-	"export_types": [
-		{
-			"export_name": "Spring",
-			"name": "Spring"
-		}
-	],
+	},
 	"dependencies": []
 }
