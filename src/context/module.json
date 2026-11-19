@@ -1,7 +1,6 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "name": "Context",
-    "category": "sugar",
     "description": "Provides a contextual state utility for sharing data across nested scopes.",
     "author": "HappySunChild (Eli)",
     "dependencies": [

@@ -17,10 +17,6 @@
             "description": "The label to use in auto-packager comments. Defaults to the id.",
             "type": "string"
         },
-        "category": {
-            "description": "The type of module this module is (i.e. 'core', 'sugar', etc.).",
-            "type": "string"
-        },
         "description": {
             "description": "A brief description of what this module does and provides.",
             "type": "string"

@@ -1,7 +1,6 @@
 {
     "$schema": "../../.vscode/module-schema.json",
     "name": "Core: Graph",
-    "category": "core",
     "description": "Provides internal utilities for working with Confusion's reactive dependency graph.",
     "author": "HappySunChild (Eli)",
     "dependencies": [

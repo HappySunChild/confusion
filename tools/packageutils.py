@@ -52,7 +52,6 @@ class Module(BaseModel):
     id: str
     name: str = Field(default_factory=lambda d: d["id"])
     description: str = "N/A"
-    category: str = "unspecified"
 
     dependencies: set[str]
 

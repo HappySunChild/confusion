@@ -22,7 +22,6 @@ net.add_nodes(
     color=[get_color(mod) for mod in mods],
     mass=[mod_weights[mod.id] for mod in mods],
     value=[mod_weights[mod.id] * 10 for mod in mods],
-    group=[mod.category for mod in mods],
 )
 
 for mod in mods:
