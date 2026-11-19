@@ -10,15 +10,11 @@
         "core_memory",
         "core_state",
         "colour",
-        "motion"
+        "motion",
+        "springs"
     ],
     "export_types": [],
     "export_members": [
-        {
-            "export_name": "Spring",
-            "source": "Spring.luau",
-            "type": "motion_springs.SpringConstructor"
-        },
         {
             "export_name": "spring_mover",
             "source": "spring_mover.luau",

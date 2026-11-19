@@ -1,7 +1,11 @@
+--!strict
+--!native
+--!optimize 2
+
 const composition = require("../composition/types")
 const motion = require("../motion/types")
 
-const spring_coefficients = require("./spring_coefficients")
+const spring_coefficients = require("../springs/spring_coefficients")
 
 const function spring_mover(damping: number, speed: number): motion.Transition
 	damping = damping or 1
@@ -15,7 +19,7 @@ const function spring_mover(damping: number, speed: number): motion.Transition
 			const spring_count = #initial_displacement
 			const initial_velocity = initial_values[2] or table.create(spring_count, 0)
 
-			return function(time_elapsed: number)
+			return function(time_elapsed: number): { { number } }
 				const pos_pos, pos_vel, vel_pos, vel_vel = spring_coefficients(time_elapsed, damping, speed)
 				const displacement = table.create(spring_count, 0)
 				const velocity = table.create(spring_count, 0)

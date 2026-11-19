@@ -1,0 +1,21 @@
+{
+	"$schema": "../../.vscode/module-schema.json",
+	"name": "Springs",
+	"author": "HappySunChild (Eli)",
+	"category": "animation",
+	"description": "WIP",
+	"export_members": [
+		{
+			"export_name": "Spring",
+			"source": "Spring.luau",
+			"type": "springs.SpringConstructor"
+		}
+	],
+	"export_types": [
+		{
+			"export_name": "Spring",
+			"name": "Spring"
+		}
+	],
+	"dependencies": []
+}
