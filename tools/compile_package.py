@@ -34,6 +34,11 @@ package_author: str = data["author"]
 package_repository: str = data["repository"]
 package_modules: list[str] = data["modules"]
 
-modules = discover_modules(Path(args.confusion_src))
+all_modules = discover_modules(Path(args.confusion_src))
+specified_modules = {
+    mod_id: mod for (mod_id, mod) in all_modules.items() if mod_id in package_modules
+}
 
-build_package(modules, output_dir, package_name, package_author, package_repository)
+build_package(
+    specified_modules, output_dir, package_name, package_author, package_repository
+)
