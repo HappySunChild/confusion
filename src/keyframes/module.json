@@ -9,17 +9,15 @@
         "core_state",
         "lerp"
     ],
-    "export_types": [
-        {
-            "export_name": "Keyframes<T>",
-            "name": "Keyframes<T>"
+    "export_types": {
+        "Keyframes<T>": {
+            "internal_name": "Keyframes<T>"
         }
-    ],
-    "export_members": [
-        {
-            "export_name": "Keyframes",
+    },
+    "export_members": {
+        "Keyframes": {
             "source": "Keyframes.luau",
             "type": "keyframes.KeyframesConstructor"
         }
-    ]
+    }
 }

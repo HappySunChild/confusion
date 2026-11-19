@@ -8,17 +8,15 @@
         "core_external",
         "core_logging"
     ],
-    "export_types": [
-        {
-            "export_name": "Contextual<T>",
-            "name": "Contextual<T>"
+    "export_types": {
+        "Contextual<T>": {
+            "internal_name": "Contextual<T>"
         }
-    ],
-    "export_members": [
-        {
-            "export_name": "Contextual",
+    },
+    "export_members": {
+        "Contextual": {
             "source": "Contextual.luau",
             "type": "context.ContextConstructor"
         }
-    ]
+    }
 }

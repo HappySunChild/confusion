@@ -10,48 +10,39 @@
         "core_logging",
         "core_memory"
     ],
-    "export_types": [
-        {
-            "name": "StateNode<T>",
-            "export_name": "StateNode<T>"
+    "export_types": {
+        "StateNode<T>": {
+            "internal_name": "StateNode<T>"
         },
-        {
-            "name": "UsedAs<T>",
-            "export_name": "UsedAs<T>"
+        "UsedAs<T>": {
+            "internal_name": "UsedAs<T>"
         },
-        {
-            "name": "Value<T>",
-            "export_name": "Value<T>"
+        "Value<T>": {
+            "internal_name": "Value<T>"
         },
-        {
-            "name": "Computed<T>",
-            "export_name": "Computed<T>"
+        "Computed<T>": {
+            "internal_name": "Computed<T>"
         },
-        {
-            "name": "Use",
-            "export_name": "Use"
+        "Use": {
+            "internal_name": "Use"
         }
-    ],
-    "export_members": [
-        {
-            "export_name": "Computed",
+    },
+    "export_members": {
+        "Computed": {
             "source": "Computed.luau",
             "type": "core_state.ComputedConstructor"
         },
-        {
-            "export_name": "Value",
+        "Value": {
             "source": "Value.luau",
             "type": "core_state.ValueConstructor"
         },
-        {
-            "export_name": "peek",
+        "peek": {
             "source": "peek.luau",
             "type": "core_state.Use"
         },
-        {
-            "export_name": "flatten",
+        "flatten": {
             "source": "flatten.luau",
             "type": "core_state.Flatten"
         }
-    ]
+    }
 }

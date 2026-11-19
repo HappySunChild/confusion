@@ -7,6 +7,6 @@
     "dependencies": [
         "colour"
     ],
-    "export_types": [],
-    "export_members": []
+    "export_types": {},
+    "export_members": {}
 }

@@ -9,19 +9,17 @@
         "core_memory",
         "core_state"
     ],
-    "export_types": [
-        {
-            "name": "Timer",
-            "export_name": "Timer"
+    "export_types": {
+        "Timer": {
+            "internal_name": "Timer"
         }
-    ],
-    "export_members": [
-        {
-            "export_name": "Timer",
+    },
+    "export_members": {
+        "Timer": {
             "source": "Timer.luau",
             "type": "chrono.TimerConstructor"
         }
-    ],
+    },
     "external_consumers": [
         "scheduler"
     ]

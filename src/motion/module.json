@@ -12,19 +12,17 @@
         "core_state",
         "chrono"
     ],
-    "export_types": [
-        {
-            "name": "Motion<T>",
-            "export_name": "Motion<T>"
+    "export_types": {
+        "Motion<T>": {
+            "internal_name": "Motion<T>"
         }
-    ],
-    "export_members": [
-        {
-            "export_name": "Motion",
+    },
+    "export_members": {
+        "Motion": {
             "source": "Motion.luau",
             "type": "motion.MotionConstructor"
         }
-    ],
+    },
     "external_consumers": [
         "scheduler"
     ]
