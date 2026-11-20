@@ -29,6 +29,7 @@
         "motion_friction",
         "safe",
         "composition",
-        "springs"
+        "springs",
+        "tweens"
     ]
 }

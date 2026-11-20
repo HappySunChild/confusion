@@ -1,0 +1,36 @@
+{
+	"$schema": "../../.vscode/module-schema.json",
+	"name": "Tweens",
+	"description": "WIP",
+	"author": "HappySunChild (Eli)",
+	"dependencies": [
+		"core_external",
+		"core_graph",
+		"core_memory",
+		"core_state",
+		"chrono",
+		"lerp"
+	],
+	"export_types": {
+		"TweenInfo": {
+			"internal_name": "TweenInfo"
+		}
+	},
+	"export_members": {
+		"Tween": {
+			"source": "Tween.luau",
+			"type": "tweens.TweenConstructor"
+		},
+		"TweenInfo": {
+			"source": "TweenInfo.luau",
+			"type": "tweens.TweenInfoConstructor"
+		},
+		"easing_styles": {
+			"source": "easing_styles.luau",
+			"type": "tweens.EasingStyles"
+		}
+	},
+	"external_consumers": [
+		"scheduler"
+	]
+}

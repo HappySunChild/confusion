@@ -2,9 +2,9 @@
 --!native
 --!optimize 2
 
-const motion_tweens = require("./types")
+const tweens = require("./types")
 
-const function get_tween_duration(info: motion_tweens.TweenInfo): number
+const function get_tween_duration(info: tweens.TweenInfo): number
 	const repeat_count = info.repeat_count
 
 	if repeat_count == -1 then

@@ -10,26 +10,11 @@
         "motion"
     ],
     "export_types": {
-        "TweenInfo": {
-            "internal_name": "TweenInfo"
-        },
         "EasingDirection": {
             "internal_name": "EasingDirection"
         }
     },
     "export_members": {
-        "Tween": {
-            "source": "Tween.luau",
-            "type": "motion_tweens.TweenConstructor"
-        },
-        "TweenInfo": {
-            "source": "TweenInfo.luau",
-            "type": "motion_tweens.TweenInfoConstructor"
-        },
-        "easing_styles": {
-            "source": "easing_styles.luau",
-            "type": "motion_tweens.EasingStyles"
-        },
         "differential_easing_styles": {
             "source": "differential_easing_styles.luau",
             "type": "motion_tweens.DifferentialEasingStyles"
