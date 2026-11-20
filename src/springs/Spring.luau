@@ -155,8 +155,7 @@ const CLASS_MT = table.freeze({
 				elapsed = get_delta_time()
 			end
 
-			const pos_pos, pos_vel, vel_pos, vel_vel =
-				spring_coefficients(elapsed, peek<<number>>(damping), peek<<number>>(speed))
+			const pos_pos, pos_vel, vel_pos, vel_vel = spring_coefficients(elapsed, new_damping, new_speed)
 
 			local is_moving = false
 
@@ -189,18 +188,25 @@ const CLASS_MT = table.freeze({
 			end
 
 			const old_value = self.cached_value
-			const new_value = pack_type(self.active_type, self.active_pos)
+			const new_value = pack_type(self.active_type, self.active_pos) :: T
 
 			if not is_moving then
 				timer:pause()
 			end
 
-			return is_similar(old_value, new_value)
+			self.cached_value = new_value
+
+			return not is_similar(old_value, new_value)
 		end,
 	}),
 })
 
-const function Spring<T>(scope: memory.Scope, goal: state.UsedAs<T>, speed: state.UsedAs<T>?, damping: state.UsedAs<T>?)
+const function Spring<T>(
+	scope: memory.Scope,
+	goal: state.UsedAs<T>,
+	speed: state.UsedAs<T>?,
+	damping: state.UsedAs<T>?
+): springs.Spring<T>
 	speed = speed or 10
 	damping = damping or 1
 
@@ -212,7 +218,7 @@ const function Spring<T>(scope: memory.Scope, goal: state.UsedAs<T>, speed: stat
 		validity = "valid",
 		using = {},
 		users = {},
-		cached_value = nil,
+		cached_value = peek(goal),
 
 		goal = goal,
 		speed = speed,

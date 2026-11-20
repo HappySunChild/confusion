@@ -13,7 +13,4 @@ export type SpringConstructor = <T>(
 
 export type SpringMover = (damping: number, speed: number) -> motion.Transition
 
-return {
-	unknown_packing_datatype = "Unable to pack value of unknown type '{type}'; returning nil.",
-	unknown_unpacking_datatype = "Unable to unpack value of unknown type '{type}'; returning empty array.",
-}
+return nil

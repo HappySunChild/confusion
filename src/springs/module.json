@@ -5,8 +5,8 @@
 	"category": "animation",
 	"description": "WIP",
 	"export_types": {
-		"Spring": {
-			"internal_name": "Spring"
+		"Spring<T>": {
+			"internal_name": "Spring<T>"
 		}
 	},
 	"export_members": {
@@ -15,5 +15,15 @@
 			"type": "springs.SpringConstructor"
 		}
 	},
-	"dependencies": []
+	"dependencies": [
+		"core_external",
+		"core_memory",
+		"core_state",
+		"colour",
+		"chrono"
+	],
+	"external_consumers": [
+		"scheduler",
+		"logger"
+	]
 }
