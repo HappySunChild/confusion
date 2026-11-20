@@ -6,14 +6,14 @@ const iter_for = require("../iter_for/types")
 const memory = require("../core_memory/types")
 const pipeline = require("./types")
 const state = require("../core_state/types")
-const tweens = require("../motion_tweens/types")
+const tweens = require("../tweens/types")
 
 const Computed = require("../core_state/Computed")
 const ForKeys = require("../iter_for/ForKeys")
 const ForPairs = require("../iter_for/ForPairs")
 const ForValues = require("../iter_for/ForValues")
-const Spring = require("../motion_springs/Spring")
-const Tween = require("../motion_tweens/Tween")
+const Spring = require("../springs/Spring")
+const Tween = require("../tweens/Tween")
 
 const inner_scope = require("../core_memory/inner_scope")
 
