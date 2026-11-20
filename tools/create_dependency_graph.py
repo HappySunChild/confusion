@@ -20,7 +20,7 @@ net.add_nodes(
     [mod.id for mod in mods],
     label=[mod.name for mod in mods],
     color=[get_color(mod) for mod in mods],
-    mass=[mod_weights[mod.id] for mod in mods],
+    mass=[mod_weights[mod.id] * 5 for mod in mods],
     value=[mod_weights[mod.id] * 10 for mod in mods],
 )
 
