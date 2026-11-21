@@ -2,7 +2,7 @@
 --!native
 --!optimize 2
 
-const motion_tweens = require("./types")
+const tweens = require("./types")
 
 const easing_styles = require("./easing_styles")
 
@@ -23,7 +23,7 @@ const function TweenInfo(
 	repeat_count: number?,
 	reverses: boolean?,
 	delay_time: number?
-): motion_tweens.TweenInfo
+): tweens.TweenInfo
 	return setmetatable({
 		time = time,
 		easing = easing,

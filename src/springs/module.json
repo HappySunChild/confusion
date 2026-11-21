@@ -1,0 +1,29 @@
+{
+	"$schema": "../../.vscode/module-schema.json",
+	"name": "Springs",
+	"author": "HappySunChild (Eli)",
+	"category": "animation",
+	"description": "WIP",
+	"export_types": {
+		"Spring<T>": {
+			"internal_name": "Spring<T>"
+		}
+	},
+	"export_members": {
+		"Spring": {
+			"source": "Spring.luau",
+			"type": "springs.SpringConstructor"
+		}
+	},
+	"dependencies": [
+		"core_external",
+		"core_memory",
+		"core_state",
+		"colour",
+		"chrono"
+	],
+	"external_consumers": [
+		"scheduler",
+		"logger"
+	]
+}

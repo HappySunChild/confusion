@@ -9,17 +9,25 @@
         "core_logging",
         "core_memory",
         "core_state",
-        "chrono"
+        "chrono",
+        "composition"
     ],
     "export_types": {
         "Motion<T>": {
             "internal_name": "Motion<T>"
+        },
+        "Mover": {
+            "internal_name": "Mover"
         }
     },
     "export_members": {
         "Motion": {
             "source": "Motion.luau",
             "type": "motion.MotionConstructor"
+        },
+        "OldMotion": {
+            "source": "OldMotion.luau",
+            "type": "motion.OldMotionConstructor"
         }
     },
     "external_consumers": [
